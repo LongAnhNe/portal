@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/OverdraftLending/OverdraftLendingFlow"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/OverdraftLending/OverdraftLendingFlow"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="Common-EventCommon.xsd"/>
+	<xsd:element name="OverdraftLendingFlow">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="idLending" minOccurs="0"/>
+				<xsd:element ref="category" minOccurs="0"/>
+				<xsd:element ref="customerId" minOccurs="0"/>
+				<xsd:element ref="amountList" minOccurs="0"/>
+				<xsd:element ref="currency" minOccurs="0"/>
+				<xsd:element ref="valueDate" minOccurs="0"/>
+				<xsd:element ref="finMatDate" minOccurs="0"/>
+				<xsd:element ref="recordStatus" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="idLending" type="xsd:string"/>
+	<xsd:element name="category" type="xsd:string"/>
+	<xsd:element name="customerId" type="xsd:decimal"/>
+	<xsd:element name="amountList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="amount" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:decimal">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="currency" type="xsd:string"/>
+	<xsd:element name="valueDate" type="xsd:date"/>
+	<xsd:element name="finMatDate" type="xsd:string"/>
+	<xsd:element name="recordStatus" type="xsd:string"/>
+</xsd:schema>

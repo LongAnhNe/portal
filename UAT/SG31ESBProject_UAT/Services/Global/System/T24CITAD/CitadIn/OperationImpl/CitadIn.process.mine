@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/soaenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="sbv/common/envelope/commonheader/1.0" xmlns:ns2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns3="http://temenos.com/FTSBVCITAD" xmlns:pfx5="http://xmlns.example.com/1438330850951" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="sbv/sharedresource/CitadIn/ESBCitadInModel" xmlns:pfx3="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:pfx2="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:pfx8="sbv/sharedresource/CitadIn/CitadInESBModel" xmlns:pfx7="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:pfx6="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0">
+    <xsd:import namespace="http://temenos.com/FTSBVCITAD"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" schemaLocation="/SharedResource/Schema/Global/T24Citad/CitadIn/CitadToESB.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadOut/FTSBVCITAD.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/ESBCitadInModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/ESBCitadInModel.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/CitadInESBModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/CitadInESBModel.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1438330850951" location="/SharedResource/Schema/Global/Local/AccountMapping/AccountMapping1.0.wsdl"/>
+    <pd:name>Services/Global/System/T24CITAD/CitadIn/OperationImpl/CitadIn.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>44</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <StartTime>1436581761000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>20</TimeInterval>
+            <FrequencyIndex>Second</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>922</pd:endX>
+    <pd:endY>213</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1436581729763</pd:targetNamespace>
+    <pd:activity name="GetCitadData">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>43</pd:x>
+        <pd:y>210</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>10</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>%%ServiceGlobalVar/CitadOut/CitadDBLink%%</jdbcSharedConfig>
+            <statement>select a.* from TBLTRANSACTIONMSG_GTW a where 1=1
+and CHECK_CODE = '05'
+and TYPE_FLAG = '0'
+and CREATE_FILE_RESULT_FLAG = '0'
+and TRX_TYPE IN('201001','101001','205001','105001')</statement>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>CHECK_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CREATE_FILE_RESULT_FLAG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FILE_NAME_RESULT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TRX_TYPE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERR_STATUS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RESPONSE_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SERIAL_NO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>O_CI_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>R_CI_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>O_INDIRECT_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>R_INDIRECT_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FEE_CI_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TRX_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BALANCE_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CURRENCY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_ADDR</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_ACCNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_ADDR</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_ACCNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONTENT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPERT1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPERT2</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FILE_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RELATION_NO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_IDENTIFY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_IDENTIFY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AUTHORIZED</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FEE_FLAG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>REFERENCE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TAX_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>EX_E_SIGN</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MSG_REASON</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ORIG_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONFIRM_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>APPR_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CREATE_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>APPR_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MAC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TYPE_FLAG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>1</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>char</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>E_SIGN</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPTIONCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONTENTFROMFILE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERR_MSG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>LINEPOSITION</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>number</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FILEPROCESSINGTIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop Handling Record">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:description>Convert/Format Each Record</pd:description>
+        <pd:x>165</pd:x>
+        <pd:y>74</pd:y>
+        <pd:width>630</pd:width>
+        <pd:height>237</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$GetCitadData/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>CitadRecord</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map to ESB Model</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>EMS Update Queue Sender</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to ESB Model</pd:from>
+            <pd:to>CallProcessByVersion</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Render XML</pd:from>
+            <pd:to>EMS Update Queue Sender</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallProcessByVersion</pd:from>
+            <pd:to>Render XML</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallProcessByVersion">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>427</pd:x>
+            <pd:y>235</pd:y>
+            <config>
+                <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;3&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;Citad&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;4&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </pfx:MsgId>
+                                <pfx:MsgPreId>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </pfx:MsgPreId>
+                                <pfx:MsgSrcId>
+                                    <xsl:value-of select="&quot;2&quot;"/>
+                                </pfx:MsgSrcId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;CitadIn&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <xsl:copy-of select="$Map-to-ESB-Model/pfx8:Citad_Out_Data"/>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map to ESB Model">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>290</pd:x>
+            <pd:y>134</pd:y>
+            <config>
+                <element ref="pfx8:Citad_Out_Data"/>
+            </config>
+            <pd:inputBindings>
+                <pfx8:Citad_Out_Data>
+                    <pfx8:TRANSACTION_TYPE>
+                        <xsl:value-of select="&quot;TRANSACTION_TYPE&quot;"/>
+                    </pfx8:TRANSACTION_TYPE>
+                    <pfx8:O_CI_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/O_CI_CODE"/>
+                    </pfx8:O_CI_CODE>
+                    <pfx8:TRX_DATE>
+                        <xsl:value-of select="$CitadRecord/Record/TRX_DATE"/>
+                    </pfx8:TRX_DATE>
+                    <pfx8:RELATION_NO>
+                        <xsl:value-of select="$CitadRecord/Record/RELATION_NO"/>
+                    </pfx8:RELATION_NO>
+                    <pfx8:TYPE_FLAG>
+                        <xsl:value-of select="$CitadRecord/Record/TYPE_FLAG"/>
+                    </pfx8:TYPE_FLAG>
+                    <xsl:if test="$CitadRecord/Record/CHECK_CODE">
+                        <pfx8:CHECK_CODE>
+                            <xsl:value-of select="$CitadRecord/Record/CHECK_CODE"/>
+                        </pfx8:CHECK_CODE>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/TRX_TYPE">
+                        <pfx8:TRX_TYPE>
+                            <xsl:value-of select="$CitadRecord/Record/TRX_TYPE"/>
+                        </pfx8:TRX_TYPE>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SERIAL_NO">
+                        <pfx8:SERIAL_NO>
+                            <xsl:value-of select="$CitadRecord/Record/SERIAL_NO"/>
+                        </pfx8:SERIAL_NO>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/RESPONSE_CODE">
+                        <pfx8:RESPONSE_CODE>
+                            <xsl:value-of select="$CitadRecord/Record/RESPONSE_CODE"/>
+                        </pfx8:RESPONSE_CODE>
+                    </xsl:if>
+                    <pfx8:R_CI_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/R_CI_CODE"/>
+                    </pfx8:R_CI_CODE>
+                    <pfx8:O_INDIRECT_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/O_INDIRECT_CODE"/>
+                    </pfx8:O_INDIRECT_CODE>
+                    <pfx8:R_INDIRECT_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/R_INDIRECT_CODE"/>
+                    </pfx8:R_INDIRECT_CODE>
+                    <xsl:if test="$CitadRecord/Record/FEE_CI_CODE">
+                        <pfx8:FEE_CI_CODE>
+                            <xsl:value-of select="$CitadRecord/Record/FEE_CI_CODE"/>
+                        </pfx8:FEE_CI_CODE>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/CURRENCY">
+                        <pfx8:CURRENCY>
+                            <xsl:value-of select="$CitadRecord/Record/CURRENCY"/>
+                        </pfx8:CURRENCY>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/AMOUNT">
+                        <pfx8:AMOUNT>
+                            <xsl:value-of select="$CitadRecord/Record/AMOUNT"/>
+                        </pfx8:AMOUNT>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SD_NAME">
+                        <pfx8:SD_NAME>
+                            <xsl:value-of select="$CitadRecord/Record/SD_NAME"/>
+                        </pfx8:SD_NAME>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SD_ACCNT">
+                        <pfx8:SD_ACCNT>
+                            <xsl:value-of select="$CitadRecord/Record/SD_ACCNT"/>
+                        </pfx8:SD_ACCNT>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/RV_NAME">
+                        <pfx8:RV_NAME>
+                            <xsl:value-of select="$CitadRecord/Record/RV_NAME"/>
+                        </pfx8:RV_NAME>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/RV_ACCNT">
+                        <pfx8:RV_ACCNT>
+                            <xsl:value-of select="$CitadRecord/Record/RV_ACCNT"/>
+                        </pfx8:RV_ACCNT>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/CONTENT">
+                        <pfx8:CONTENT>
+                            <xsl:value-of select="$CitadRecord/Record/CONTENT"/>
+                        </pfx8:CONTENT>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/OPERT1">
+                        <pfx8:OPERT1>
+                            <xsl:value-of select="$CitadRecord/Record/OPERT1"/>
+                        </pfx8:OPERT1>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/OPERT2">
+                        <pfx8:OPERT2>
+                            <xsl:value-of select="$CitadRecord/Record/OPERT2"/>
+                        </pfx8:OPERT2>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/REFERENCE">
+                        <pfx8:REFERENCE>
+                            <xsl:value-of select="$CitadRecord/Record/REFERENCE"/>
+                        </pfx8:REFERENCE>
+                    </xsl:if>
+                    <pfx8:CONTENT_EX>
+                        <xsl:value-of select="&quot;CONTENT_EX&quot;"/>
+                    </pfx8:CONTENT_EX>
+                </pfx8:Citad_Out_Data>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="EMS Update Queue Sender">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>608</pd:x>
+            <pd:y>241</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>CitadDBUpdateQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            </config>
+            <pd:inputBindings>
+                <ns0:ActivityInput xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/jms">
+                    <Body>
+                        <xsl:value-of select="$Render-XML/xmlString"/>
+                    </Body>
+                </ns0:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Render XML">
+            <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+            <pd:x>538</pd:x>
+            <pd:y>130</pd:y>
+            <config>
+                <renderAsText>text</renderAsText>
+                <validateInput>false</validateInput>
+                <term>
+                    <xsd:element name="Records">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="O_CI_CODE" type="xsd:string"/>
+                                <xsd:element name="TRX_DATE" type="xsd:string"/>
+                                <xsd:element name="RELATION_NO" type="xsd:string"/>
+                                <xsd:element name="TYPE_FLAG" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </term>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$CallProcessByVersion/root/ns2:ServiceEnverlop/ServiceBody/*" element="pfx4:Citad_Out_Data"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <Records>
+                    <O_CI_CODE>
+                        <xsl:value-of select="$CallProcessByVersion/root/ns2:ServiceEnverlop/ServiceBody/pfx4:Citad_Out_Data[1]/pfx4:O_CI_CODE"/>
+                    </O_CI_CODE>
+                    <TRX_DATE>
+                        <xsl:value-of select="$CallProcessByVersion/root/ns2:ServiceEnverlop/ServiceBody/pfx4:Citad_Out_Data[1]/pfx4:TRX_DATE"/>
+                    </TRX_DATE>
+                    <RELATION_NO>
+                        <xsl:value-of select="$CallProcessByVersion/root/ns2:ServiceEnverlop/ServiceBody/pfx4:Citad_Out_Data[1]/pfx4:RELATION_NO"/>
+                    </RELATION_NO>
+                    <TYPE_FLAG>
+                        <xsl:value-of select="$CallProcessByVersion/root/ns2:ServiceEnverlop/ServiceBody/pfx4:Citad_Out_Data[1]/pfx4:TYPE_FLAG"/>
+                    </TYPE_FLAG>
+                </Records>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>925</pd:x>
+        <pd:y>393</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>GetCitadData</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCitadData</pd:from>
+        <pd:to>Loop Handling Record</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop Handling Record</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

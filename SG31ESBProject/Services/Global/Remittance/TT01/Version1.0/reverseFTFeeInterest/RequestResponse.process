@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="sbv/service/global/utilities/cbsstatus/inquiry/version1.0" xmlns:pfx15="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx13="http://temenos.com/SBV.FT.BULK.IBPS.LV" xmlns:pfx12="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx10="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx19="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx18="http://xmlns.example.com/1438330850951" xmlns:pfx17="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx5="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/FTIBPSHV" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx6="www.tibco.com/plugin/Sleep" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns12="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" xmlns:ns5="sbv/global/remittance/fundxfer/version1.0" xmlns:ns6="sbv/global/datatype/datatype/version1.0" xmlns:ns10="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns7="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns11="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx22="http://temenos.com/T24PORTAL" xmlns:pfx23="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx20="http://temenos.com/SBV.ERP.T24.INTEGRATION" xmlns:pfx21="http://www.sbv.gov.vn/global/remittance/cbpfundxfer/version1.0" xmlns:pfx24="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/FTFeeInterest/Schema.xsd" xmlns:pfx25="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.xsd"/>
+    <xsd:import namespace="http://temenos.com/T24PORTAL" schemaLocation="/SharedResource/Schema/Global/System/T24/SBV.FT.T24.PORTAL/SBV.FT.T24.PORTAL_xsd1.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/FTFeeInterest/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/FTFeeInterest/FTFeeInterest.xsd"/>
+    <wsdl:import namespace="http://temenos.com/FTIBPSHV"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" location="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION"/>
+    <wsdl:import namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION" location="/SharedResource/Schema/Global/System/T24/SBV.ERP.T24.INTEGRATION/SBV.ERP.T24.INTEGRATION.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/T24PORTAL" location="/SharedResource/Schema/Global/System/T24/SBV.FT.T24.PORTAL/SBV.FT.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL.TT01/SBV.INTE.T24.PORTAL.TT01.wsdl"/>
+    <pd:name>Services/Global/Remittance/TT01/Version1.0/reverseFTFeeInterest/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>56</pd:startX>
+    <pd:startY>142</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="" element="pfx24:FTFeeInterestRes"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                    </ns3:MsgId>
+                    <ns3:MsgPreId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                    </ns3:MsgPreId>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ReverseFTResponse/FeeResponse/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$ReverseFTResponse/FeeResponse/ErrorMessage"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+                <ServiceBody/>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1028</pd:endX>
+    <pd:endY>142</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ReverseFTResponse>
+            <xsd:element name="FeeResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ReverseFTResponse>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/tt01/ftfeeinterest/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="ResponseSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>437</pd:x>
+        <pd:y>47</pd:y>
+        <config>
+            <variableName>ReverseFTResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <FeeResponse>
+                <Status>
+                    <xsl:value-of select="if($CallReverseFTUSD/outputMessage/pfx25:FTReverseFeeInterestUSDResponse/Status/successIndicator='Success'&#xA;or $CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/successIndicator='Success')&#xA;then '0' else '1'"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="if($CallReverseFTUSD/outputMessage/pfx25:FTReverseFeeInterestUSDResponse/Status/successIndicator ='Success') &#xA;then ''&#xA;else if($CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/successIndicator ='Success') then&#xA;''&#xA;else&#xA;concat($CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/messages[1], $CallReverseFTUSD/outputMessage/pfx25:FTReverseFeeInterestUSDResponse/Status/messages[1])"/>
+                </ErrorMessage>
+            </FeeResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>439</pd:x>
+        <pd:y>247</pd:y>
+        <config>
+            <variableName>ReverseFTResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <FeeResponse>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-',$_error/ns:ErrorReport/Data)"/>
+                </ErrorMessage>
+            </FeeResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallReverseFTVND">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>144</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx25:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>FTRevserseFeeInterest</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortalTT01%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx25:FTRevserseFeeInterest>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:CompanyCode"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <FUNDSTRANSFERPORTFEEINTERESTType>
+                        <xsl:if test="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:TransactionId">
+                            <transactionId>
+                                <xsl:value-of select="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:TransactionId"/>
+                            </transactionId>
+                        </xsl:if>
+                    </FUNDSTRANSFERPORTFEEINTERESTType>
+                </pfx25:FTRevserseFeeInterest>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseExisted">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>437</pd:x>
+        <pd:y>141</pd:y>
+        <config>
+            <variableName>ReverseFTResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <FeeResponse>
+                <Status>
+                    <xsl:value-of select="'0'"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="if(exists($CallReverseFTUSD/outputMessage/pfx25:FTReverseFeeInterestUSDResponse)) then&#xA;concat($CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/messageId, $CallReverseFTUSD/outputMessage/pfx25:FTReverseFeeInterestUSDResponse/Status/messages[1])&#xA;else if(exists($CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse)) then&#xA;concat($CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/messageId, $CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/messages[1])&#xA;else&#xA;''"/>
+                </ErrorMessage>
+            </FeeResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>54</pd:x>
+        <pd:y>336</pd:y>
+        <config>
+            <element ref="pfx24:FTFeeInterestInfoReq"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx24:FTFeeInterestInfoReq"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx24:FTFeeInterestInfoReq"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>602</pd:x>
+        <pd:y>137</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>700</pd:x>
+        <pd:y>381</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>860</pd:x>
+        <pd:y>382</pd:y>
+        <config>
+            <variableName>ReverseFTResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <FeeResponse>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="&quot;GIAO DICH BI EXCEPTION&quot;"/>
+                </ErrorMessage>
+            </FeeResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseDebitStatusError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>872</pd:x>
+        <pd:y>140</pd:y>
+        <config>
+            <variableName>ReverseFTResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <FeeResponse>
+                <Status>
+                    <xsl:value-of select="$ReverseFTResponse/FeeResponse/Status"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="$ReverseFTResponse/FeeResponse/ErrorMessage"/>
+                </ErrorMessage>
+            </FeeResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>745</pd:x>
+        <pd:y>265</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CallReverseFTUSD">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>472</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx25:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>FTReverseFeeInterestUSD</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortalTT01%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx25:FTReverseFeeInterestUSD>
+                    <WebRequestCommon>
+                        <xsl:if test="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:CompanyCode">
+                            <company>
+                                <xsl:value-of select="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:CompanyCode"/>
+                            </company>
+                        </xsl:if>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <FUNDSTRANSFERPORTREINTType>
+                        <xsl:if test="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:TransactionId">
+                            <transactionId>
+                                <xsl:value-of select="$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:TransactionId"/>
+                            </transactionId>
+                        </xsl:if>
+                    </FUNDSTRANSFERPORTREINTType>
+                </pfx25:FTReverseFeeInterestUSD>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ResponseSuccess</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseError</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReverseFTVND</pd:from>
+        <pd:to>ResponseSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReverseFTVND</pd:from>
+        <pd:to>ResponseError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReverseFTVND</pd:from>
+        <pd:to>ResponseExisted</pd:to>
+        <pd:xpathDescription>Existed</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/successIndicator='T24Error' 
+and contains($CallReverseFTVND/outputMessage/pfx25:FTRevserseFeeInterestResponse/Status/messages[1],'HISTORY RECORD MISSING')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseExisted</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>CallReverseFTVND</pd:to>
+        <pd:xpathDescription>ReverseOthersFT</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>ResponseException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ReverseFTResponse/FeeResponse/Status = 1</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseDebitStatusError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>CallReverseFTUSD</pd:to>
+        <pd:xpathDescription>ReverseFTUSD</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Map-Data/pfx24:FTFeeInterestInfoReq/pfx24:ReverseCurrency = 'USD'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReverseFTUSD</pd:from>
+        <pd:to>ResponseSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReverseFTUSD</pd:from>
+        <pd:to>ResponseExisted</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReverseFTUSD</pd:from>
+        <pd:to>ResponseError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

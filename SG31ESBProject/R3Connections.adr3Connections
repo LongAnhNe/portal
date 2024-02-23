@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns="http://www.tibco.com/xmlns/adapter/SAPAdapter/2002" xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002">
+    <clientConnectionPool xmlns:SAPAdapter="http://www.tibco.com/xmlns/adapter/SAPAdapter/2002" name="SAPTestR3AdapterConfigurationInboundConnection">
+        <useSAPRFCIni>0</useSAPRFCIni>
+        <useSNC>0</useSNC>
+        <useLoadBalancing>0</useLoadBalancing>
+        <bStopOnRetryFail>0</bStopOnRetryFail>
+        <maxAttemptsBeforeSuspend>1</maxAttemptsBeforeSuspend>
+        <maxAttempts>3</maxAttempts>
+        <retryInterval>30000</retryInterval>
+        <maxConnections>1</maxConnections>
+        <maxRetryInterval>60</maxRetryInterval>
+        <systemNumber>%%SAPAdapterConfig/SystemNumber%%</systemNumber>
+        <appServer>%%SAPAdapterConfig/AppServer%%</appServer>
+        <defaultClient isRef="true">/R3Connections.adr3Connections#client.SAPTestR3AdapterConfigurationInboundConnectionClient0</defaultClient>
+        <clients>
+            <client isRef="true">/R3Connections.adr3Connections#client.SAPTestR3AdapterConfigurationInboundConnectionClient0</client>
+        </clients>
+    </clientConnectionPool>
+    <serverConnectionPool xmlns:SAPAdapter="http://www.tibco.com/xmlns/adapter/SAPAdapter/2002" name="SAPTestR3AdapterConfigurationOutboundConnection">
+        <timerRef>RfcPollingTimer</timerRef>
+        <useSAPRFCIni>0</useSAPRFCIni>
+        <useSNC>0</useSNC>
+        <bStopOnRetryFail>0</bStopOnRetryFail>
+        <maxAttemptsBeforeSuspend>1</maxAttemptsBeforeSuspend>
+        <maxAttempts>3</maxAttempts>
+        <retryInterval>30000</retryInterval>
+        <maxConnections>1</maxConnections>
+        <maxRetryInterval>60</maxRetryInterval>
+        <gatewayService>%%SAPAdapterConfig/GatewayService%%</gatewayService>
+        <rfcTrace>0</rfcTrace>
+        <programID>%%SAPAdapterConfig/ProgramId%%</programID>
+        <gatewayHost>%%SAPAdapterConfig/GatewayHost%%</gatewayHost>
+    </serverConnectionPool>
+    <client xmlns:SAPAdapter="http://www.tibco.com/xmlns/adapter/SAPAdapter/2002" name="SAPTestR3AdapterConfigurationInboundConnectionClient0">
+        <rfcTrace>0</rfcTrace>
+        <abapDebug>0</abapDebug>
+        <useSAPGUI>0</useSAPGUI>
+        <userName>%%SAPAdapterConfig/Username%%</userName>
+        <language>E</language>
+        <codePage/>
+        <number>%%SAPAdapterConfig/Client%%</number>
+        <password>%%SAPAdapterConfig/Password%%</password>
+    </client>
+    <connectionManager xmlns:SAPAdapter="http://www.tibco.com/xmlns/adapter/SAPAdapter/2002" name="SAPTestR3AdapterConfigurationActiveConnections">
+        <clientConnectionPool isRef="true">/R3Connections.adr3Connections#clientConnectionPool.SAPTestR3AdapterConfigurationInboundConnection</clientConnectionPool>
+        <serverConnectionPool isRef="true">/R3Connections.adr3Connections#serverConnectionPool.SAPTestR3AdapterConfigurationOutboundConnection</serverConnectionPool>
+    </connectionManager>
+</Repository:repository>

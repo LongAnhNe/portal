@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/soaenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1433466938916">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.wsdl"/>
+    <pd:name>Services/Global/Remittance/PortalFundXfer/OperationImpl/createInquiryFTTransaction.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createInquiryFTTransactionReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Call-Process/root/ns4:ServiceEnverlop/ServiceBody/*" element="ns3:FTTransactionList"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:createInquiryFTTransactionRes>
+            <Res>
+                <ns3:createInquiryFTTransactionRes>
+                    <ns2:AppHdr>
+                        <xsl:if test="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:CharSet">
+                            <ns2:CharSet>
+                                <xsl:value-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:CharSet"/>
+                            </ns2:CharSet>
+                        </xsl:if>
+                        <ns2:ServVersion>
+                            <xsl:value-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:ServVersion"/>
+                        </ns2:ServVersion>
+                        <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:From"/>
+                        <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:To"/>
+                        <ns2:MsgId>
+                            <xsl:value-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:MsgId"/>
+                        </ns2:MsgId>
+                        <ns2:MsgSrcId>
+                            <xsl:value-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:MsgId"/>
+                        </ns2:MsgSrcId>
+                        <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:BizServ"/>
+                        <ns2:CreatedDate>
+                            <xsl:value-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:CreatedDate"/>
+                        </ns2:CreatedDate>
+                        <xsl:if test="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:Signature">
+                            <ns2:Signature>
+                                <xsl:value-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ns2:Signature"/>
+                            </ns2:Signature>
+                        </xsl:if>
+                    </ns2:AppHdr>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ns2:ResponseStatus"/>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ServiceBody/ns3:FTTransactionList"/>
+                </ns3:createInquiryFTTransactionRes>
+            </Res>
+        </wsdlPfx:createInquiryFTTransactionRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createInquiryFTTransactionRes"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1465890581451</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>310</pd:x>
+        <pd:y>129</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:SOAEnvelope>
+                    <ns1:SOAServiceHeader>
+                        <ns1:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns2:AppHdr/node()"/>
+                        </ns1:AppHdr>
+                        <ns1:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns1:ProcessName>
+                    </ns1:SOAServiceHeader>
+                    <ns1:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createInquiryFTTransactionReq/Req/ns3:createInquiryFTTransactionReq/ns3:FTTransactionInput"/>
+                    </ns1:ServiceBody>
+                </ns1:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="www.tibco.com/plugin/Sleep" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.temenos.com/T24/event/PushNettingIBPS/PushNettingIBPSFlow" xmlns:pfx2="http://www.temenos.com/T24/event/ResultNettingIBPS/ResultNettingIBPSFlow" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/file/v2">
+    <xsd:import namespace="http://www.temenos.com/T24/event/ResultNettingIBPS/ResultNettingIBPSFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/NettingResult/ResultNettingIBPS-ResultNettingIBPSFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/PushNettingIBPS/PushNettingIBPSFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/NettingResult/PushNettingIBPS-PushNettingIBPSFlow.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse"/>
+    <pd:name>Services/Global/System/IBPST24/FTBulk/OperationImpl/NettingConfirmTest.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>100</pd:x>
+        <pd:y>247</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>sample</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>992</pd:endX>
+    <pd:endY>241</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <resultData>
+            <xsd:element name="strResultData" type="xsd:string"/>
+        </resultData>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437550821793</pd:targetNamespace>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>882</pd:x>
+        <pd:y>247</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="AssignResponseStr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>565</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <variableName>resultData</variableName>
+        </config>
+        <pd:inputBindings>
+            <strResultData>
+                <xsl:value-of select="concat(tib:pad($MapResponse/responseXML/systemType, 10, ' '),tib:pad($MapResponse/responseXML/nettingID,25,' '),&quot;Y&quot;,tib:pad($MapResponse/responseXML/status,4,' '),tib:pad($MapResponse/responseXML/processDate,14,' '),tib:concat-sequence($MapResponse/responseXML/Transaction))"/>
+            </strResultData>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapResponse">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>415</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <element>
+                <xsd:element name="responseXML">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="nettingID" type="xsd:string"/>
+                            <xsd:element name="systemType" type="xsd:string"/>
+                            <xsd:element name="status" type="xsd:string"/>
+                            <xsd:element name="processDate" type="xsd:string"/>
+                            <xsd:element name="Flag" type="xsd:string"/>
+                            <xsd:element name="Transaction" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="sourceSysID" type="xsd:string"/>
+                                        <xsd:element name="AccountNo" type="xsd:string"/>
+                                        <xsd:element name="CurrentBal" type="xsd:string"/>
+                                        <xsd:element name="Amount" type="xsd:string"/>
+                                        <xsd:element name="CreditDebit" type="xsd:string"/>
+                                        <xsd:element name="Status" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <responseXML>
+                <nettingID>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:id"/>
+                </nettingID>
+                <systemType>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:systemType"/>
+                </systemType>
+                <status>
+                    <xsl:value-of select="if ($ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:ftGeneratelStat=&quot;PROCESSED&quot;) then &quot;6000&quot; else &quot;6001&quot;"/>
+                </status>
+                <processDate>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:processingDate"/>
+                </processDate>
+                <Flag>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:transFlag"/>
+                </Flag>
+                <xsl:for-each select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:ibpsRefGroup">
+                    <Transaction>
+                        <sourceSysID>
+                            <xsl:value-of select="tib:pad(pfx3:ibpsRef, 40,' ')"/>
+                        </sourceSysID>
+                        <AccountNo>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitCitadNo)) then  tib:pad(current()/pfx3:debitCitadNo, 16,' ')       else &#xA;if (exists(current()/pfx3:creditCitadNo)) then  tib:pad(current()/pfx3:creditCitadNo, 16,' ') &#xA;else &quot;&quot;"/>
+                        </AccountNo>
+                        <CurrentBal>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitCurBal)) then tib:pad(current()/pfx3:debitCurBal,18,' ') else &#xA;if (exists(current()/pfx3:creditCurBal)) then tib:pad(current()/pfx3:creditCurBal,18,' ')&#xA;else tib:pad(&quot; &quot;,18,' ')"/>
+                        </CurrentBal>
+                        <Amount>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitAmount)) then tib:pad(pfx3:debitAmount,18,' ')&#xA;else if (exists(current()/pfx3:creditAmount)) then tib:pad(current()/pfx3:creditAmount,18,' ')&#xA;else tib:pad(&quot; &quot;,18, ' ')"/>
+                        </Amount>
+                        <CreditDebit>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitCitadNo)) then 'D'&#xA;else if (exists(current()/pfx3:creditCitadNo)) then 'C'&#xA;else ' '"/>
+                        </CreditDebit>
+                        <Status>
+                            <xsl:value-of select="if (pfx3:ftStatus=&quot;SUCCESS&quot;) then &quot;6000&quot; else &quot;6001&quot;"/>
+                        </Status>
+                    </Transaction>
+                </xsl:for-each>
+            </responseXML>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>637</pd:x>
+        <pd:y>394</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>853</pd:x>
+        <pd:y>376</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns3:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="100"/>
+                </IntervalInMillisec>
+            </ns3:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseNettingResult">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>249</pd:x>
+        <pd:y>254</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx3:PushNettingIBPSFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$JMS-Queue-Receiver/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapResponse</pd:from>
+        <pd:to>AssignResponseStr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseNettingResult</pd:from>
+        <pd:to>MapResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>ParseNettingResult</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignResponseStr</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

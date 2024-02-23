@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/logging/enginelog/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="sbv/common/envelope/serviceenvelope/1.0">
+    <xsd:import namespace="sbv/common/logging/enginelog/1.0" schemaLocation="/SharedResource/Schema/Common/Logging/EngineLog.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <pd:name>Util/ExceptionHandling/errorFormating.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns:EngineLog" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx:ServiceEnverlop>
+                <ns2:AppHdr>
+                    <ns2:ServVersion>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns2:ServVersion>
+                    <ns2:From>
+                        <ns2:Id>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns2:Name>
+                    </ns2:From>
+                    <ns2:To>
+                        <ns2:Id>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns2:Name>
+                    </ns2:To>
+                    <ns2:MsgId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns2:MsgId>
+                    <ns2:BizServ>
+                        <ns2:Id>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns2:Name>
+                    </ns2:BizServ>
+                    <ns2:CreatedDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns2:CreatedDate>
+                </ns2:AppHdr>
+                <ns2:ResponseStatus>
+                    <ns2:Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns2:Status>
+                    <ns2:ErrorCode>
+                        <xsl:value-of select="&quot;001&quot;"/>
+                    </ns2:ErrorCode>
+                    <ns2:ErrorMessage>
+                        <xsl:value-of select="&quot;Invalid Input&quot;"/>
+                    </ns2:ErrorMessage>
+                </ns2:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$Start/root/ns:EngineLog/ns:Category"/>
+                </ServiceBody>
+            </pfx:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>496</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/process/global/errorFormating/1.0</pd:targetNamespace>
+    <pd:activity name="writeToEngineLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>315</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Util/Logging/writeToEngineLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/ns:EngineLog"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>writeToEngineLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>writeToEngineLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

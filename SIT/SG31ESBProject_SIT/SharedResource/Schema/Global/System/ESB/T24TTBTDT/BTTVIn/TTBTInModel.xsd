@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/BTTVIn/version1.0/TTBTInModel.xsd"
+	 targetNamespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/BTTVIn/version1.0/TTBTInModel.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:element name="BTTV_In_Model" type="BTTV_In_Model_Type"/>
+	<xsd:element name="CITAD_TYPE" type="xsd:string"/>
+	<xsd:element name="TRANSACTION_TYPE" type="xsd:string"/>
+	<xsd:element name="DEBIT_ACCOUNT" type="xsd:string"/>
+	<xsd:element name="CREDIT_ACCOUNT" type="xsd:string"/>
+	<xsd:element name="CURRENCY" type="xsd:string"/>
+	<xsd:element name="AMOUNT" type="xsd:decimal"/>
+	<xsd:element name="VALUE_DATE" type="xsd:string"/>
+	<xsd:element name="DEBIT_NARRATIVE" type="xsd:string"/>
+	<xsd:element name="SENDING_BANK_CODE" type="xsd:string"/>
+	<xsd:element name="BANK_SORT_CODE" type="xsd:string"/>
+	<xsd:element name="ORDERING_CUSTOMER" type="xsd:string"/>
+	<xsd:element name="currency_timestamp" type="xsd:long"/>
+	<xsd:complexType name="BTTV_In_Model_Type">
+		<xsd:sequence>
+			<xsd:element ref="Addition_Data"/>
+			<xsd:element ref="BTTV_DATA"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BTTV_DATA_TYPE">
+		<xsd:sequence>
+			<xsd:element ref="CITAD_TYPE" minOccurs="0"/>
+			<xsd:element ref="TRANSACTION_TYPE" minOccurs="0"/>
+			<xsd:element ref="DEBIT_ACCOUNT" minOccurs="0"/>
+			<xsd:element ref="CREDIT_ACCOUNT" minOccurs="0"/>
+			<xsd:element ref="CURRENCY" minOccurs="0"/>
+			<xsd:element ref="AMOUNT"/>
+			<xsd:element ref="VALUE_DATE"/>
+			<xsd:element ref="DEBIT_NARRATIVE"/>
+			<xsd:element ref="SENDING_BANK_CODE" minOccurs="0"/>
+			<xsd:element ref="BANK_SORT_CODE" minOccurs="0"/>
+			<xsd:element ref="ORDERING_CUSTOMER" minOccurs="0"/>
+			<xsd:element ref="IN_SEND_BANK" minOccurs="0"/>
+			<xsd:element ref="IN_BENEFICIARY_ACCOUNT_NO" minOccurs="0"/>
+			<xsd:element ref="IN_BENEFICIARY" minOccurs="0"/>
+			<xsd:element ref="IN_RECEIVING_BANK" minOccurs="0"/>
+			<xsd:element ref="SINGNATORY" minOccurs="0"/>
+			<xsd:element ref="PAYMNET_DETAILS" minOccurs="0"/>
+			<xsd:element ref="COMPANY.CODE" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Addition_Data_Type">
+		<xsd:sequence>
+			<xsd:element ref="currency_timestamp" minOccurs="0"/>
+			<xsd:element ref="UNIQUE_ID" minOccurs="0"/>
+			<xsd:element ref="STATUS" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="BTTV_DATA" type="BTTV_DATA_TYPE"/>
+	<xsd:element name="Addition_Data" type="Addition_Data_Type"/>
+	<xsd:element name="UNIQUE_ID" type="xsd:string"/>
+	<xsd:element name="IN_SEND_BANK" type="xsd:string"/>
+	<xsd:element name="IN_BENEFICIARY_ACCOUNT_NO" type="xsd:string"/>
+	<xsd:element name="IN_BENEFICIARY" type="xsd:string"/>
+	<xsd:element name="IN_RECEIVING_BANK" type="xsd:string"/>
+	<xsd:element name="SINGNATORY" type="xsd:string"/>
+	<xsd:element name="PAYMNET_DETAILS" type="xsd:string"/>
+	<xsd:element name="COMPANY.CODE" type="xsd:string"/>
+	<xsd:element name="STATUS" type="xsd:int"/>
+</xsd:schema>

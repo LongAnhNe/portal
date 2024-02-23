@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.temenos.com/T24/event/T242ERP/T24Entries" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1436322400562" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.temenos.com/T24/event/Common/EventCommon" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/T24-Entries.xsd"/>
+    <xsd:import namespace="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/GLPosting/GLPosting.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1436322400562" location="/SharedResource/Schema/Global/Remittance/GLPosting/GLPosting.wsdl"/>
+    <pd:name>Services/Global/Remittance/GLPosting/Version1.0/createGLPosting/RequestResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>40</pd:startX>
+    <pd:startY>89</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$GLPostingRes/ns1:GLPostingRes/ns2:AppHdr"/>
+                <xsl:copy-of select="$GLPostingRes/ns1:GLPostingRes/ns2:ResponseStatus"/>
+                <ServiceBody>
+                    <xsl:copy-of select="$GLPostingRes/ns1:GLPostingRes/ns1:TransactionStatus"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>715</pd:endX>
+    <pd:endY>300</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AppHdr ref="ns2:AppHdr"/>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/glposting/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="AppHdr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>256</pd:x>
+        <pd:y>89</pd:y>
+        <config>
+            <variableName>AppHdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns2:AppHdr>
+                <ns2:CharSet>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </ns2:CharSet>
+                <ns2:ServVersion>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </ns2:ServVersion>
+                <ns2:From>
+                    <ns2:Id>
+                        <xsl:value-of select="&quot;2&quot;"/>
+                    </ns2:Id>
+                    <ns2:Name>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </ns2:Name>
+                </ns2:From>
+                <ns2:To>
+                    <ns2:Id>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns2:Id>
+                    <ns2:Name>
+                        <xsl:value-of select="&quot;T24&quot;"/>
+                    </ns2:Name>
+                </ns2:To>
+                <ns2:MsgId>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </ns2:MsgId>
+                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgPreId">
+                    <ns2:MsgPreId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgPreId"/>
+                    </ns2:MsgPreId>
+                </xsl:if>
+                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId">
+                    <ns2:MsgSrcId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId"/>
+                    </ns2:MsgSrcId>
+                </xsl:if>
+                <ns2:BizServ>
+                    <ns2:Id>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns2:Id>
+                    <ns2:Name>
+                        <xsl:value-of select="&quot;GLPosting&quot;"/>
+                    </ns2:Name>
+                </ns2:BizServ>
+                <ns2:CreatedDate>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns2:CreatedDate>
+            </ns2:AppHdr>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>607</pd:x>
+        <pd:y>458</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GLPostingRes">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>637</pd:x>
+        <pd:y>299</pd:y>
+        <config>
+            <element ref="ns1:GLPostingRes"/>
+        </config>
+        <pd:inputBindings>
+            <ns1:GLPostingRes>
+                <xsl:copy-of select="$AppHdr/ns2:AppHdr"/>
+                <ns2:ResponseStatus>
+                    <ns2:Status>
+                        <xsl:value-of select="'0'"/>
+                    </ns2:Status>
+                    <ns2:ErrorCode>
+                        <xsl:value-of select="'000'"/>
+                    </ns2:ErrorCode>
+                    <ns2:ErrorMessage>
+                        <xsl:value-of select="concat($Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId, &quot; posted successfully&quot;)"/>
+                    </ns2:ErrorMessage>
+                </ns2:ResponseStatus>
+                <ns1:TransactionStatus>
+                    <xsl:value-of select="concat($Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId, &quot; posted successfully&quot;)"/>
+                </ns1:TransactionStatus>
+            </ns1:GLPostingRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map-to-T24Entries">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>165</pd:x>
+        <pd:y>89</pd:y>
+        <config>
+            <element ref="ns:T24Entries"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns:T24Entries"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns:T24Entries"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Rollback group">
+        <pd:type>com.tibco.pe.core.TransactionGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>12</pd:x>
+        <pd:y>163</pd:y>
+        <pd:width>557</pd:width>
+        <pd:height>269</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>transactionGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:transactionType>JDBCTransaction</pd:transactionType>
+            <pd:includeCheckpoint>false</pd:includeCheckpoint>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Group</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd-Err</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Group</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Group</pd:from>
+            <pd:to>GLPostingRes 2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GLPostingRes 2</pd:from>
+            <pd:to>LogEnd-Err</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="Group">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>43</pd:x>
+            <pd:y>204</pd:y>
+            <pd:width>215</pd:width>
+            <pd:height>174</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$Map-to-T24Entries/ns:T24Entries/ns:entryIdGroup</pd:over>
+                <pd:iterationElementSlot>current</pd:iterationElementSlot>
+                <pd:indexSlot>i</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>insertNewT24Entries</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>insertNewT24Entries</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="insertNewT24Entries">
+                <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+                <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+                <pd:x>139</pd:x>
+                <pd:y>290</pd:y>
+                <config>
+                    <timeout>10</timeout>
+                    <commit>false</commit>
+                    <emptyStrAsNil>true</emptyStrAsNil>
+                    <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                    <statement>INSERT INTO SBV_T24_TL (STMT_NO,COMPANY_CODE,SYSTEM_ID,STMT_TYPE,ACCOUNT_NUMBER,CURRENCY,AMOUNT_LCY,CRF_TYPE,VALUE_DATE,INPUTTER,AUTHORISER,CUSTOMER_ID,CUSTOMER_NAME,TRANS_REFERENCE,CURRENCY_RATE,INTEREST_RATE,REF_NO_INTERFACE_T24ERP,AMOUNT_FCY,STMT_DESC)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+                    <Prepared_Param_DataType>
+                        <parameter>
+                            <parameterName>STMT_NO</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>COMPANY_CODE</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>SYSTEM_ID</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>STMT_TYPE</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>ACCOUNT_NUMBER</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>CURRENCY</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>AMOUNT_LCY</parameterName>
+                            <dataType>NUMERIC</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>CRF_TYPE</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>VALUE_DATE</parameterName>
+                            <dataType>DATE</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>INPUTTER</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>AUTHORISER</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>CUSTOMER_ID</parameterName>
+                            <dataType>INTEGER</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>CUSTOMER_NAME</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>TRANS_REFERENCE</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>CURRENCY_RATE</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>INTEREST_RATE</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>REF_NO_INTERFACE_T24ERP</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>AMOUNT_FCY</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                        <parameter>
+                            <parameterName>STMT_DESC</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                    </Prepared_Param_DataType>
+                </config>
+                <pd:inputBindings>
+                    <xsl:for-each select="$current/ns:entryIdGroup">
+                        <jdbcUpdateActivityInput>
+                            <STMT_NO>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:entryId)">
+                                        <xsl:value-of select="ns:entryId"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </STMT_NO>
+                            <COMPANY_CODE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:t24CoCode)">
+                                        <xsl:value-of select="ns:t24CoCode"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </COMPANY_CODE>
+                            <SYSTEM_ID>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:prodModule)">
+                                        <xsl:value-of select="ns:prodModule"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </SYSTEM_ID>
+                            <STMT_TYPE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:transCode)">
+                                        <xsl:value-of select="ns:transCode"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </STMT_TYPE>
+                            <ACCOUNT_NUMBER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:erpAcct)">
+                                        <xsl:value-of select="ns:erpAcct"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ACCOUNT_NUMBER>
+                            <CURRENCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:entryCcy)">
+                                        <xsl:value-of select="ns:entryCcy"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CURRENCY>
+                            <AMOUNT_LCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:amtLcy)">
+                                        <xsl:value-of select="ns:amtLcy"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AMOUNT_LCY>
+                            <CRF_TYPE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:drCrMarker)">
+                                        <xsl:value-of select="ns:drCrMarker"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CRF_TYPE>
+                            <VALUE_DATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:valueDate)">
+                                        <xsl:value-of select="ns:valueDate"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </VALUE_DATE>
+                            <INPUTTER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:txnInputter)">
+                                        <xsl:value-of select="ns:txnInputter"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </INPUTTER>
+                            <AUTHORISER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:txnAuthoriser)">
+                                        <xsl:value-of select="ns:txnAuthoriser"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AUTHORISER>
+                            <CUSTOMER_ID>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:customerId)">
+                                        <xsl:value-of select="ns:customerId"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CUSTOMER_ID>
+                            <CUSTOMER_NAME>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if (exists(ns:customerName)) then ns:customerName else &quot;&quot;)">
+                                        <xsl:value-of select="if (exists(ns:customerName)) then ns:customerName else &quot;&quot;"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CUSTOMER_NAME>
+                            <TRANS_REFERENCE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:contractId)">
+                                        <xsl:value-of select="ns:contractId"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TRANS_REFERENCE>
+                            <CURRENCY_RATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if (exists(ns:exchRate)) then ns:exchRate else &quot;&quot;)">
+                                        <xsl:value-of select="if (exists(ns:exchRate)) then ns:exchRate else &quot;&quot;"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CURRENCY_RATE>
+                            <INTEREST_RATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if (exists(ns:intRate)) then ns:intRate else &quot;&quot;)">
+                                        <xsl:value-of select="if (exists(ns:intRate)) then ns:intRate else &quot;&quot;"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </INTEREST_RATE>
+                            <REF_NO_INTERFACE_T24ERP>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId)">
+                                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </REF_NO_INTERFACE_T24ERP>
+                            <AMOUNT_FCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:amtFcy)">
+                                        <xsl:value-of select="ns:amtFcy"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AMOUNT_FCY>
+                            <STMT_DESC>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ns:transDesc)">
+                                        <xsl:value-of select="ns:transDesc"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </STMT_DESC>
+                        </jdbcUpdateActivityInput>
+                    </xsl:for-each>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="GLPostingRes 2">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>367</pd:x>
+            <pd:y>354</pd:y>
+            <config>
+                <element ref="ns1:GLPostingRes"/>
+            </config>
+            <pd:inputBindings>
+                <ns1:GLPostingRes>
+                    <xsl:copy-of select="$AppHdr/ns2:AppHdr"/>
+                    <ns2:ResponseStatus>
+                        <ns2:Status>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ns2:Status>
+                        <ns2:ErrorCode>
+                            <xsl:value-of select="&quot;001&quot;"/>
+                        </ns2:ErrorCode>
+                        <ns2:ErrorMessage>
+                            <xsl:value-of select="concat( &quot;Posting &quot;,$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId,&quot; failed&quot;)"/>
+                        </ns2:ErrorMessage>
+                        <ns2:ErrorInfo>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId">
+                                <ns2:Id>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId"/>
+                                </ns2:Id>
+                            </xsl:if>
+                            <ns2:ErrorCode>
+                                <xsl:value-of select="&quot;001&quot;"/>
+                            </ns2:ErrorCode>
+                            <ns2:ErrorMessage>
+                                <xsl:value-of select="concat( &quot;Posting &quot;,$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId,&quot; failed&quot;)"/>
+                            </ns2:ErrorMessage>
+                        </ns2:ErrorInfo>
+                    </ns2:ResponseStatus>
+                    <ns1:TransactionStatus>
+                        <xsl:value-of select="concat( &quot;Posting &quot;,$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId,&quot; failed&quot;)"/>
+                    </ns1:TransactionStatus>
+                </ns1:GLPostingRes>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogEnd-Err">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>489</pd:x>
+            <pd:y>356</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="'DEBUG'"/>
+                    </EnableRoles>
+                    <ns0:EngineLog xmlns:ns0="sbv/common/logging/enginelog/1.0">
+                        <ns0:ServiceName>
+                            <xsl:value-of select="'T24EntriesOnl'"/>
+                        </ns0:ServiceName>
+                        <ns0:Message>
+                            <xsl:value-of select="concat(&quot;T24EntriesOnl&quot;,': End ',&quot;T24EntriesOnl&quot;)"/>
+                        </ns0:Message>
+                        <ns0:Category>
+                            <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/EnableRoles"/>
+                        </ns0:Category>
+                        <ns0:TrackingId>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                        </ns0:TrackingId>
+                    </ns0:EngineLog>
+                    <pfx:SOAEnvelope>
+                        <pfx:SOAServiceHeader>
+                            <pfx:AppHdr>
+                                <xsl:copy-of select="$AppHdr/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                                <xsl:copy-of select="$AppHdr/ns2:AppHdr/@*"/>
+                                <xsl:copy-of select="$AppHdr/ns2:AppHdr/node()"/>
+                            </pfx:AppHdr>
+                            <pfx:SOAMsgId>
+                                <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                            </pfx:SOAMsgId>
+                            <pfx:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/Remittance/GLPosting/Version1.0/createGLPosting/RequestResponse&quot;"/>
+                            </pfx:ServiceName>
+                            <pfx:OperationName>
+                                <xsl:value-of select="'RequestResponse'"/>
+                            </pfx:OperationName>
+                            <pfx:ProcessName>
+                                <xsl:value-of select="$_processContext/ns5:ProcessContext/ProjectName"/>
+                            </pfx:ProcessName>
+                        </pfx:SOAServiceHeader>
+                        <pfx:ServiceBody>
+                            <pfx2:ServiceEnverlop>
+                                <xsl:copy-of select="$AppHdr/ns2:AppHdr"/>
+                                <ns2:ResponseStatus>
+                                    <ns2:Status>
+                                        <xsl:value-of select="'1'"/>
+                                    </ns2:Status>
+                                    <ns2:ErrorCode>
+                                        <xsl:value-of select="'999'"/>
+                                    </ns2:ErrorCode>
+                                    <ns2:ErrorMessage>
+                                        <xsl:value-of select="concat( &quot;Posting &quot;,$Start/root/pfx2:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId,&quot; failed&quot;)"/>
+                                    </ns2:ErrorMessage>
+                                </ns2:ResponseStatus>
+                                <ServiceBody>
+                                    <xsl:copy-of select="$current/ns:entryIdGroup/ns:entryId"/>
+                                </ServiceBody>
+                            </pfx2:ServiceEnverlop>
+                        </pfx:ServiceBody>
+                    </pfx:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="'End'"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="'0'"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map-to-T24Entries</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GLPostingRes</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map-to-T24Entries</pd:from>
+        <pd:to>AppHdr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rollback group</pd:from>
+        <pd:to>GLPostingRes</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AppHdr</pd:from>
+        <pd:to>Rollback group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

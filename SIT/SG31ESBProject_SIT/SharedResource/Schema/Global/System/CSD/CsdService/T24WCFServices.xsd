@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices">
+    <xs:complexType name="RequestHeader">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="MsgReqId" nillable="true" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="RequestHeader" nillable="true" type="tns:RequestHeader"/>
+    <xs:complexType name="ResponseHeader">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="MsgResId" nillable="true" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ResponseHeader" nillable="true" type="tns:ResponseHeader"/>
+    <xs:complexType name="ResponseStatus">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="Errors" nillable="true" type="tns:ArrayOfErrorInfo"/>
+            <xs:element minOccurs="0" name="Status" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ResponseStatus" nillable="true" type="tns:ResponseStatus"/>
+    <xs:complexType name="ArrayOfErrorInfo">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="ErrorInfo" nillable="true" type="tns:ErrorInfo"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfErrorInfo" nillable="true" type="tns:ArrayOfErrorInfo"/>
+    <xs:complexType name="ErrorInfo">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="ErrorCode" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ErrorInfo" nillable="true" type="tns:ErrorInfo"/>
+</xs:schema>

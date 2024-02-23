@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.sbv.gov.vn/global/remitance/autiongold/version1.0" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns3="sbv/common/envelope/soaenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1469593316763">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/remitance/autiongold/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/AutionGold/AOMMetalDeal.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1469593316763" location="/SharedResource/Schema/Global/Remittance/AutionGold/AutionGold.wsdl"/>
+    <pd:name>Services/Global/Remittance/AutionGold/OperationImpl/createMetalDleal.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createMetalDlealReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Call-Process/root/ns4:ServiceEnverlop/ServiceBody/*" element="ns1:createMetalDealRes" cardinality="?"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:createMetalDlealRes>
+            <part1>
+                <ns1:createMetalDealRes>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ns:AppHdr"/>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ns:ResponseStatus"/>
+                    <ns1:ScreateMetalDealResBody>
+                        <xsl:if test="$Call-Process/root/ns4:ServiceEnverlop/ServiceBody/ns1:createMetalDealRes/ns1:ScreateMetalDealResBody/ns1:FxRef">
+                            <ns1:FxRef>
+                                <xsl:value-of select="$Call-Process/root/ns4:ServiceEnverlop/ServiceBody/ns1:createMetalDealRes/ns1:ScreateMetalDealResBody/ns1:FxRef"/>
+                            </ns1:FxRef>
+                        </xsl:if>
+                    </ns1:ScreateMetalDealResBody>
+                </ns1:createMetalDealRes>
+            </part1>
+        </wsdlPfx:createMetalDlealRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createMetalDlealRes"/>
+    <pd:endX>449</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1469697003580</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:SOAEnvelope>
+                    <ns3:SOAServiceHeader>
+                        <ns3:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createMetalDlealReq/part1/ns1:createMetalDlealReq/ns:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createMetalDlealReq/part1/ns1:createMetalDlealReq/ns:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createMetalDlealReq/part1/ns1:createMetalDlealReq/ns:AppHdr/node()"/>
+                        </ns3:AppHdr>
+                        <ns3:OperationName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns3:OperationName>
+                        <ns3:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </ns3:ProcessName>
+                    </ns3:SOAServiceHeader>
+                    <ns3:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createMetalDlealReq/part1/ns1:createMetalDlealReq/ns1:createMetalDealReqBody"/>
+                    </ns3:ServiceBody>
+                </ns3:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

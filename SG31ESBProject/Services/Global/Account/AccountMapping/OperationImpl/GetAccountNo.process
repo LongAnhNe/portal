@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1436322400563">
+    <wsdl:import namespace="http://xmlns.example.com/1436322400563" location="/SharedResource/Schema/Global/Account/AccountMapping/AccountMapping.wsdl"/>
+    <pd:name>Services/Global/Account/AccountMapping/OperationImpl/GetAccountNo.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:GetAccountNoReq"/>
+    <pd:startX>137</pd:startX>
+    <pd:startY>74</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:GetAccountNoRes>
+            <AccountMappingRes>
+                <xsl:copy-of select="$RequestResponse/root/ns:AccountMappingRes"/>
+            </AccountMappingRes>
+        </wsdlPfx:GetAccountNoRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:GetAccountNoRes"/>
+    <pd:endX>455</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1441944724854</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <processName>/Services/Global/Account/AccountMapping/Version1.0/GetAccountNo/RequestResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/wsdlPfx:GetAccountNoReq/AccountMappingReq/ns:AccountMappingReq"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

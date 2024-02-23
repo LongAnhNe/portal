@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://esb.vsd.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.example.com/1469432349038" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="BondPaymentPortTypeService" targetNamespace="http://xmlns.example.com/1469432349038">
+    <wsdl:types>
+        <xs:schema xmlns:ns1="vsd/common/envelope/commonheader/1.0" xmlns:tns="vsd/common/envelope/serviceenvelope/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="vsd/common/envelope/serviceenvelope/1.0">
+            <xs:import namespace="vsd/common/envelope/commonheader/1.0"/>
+            <xs:element name="BaseServiceEnvelopeRequest" type="tns:BaseServiceEnvelopeRequestType"/>
+            <xs:element name="BaseServiceEnvelopeResponse" type="tns:BaseServiceEnvelopeResponseType"/>
+            <xs:element name="ServiceEnverlop" type="tns:ServiceEnverlopType"/>
+            <xs:complexType name="BaseServiceEnvelopeRequestType">
+                <xs:sequence>
+                    <xs:element ref="ns1:AppHdr"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="BaseServiceEnvelopeResponseType">
+                <xs:sequence>
+                    <xs:element ref="ns1:AppHdr"/>
+                    <xs:element ref="ns1:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ServiceEnverlopType">
+                <xs:sequence>
+                    <xs:element ref="ns1:AppHdr"/>
+                    <xs:element minOccurs="0" ref="ns1:ResponseStatus"/>
+                    <xs:element name="ServiceBody" type="tns:ServiceBodyType"/>
+                    <xs:element minOccurs="0" name="Other" type="xs:string"/>
+                </xs:sequence>
+                <xs:anyAttribute namespace="##other" processContents="skip"/>
+            </xs:complexType>
+            <xs:complexType name="ServiceBodyType">
+                <xs:sequence>
+                    <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+                </xs:sequence>
+                <xs:anyAttribute namespace="##other" processContents="skip"/>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:tns="vsd/common/envelope/commonheader/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="vsd/common/envelope/commonheader/1.0" version="1.0">
+            <xs:element name="AppHdr" type="tns:AppHdrType"/>
+            <xs:element name="CharSet" type="xs:string"/>
+            <xs:element name="CreatedDate" type="xs:anySimpleType"/>
+            <xs:element name="MsgId" type="xs:string"/>
+            <xs:element name="MsgPreId" type="xs:string"/>
+            <xs:element name="MsgSrcId" type="xs:string"/>
+            <xs:element name="NameValuePairs" type="tns:PairsType"/>
+            <xs:element name="ResponseStatus" type="tns:ResponseStatusType"/>
+            <xs:element name="ServVersion" type="xs:string"/>
+            <xs:element name="Signature" type="xs:string"/>
+            <xs:complexType name="AppHdrType">
+                <xs:sequence>
+                    <xs:element form="qualified" minOccurs="0" name="CharSet" type="xs:string"/>
+                    <xs:element form="qualified" name="ServVersion" type="xs:string"/>
+                    <xs:element form="qualified" name="From" type="tns:PairsType"/>
+                    <xs:element form="qualified" name="To" type="tns:PairsType"/>
+                    <xs:element form="qualified" name="MsgId" type="xs:string"/>
+                    <xs:element form="qualified" minOccurs="0" name="MsgPreId" type="xs:string"/>
+                    <xs:element form="qualified" minOccurs="0" name="MsgSrcId" type="xs:string"/>
+                    <xs:element form="qualified" name="BizServ" type="tns:PairsType"/>
+                    <xs:element form="qualified" name="CreatedDate" type="xs:dateTime"/>
+                    <xs:element form="qualified" minOccurs="0" name="Signature" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PairsType">
+                <xs:sequence>
+                    <xs:element form="qualified" name="Id" type="xs:string"/>
+                    <xs:element form="qualified" name="Name" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ResponseStatusType">
+                <xs:sequence>
+                    <xs:element form="qualified" name="Status" type="xs:string"/>
+                    <xs:element form="qualified" minOccurs="0" name="ErrorCode" type="xs:string"/>
+                    <xs:element form="qualified" minOccurs="0" name="ErrorMessage" type="xs:string"/>
+                    <xs:element form="qualified" maxOccurs="unbounded" minOccurs="0" name="ErrorInfo" type="tns:ErrorInfoType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ErrorInfoType">
+                <xs:sequence>
+                    <xs:element form="qualified" minOccurs="0" name="Id" type="xs:string"/>
+                    <xs:element form="qualified" minOccurs="0" name="ErrorCode" type="xs:string"/>
+                    <xs:element form="qualified" minOccurs="0" name="ErrorMessage" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ns1="vsd/common/envelope/serviceenvelope/1.0" xmlns:tns="http://esb.vsd.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://esb.vsd.com/">
+            <xs:import namespace="vsd/common/envelope/serviceenvelope/1.0"/>
+            <xs:element name="Amount" type="xs:string"/>
+            <xs:element name="BondCode" type="xs:string"/>
+            <xs:element name="BondConfirmPayment">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="SendingNumber" type="xs:int"/>
+                        <xs:element name="FinishFlag" type="xs:boolean"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:BondConfirmPaymentDetail"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="BondConfirmPaymentDetail">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="SrcTransID" type="xs:string"/>
+                        <xs:element name="TransDate" type="xs:string"/>
+                        <xs:element name="ValueDate" type="xs:string"/>
+                        <xs:element name="BondCode" type="xs:string"/>
+                        <xs:element name="SendingBank" type="xs:string"/>
+                        <xs:element name="RecevingBank" type="xs:string"/>
+                        <xs:element name="Amount" type="xs:string"/>
+                        <xs:element name="Currency" type="xs:string"/>
+                        <xs:element name="Notes" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="BondPaymentFormReq" type="tns:BondPaymentFormReqType"/>
+            <xs:element name="BondPaymentFormRes" type="tns:BondPaymentFormResType"/>
+            <xs:element name="Currency" type="xs:string"/>
+            <xs:element name="FinishFlag" type="xs:boolean"/>
+            <xs:element name="ModifyType" type="xs:int"/>
+            <xs:element name="Notes" type="xs:string"/>
+            <xs:element name="RecevingBank" type="xs:string"/>
+            <xs:element name="ReportBondPayment">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:ReportBondPaymentDetail"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ReportBondPaymentDetail">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="SrcTransID" type="xs:string"/>
+                        <xs:element name="TransDate" type="xs:string"/>
+                        <xs:element name="ValueDate" type="xs:string"/>
+                        <xs:element name="BondCode" type="xs:string"/>
+                        <xs:element name="SendingBank" type="xs:string"/>
+                        <xs:element name="RecevingBank" type="xs:string"/>
+                        <xs:element name="Amount" type="xs:string"/>
+                        <xs:element name="Currency" type="xs:string"/>
+                        <xs:element name="TransCompleted" type="xs:boolean"/>
+                        <xs:element name="Status" type="xs:boolean"/>
+                        <xs:element name="Notes" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ReportBondPaymentReq" type="tns:ReportBondPaymentReqType"/>
+            <xs:element name="ReportBondPaymentRes" type="tns:ReportBondPaymentResType"/>
+            <xs:element name="ReverseBondPayment">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:ReverseBondPaymentDetail"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ReverseBondPaymentDetail">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="SrcTransID" type="xs:string"/>
+                        <xs:element name="TransDate" type="xs:string"/>
+                        <xs:element name="BondCode" type="xs:string"/>
+                        <xs:element name="SendingBank" type="xs:string"/>
+                        <xs:element name="RecevingBank" type="xs:string"/>
+                        <xs:element name="Amount" type="xs:string"/>
+                        <xs:element name="Currency" type="xs:string"/>
+                        <xs:element name="ValueDate" type="xs:string"/>
+                        <xs:element name="ModifyType" type="xs:int"/>
+                        <xs:element minOccurs="0" name="ErrCode" type="xs:string"/>
+                        <xs:element minOccurs="0" name="ErrDesc" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ReverseBondPaymentReq" type="tns:ReverseBondPaymentReqType"/>
+            <xs:element name="ReverseBondPaymentRes" type="tns:ReverseBondPaymentResType"/>
+            <xs:element name="SendingBank" type="xs:string"/>
+            <xs:element name="SendingNumber" type="xs:int"/>
+            <xs:element name="SrcTransID" type="xs:string"/>
+            <xs:element name="Status" type="xs:boolean"/>
+            <xs:element name="TransCompleted" type="xs:boolean"/>
+            <xs:element name="TransDate" type="xs:string"/>
+            <xs:element name="ValueDate" type="xs:string"/>
+            <xs:complexType name="ReverseBondPaymentReqType">
+                <xs:complexContent>
+                    <xs:extension base="ns1:BaseServiceEnvelopeRequestType">
+                        <xs:sequence>
+                            <xs:element ref="tns:ReverseBondPayment"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ReportBondPaymentReqType">
+                <xs:complexContent>
+                    <xs:extension base="ns1:BaseServiceEnvelopeRequestType">
+                        <xs:sequence>
+                            <xs:element ref="tns:ReportBondPayment"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="BondPaymentFormReqType">
+                <xs:complexContent>
+                    <xs:extension base="ns1:BaseServiceEnvelopeRequestType">
+                        <xs:sequence>
+                            <xs:element ref="tns:BondConfirmPayment"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ReverseBondPaymentResType">
+                <xs:complexContent>
+                    <xs:extension base="ns1:BaseServiceEnvelopeResponseType">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="BondPaymentFormResType">
+                <xs:complexContent>
+                    <xs:extension base="ns1:BaseServiceEnvelopeResponseType">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ReportBondPaymentResType">
+                <xs:complexContent>
+                    <xs:extension base="ns1:BaseServiceEnvelopeResponseType">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ReverseBondPaymentType">
+                <xs:sequence>
+                    <xs:element ref="tns:ReverseBondPaymentDetail"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="BondConfirmPaymentType">
+                <xs:sequence>
+                    <xs:element ref="tns:BondConfirmPaymentDetail"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="reportBondPaymentResponse">
+        <wsdl:part element="ns1:ReportBondPaymentRes" name="Response">    </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="reverseBondPayment">
+        <wsdl:part element="ns1:ReverseBondPaymentReq" name="Request">    </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="reportBondPayment">
+        <wsdl:part element="ns1:ReportBondPaymentReq" name="Request">    </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="confirmBondPaymentResponse">
+        <wsdl:part element="ns1:BondPaymentFormRes" name="Response">    </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="confirmBondPayment">
+        <wsdl:part element="ns1:BondPaymentFormReq" name="Request">    </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="reverseBondPaymentResponse">
+        <wsdl:part element="ns1:ReverseBondPaymentRes" name="Response">    </wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="BondPaymentPortType">
+        <wsdl:operation name="reverseBondPayment">
+            <wsdl:input message="tns:reverseBondPayment" name="reverseBondPayment">    </wsdl:input>
+            <wsdl:output message="tns:reverseBondPaymentResponse" name="reverseBondPaymentResponse">    </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="reportBondPayment">
+            <wsdl:input message="tns:reportBondPayment" name="reportBondPayment">    </wsdl:input>
+            <wsdl:output message="tns:reportBondPaymentResponse" name="reportBondPaymentResponse">    </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="confirmBondPayment">
+            <wsdl:input message="tns:confirmBondPayment" name="confirmBondPayment">    </wsdl:input>
+            <wsdl:output message="tns:confirmBondPaymentResponse" name="confirmBondPaymentResponse">    </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BondPaymentPortTypeServiceSoapBinding" type="tns:BondPaymentPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="reverseBondPayment">
+            <soap:operation soapAction="/Services/Global/System/VSD/BondPaymentService.serviceagent/BondPaymentPortTypeEndpoint0/reverseBondPayment" style="document"/>
+            <wsdl:input name="reverseBondPayment">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="reverseBondPaymentResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="reportBondPayment">
+            <soap:operation soapAction="/Services/Global/System/VSD/BondPaymentService.serviceagent/BondPaymentPortTypeEndpoint0/reportBondPayment" style="document"/>
+            <wsdl:input name="reportBondPayment">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="reportBondPaymentResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="confirmBondPayment">
+            <soap:operation soapAction="/Services/Global/System/VSD/BondPaymentService.serviceagent/BondPaymentPortTypeEndpoint0/confirmBondPayment" style="document"/>
+            <wsdl:input name="confirmBondPayment">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="confirmBondPaymentResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="BondPaymentPortTypeService">
+        <wsdl:port binding="tns:BondPaymentPortTypeServiceSoapBinding" name="BondPaymentPortTypePort">
+            <soap:address location="http://10.0.13.30:8181/cxf/SBVContext/SBVInService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

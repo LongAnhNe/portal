@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTPostingESBModel.xsd"
+	 targetNamespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTPostingESBModel.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:element name="BTCT_Posting_Model" type="BTCT_Posting_Model_Type"/>
+	<xsd:element name="CHUTRI_REF" type="xsd:string"/>
+	<xsd:element name="THANHVIEN_REF" type="xsd:string"/>
+	<xsd:element name="MA_CHINHANH_T24" type="xsd:string"/>
+	<xsd:element name="SENT_TO_T24" type="xsd:short"/>
+	<xsd:element name="ERR_MSG" type="xsd:string"/>
+	<xsd:element name="SHNH" type="xsd:string"/>
+	<xsd:element name="NGAY" type="xsd:string"/>
+	<xsd:element name="PHIEN" type="xsd:short"/>
+	<xsd:element name="TINHTRANG" type="xsd:string"/>
+	<xsd:element name="SODUOCTHU" type="xsd:decimal"/>
+	<xsd:element name="SOPHAITRA" type="xsd:decimal"/>
+	<xsd:element name="currency_timestamp" type="xsd:long"/>
+	<xsd:complexType name="BTCT_Posting_Model_Type">
+		<xsd:sequence>
+			<xsd:element ref="Addition_Data"/>
+			<xsd:element ref="TTBTDT_DATA"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TTBTDT_DATA_TYPE">
+		<xsd:sequence>
+			<xsd:element ref="CHUTRI_REF" minOccurs="0"/>
+			<xsd:element ref="THANHVIEN_REF" minOccurs="0"/>
+			<xsd:element ref="MA_CHINHANH_T24" minOccurs="0"/>
+			<xsd:element ref="SENT_TO_T24" minOccurs="0"/>
+			<xsd:element ref="ERR_MSG" minOccurs="0"/>
+			<xsd:element ref="SHNH"/>
+			<xsd:element ref="NGAY"/>
+			<xsd:element ref="PHIEN"/>
+			<xsd:element ref="TINHTRANG" minOccurs="0"/>
+			<xsd:element ref="SODUOCTHU" minOccurs="0"/>
+			<xsd:element ref="SOPHAITRA" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Addition_Data_Type">
+		<xsd:sequence>
+			<xsd:element ref="currency_timestamp" minOccurs="0"/>
+			<xsd:element ref="UNIQUE_ID" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="TTBTDT_DATA" type="TTBTDT_DATA_TYPE"/>
+	<xsd:element name="Addition_Data" type="Addition_Data_Type"/>
+	<xsd:element name="UNIQUE_ID" type="xsd:string"/>
+</xsd:schema>

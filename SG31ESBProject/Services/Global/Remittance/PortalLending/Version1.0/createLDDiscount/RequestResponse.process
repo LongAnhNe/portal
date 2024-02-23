@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/Schema.xsd" xmlns:pfx13="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx12="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx10="http://temenos.com/SBV.CSD.WS" xmlns:ns22="sbv/global/datatype/datatype/version1.0" xmlns:pfx17="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/LendingCommon.xsd" xmlns:pfx5="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:pfx3="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="www.tibco.com/plugin/Sleep" xmlns:pfx6="http://xmlns.example.com/1433466938916" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns12="sbv/common/exceptionhandling/exception/1.0" xmlns:ns5="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/SecuritiesPosting/SecuritiesPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CDPFundXfer/FundXfer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalLending/PortalLending.xsd"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.T24Service.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <pd:name>Services/Global/Remittance/PortalLending/Version1.0/createLDDiscount/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>449</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To"/>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$ResponseResult/root/TransactionID"/>
+                    </ns3:MsgId>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId">
+                        <ns3:MsgPreId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId"/>
+                        </ns3:MsgPreId>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ"/>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/root/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorCode>
+                        <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                    </ns3:ErrorCode>
+                    <xsl:if test="$ResponseResult/root/Message">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/root/Message"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                    <ns3:ErrorInfo>
+                        <ns3:ErrorCode>
+                            <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                        </ns3:ErrorCode>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx14:LDDiscountInfoRes>
+                        <pfx14:transactionId>
+                            <xsl:value-of select="$ResponseResult/root/TransactionID"/>
+                        </pfx14:transactionId>
+                    </pfx14:LDDiscountInfoRes>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>852</pd:endX>
+    <pd:endY>449</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="TransactionID" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/portallending/createlddiscount/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1210</pd:x>
+        <pd:y>449</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1013</pd:x>
+        <pd:y>450</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="concat(&quot;Loi Catch Exception: &quot;, $_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg)"/>
+                </Message>
+                <TransactionID>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransactionID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>200</pd:x>
+        <pd:y>449</pd:y>
+        <config>
+            <element ref="pfx14:LDDiscountInfoReq"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx14:LDDiscountInfoReq"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx14:LDDiscountInfoReq"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="LDDiscount">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>336</pd:x>
+        <pd:y>216</pd:y>
+        <pd:width>414</pd:width>
+        <pd:height>450</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24LDDiscountWS</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LDDiscountExisted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LDDiscountSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LD DiscountTimeOut</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LDDiscountError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24LDDiscountWS</pd:from>
+            <pd:to>LDDiscountSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24LDDiscountWS</pd:from>
+            <pd:to>LDDiscountError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LDDiscountError</pd:from>
+            <pd:to>LD DiscountTimeOut</pd:to>
+            <pd:xpathDescription>Timeout</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24LDDiscountWS</pd:from>
+            <pd:to>LDDiscountExisted</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/successIndicator='T24Error' 
+and contains($CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+        </pd:transition>
+        <pd:activity name="CallT24LDDiscountWS">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>404</pd:x>
+            <pd:y>354</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx15:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>LDDiscountInput</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSPortal%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx14:LDDiscountInfoReq"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx15:LDDiscountInput>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="&quot;VN0010001&quot;"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <LDLOANSANDDEPOSITSSBVSVDISCOUNTINPType>
+                            <CustomerId>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:CustomerId"/>
+                            </CustomerId>
+                            <Currency>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:Currency"/>
+                            </Currency>
+                            <gAMOUNT>
+                                <LoanAmount>
+                                    <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:LoanAmount"/>
+                                </LoanAmount>
+                            </gAMOUNT>
+                            <gBUSDAYDEFN>
+                                <BusinessDayDef>
+                                    <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:BusinessDayDef"/>
+                                </BusinessDayDef>
+                            </gBUSDAYDEFN>
+                            <LoanStartDate>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:LoanStartDate"/>
+                            </LoanStartDate>
+                            <LoanMaturityDate>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:LoanMaturityDate"/>
+                            </LoanMaturityDate>
+                            <LimitReference>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:LimitReference"/>
+                            </LimitReference>
+                            <LoanProduct>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:LoanProduct"/>
+                            </LoanProduct>
+                            <DRAWDOWNACCOUNT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:DRAWDOWNACCOUNT"/>
+                            </DRAWDOWNACCOUNT>
+                            <InterestType>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:InterestType"/>
+                            </InterestType>
+                            <InterestBasis>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:InterestBasis"/>
+                            </InterestBasis>
+                            <gINTERESTRATE>
+                                <InterestRateFixed>
+                                    <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:InterestRateFixed"/>
+                                </InterestRateFixed>
+                            </gINTERESTRATE>
+                            <InterestKey>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:InterestKey"/>
+                            </InterestKey>
+                            <InterestSpread>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:InterestSpread"/>
+                            </InterestSpread>
+                            <ACCRUALPARAM>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:AccrualParam"/>
+                            </ACCRUALPARAM>
+                            <CAPITALISATION>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:Capitalisation"/>
+                            </CAPITALISATION>
+                            <TOTINTERESTAMT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:TOTInteresAMT"/>
+                            </TOTINTERESTAMT>
+                            <LiquidationMode>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:LiquidationMode"/>
+                            </LiquidationMode>
+                            <UseDefaultPIRate>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:UseDefaultPIRate"/>
+                            </UseDefaultPIRate>
+                            <PRINLIQACCT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:PRINLIQACCT"/>
+                            </PRINLIQACCT>
+                            <PRINBENBANK1>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:PRINBENBANK1"/>
+                            </PRINBENBANK1>
+                            <PRINBENBANK2>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:PRINBENBANK2"/>
+                            </PRINBENBANK2>
+                            <gPRINADDRESS>
+                                <PRINADDRESS>
+                                    <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:PRINADDRESS"/>
+                                </PRINADDRESS>
+                            </gPRINADDRESS>
+                            <BENEFPRINACCT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:BENEFPRINACCT"/>
+                            </BENEFPRINACCT>
+                            <INTLIQACCT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:INTLIQACCT"/>
+                            </INTLIQACCT>
+                            <INTBENBANK1>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:INTBENBANK1"/>
+                            </INTBENBANK1>
+                            <COMLIQACCT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:COMLIQACCT"/>
+                            </COMLIQACCT>
+                            <SECUREDYN>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:SECUREDYN"/>
+                            </SECUREDYN>
+                            <FEEPAYACCOUNT>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:FEEPAYACCOUNT"/>
+                            </FEEPAYACCOUNT>
+                            <gOURREMARKS>
+                                <OURREMARKS>
+                                    <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:OURREMARKS"/>
+                                </OURREMARKS>
+                            </gOURREMARKS>
+                            <AUTOSCHEDS>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:AutoScheds"/>
+                            </AUTOSCHEDS>
+                            <DEFINESCHEDS>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:DEFINESCHEDS"/>
+                            </DEFINESCHEDS>
+                            <INTERESTDUEDATE>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:InterestDueDate"/>
+                            </INTERESTDUEDATE>
+                            <PaymethodBEGINEND>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:PaymethodBEGINEND"/>
+                            </PaymethodBEGINEND>
+                            <FWDBWDKEY>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:FWDBWDKey"/>
+                            </FWDBWDKEY>
+                            <BASEDATEKEY>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:BaseDateKey"/>
+                            </BASEDATEKEY>
+                            <ROUNDINGRULE>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:ROUNDINGRULE"/>
+                            </ROUNDINGRULE>
+                            <BuyBackOption>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:BuyBackOption"/>
+                            </BuyBackOption>
+                            <PortalReferenceNo>
+                                <xsl:value-of select="$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LDDiscountDetail/pfx14:PortalReferenceNo"/>
+                            </PortalReferenceNo>
+                        </LDLOANSANDDEPOSITSSBVSVDISCOUNTINPType>
+                    </pfx15:LDDiscountInput>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LDDiscountSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>604</pd:x>
+            <pd:y>281</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="if($CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/successIndicator=&quot;Success&quot;) then '0'&#xA;else '1'"/>
+                    </Status>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="not(($CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1]/@xsi:nil=(&quot;true&quot;)) or ($CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1]/@xsi:nil=(&quot;1&quot;)))">
+                        <Message>
+                            <xsl:value-of select="$CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1]"/>
+                        </Message>
+                    </xsl:if>
+                    <TransactionID>
+                        <xsl:value-of select="if($CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/successIndicator=&quot;Success&quot;) then&#xA;$CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/transactionId&#xA;else&#xA;''"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LDDiscountError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>471</pd:x>
+            <pd:y>567</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </Status>
+                    <Message>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. LOI GOI WEBSERVICES&quot;)"/>
+                    </Message>
+                    <TransactionID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LD DiscountTimeOut">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>608</pd:x>
+            <pd:y>570</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;3&quot;"/>
+                    </Status>
+                    <Message>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. T24 Services Timeout&quot;)"/>
+                    </Message>
+                    <TransactionID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LDDiscountExisted">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>559</pd:x>
+            <pd:y>401</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="'0'"/>
+                    </Status>
+                    <xsl:if test="$CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1]">
+                        <Message>
+                            <xsl:value-of select="$CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1]"/>
+                        </Message>
+                    </xsl:if>
+                    <TransactionID>
+                        <xsl:value-of select="substring-after($CallT24LDDiscountWS/outputMessage/pfx15:LDDiscountInputResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO &quot;)"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LDDiscount</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>LDDiscount</pd:to>
+        <pd:xpathDescription>LD Discount</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Map-Data/pfx14:LDDiscountInfoReq/pfx14:LendingCommon/pfx17:TransactionType = 'LDDiscount'</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

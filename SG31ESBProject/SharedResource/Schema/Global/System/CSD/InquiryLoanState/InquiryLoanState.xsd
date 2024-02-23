@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="createInquiryLoanStateReq" type="createInquiryLoanStateReqType"/>
+	<xs:element name="createInquiryLoanStateRes" type="createInquiryLoanStateResType"/>
+	<xs:complexType name="createInquiryLoanStateReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="InquiryLoanState"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createInquiryLoanStateResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SInquiryLoanStateList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="InquiryLoanState" type="InquiryLoanStateType"/>
+	<xs:complexType name="InquiryLoanStateType">
+		<xs:sequence>
+			<xs:element ref="InterfaceId"/>
+			<xs:element ref="LoanContractNumber"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="InterfaceId" type="xs:string"/>
+	<xs:element name="LoanContractNumber" type="xs:string"/>
+	<xs:element name="InquiryLoanStateDetail" type="InquiryLoanStateDetailType"/>
+	<xs:complexType name="InquiryLoanStateDetailType">
+		<xs:sequence>
+			<xs:element ref="LoanContractNumber" minOccurs="0"/>
+			<xs:element ref="category" minOccurs="0"/>
+			<xs:element ref="customerId" minOccurs="0"/>
+			<xs:element ref="amount" minOccurs="0"/>
+			<xs:element ref="currency" minOccurs="0"/>
+			<xs:element ref="valueDate" minOccurs="0"/>
+			<xs:element ref="finMatDate" minOccurs="0"/>
+			<xs:element ref="interestRate" minOccurs="0"/>
+			<xs:element ref="PenatyAmount" minOccurs="0"/>
+			<xs:element ref="recordStatus" minOccurs="0"/>
+			<xs:element ref="overdueStatus" minOccurs="0"/>
+			<xs:element ref="status" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="category" type="xs:string"/>
+	<xs:element name="customerId" type="xs:string"/>
+	<xs:element name="currency" type="xs:string"/>
+	<xs:element name="valueDate" type="xs:string"/>
+	<xs:element name="finMatDate" type="xs:string"/>
+	<xs:element name="recordStatus" type="xs:string"/>
+	<xs:element name="status" type="xs:string"/>
+	<xs:element name="interestRate" type="xs:string"/>
+	<xs:element name="amount" type="xs:string"/>
+	<xs:element name="SInquiryLoanStateList" type="InquiryLoanStateListType"/>
+	<xs:complexType name="InquiryLoanStateListType">
+		<xs:sequence>
+			<xs:element ref="InquiryLoanStateDetail" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="overdueStatus" type="xs:string"/>
+	<xs:element name="PenatyAmount" type="xs:string"/>
+</xs:schema>

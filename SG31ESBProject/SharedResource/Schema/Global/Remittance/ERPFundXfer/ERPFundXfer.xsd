@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:cmd-dt="sbv/global/datatype/datatype/version1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="sbv/global/datatype/datatype/version1.0" schemaLocation="../../DataType/DataType1.0.xsd"/>
+	<xs:element name="createFundReq" type="createFundReqType"/>
+	<xs:element name="createFundRes" type="createFundResType"/>
+	<xs:complexType name="createFundReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FundXferInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createFundResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FundXferInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FundXferReqType">
+		<xs:sequence>
+			<xs:element name="SystemType" type="xs:string"/>
+			<xs:element name="SourceAppId" type="xs:string"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+			<xs:element name="BusinessCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FundXferResType">
+		<xs:sequence>
+			<xs:element name="TransId" type="xs:string"/>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FundXferInfoReq" type="FundXferReqType"/>
+	<xs:element name="FundXferInfoRes" type="FundXferResType"/>
+	<xs:complexType name="createFTCITADReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FTCITADReqType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createFTCITADResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FTCITADResType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTCITADReqType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TransType" type="xs:string"/>
+				<xs:element name="CompanyCode" type="xs:string"/>
+				<xs:element name="ERPIDReference" type="xs:string"/>
+				<xs:element name="SendingBank" type="xs:string"/>
+				<xs:element name="ReceiveBank" type="xs:string"/>
+				<xs:element name="InSendingBank" type="xs:string" minOccurs="0"/>
+				<xs:element name="InReceiveBank" type="xs:string" minOccurs="0"/>
+				<xs:element name="Currency" type="xs:string"/>
+				<xs:element name="Amount" type="xs:string"/>
+				<xs:element name="CustomerName" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustomerAddress" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustomerAccount" type="xs:string"/>
+				<xs:element name="Benificiary" type="xs:string"/>
+				<xs:element name="BenCustomerAddress" type="xs:string"/>
+				<xs:element name="BenCustomerAccount" type="xs:string" minOccurs="0"/>
+				<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+				<xs:element name="CITADType" type="xs:string"/>
+				<xs:element name="ValueDate" type="xs:string"/>
+				<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+				<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FTCITADResType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TransId" type="xs:string" minOccurs="0"/>
+				<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="createFTCITADReq" type="createFTCITADReqType"/>
+	<xs:element name="createFTCITADRes" type="createFTCITADResType"/>
+	<xs:complexType name="createTellerReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="TellerReqType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createTellerResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="TellerResType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TellerReqType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SystemType" type="xs:string"/>
+				<xs:element name="SourceAppId" type="xs:string"/>
+				<xs:element name="TransactionCode" type="xs:string"/>
+				<xs:element name="CurrencyCash" type="xs:string" minOccurs="0"/>
+				<xs:element name="AccountCash" type="xs:string" minOccurs="0"/>
+				<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+				<xs:element name="ValueDateCash" type="xs:string" minOccurs="0"/>
+				<xs:element name="Currency2" type="xs:string" minOccurs="0"/>
+				<xs:element name="Account2" type="xs:string" minOccurs="0"/>
+				<xs:element name="ValueDate2" type="xs:string" minOccurs="0"/>
+				<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+				<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+				<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="Depositor" type="xs:string" minOccurs="0"/>
+				<xs:element name="DepositorAd" type="xs:string" minOccurs="0"/>
+				<xs:element name="Receiver" type="xs:string" minOccurs="0"/>
+				<xs:element name="ReceiverAd" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TellerResType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TransId" type="xs:string"/>
+				<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="createTellerReq" type="createTellerReqType"/>
+	<xs:element name="createTellerRes" type="createTellerResType"/>
+</xs:schema>

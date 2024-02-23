@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns5="sbv/common/envelope/commonheader/1.0" xmlns:ns13="sbv/common/envelope/soaenvelope/1.0" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:ns7="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.temenos.com/T24/event/Holiday/HolidayFlow" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns3="www.tibco.com/plugin/Sleep" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://www.temenos.com/T24/event/Holiday/HolidayFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/CSDCalendarSubscribe/T24HolidaySchema.xsd"/>
+    <pd:name>Services/Global/System/CSDT24/CustomerInfo/OperationImpl/PublishCBSCustomer.process</pd:name>
+    <pd:startName>CBS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="CBS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>92</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>jms/requestQueue</destination>
+                <selector>application='CUSTOMER'</selector>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/T24JMSQueue_Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>608</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1436004415281</pd:targetNamespace>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>474</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <ConfirmEvent>CBS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>607</pd:x>
+        <pd:y>202</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns3:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/ServiceGlobalVar/CurrencyPublic/SleepTime"/>
+                </IntervalInMillisec>
+            </ns3:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="EMS Currency Publisher">
+        <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
+        <pd:x>354</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBCustomerTopic</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ApplicationProperties/>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$CBS-Queue-Receiver/ns:ActivityOutput/Body"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>478</pd:x>
+        <pd:y>203</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogStart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>227</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;PusblishCBSCustomer&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat(&quot;PusblishCBSCustomer&quot;,': Start ',&quot;PusblishCBSCustomer&quot;)"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$_processContext/ns6:ProcessContext/ProcessId"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns5:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns5:CharSet>
+                            <ns5:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns5:ServVersion>
+                            <ns5:From>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;4&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns5:Name>
+                            </ns5:From>
+                            <ns5:To>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;5&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;CSD&quot;"/>
+                                </ns5:Name>
+                            </ns5:To>
+                            <ns5:MsgId>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </ns5:MsgId>
+                            <ns5:BizServ>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;5&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;PusblishCBSCustomer&quot;"/>
+                                </ns5:Name>
+                            </ns5:BizServ>
+                            <ns5:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns5:CreatedDate>
+                        </ns13:AppHdr>
+                        <ns13:SOAMsgId>
+                            <xsl:value-of select="$_processContext/ns6:ProcessContext/ProcessId"/>
+                        </ns13:SOAMsgId>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/CSDT24/PusblishCBSCustomer&quot;"/>
+                        </ns13:ServiceName>
+                        <ns13:OperationName>
+                            <xsl:value-of select="&quot;PusblishCBSCustomer&quot;"/>
+                        </ns13:OperationName>
+                        <ns13:ProcessName>
+                            <xsl:value-of select="$_processContext/ns6:ProcessContext/ProjectName"/>
+                        </ns13:ProcessName>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody/>
+                    <ns13:Other>
+                        <xsl:value-of select="$CBS-Queue-Receiver/ns:ActivityOutput/Body"/>
+                    </ns13:Other>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="0"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CBS Queue Receiver</pd:from>
+        <pd:to>LogStart</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>EMS Currency Publisher</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart</pd:from>
+        <pd:to>EMS Currency Publisher</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

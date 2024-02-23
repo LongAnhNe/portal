@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/serviceenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" location="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.wsdl"/>
+    <pd:name>Services/Global/Remittance/CashPosting/OperationImpl/createMultiPosting.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createMultiPostingReq"/>
+    <pd:startX>100</pd:startX>
+    <pd:startY>102</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:createMultiPostingRes>
+            <Res>
+                <wsdlPfx:createPostingRes>
+                    <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ns1:AppHdr"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ns1:ResponseStatus"/>
+                    <wsdlPfx:TransactionRef>
+                        <xsl:value-of select="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/wsdlPfx:FTGroupRes[1]/wsdlPfx:TransactionRef"/>
+                    </wsdlPfx:TransactionRef>
+                </wsdlPfx:createPostingRes>
+            </Res>
+        </wsdlPfx:createMultiPostingRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createMultiPostingRes"/>
+    <pd:endX>553</pd:endX>
+    <pd:endY>102</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseVariable ref="wsdlPfx:createPostingRes"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1440987702725</pd:targetNamespace>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>415</pd:x>
+        <pd:y>102</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/*" element="wsdlPfx:FTGroupRes"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <wsdlPfx:createPostingRes>
+                <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ns1:AppHdr"/>
+                <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ns1:ResponseStatus"/>
+                <wsdlPfx:TransactionRef>
+                    <xsl:value-of select="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/wsdlPfx:FTGroupRes[1]/wsdlPfx:TransactionRef"/>
+                </wsdlPfx:TransactionRef>
+            </wsdlPfx:createPostingRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>267</pd:x>
+        <pd:y>104</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createMultiPostingReq/Req/wsdlPfx:createPostingReq/ns1:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createMultiPostingReq/Req/wsdlPfx:createPostingReq/ns1:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createMultiPostingReq/Req/wsdlPfx:createPostingReq/ns1:AppHdr/node()"/>
+                        </ns12:AppHdr>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createMultiPostingReq/Req/wsdlPfx:createPostingReq/wsdlPfx:CashPosting"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

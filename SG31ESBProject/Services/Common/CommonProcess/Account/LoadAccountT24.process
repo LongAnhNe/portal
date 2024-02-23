@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Services/Common/CommonProcess/Account/LoadAccountT24.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>31</pd:startX>
+    <pd:startY>162</pd:startY>
+    <pd:returnBindings>
+        <Data>
+            <xsl:for-each select="$ListDataResult/ListDataResult/ListDataResult">
+                <List_Data>
+                    <Key>
+                        <xsl:value-of select="Key"/>
+                    </Key>
+                    <Value>
+                        <xsl:value-of select="Value"/>
+                    </Value>
+                </List_Data>
+            </xsl:for-each>
+        </Data>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Data">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="List_Data" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Key" type="xsd:string"/>
+                                <xsd:element name="Value" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1238</pd:endX>
+    <pd:endY>222</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ListAccountID>
+            <xsd:element name="ListAccountID">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ListData" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="bankcode" type="xsd:string"/>
+                                    <xsd:element name="t24account" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ListAccountID>
+        <ListData>
+            <xsd:element name="ListDataFromDataBase">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ListData" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="BANKCODE" type="xsd:string"/>
+                                    <xsd:element name="T24ACCOUNT" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ListData>
+        <ListAccoutKQ>
+            <xsd:element name="ListAccountKQ">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ListData" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="bankcode" type="xsd:string"/>
+                                    <xsd:element name="t24account" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ListAccoutKQ>
+        <ListDataResult>
+            <xsd:element name="ListDataResult">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ListDataResult" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="Key" type="xsd:string"/>
+                                    <xsd:element name="Value" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ListDataResult>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1442823842598</pd:targetNamespace>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>152</pd:x>
+        <pd:y>162</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <commit>false</commit>
+            <maxRows>%%AMXSOADB/MaxRow%%</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>Select * from ACCOUNTMAPPING</statement>
+            <wizardData/>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BANKCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>T24ACCOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TIMEUPDATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SYSTEM</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>158</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="&quot;AccountMapping.xml&quot;"/>
+                </fileName>
+            </ns:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>259</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="Listdata">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="ListDataPutCache" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="key" type="xsd:string"/>
+                                        <xsd:element name="value" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="substring-after($Read-File/ns1:ReadActivityOutputTextClass/fileContent/textContent, '?>')"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ListDataFromDataBase">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>384</pd:x>
+        <pd:y>161</pd:y>
+        <config>
+            <variableName>ListData</variableName>
+        </config>
+        <pd:inputBindings>
+            <ListDataFromDataBase>
+                <xsl:for-each select="$JDBC-Query/resultSet/Record">
+                    <ListData>
+                        <BANKCODE>
+                            <xsl:value-of select="BANKCODE"/>
+                        </BANKCODE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="T24ACCOUNT"/>
+                        </T24ACCOUNT>
+                    </ListData>
+                </xsl:for-each>
+            </ListDataFromDataBase>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ListDataFromFile">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <variableName>ListData</variableName>
+        </config>
+        <pd:inputBindings>
+            <ListDataFromDataBase>
+                <xsl:for-each select="$Parse-XML/Listdata/ListDataPutCache">
+                    <ListData>
+                        <BANKCODE>
+                            <xsl:value-of select="key"/>
+                        </BANKCODE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="value"/>
+                        </T24ACCOUNT>
+                    </ListData>
+                </xsl:for-each>
+            </ListDataFromDataBase>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Split_Type_Account">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>503</pd:x>
+        <pd:y>63</pd:y>
+        <pd:width>246</pd:width>
+        <pd:height>328</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$ListData/ListDataFromDataBase/ListData</pd:over>
+            <pd:iterationElementSlot>list_data</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ListAccountKQ</pd:to>
+            <pd:xpathDescription>AccountKq</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>tib:right($list_data/ListData/BANKCODE, 2)="KQ"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ListAccountID</pd:to>
+            <pd:xpathDescription>AccountId</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>tib:right($list_data/ListData/BANKCODE,2)!="KQ"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ListAccountID</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ListAccountKQ</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ListAccountID">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>621</pd:x>
+            <pd:y>143</pd:y>
+            <config>
+                <variableName>ListAccountID</variableName>
+            </config>
+            <pd:inputBindings>
+                <ListAccountID>
+                    <xsl:copy-of select="$ListAccountID/ListAccountID/ListData"/>
+                    <ListData>
+                        <bankcode>
+                            <xsl:value-of select="$list_data/ListData/BANKCODE"/>
+                        </bankcode>
+                        <t24account>
+                            <xsl:value-of select="$list_data/ListData/T24ACCOUNT"/>
+                        </t24account>
+                    </ListData>
+                </ListAccountID>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ListAccountKQ">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>620</pd:x>
+            <pd:y>313</pd:y>
+            <config>
+                <variableName>ListAccoutKQ</variableName>
+            </config>
+            <pd:inputBindings>
+                <ListAccountKQ>
+                    <xsl:copy-of select="$ListAccoutKQ/ListAccountKQ/ListData"/>
+                    <ListData>
+                        <bankcode>
+                            <xsl:value-of select="substring-before($list_data/ListData/BANKCODE,&quot;KQ&quot;)"/>
+                        </bankcode>
+                        <t24account>
+                            <xsl:value-of select="$list_data/ListData/T24ACCOUNT"/>
+                        </t24account>
+                    </ListData>
+                </ListAccountKQ>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="CheckAccountKQ">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>904</pd:x>
+        <pd:y>140</pd:y>
+        <config>
+            <processName>/Services/Common/CommonProcess/Account/CheckAccountKQ.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ListData>
+                <xsl:for-each select="$ListAccoutKQ/ListAccountKQ/ListData">
+                    <ListAccountKQ>
+                        <bankcode>
+                            <xsl:value-of select="bankcode"/>
+                        </bankcode>
+                        <t24account>
+                            <xsl:value-of select="t24account"/>
+                        </t24account>
+                    </ListAccountKQ>
+                </xsl:for-each>
+            </ListData>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CheckAccountId">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>914</pd:x>
+        <pd:y>315</pd:y>
+        <config>
+            <processName>/Services/Common/CommonProcess/Account/CheckAccountID.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ListData>
+                <xsl:for-each select="$ListAccountID/ListAccountID/ListData">
+                    <ListAccountID>
+                        <bankcode>
+                            <xsl:value-of select="bankcode"/>
+                        </bankcode>
+                        <t24account>
+                            <xsl:value-of select="t24account"/>
+                        </t24account>
+                    </ListAccountID>
+                </xsl:for-each>
+            </ListData>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ListDataResult">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1065</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <variableName>ListDataResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <ListDataResult>
+                <xsl:copy-of select="$ListDataResult/ListDataResult/ListDataResult"/>
+                <xsl:for-each select="$CheckAccountKQ/ListData/ListDataPutCache">
+                    <ListDataResult>
+                        <Key>
+                            <xsl:value-of select="key"/>
+                        </Key>
+                        <Value>
+                            <xsl:value-of select="value"/>
+                        </Value>
+                    </ListDataResult>
+                </xsl:for-each>
+            </ListDataResult>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ListDataResult-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1074</pd:x>
+        <pd:y>312</pd:y>
+        <config>
+            <variableName>ListDataResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <ListDataResult>
+                <xsl:copy-of select="$ListDataResult/ListDataResult/ListDataResult"/>
+                <xsl:for-each select="$CheckAccountId/ListData/ListDataPutCache">
+                    <ListDataResult>
+                        <Key>
+                            <xsl:value-of select="key"/>
+                        </Key>
+                        <Value>
+                            <xsl:value-of select="value"/>
+                        </Value>
+                    </ListDataResult>
+                </xsl:for-each>
+            </ListDataResult>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>ListDataFromDataBase</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>ListDataFromFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ListDataFromDataBase</pd:from>
+        <pd:to>Split_Type_Account</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ListDataFromFile</pd:from>
+        <pd:to>Split_Type_Account</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Split_Type_Account</pd:from>
+        <pd:to>CheckAccountKQ</pd:to>
+        <pd:xpathDescription>exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($ListAccoutKQ/ListAccountKQ/ListData/bankcode)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Split_Type_Account</pd:from>
+        <pd:to>CheckAccountId</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckAccountKQ</pd:from>
+        <pd:to>ListDataResult</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ListDataResult</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckAccountId</pd:from>
+        <pd:to>ListDataResult-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ListDataResult-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

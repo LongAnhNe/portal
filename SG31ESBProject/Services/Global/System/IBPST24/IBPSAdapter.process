@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService" xmlns:pfx5="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/global/utilities/cbsstatus/inquiry/version1.0" xmlns:pfx3="sbv/global/datatype/datatype/version1.0" xmlns:pfx2="sbv/common/envelope/commonheader/1.0" xmlns:pfx8="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd2" xmlns:pfx7="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd" xmlns:pfx6="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="sbv/common/logging/enginelog/1.0" xmlns:pfx="http://xmlns.example.com/1433466938916" xmlns:ns7="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns8="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/remittance/fundxfer/version1.0" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.xsd"/>
+    <xsd:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" schemaLocation="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV_XSD1.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="sbv/global/utilities/cbsstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/System/IBPS/AccountNoList.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd2" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSMessage.xsd"/>
+    <pd:name>Services/Global/System/IBPST24/IBPSAdapter.process</pd:name>
+    <pd:startName>Adapter Request-Response Server</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Adapter Request-Response Server">
+        <pd:type>com.tibco.plugin.ae.AERPCServerActivity</pd:type>
+        <pd:resourceType>ae.aepalette.aeRRServer</pd:resourceType>
+        <pd:x>87</pd:x>
+        <pd:y>361</pd:y>
+        <config>
+            <ae.aepalette.sharedProperties.transportChoice>default</ae.aepalette.sharedProperties.transportChoice>
+            <ae.aepalette.sharedProperties.useRequestReply>false</ae.aepalette.sharedProperties.useRequestReply>
+            <tpPluginEndpointName>RequestResponseInvocationServiceEndPoint</tpPluginEndpointName>
+            <ae.aepalette.sharedProperties.transportType>rv</ae.aepalette.sharedProperties.transportType>
+            <ae.aepalette.sharedProperties.rvSubject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseInvocationService</ae.aepalette.sharedProperties.rvSubject>
+            <ae.aepalette.sharedProperties.rvSessionService>%%RvService%%</ae.aepalette.sharedProperties.rvSessionService>
+            <ae.aepalette.sharedProperties.rvSessionNetwork>%%RvNetwork%%</ae.aepalette.sharedProperties.rvSessionNetwork>
+            <ae.aepalette.sharedProperties.rvSessionDaemon>%%RvDaemon%%</ae.aepalette.sharedProperties.rvSessionDaemon>
+            <ae.aepalette.aeOpClientReqActivity.ops>operation</ae.aepalette.aeOpClientReqActivity.ops>
+            <ae.aepalette.sharedProperties.adapterService>/SharedResource/Connection/Adapter/TuxedoAdapterConfiguration.adtuxedo#adapterService.RequestResponseInvocationService</ae.aepalette.sharedProperties.adapterService>
+            <ae.aepalette.sharedProperties.outputMeta>
+                <aeMeta>/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#rpcClass.RequestResponseInvocationServiceRPCClass</aeMeta>
+            </ae.aepalette.sharedProperties.outputMeta>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>906</pd:endX>
+    <pd:endY>349</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <DataResponse>
+            <xsd:element name="DataResponse" type="xsd:string"/>
+        </DataResponse>
+        <routingcode>
+            <xsd:element name="routingcode" type="xsd:string"/>
+        </routingcode>
+        <AdapterMessage ref="pfx8:FML32MessageType"/>
+        <ServiceEnvelop ref="ns3:ServiceEnverlop"/>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/global/system/ibpst24/ibpsadapterreceiver/version1.0</pd:targetNamespace>
+    <pd:activity name="CallIBPSProcessDynamic">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>431</pd:x>
+        <pd:y>350</pd:y>
+        <config>
+            <processNameXPath>concat('Services/Global/System/IBPST24/',$AdapterMessage/pfx8:FML32MessageType/pfx8:Routing_Code,'/OperationImpl/',$AdapterMessage/pfx8:FML32MessageType/pfx8:Routing_Code,'.process')</processNameXPath>
+            <processName>/Services/Common/TemplateProcess/RequestResponseInterface.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:ServiceEnverlop>
+                    <pfx2:AppHdr>
+                        <pfx2:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </pfx2:CharSet>
+                        <pfx2:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </pfx2:ServVersion>
+                        <pfx2:From>
+                            <pfx2:Id>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </pfx2:Id>
+                            <pfx2:Name>
+                                <xsl:value-of select="&quot;IBPS&quot;"/>
+                            </pfx2:Name>
+                        </pfx2:From>
+                        <pfx2:To>
+                            <pfx2:Id>
+                                <xsl:value-of select="&quot;2&quot;"/>
+                            </pfx2:Id>
+                            <pfx2:Name>
+                                <xsl:value-of select="&quot;T24&quot;"/>
+                            </pfx2:Name>
+                        </pfx2:To>
+                        <pfx2:MsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                        </pfx2:MsgId>
+                        <pfx2:MsgPreId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </pfx2:MsgPreId>
+                        <pfx2:MsgSrcId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                        </pfx2:MsgSrcId>
+                        <pfx2:BizServ>
+                            <pfx2:Id>
+                                <xsl:value-of select="concat($routingcode/routingcode, generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                            </pfx2:Id>
+                            <pfx2:Name>
+                                <xsl:value-of select="$AdapterMessage/pfx8:FML32MessageType/pfx8:Routing_Code"/>
+                            </pfx2:Name>
+                        </pfx2:BizServ>
+                        <pfx2:CreatedDate>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </pfx2:CreatedDate>
+                    </pfx2:AppHdr>
+                    <ServiceBody>
+                        <xsl:copy-of select="$AdapterMessage/pfx8:FML32MessageType"/>
+                    </ServiceBody>
+                </ns3:ServiceEnverlop>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignDataInput">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>250</pd:x>
+        <pd:y>346</pd:y>
+        <config>
+            <variableName>AdapterMessage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx8:FML32MessageType>
+                <pfx8:Routing_Code>
+                    <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ROUTING__CODE__167773161"/>
+                </pfx8:Routing_Code>
+                <pfx8:Error_Code>
+                    <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ERROR__CODE__167773162"/>
+                </pfx8:Error_Code>
+                <pfx8:Option>
+                    <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/OPTION__167773163"/>
+                </pfx8:Option>
+                <pfx8:Data>
+                    <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/DATA__167773164"/>
+                </pfx8:Data>
+            </pfx8:FML32MessageType>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>457</pd:x>
+        <pd:y>513</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>635</pd:x>
+        <pd:y>513</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/*" element="pfx8:FML32MessageType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns6:EngineLog>
+                    <ns6:ServiceName>
+                        <xsl:value-of select="&quot;IBPSAdapterReceiver&quot;"/>
+                    </ns6:ServiceName>
+                    <ns6:Message>
+                        <xsl:value-of select="concat(&quot;IBPSAdapterReceiver&quot;,': End ',&quot;IBPSAdapterReceiver&quot;)"/>
+                    </ns6:Message>
+                    <ns6:Category>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                    </ns6:Category>
+                    <ns6:TrackingId>
+                        <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                    </ns6:TrackingId>
+                </ns6:EngineLog>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:CharSet">
+                                <pfx2:CharSet>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:CharSet"/>
+                                </pfx2:CharSet>
+                            </xsl:if>
+                            <pfx2:ServVersion>
+                                <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:ServVersion"/>
+                            </pfx2:ServVersion>
+                            <pfx2:From>
+                                <pfx2:Id>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:From/pfx2:Id"/>
+                                </pfx2:Id>
+                                <pfx2:Name>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:From/pfx2:Name"/>
+                                </pfx2:Name>
+                            </pfx2:From>
+                            <pfx2:To>
+                                <pfx2:Id>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:To/pfx2:Id"/>
+                                </pfx2:Id>
+                                <pfx2:Name>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:To/pfx2:Name"/>
+                                </pfx2:Name>
+                            </pfx2:To>
+                            <pfx2:MsgId>
+                                <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:MsgId"/>
+                            </pfx2:MsgId>
+                            <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:MsgPreId">
+                                <pfx2:MsgPreId>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:MsgPreId"/>
+                                </pfx2:MsgPreId>
+                            </xsl:if>
+                            <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:MsgSrcId">
+                                <pfx2:MsgSrcId>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:MsgSrcId"/>
+                                </pfx2:MsgSrcId>
+                            </xsl:if>
+                            <pfx2:BizServ>
+                                <pfx2:Id>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:BizServ/pfx2:Id"/>
+                                </pfx2:Id>
+                                <pfx2:Name>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:BizServ/pfx2:Name"/>
+                                </pfx2:Name>
+                            </pfx2:BizServ>
+                            <pfx2:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx2:CreatedDate>
+                            <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:Signature">
+                                <pfx2:Signature>
+                                    <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/pfx2:AppHdr/pfx2:Signature"/>
+                                </pfx2:Signature>
+                            </xsl:if>
+                        </ns12:AppHdr>
+                        <ns12:SOAMsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                        </ns12:SOAMsgId>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;IBPSAdapterReceiver&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:OperationName>
+                            <xsl:value-of select="&quot;IBPSAdapterReceiver&quot;"/>
+                        </ns12:OperationName>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapDataRes">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>611</pd:x>
+        <pd:y>348</pd:y>
+        <config>
+            <element ref="pfx8:FML32MessageType"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/*" element="pfx8:FML32MessageType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx8:FML32MessageType>
+                <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Routing_Code">
+                    <pfx8:Routing_Code>
+                        <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Routing_Code"/>
+                    </pfx8:Routing_Code>
+                </xsl:if>
+                <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Error_Code">
+                    <pfx8:Error_Code>
+                        <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Error_Code"/>
+                    </pfx8:Error_Code>
+                </xsl:if>
+                <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Option">
+                    <pfx8:Option>
+                        <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Option"/>
+                    </pfx8:Option>
+                </xsl:if>
+                <xsl:if test="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Data">
+                    <pfx8:Data>
+                        <xsl:value-of select="$CallIBPSProcessDynamic/root/ns3:ServiceEnverlop/ServiceBody/pfx8:FML32MessageType[1]/pfx8:Data"/>
+                    </pfx8:Data>
+                </xsl:if>
+            </pfx8:FML32MessageType>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Respond to Adapter Request">
+        <pd:type>com.tibco.plugin.ae.AERPCServerReplyActivity</pd:type>
+        <pd:resourceType>ae.aepalette.aeOpServerReplyActivity</pd:resourceType>
+        <pd:x>802</pd:x>
+        <pd:y>514</pd:y>
+        <config>
+            <ae.aepalette.sharedProperties.transportChoice>default</ae.aepalette.sharedProperties.transportChoice>
+            <ae.aepalette.sharedProperties.useRequestReply>false</ae.aepalette.sharedProperties.useRequestReply>
+            <ae.aepalette.aeOpServerReplyActivity.endpoint>Adapter Request-Response Server</ae.aepalette.aeOpServerReplyActivity.endpoint>
+            <ae.aepalette.aeOpClientReqActivity.ops>operation</ae.aepalette.aeOpClientReqActivity.ops>
+            <ae.aepalette.sharedProperties.outputMeta>/AESchemas/ae/Tuxedo/TuxedoAdapterConfigurationNode1/RequestResponseInvocationService.aeschema#rpcClass.RequestResponseInvocationServiceRPCClass</ae.aepalette.sharedProperties.outputMeta>
+        </config>
+        <pd:inputBindings>
+            <ProcessStarterReply>
+                <ns:__caret_reply_caret_RequestResponseInvocationServiceRPCClass_caret_operation>
+                    <__caret_returnValue_caret_>
+                        <xsl:if test="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ROUTING__CODE__167773161">
+                            <ROUTING__CODE__167773161>
+                                <xsl:copy-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ROUTING__CODE__167773161/@xsi:nil"/>
+                                <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ROUTING__CODE__167773161"/>
+                            </ROUTING__CODE__167773161>
+                        </xsl:if>
+                        <xsl:if test="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ERROR__CODE__167773162">
+                            <ERROR__CODE__167773162>
+                                <xsl:copy-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ERROR__CODE__167773162/@xsi:nil"/>
+                                <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/ERROR__CODE__167773162"/>
+                            </ERROR__CODE__167773162>
+                        </xsl:if>
+                        <xsl:if test="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/OPTION__167773163">
+                            <OPTION__167773163>
+                                <xsl:copy-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/OPTION__167773163/@xsi:nil"/>
+                                <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/OPTION__167773163"/>
+                            </OPTION__167773163>
+                        </xsl:if>
+                        <xsl:if test="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/DATA__167773164">
+                            <DATA__167773164>
+                                <xsl:copy-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/DATA__167773164/@xsi:nil"/>
+                                <xsl:value-of select="$Adapter-Request-Response-Server/ProcessStarterOutput/ns:__caret_request_caret_RequestResponseInvocationServiceRPCClass_caret_operation/input/DATA__167773164"/>
+                            </DATA__167773164>
+                        </xsl:if>
+                    </__caret_returnValue_caret_>
+                </ns:__caret_reply_caret_RequestResponseInvocationServiceRPCClass_caret_operation>
+            </ProcessStarterReply>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Respond-to-Adapter-Request-1">
+        <pd:type>com.tibco.plugin.ae.AERPCServerReplyActivity</pd:type>
+        <pd:resourceType>ae.aepalette.aeOpServerReplyActivity</pd:resourceType>
+        <pd:x>759</pd:x>
+        <pd:y>349</pd:y>
+        <config>
+            <ae.aepalette.sharedProperties.transportChoice>default</ae.aepalette.sharedProperties.transportChoice>
+            <ae.aepalette.sharedProperties.useRequestReply>false</ae.aepalette.sharedProperties.useRequestReply>
+            <ae.aepalette.aeOpServerReplyActivity.endpoint>Adapter Request-Response Server</ae.aepalette.aeOpServerReplyActivity.endpoint>
+            <ae.aepalette.aeOpClientReqActivity.ops>operation</ae.aepalette.aeOpClientReqActivity.ops>
+            <ae.aepalette.sharedProperties.outputMeta>/AESchemas/ae/Tuxedo/TuxedoAdapterConfigurationNode1/RequestResponseInvocationService.aeschema#rpcClass.RequestResponseInvocationServiceRPCClass</ae.aepalette.sharedProperties.outputMeta>
+        </config>
+        <pd:inputBindings>
+            <ProcessStarterReply>
+                <ns:__caret_reply_caret_RequestResponseInvocationServiceRPCClass_caret_operation>
+                    <__caret_returnValue_caret_>
+                        <ROUTING__CODE__167773161>
+                            <xsl:choose>
+                                <xsl:when test="exists($MapDataRes/pfx8:FML32MessageType/pfx8:Routing_Code)">
+                                    <xsl:value-of select="$MapDataRes/pfx8:FML32MessageType/pfx8:Routing_Code"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ROUTING__CODE__167773161>
+                        <ERROR__CODE__167773162>
+                            <xsl:choose>
+                                <xsl:when test="exists($MapDataRes/pfx8:FML32MessageType/pfx8:Error_Code)">
+                                    <xsl:value-of select="$MapDataRes/pfx8:FML32MessageType/pfx8:Error_Code"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ERROR__CODE__167773162>
+                        <OPTION__167773163>
+                            <xsl:choose>
+                                <xsl:when test="exists($MapDataRes/pfx8:FML32MessageType/pfx8:Option)">
+                                    <xsl:value-of select="$MapDataRes/pfx8:FML32MessageType/pfx8:Option"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </OPTION__167773163>
+                        <DATA__167773164>
+                            <xsl:choose>
+                                <xsl:when test="exists($MapDataRes/pfx8:FML32MessageType/pfx8:Data)">
+                                    <xsl:value-of select="$MapDataRes/pfx8:FML32MessageType/pfx8:Data"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </DATA__167773164>
+                    </__caret_returnValue_caret_>
+                </ns:__caret_reply_caret_RequestResponseInvocationServiceRPCClass_caret_operation>
+            </ProcessStarterReply>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>AssignDataInput</pd:from>
+        <pd:to>CallIBPSProcessDynamic</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallIBPSProcessDynamic</pd:from>
+        <pd:to>MapDataRes</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapDataRes</pd:from>
+        <pd:to>Respond-to-Adapter-Request-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>Respond to Adapter Request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Adapter Request-Response Server</pd:from>
+        <pd:to>AssignDataInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Respond to Adapter Request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Respond-to-Adapter-Request-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

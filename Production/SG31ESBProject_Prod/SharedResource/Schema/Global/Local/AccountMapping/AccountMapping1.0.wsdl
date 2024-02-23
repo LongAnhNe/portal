@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.example.com/1438330850951" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" name="Untitled" targetNamespace="http://xmlns.example.com/1438330850951">
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" location="../../Account/AccountMapping/AccountMapping.xsd"/>
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:include schemaLocation="../../../../../SharedResource/Schema/Global/Account/AccountMapping/AccountMapping.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="AccountMapping">
+        <wsdl:port name="GetAccountNoPortTypeEndpoint1" binding="tns:GetAccountNoPortTypeEndpoint1Binding">
+            <soap:address location=""/>
+            <jms:connectionFactory>FTQueueConnectionFactory</jms:connectionFactory>
+            <jms:targetAddress destination="queue">accountmapping.1.0</jms:targetAddress>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="GetAccountNoPortType">
+        <wsdl:operation name="GetAccountNo">
+            <wsdl:input message="tns:GetAccountNoReq"/>
+            <wsdl:output message="tns:GetAccountNoRes"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="GetAccountNoPortTypeEndpoint1Binding" type="tns:GetAccountNoPortType">
+        <soap:binding style="document" transport="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS"/>
+        <jms:binding messageFormat="bytes"/>
+        <wsdl:operation name="GetAccountNo">
+            <soap:operation style="document" soapAction="/Services/Global/Account/AccountMapping/OperationImpl/AccountMapping.serviceagent/GetAccountNoPortTypeEndpoint1/GetAccountNo"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="AccountMappingReq"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="AccountMappingRes"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="GetAccountNoReq">
+        <wsdl:part name="AccountMappingReq" element="ns:AccountMappingReq"/>
+    </wsdl:message>
+    <wsdl:message name="GetAccountNoRes">
+        <wsdl:part name="AccountMappingRes" element="ns:AccountMappingRes"/>
+    </wsdl:message>
+</wsdl:definitions>

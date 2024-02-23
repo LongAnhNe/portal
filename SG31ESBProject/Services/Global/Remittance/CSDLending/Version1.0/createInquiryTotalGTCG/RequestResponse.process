@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/Schema.xsd" xmlns:pfx13="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx12="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx10="http://temenos.com/SBV.CSD.WS" xmlns:ns22="sbv/global/datatype/datatype/version1.0" xmlns:pfx19="http://fis.vn/iMaximusGateway/PortalPostToCsdService" xmlns:pfx18="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/CSDLending/CSDLending.xsd" xmlns:pfx17="http://tempuri.org/" xmlns:pfx5="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:pfx3="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="www.tibco.com/plugin/Sleep" xmlns:pfx6="http://xmlns.example.com/1433466938916" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns12="sbv/common/exceptionhandling/exception/1.0" xmlns:ns5="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns13="http://fis.vn/iMaximusGateway/PortalPostToCsdService/GetInquirySumBalanceFrPortal" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:ns10="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:ns7="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/LendingCommon.xsd" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns11="http://fis.vn/iMaximusGateway/PortalPostToCsdService/GetInquiryFrPortal" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx20="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/OpenMarketCustomer/OpenMarketCustomer.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/SecuritiesPosting/SecuritiesPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CDPFundXfer/FundXfer.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalLending/PortalLending.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/CSDLending/CSDLending.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/CSDLending/CSDLending.xsd"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.T24Service.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/PortalPostToCsdService"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/PortalPostToCsdService" location="/SharedResource/Schema/Global/System/CSD/PortalPostToCSDService/PortalPostToCsdService.wsdl"/>
+    <pd:name>Services/Global/Remittance/CSDLending/Version1.0/createInquiryTotalGTCG/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>449</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To"/>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                    </ns3:MsgId>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId">
+                        <ns3:MsgPreId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId"/>
+                        </ns3:MsgPreId>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ"/>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/root/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorCode>
+                        <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                    </ns3:ErrorCode>
+                    <xsl:if test="$ResponseResult/root/Message">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/root/Message"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                    <ns3:ErrorInfo>
+                        <ns3:ErrorCode>
+                            <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                        </ns3:ErrorCode>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx18:TotalGTCGListInfo>
+                        <xsl:copy-of select="$MapInquiryESBModel/pfx18:TotalGTCGInfo"/>
+                    </pfx18:TotalGTCGListInfo>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>908</pd:endX>
+    <pd:endY>449</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/csdlending/createinquirytotalgtcg/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1210</pd:x>
+        <pd:y>449</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1013</pd:x>
+        <pd:y>450</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="concat(&quot;Loi Catch Exception: &quot;, $_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg)"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>149</pd:x>
+        <pd:y>448</pd:y>
+        <config>
+            <element ref="pfx18:TotalGTCGInput"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx18:TotalGTCGInput"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx18:TotalGTCGInput"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CSDGetInquiryFrPortal">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>288</pd:x>
+        <pd:y>448</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx19:PortalPostToCsdService</service>
+            <servicePort>BasicHttpBinding_IPortalPostToCsdService</servicePort>
+            <operation>GetInquirySumBalanceFrPortal</operation>
+            <soapAction>http://fis.vn/iMaximusGateway/PortalPostToCsdService/IPortalPostToCsdService/GetInquirySumBalanceFrPortal</soapAction>
+            <endpointURL>%%CsdWS/CSDPORTALService%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx19:GetInquirySumBalanceFrPortal>
+                    <pfx19:request>
+                        <ns13:Header>
+                            <ns10:MsgReqId>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Map-Data/pfx18:TotalGTCGInput/pfx18:InterfaceId)">
+                                        <xsl:value-of select="$Map-Data/pfx18:TotalGTCGInput/pfx18:InterfaceId"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ns10:MsgReqId>
+                        </ns13:Header>
+                        <ns13:Request>
+                            <ns13:MemberCode>
+                                <xsl:choose>
+                                    <xsl:when test="exists($Map-Data/pfx18:TotalGTCGInput/pfx18:CustomerId)">
+                                        <xsl:value-of select="$Map-Data/pfx18:TotalGTCGInput/pfx18:CustomerId"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ns13:MemberCode>
+                        </ns13:Request>
+                    </pfx19:request>
+                </pfx19:GetInquirySumBalanceFrPortal>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetInquiryFrPortalError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>380</pd:x>
+        <pd:y>703</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. LOI GOI WEBSERVICES&quot;)"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetInquiryFrPortalTimeOut">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>519</pd:x>
+        <pd:y>485</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;3&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. T24 Services Timeout&quot;)"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapInquiryESBModel">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>483</pd:x>
+        <pd:y>295</pd:y>
+        <config>
+            <element ref="pfx18:TotalGTCGInfo"/>
+        </config>
+        <pd:inputBindings>
+            <pfx18:TotalGTCGInfo>
+                <xsl:if test="not(($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Depository/@xsi:nil=(&quot;true&quot;)) or ($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Depository/@xsi:nil=(&quot;1&quot;)))">
+                    <pfx18:GTCG_SDLK>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Depository"/>
+                    </pfx18:GTCG_SDLK>
+                </xsl:if>
+                <xsl:if test="not(($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Overdraft/@xsi:nil=(&quot;true&quot;)) or ($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Overdraft/@xsi:nil=(&quot;1&quot;)))">
+                    <pfx18:GTCG_CCTC>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Overdraft"/>
+                    </pfx18:GTCG_CCTC>
+                </xsl:if>
+                <xsl:if test="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Netdebt">
+                    <pfx18:GTCG_HMNR>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Netdebt"/>
+                    </pfx18:GTCG_HMNR>
+                </xsl:if>
+                <xsl:if test="not(($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Focus/@xsi:nil=(&quot;true&quot;)) or ($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Focus/@xsi:nil=(&quot;1&quot;)))">
+                    <pfx18:GTCG_TTTT>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Focus"/>
+                    </pfx18:GTCG_TTTT>
+                </xsl:if>
+                <xsl:if test="not(($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Mortgage/@xsi:nil=(&quot;true&quot;)) or ($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Mortgage/@xsi:nil=(&quot;1&quot;)))">
+                    <pfx18:GTCG_CCVV>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:Mortgage"/>
+                    </pfx18:GTCG_CCVV>
+                </xsl:if>
+                <xsl:if test="not(($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:OverdraftLimit/@xsi:nil=(&quot;true&quot;)) or ($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:OverdraftLimit/@xsi:nil=(&quot;1&quot;)))">
+                    <pfx18:HMCC_CCTC>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:OverdraftLimit"/>
+                    </pfx18:HMCC_CCTC>
+                </xsl:if>
+                <xsl:if test="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:NetdebtLimit">
+                    <pfx18:HMCC_HMNR>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:NetdebtLimit"/>
+                    </pfx18:HMCC_HMNR>
+                </xsl:if>
+                <xsl:if test="not(($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:FocusLimit/@xsi:nil=(&quot;true&quot;)) or ($CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:FocusLimit/@xsi:nil=(&quot;1&quot;)))">
+                    <pfx18:HMCC_TTTT>
+                        <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:Result/ns13:GetInquirySumBalanceFrPortalResponseType[1]/ns13:FocusLimit"/>
+                    </pfx18:HMCC_TTTT>
+                </xsl:if>
+            </pfx18:TotalGTCGInfo>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetStatusSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>810</pd:x>
+        <pd:y>294</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="$CSDGetInquiryFrPortal/outputMessage/pfx19:GetInquirySumBalanceFrPortalResponse/pfx19:GetInquirySumBalanceFrPortalResult/ns13:ResponseStatus/ns10:Status"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CSDGetInquiryFrPortal</pd:from>
+        <pd:to>GetInquiryFrPortalError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetInquiryFrPortalError</pd:from>
+        <pd:to>GetInquiryFrPortalTimeOut</pd:to>
+        <pd:xpathDescription>Timeout</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>CSDGetInquiryFrPortal</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetInquiryFrPortalError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetInquiryFrPortalTimeOut</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusSuccess</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CSDGetInquiryFrPortal</pd:from>
+        <pd:to>MapInquiryESBModel</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapInquiryESBModel</pd:from>
+        <pd:to>SetStatusSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

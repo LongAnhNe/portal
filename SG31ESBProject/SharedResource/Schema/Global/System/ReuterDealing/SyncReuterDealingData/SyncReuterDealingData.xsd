@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/SyncReuterDealingData.xsd"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/SyncReuterDealingData.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../../ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ESBServiceState"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InsertSG4DB_Spot">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Record" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InsertSG4DB_Forward">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Record" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InsertSG4DB_Swap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Record" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InsertSG4DB_ALL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Record" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Record">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:string" minOccurs="0"/>
+				<xs:element name="dealid" type="xs:string" minOccurs="0"/>
+				<xs:element name="dealdate" type="xs:date" minOccurs="0"/>
+				<xs:element name="buyernamevit" type="xs:string" minOccurs="0"/>
+				<xs:element name="valuedate1" type="xs:date" minOccurs="0"/>
+				<xs:element name="valuedate2" type="xs:date" minOccurs="0"/>
+				<xs:element name="dealtime" type="xs:string" minOccurs="0"/>
+				<xs:element name="sellernamevit" type="xs:string" minOccurs="0"/>
+				<xs:element name="volume" type="xs:float" minOccurs="0"/>
+				<xs:element name="curpair" type="xs:string" minOccurs="0"/>
+				<xs:element name="rate1" type="xs:float" minOccurs="0"/>
+				<xs:element name="rate2" type="xs:float" minOccurs="0"/>
+				<xs:element name="elapseddays_calc" type="xs:float" minOccurs="0"/>
+				<xs:element name="puredealtypedim" type="xs:short" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

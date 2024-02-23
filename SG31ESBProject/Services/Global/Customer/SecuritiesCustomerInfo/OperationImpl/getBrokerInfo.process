@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1457003372324" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/SecuritiesCustomerInfo/SecuritiesCustomerInfo.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1457003372324" location="/SharedResource/Schema/Global/Customer/SecuritiesCustomerInfo/SecuritiesCustomerInfo.wsdl"/>
+    <pd:name>Services/Global/Customer/SecuritiesCustomerInfo/OperationImpl/getBrokerInfo.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:getBrokerInfoReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Call-Process/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns:BrokerInfoDetail"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:getBrokerInfoRes>
+            <Res>
+                <ns:getBrokerInfoRes>
+                    <ns2:AppHdr>
+                        <xsl:if test="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:CharSet">
+                            <ns2:CharSet>
+                                <xsl:value-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:CharSet"/>
+                            </ns2:CharSet>
+                        </xsl:if>
+                        <ns2:ServVersion>
+                            <xsl:value-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:ServVersion"/>
+                        </ns2:ServVersion>
+                        <xsl:copy-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:From"/>
+                        <xsl:copy-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:To"/>
+                        <ns2:MsgId>
+                            <xsl:value-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:MsgId"/>
+                        </ns2:MsgId>
+                        <ns2:MsgSrcId>
+                            <xsl:value-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:MsgId"/>
+                        </ns2:MsgSrcId>
+                        <xsl:copy-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ"/>
+                        <ns2:CreatedDate>
+                            <xsl:value-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:CreatedDate"/>
+                        </ns2:CreatedDate>
+                        <xsl:if test="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:Signature">
+                            <ns2:Signature>
+                                <xsl:value-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:AppHdr/ns2:Signature"/>
+                            </ns2:Signature>
+                        </xsl:if>
+                    </ns2:AppHdr>
+                    <xsl:copy-of select="$Call-Process/root/ns3:ServiceEnverlop/ns2:ResponseStatus"/>
+                    <ns:BrokerInfoList>
+                        <xsl:copy-of select="$Call-Process/root/ns3:ServiceEnverlop/ServiceBody/ns:BrokerInfoDetail"/>
+                    </ns:BrokerInfoList>
+                </ns:getBrokerInfoRes>
+            </Res>
+        </wsdlPfx:getBrokerInfoRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:getBrokerInfoRes"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1457065888393</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>308</pd:x>
+        <pd:y>115</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:getBrokerInfoReq/Req/ns:getBrokerInfoReq/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:getBrokerInfoReq/Req/ns:getBrokerInfoReq/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:getBrokerInfoReq/Req/ns:getBrokerInfoReq/ns2:AppHdr/node()"/>
+                        </ns12:AppHdr>
+                        <ns12:OperationName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns12:OperationName>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:getBrokerInfoReq/Req/ns:getBrokerInfoReq/ns:BrokerInfoInput"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

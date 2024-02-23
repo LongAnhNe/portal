@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://tempuri.org/" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx13="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx12="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx10="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx19="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx18="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:pfx17="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns12="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd" xmlns:ns6="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:ns10="http://www.sbv.gov.vn/global/CheckAccountBalance/CheckAccountBalance/version1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns11="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:pfx22="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx23="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx20="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx21="http://xmlns.example.com/1438330850951" xmlns:pfx26="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" xmlns:pfx27="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" xmlns:pfx24="http://www.sbv.gov.vn/schema/global/customer/brokerinfo/BrokerInfo.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx25="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/CheckAccountBalance/CheckAccountBalance/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/CheckAccountBalance/CheckAccountBalance.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" schemaLocation="/SharedResource/Schema/Global/System/CSD/InquiryLoanState/InquiryLoanState.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/customer/brokerinfo/BrokerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/BrokerInfo/BrokerInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/SecuritiesCustomerInfo/SecuritiesCustomerInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/ForexManagement/Securities.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/TTBTDT/BTCTPosting/SBV.FT.TTBT.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.T24Service.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL.TT01/SBV.INTE.T24.PORTAL.TT01.wsdl"/>
+    <pd:name>Services/Global/Remittance/ForexManagement/Version1.0/InquirySecuritiesTrading/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>51</pd:startX>
+    <pd:startY>206</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseStatus/root/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$ResponseStatus/root/Msg"/>
+                    </ns3:ErrorMessage>
+                    <ns3:ErrorInfo>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/Status/messages[1]"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$MapInquiryESBModel/ns12:SecuritiesTradingDetail"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>928</pd:endX>
+    <pd:endY>417</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseStatus>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseStatus>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/forexmanagement/inquirysecuritiestrading/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="SetStatusSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>759</pd:x>
+        <pd:y>172</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="if($SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/Status/successIndicator = 'Success') then 0&#xA;else&#xA;1"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetStatusErr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>241</pd:x>
+        <pd:y>515</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;LOI GOI WEBSERVICE&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>126</pd:x>
+        <pd:y>569</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetStatusException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>332</pd:x>
+        <pd:y>572</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;LOI EXCEPTION&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetStatusT24Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>422</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/Status/messages[1]"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapInquiryESBModel">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>424</pd:x>
+        <pd:y>178</pd:y>
+        <config>
+            <element ref="ns12:SecuritiesTradingDetail"/>
+        </config>
+        <pd:inputBindings>
+            <ns12:SecuritiesTradingDetail>
+                <ns12:SecTradeId>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/@id"/>
+                </ns12:SecTradeId>
+                <ns12:SecCode>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/SECURITYCODE"/>
+                </ns12:SecCode>
+                <ns12:SecCurrency>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/SECURITYCURRENCY"/>
+                </ns12:SecCurrency>
+                <ns12:PriceType>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/PRICETYPE"/>
+                </ns12:PriceType>
+                <ns12:Depository>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/DEPOSITORY"/>
+                </ns12:Depository>
+                <ns12:TradeDate>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/TRADEDATE"/>
+                </ns12:TradeDate>
+                <ns12:ValueDate>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/VALUEDATE"/>
+                </ns12:ValueDate>
+                <ns12:TradeCcy>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/TRADECCY"/>
+                </ns12:TradeCcy>
+                <ns12:StockExchange>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/STOCKEXCHANGE"/>
+                </ns12:StockExchange>
+                <ns12:NetTrade>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/NETTRADE"/>
+                </ns12:NetTrade>
+                <ns12:LastPayDate>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/LASTPAYMNTDATE"/>
+                </ns12:LastPayDate>
+                <ns12:InterestRate>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/INTERESTRATE"/>
+                </ns12:InterestRate>
+                <ns12:ExchangeRateSec>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/EXCHRATESEC"/>
+                </ns12:ExchangeRateSec>
+                <ns12:ExchangeRateTrd>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/EXCHRATETRD"/>
+                </ns12:ExchangeRateTrd>
+                <ns12:MaturityDate>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/MATURITYDATE"/>
+                </ns12:MaturityDate>
+                <ns12:MarketType>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/MARKETTYPE"/>
+                </ns12:MarketType>
+                <ns12:gCustomerNo>
+                    <xsl:for-each select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/gCUSTOMERNO/mCUSTOMERNO[1]">
+                        <ns12:mCustomerNo>
+                            <xsl:if test="CUSTOMERNO">
+                                <ns12:CustomerNo>
+                                    <xsl:value-of select="CUSTOMERNO"/>
+                                </ns12:CustomerNo>
+                            </xsl:if>
+                            <xsl:if test="CUSTTRANSCODE">
+                                <ns12:CustTransCode>
+                                    <xsl:value-of select="CUSTTRANSCODE"/>
+                                </ns12:CustTransCode>
+                            </xsl:if>
+                            <xsl:if test="CUSTSECACC">
+                                <ns12:CustSecAccount>
+                                    <xsl:value-of select="CUSTSECACC"/>
+                                </ns12:CustSecAccount>
+                            </xsl:if>
+                            <xsl:if test="CUSTACCNO">
+                                <ns12:CustAccNo>
+                                    <xsl:value-of select="CUSTACCNO"/>
+                                </ns12:CustAccNo>
+                            </xsl:if>
+                            <xsl:for-each select="sgCUSTNONOM">
+                                <ns12:sgCustNoNom>
+                                    <xsl:for-each select="CUSTNONOM[1]">
+                                        <ns12:CustNoNom>
+                                            <xsl:if test="CUSTNONOM">
+                                                <ns12:CustNoNom>
+                                                    <xsl:value-of select="CUSTNONOM"/>
+                                                </ns12:CustNoNom>
+                                            </xsl:if>
+                                            <xsl:if test="CUSTPRICE">
+                                                <ns12:CustPrice>
+                                                    <xsl:value-of select="CUSTPRICE"/>
+                                                </ns12:CustPrice>
+                                            </xsl:if>
+                                        </ns12:CustNoNom>
+                                    </xsl:for-each>
+                                </ns12:sgCustNoNom>
+                            </xsl:for-each>
+                            <xsl:if test="CUSTTOTNOM">
+                                <ns12:CustTotNom>
+                                    <xsl:value-of select="CUSTTOTNOM"/>
+                                </ns12:CustTotNom>
+                            </xsl:if>
+                            <xsl:if test="CUGROSSAMSEC">
+                                <ns12:Cugrossamsec>
+                                    <xsl:value-of select="CUGROSSAMSEC"/>
+                                </ns12:Cugrossamsec>
+                            </xsl:if>
+                            <xsl:if test="CUGROSSAMTRD">
+                                <ns12:Cugrossamtrd>
+                                    <xsl:value-of select="CUGROSSAMTRD"/>
+                                </ns12:Cugrossamtrd>
+                            </xsl:if>
+                            <xsl:if test="CUGROSSACCR">
+                                <ns12:Cugrossaccr>
+                                    <xsl:value-of select="CUGROSSACCR"/>
+                                </ns12:Cugrossaccr>
+                            </xsl:if>
+                            <xsl:if test="CUBRKRCOMM">
+                                <ns12:Cubrkrcomm>
+                                    <xsl:value-of select="CUBRKRCOMM"/>
+                                </ns12:Cubrkrcomm>
+                            </xsl:if>
+                            <xsl:if test="CUFOREIGNFEE">
+                                <ns12:Cuforeignfee>
+                                    <xsl:value-of select="CUFOREIGNFEE"/>
+                                </ns12:Cuforeignfee>
+                            </xsl:if>
+                            <xsl:if test="CUCOMMISSION">
+                                <ns12:Cucommission>
+                                    <xsl:value-of select="CUCOMMISSION"/>
+                                </ns12:Cucommission>
+                            </xsl:if>
+                            <xsl:if test="CUSTAMPTAX">
+                                <ns12:Custamptax>
+                                    <xsl:value-of select="CUSTAMPTAX"/>
+                                </ns12:Custamptax>
+                            </xsl:if>
+                            <xsl:if test="CUEBVFEES">
+                                <ns12:Cuebvfees>
+                                    <xsl:value-of select="CUEBVFEES"/>
+                                </ns12:Cuebvfees>
+                            </xsl:if>
+                            <xsl:if test="CUFEESMISC">
+                                <ns12:Cufeesmisc>
+                                    <xsl:value-of select="CUFEESMISC"/>
+                                </ns12:Cufeesmisc>
+                            </xsl:if>
+                            <xsl:if test="CUDISCAMT">
+                                <ns12:Cudiscamt>
+                                    <xsl:value-of select="CUDISCAMT"/>
+                                </ns12:Cudiscamt>
+                            </xsl:if>
+                            <xsl:for-each select="sgCUTAXCODE">
+                                <ns12:sgCutaxcode>
+                                    <xsl:for-each select="CUTAXCODE[1]">
+                                        <ns12:Cutaxcode>
+                                            <xsl:if test="CUTAXTCY">
+                                                <ns12:Cutaxtcy>
+                                                    <xsl:value-of select="CUTAXTCY"/>
+                                                </ns12:Cutaxtcy>
+                                            </xsl:if>
+                                            <xsl:if test="CUTAXLCY">
+                                                <ns12:Cutaxlcy>
+                                                    <xsl:value-of select="CUTAXLCY"/>
+                                                </ns12:Cutaxlcy>
+                                            </xsl:if>
+                                        </ns12:Cutaxcode>
+                                    </xsl:for-each>
+                                </ns12:sgCutaxcode>
+                            </xsl:for-each>
+                            <xsl:if test="CUNETAMTRD">
+                                <ns12:Cunetamtrd>
+                                    <xsl:value-of select="CUNETAMTRD"/>
+                                </ns12:Cunetamtrd>
+                            </xsl:if>
+                            <xsl:if test="CUEXRATEREF">
+                                <ns12:Cuexrateref>
+                                    <xsl:value-of select="CUEXRATEREF"/>
+                                </ns12:Cuexrateref>
+                            </xsl:if>
+                            <xsl:if test="CUEXRATEACC">
+                                <ns12:Cuexrateacc>
+                                    <xsl:value-of select="CUEXRATEACC"/>
+                                </ns12:Cuexrateacc>
+                            </xsl:if>
+                            <xsl:if test="CUACCOUNTCCY">
+                                <ns12:Cuaccountccy>
+                                    <xsl:value-of select="CUACCOUNTCCY"/>
+                                </ns12:Cuaccountccy>
+                            </xsl:if>
+                            <xsl:if test="CUAMOUNTDUE">
+                                <ns12:Cuamountdue>
+                                    <xsl:value-of select="CUAMOUNTDUE"/>
+                                </ns12:Cuamountdue>
+                            </xsl:if>
+                            <xsl:if test="CUREFCCY">
+                                <ns12:Curefccy>
+                                    <xsl:value-of select="CUREFCCY"/>
+                                </ns12:Curefccy>
+                            </xsl:if>
+                            <xsl:if test="CUDELIVINSTR">
+                                <ns12:Cudelivinstr>
+                                    <xsl:value-of select="CUDELIVINSTR"/>
+                                </ns12:Cudelivinstr>
+                            </xsl:if>
+                            <xsl:if test="DISCOUNTAMOUNT">
+                                <ns12:Discountamount>
+                                    <xsl:value-of select="DISCOUNTAMOUNT"/>
+                                </ns12:Discountamount>
+                            </xsl:if>
+                        </ns12:mCustomerNo>
+                    </xsl:for-each>
+                </ns12:gCustomerNo>
+                <xsl:for-each select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/gBROKERNO">
+                    <ns12:gBrokerNo>
+                        <xsl:for-each select="mBROKERNO[1]">
+                            <ns12:mBrokerNo>
+                                <xsl:if test="BROKERNO">
+                                    <ns12:BrokerNo>
+                                        <xsl:value-of select="BROKERNO"/>
+                                    </ns12:BrokerNo>
+                                </xsl:if>
+                                <xsl:if test="BROKERTYPE">
+                                    <ns12:BrokerType>
+                                        <xsl:value-of select="BROKERTYPE"/>
+                                    </ns12:BrokerType>
+                                </xsl:if>
+                                <xsl:if test="BRTRANSCODE">
+                                    <ns12:BRTranscode>
+                                        <xsl:value-of select="BRTRANSCODE"/>
+                                    </ns12:BRTranscode>
+                                </xsl:if>
+                                <xsl:if test="BRACCNO">
+                                    <ns12:BRAccNo>
+                                        <xsl:value-of select="BRACCNO"/>
+                                    </ns12:BRAccNo>
+                                </xsl:if>
+                                <xsl:for-each select="sgBRNONOM">
+                                    <ns12:sgBRNoNom>
+                                        <xsl:for-each select="BRNONOM[1]">
+                                            <ns12:BRNoNom>
+                                                <xsl:if test="BRNONOM">
+                                                    <ns12:BRNoNom>
+                                                        <xsl:value-of select="BRNONOM"/>
+                                                    </ns12:BRNoNom>
+                                                </xsl:if>
+                                                <xsl:if test="BRPRICE">
+                                                    <ns12:BRPrice>
+                                                        <xsl:value-of select="BRPRICE"/>
+                                                    </ns12:BRPrice>
+                                                </xsl:if>
+                                                <xsl:if test="BRTRDTIME">
+                                                    <ns12:BRTrdTime>
+                                                        <xsl:value-of select="BRTRDTIME"/>
+                                                    </ns12:BRTrdTime>
+                                                </xsl:if>
+                                            </ns12:BRNoNom>
+                                        </xsl:for-each>
+                                    </ns12:sgBRNoNom>
+                                </xsl:for-each>
+                                <xsl:if test="BRTOTNOM">
+                                    <ns12:BRTotNom>
+                                        <xsl:value-of select="BRTOTNOM"/>
+                                    </ns12:BRTotNom>
+                                </xsl:if>
+                                <xsl:if test="BRGROSSAMSEC">
+                                    <ns12:BRGrossamsec>
+                                        <xsl:value-of select="BRGROSSAMSEC"/>
+                                    </ns12:BRGrossamsec>
+                                </xsl:if>
+                                <xsl:if test="BRGROSSAMTRD">
+                                    <ns12:BRGrossamtrd>
+                                        <xsl:value-of select="BRGROSSAMTRD"/>
+                                    </ns12:BRGrossamtrd>
+                                </xsl:if>
+                                <xsl:if test="BRINTRAMTRD">
+                                    <ns12:BRIntAmt>
+                                        <xsl:value-of select="BRINTRAMTRD"/>
+                                    </ns12:BRIntAmt>
+                                </xsl:if>
+                                <xsl:if test="BRGROSSACCR">
+                                    <ns12:BRGrossAcc>
+                                        <xsl:value-of select="BRGROSSACCR"/>
+                                    </ns12:BRGrossAcc>
+                                </xsl:if>
+                                <xsl:if test="BRBROKERCOMM">
+                                    <ns12:BRBrokerCom>
+                                        <xsl:value-of select="BRBROKERCOMM"/>
+                                    </ns12:BRBrokerCom>
+                                </xsl:if>
+                                <xsl:if test="BRFOREIGNFEE">
+                                    <ns12:BRForeignfee>
+                                        <xsl:value-of select="BRFOREIGNFEE"/>
+                                    </ns12:BRForeignfee>
+                                </xsl:if>
+                                <xsl:if test="CLCOMMISSION">
+                                    <ns12:CLCommission>
+                                        <xsl:value-of select="CLCOMMISSION"/>
+                                    </ns12:CLCommission>
+                                </xsl:if>
+                                <xsl:if test="BRSTAMPTAX">
+                                    <ns12:BRStampTax>
+                                        <xsl:value-of select="BRSTAMPTAX"/>
+                                    </ns12:BRStampTax>
+                                </xsl:if>
+                                <xsl:if test="BREBVFEES">
+                                    <ns12:BREbvfee>
+                                        <xsl:value-of select="BREBVFEES"/>
+                                    </ns12:BREbvfee>
+                                </xsl:if>
+                                <xsl:if test="BRFEESMISC">
+                                    <ns12:BRFeemisc>
+                                        <xsl:value-of select="BRFEESMISC"/>
+                                    </ns12:BRFeemisc>
+                                </xsl:if>
+                                <xsl:if test="BRNETAMTRD">
+                                    <ns12:BRNetamt>
+                                        <xsl:value-of select="BRNETAMTRD"/>
+                                    </ns12:BRNetamt>
+                                </xsl:if>
+                                <xsl:if test="BREXRATEACC">
+                                    <ns12:BRExRateAcc>
+                                        <xsl:value-of select="BREXRATEACC"/>
+                                    </ns12:BRExRateAcc>
+                                </xsl:if>
+                                <xsl:if test="BRACCOUNTCCY">
+                                    <ns12:BRAccountCcy>
+                                        <xsl:value-of select="BRACCOUNTCCY"/>
+                                    </ns12:BRAccountCcy>
+                                </xsl:if>
+                                <xsl:if test="BRAMOUNTDUE">
+                                    <ns12:BRAmountDue>
+                                        <xsl:value-of select="BRAMOUNTDUE"/>
+                                    </ns12:BRAmountDue>
+                                </xsl:if>
+                                <xsl:if test="BRDELIVINSTR">
+                                    <ns12:BRDelivinstr>
+                                        <xsl:value-of select="BRDELIVINSTR"/>
+                                    </ns12:BRDelivinstr>
+                                </xsl:if>
+                            </ns12:mBrokerNo>
+                        </xsl:for-each>
+                    </ns12:gBrokerNo>
+                </xsl:for-each>
+                <ns12:TradeTime>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/TRADETIME"/>
+                </ns12:TradeTime>
+                <ns12:Bndrndmeth>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/BNDRNDMETH"/>
+                </ns12:Bndrndmeth>
+                <ns12:CgTradeTime>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/CGTRADETIME"/>
+                </ns12:CgTradeTime>
+                <ns12:PaymentReqd>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/PAYMENTREQD"/>
+                </ns12:PaymentReqd>
+                <ns12:Brokeradvicereqd>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/BROKERADVICEREQD"/>
+                </ns12:Brokeradvicereqd>
+                <ns12:Depotadvicereqd>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/DEPOTADVICEREQD"/>
+                </ns12:Depotadvicereqd>
+                <ns12:Cashholdsettle>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/CASHHOLDSETTLE"/>
+                </ns12:Cashholdsettle>
+                <ns12:Secholdsettle>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/SECHOLDSETTLE"/>
+                </ns12:Secholdsettle>
+                <ns12:BulkProcessing>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/BULKPROCESSING"/>
+                </ns12:BulkProcessing>
+                <xsl:for-each select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/gSTATEMENTNOS">
+                    <ns12:gStatementNos>
+                        <ns12:StatementNos>
+                            <xsl:value-of select="STATEMENTNOS[1]"/>
+                        </ns12:StatementNos>
+                    </ns12:gStatementNos>
+                </xsl:for-each>
+                <xsl:for-each select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/gOVERRIDE">
+                    <ns12:gOverride>
+                        <ns12:Override>
+                            <xsl:value-of select="OVERRIDE[1]"/>
+                        </ns12:Override>
+                    </ns12:gOverride>
+                </xsl:for-each>
+                <ns12:RecordStatus>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/RECORDSTATUS"/>
+                </ns12:RecordStatus>
+                <ns12:CurrNo>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/CURRNO"/>
+                </ns12:CurrNo>
+                <xsl:for-each select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/gINPUTTER">
+                    <ns12:gInputter>
+                        <ns12:Inputter>
+                            <xsl:value-of select="INPUTTER[1]"/>
+                        </ns12:Inputter>
+                    </ns12:gInputter>
+                </xsl:for-each>
+                <xsl:for-each select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/gDATETIME">
+                    <ns12:gDatetime>
+                        <ns12:DateTime>
+                            <xsl:value-of select="DATETIME[1]"/>
+                        </ns12:DateTime>
+                    </ns12:gDatetime>
+                </xsl:for-each>
+                <ns12:CoCode>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/COCODE"/>
+                </ns12:CoCode>
+                <ns12:DeptCode>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/DEPTCODE"/>
+                </ns12:DeptCode>
+                <ns12:SourceRef>
+                    <xsl:value-of select="$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/SECTRADEType/LSOURCEREF"/>
+                </ns12:SourceRef>
+            </ns12:SecuritiesTradingDetail>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SoapInquirySCTrading">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>151</pd:x>
+        <pd:y>176</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx27:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>SCDetailSecTradeView</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortalTT01%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns12:SecuritiesTradeId"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx27:SCDetailSecTradeView>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <SECTRADEType>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns12:SecuritiesTradeId[1]">
+                            <transactionId>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns12:SecuritiesTradeId[1]"/>
+                            </transactionId>
+                        </xsl:if>
+                    </SECTRADEType>
+                </pfx27:SCDetailSecTradeView>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SoapInquirySCTrading</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusSuccess</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusErr</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>SetStatusException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusT24Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapInquirySCTrading</pd:from>
+        <pd:to>SetStatusT24Error</pd:to>
+        <pd:xpathDescription>T24ReturnError</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$SoapInquirySCTrading/outputMessage/pfx27:SCDetailSecTradeViewResponse/Status/successIndicator = 'T24Error'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapInquirySCTrading</pd:from>
+        <pd:to>SetStatusErr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapInquirySCTrading</pd:from>
+        <pd:to>MapInquiryESBModel</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapInquiryESBModel</pd:from>
+        <pd:to>SetStatusSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

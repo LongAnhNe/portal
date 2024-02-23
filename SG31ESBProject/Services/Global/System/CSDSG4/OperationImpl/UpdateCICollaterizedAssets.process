@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/common/envelope/soaenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns3="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCICollaterizedAssets.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://wsdl.www.sbv.gov.vn/schema/global/system/csdtosg4/CSDToSG4.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCICollaterizedAssets.xsd" schemaLocation="/SharedResource/Schema/Global/System/CSDSG4/UpdateCICollaterizedAssets.xsd"/>
+    <wsdl:import namespace="http://wsdl.www.sbv.gov.vn/schema/global/system/csdtosg4/CSDToSG4.wsdl" location="/SharedResource/Schema/Global/System/CSDSG4/CIPaymentCapability.wsdl"/>
+    <pd:name>Services/Global/System/CSDSG4/OperationImpl/UpdateCICollaterizedAssets.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:UpdateCICollaterizedAssetsRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$UpdateCICollaterizedAssets/root/ns4:ServiceEnverlop/ServiceBody/*" element="ns3:UpdateCICollaterizedAssetsResponseBody"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:UpdateCICollaterizedAssetsResponse>
+            <response>
+                <ns3:UpdateCICollaterizedAssetsResponse>
+                    <xsl:copy-of select="$UpdateCICollaterizedAssets/root/ns4:ServiceEnverlop/ns2:AppHdr"/>
+                    <xsl:copy-of select="$UpdateCICollaterizedAssets/root/ns4:ServiceEnverlop/ns2:ResponseStatus"/>
+                    <xsl:copy-of select="$UpdateCICollaterizedAssets/root/ns4:ServiceEnverlop/ServiceBody/ns3:UpdateCICollaterizedAssetsResponseBody"/>
+                </ns3:UpdateCICollaterizedAssetsResponse>
+            </response>
+        </wsdlPfx:UpdateCICollaterizedAssetsResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:UpdateCICollaterizedAssetsResponse"/>
+    <pd:endX>451</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1465442907965</pd:targetNamespace>
+    <pd:activity name="UpdateCICollaterizedAssets">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:SOAEnvelope>
+                    <ns1:SOAServiceHeader>
+                        <ns1:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:UpdateCICollaterizedAssetsRequest/request/ns3:UpdateCICollaterizedAssetsRequest/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:UpdateCICollaterizedAssetsRequest/request/ns3:UpdateCICollaterizedAssetsRequest/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:UpdateCICollaterizedAssetsRequest/request/ns3:UpdateCICollaterizedAssetsRequest/ns2:AppHdr/node()"/>
+                        </ns1:AppHdr>
+                        <ns1:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns1:ProcessName>
+                    </ns1:SOAServiceHeader>
+                    <ns1:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:UpdateCICollaterizedAssetsRequest/request/ns3:UpdateCICollaterizedAssetsRequest/ns3:UpdateCICollaterizedAssetsRequestBody"/>
+                    </ns1:ServiceBody>
+                </ns1:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>UpdateCICollaterizedAssets</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateCICollaterizedAssets</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

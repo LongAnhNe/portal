@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns22="sbv/common/envelope/commonheader/1.0" xmlns:pfx5="schema://www.sbv.gov.vn/schema/global/T24SyncInformation/ExchangeRatePublish/ExchangeRatePublish.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBServiceResponse.xsd" xmlns:pfx3="http://schemas.tibco.com/bw/plugins/jdbc/5.0/jdbcExceptions" xmlns:pfx2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ServiceResponse.xsd" xmlns:pfx6="http://schemas.tibco.com/bw/plugins/jms/5.0/jmsExceptions" xmlns:ns16="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/NotifyBackendAlert.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="sbv/common/exceptionhandling/exception/1.0" xmlns:ns15="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/Schema.xsd" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:ns6="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns7="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:pfx="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns4="www.tibco.com/plugin/Sleep" xmlns:ns3="http://www.temenos.com/T24/event/Common/EventCommon" xmlns:ns0="http://www.tibco.com/pe/CheckpointSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/T24SyncInformation/ExchangeRatePublish/ExchangeRatePublish.xsd" schemaLocation="/SharedResource/Schema/Global/T24SyncInformation/ExchangeRatePublish/ExchangeRatePublish.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/ExchangeRatePublish/ExchangeRatePublish-ExchangeRateFlow.xsd"/>
+    <pd:name>Services/Global/T24SyncInformation/ExchangeRatePublish/Production_phase 1/ERPExchangeRateQueue-ESBErrorQueue.process</pd:name>
+    <pd:startName>ERP ExchangeRate Subscribe</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ERP ExchangeRate Subscribe">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>165</pd:x>
+        <pd:y>406</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>jms/requestQueue21application='CURRENCY'<destination>ESBErrorQueue</destination>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <selector>application='CURRENCY'</selector>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1185</pd:endX>
+    <pd:endY>410</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx5:ESBServiceState"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1436004432453</pd:targetNamespace>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>843</pd:x>
+        <pd:y>405</pd:y>
+        <config>
+            <ConfirmEvent>ERP ExchangeRate Subscribe</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch ALL">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>550</pd:x>
+        <pd:y>715</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>978</pd:x>
+        <pd:y>407</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="&quot;ERPExchangeRateSubscribe&quot;"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat( 'ERPExchangeRateSubscribe' ,': End ', 'ERPExchangeRateSubscribe' )"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <ns22:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns22:CharSet>
+                            <ns22:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns22:ServVersion>
+                            <ns22:From>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;99&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns22:Name>
+                            </ns22:From>
+                            <ns22:To>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;07&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ERP&quot;"/>
+                                </ns22:Name>
+                            </ns22:To>
+                            <ns22:MsgId>
+                                <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </ns22:MsgId>
+                            <xsl:if test="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                                <ns22:MsgPreId>
+                                    <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                                </ns22:MsgPreId>
+                            </xsl:if>
+                            <xsl:if test="$Parse-XML/pfx:ExchangeRateFlow/pfx:id">
+                                <ns22:MsgSrcId>
+                                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                                </ns22:MsgSrcId>
+                            </xsl:if>
+                            <ns22:BizServ>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;7&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ExchangeRatePublish&quot;"/>
+                                </ns22:Name>
+                            </ns22:BizServ>
+                            <ns22:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns22:CreatedDate>
+                        </ns12:AppHdr>
+                        <ns12:SOAMsgId>
+                            <xsl:value-of select="concat( generate-id($_processContext/ns2:ProcessContext),  tib:timestamp() )"/>
+                        </ns12:SOAMsgId>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/CSDT24/ExchangeRatePublish&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:OperationName>
+                            <xsl:value-of select="&quot;ERPExchangeRateSubscribe&quot;"/>
+                        </ns12:OperationName>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <ns6:ServiceEnverlop>
+                            <ns22:AppHdr>
+                                <ns22:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns22:CharSet>
+                                <ns22:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns22:ServVersion>
+                                <ns22:From>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;99&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;ESB&quot;"/>
+                                    </ns22:Name>
+                                </ns22:From>
+                                <ns22:To>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;07&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;ERP&quot;"/>
+                                    </ns22:Name>
+                                </ns22:To>
+                                <ns22:MsgId>
+                                    <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                </ns22:MsgId>
+                                <xsl:if test="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                                    <ns22:MsgPreId>
+                                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                                    </ns22:MsgPreId>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx:ExchangeRateFlow/pfx:id">
+                                    <ns22:MsgSrcId>
+                                        <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                                    </ns22:MsgSrcId>
+                                </xsl:if>
+                                <ns22:BizServ>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;7&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;ExchangeRatePublish&quot;"/>
+                                    </ns22:Name>
+                                </ns22:BizServ>
+                                <ns22:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns22:CreatedDate>
+                            </ns22:AppHdr>
+                            <ns22:ResponseStatus>
+                                <ns22:Status>
+                                    <xsl:value-of select="if ($ESBServiceState/pfx5:ESBServiceState/ns7:Status = 0) &#xA;then 0&#xA;else 1"/>
+                                </ns22:Status>
+                                <ns22:ErrorCode>
+                                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:Status"/>
+                                </ns22:ErrorCode>
+                                <ns22:ErrorMessage>
+                                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:ErrorMessage"/>
+                                </ns22:ErrorMessage>
+                            </ns22:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/Body"/>
+                                <xsl:copy-of select="$Parse-XML/pfx:ExchangeRateFlow"/>
+                                <xsl:copy-of select="$Insert-ERP-DB/jdbcUpdateActivityOutput"/>
+                                <xsl:copy-of select="$Call-Proc/resultSet"/>
+                                <xsl:copy-of select="$ESBServiceState/pfx5:ESBServiceState"/>
+                            </ServiceBody>
+                        </ns6:ServiceEnverlop>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ESBServiceState/pfx5:ESBServiceState/ns7:timestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert ERP DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>511</pd:x>
+        <pd:y>401</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/ExchangeRatePublish/ERP_InsertDB_Timeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <statement>Insert into EPR_T24_GL_DRATES(FROM_CURRENCY,TO_CURRENCY,FROM_CONVERSION_DATE,TO_CONVERSION_DATE,USER_CONVERSION_TYPE,CONVERSION_RATE,MODE_FLAG,STATUS)
+values(?,?,?,?,?,?,?,?)
+</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>FROM_CURRENCY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TO_CURRENCY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FROM_CONVERSION_DATE</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TO_CONVERSION_DATE</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>USER_CONVERSION_TYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CONVERSION_RATE</parameterName>
+                    <dataType>NUMERIC</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MODE_FLAG</parameterName>
+                    <dataType>CHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>STATUS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <FROM_CURRENCY>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:ExchangeRateFlow/pfx:id)">
+                            <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </FROM_CURRENCY>
+                <TO_CURRENCY>
+                    <xsl:value-of select="&quot;VND&quot;"/>
+                </TO_CURRENCY>
+                <FROM_CONVERSION_DATE>
+                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:eventCommon/ns3:today"/>
+                </FROM_CONVERSION_DATE>
+                <TO_CONVERSION_DATE>
+                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:eventCommon/ns3:today"/>
+                </TO_CONVERSION_DATE>
+                <USER_CONVERSION_TYPE>
+                    <xsl:value-of select="&quot;midRevalRate&quot;"/>
+                </USER_CONVERSION_TYPE>
+                <CONVERSION_RATE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:ExchangeRateFlow/pfx:currencyMarketGroup[1]/pfx:midRevalRate)">
+                            <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:currencyMarketGroup[1]/pfx:midRevalRate"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CONVERSION_RATE>
+                <MODE_FLAG>
+                    <xsl:value-of select="1"/>
+                </MODE_FLAG>
+                <STATUS>
+                    <xsl:value-of select="&quot;ACTIVE&quot;"/>
+                </STATUS>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>391</pd:x>
+        <pd:y>401</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:ExchangeRateFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="1. Parse-Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>392</pd:x>
+        <pd:y>204</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:ESBServiceState>
+                <ns7:Status>
+                    <xsl:value-of select="1"/>
+                </ns7:Status>
+                <ns7:ErrorMessage>
+                    <xsl:value-of select="concat( &quot;Pare XML Error. Msg : &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                </ns7:ErrorMessage>
+                <ns7:NotifyMsg>
+                    <xsl:value-of select="concat( &quot;Pare XML Error. Msg : &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                </ns7:NotifyMsg>
+                <ns7:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns7:ErrorExist>
+                <ns7:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:Unique_ID"/>
+                </ns7:Unique_ID>
+                <ns7:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:timestamps"/>
+                </ns7:timestamps>
+                <ns7:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:CurrentDateTime"/>
+                </ns7:CurrentDateTime>
+            </pfx5:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GotoEnd">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1071</pd:x>
+        <pd:y>310</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Call Proc">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>636</pd:x>
+        <pd:y>402</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/ExchangeRatePublish/ERP_Proc_Timeout_sec%%</timeout>
+            <maxRows>%%ServiceGlobalVar/ExchangeRatePublish/ERP_Proc_MaxRow%%</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <catalog>ERP_T24_GL_DRATES_PKG</catalog>
+            <ProcedureName>DAILY_RATES_PRC</ProcedureName>
+            <oraObjects/>
+            <oraTables/>
+            <parameterTypes>
+                <parameter>
+                    <colName>RESCODE</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>ERRMSG</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="2. CallProcError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>741</pd:x>
+        <pd:y>307</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:ESBServiceState>
+                <ns7:Status>
+                    <xsl:value-of select="2"/>
+                </ns7:Status>
+                <ns7:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Call ERP Proc Error. Msg : &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                </ns7:ErrorMessage>
+                <ns7:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Call ERP Proc Error. Msg : &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                </ns7:NotifyMsg>
+                <ns7:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns7:ErrorExist>
+                <xsl:if test="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <ns7:Unique_ID>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </ns7:Unique_ID>
+                </xsl:if>
+                <ns7:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:timestamps"/>
+                </ns7:timestamps>
+                <ns7:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns7:CurrentDateTime"/>
+                </ns7:CurrentDateTime>
+            </pfx5:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="0. Init Service State">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>279</pd:x>
+        <pd:y>407</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:ESBServiceState>
+                <ns7:Status>
+                    <xsl:value-of select="0"/>
+                </ns7:Status>
+                <ns7:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns7:ErrorExist>
+                <xsl:if test="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <ns7:Unique_ID>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </ns7:Unique_ID>
+                </xsl:if>
+                <ns7:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns7:timestamps>
+                <ns7:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns7:CurrentDateTime>
+            </pfx5:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Error Handling (1)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>663</pd:x>
+        <pd:y>550</pd:y>
+        <pd:width>454</pd:width>
+        <pd:height>314</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>IsNotExistInQueue</pd:to>
+            <pd:xpathDescription>Lost Conn</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns2:ErrorReport/MsgCode = "BW-JMS-100039" 
+or $_error/ns2:ErrorReport/MsgCode = "BW-JDBC-100039"
+or $_error/ns2:ErrorReport/MsgCode = $_error_Insert-ERP-DB/ActivityErrors/pfx3:JDBCConnectionNotFoundException/msgCode 
+or $_error/ns2:ErrorReport/MsgCode = $_error_Call-Proc/ActivityErrors/pfx3:JDBCConnectionNotFoundException/msgCode
+or $_error/ns2:ErrorReport/MsgCode = $_error_ExchangeRateErrorQueue/ActivityErrors/pfx6:JMSSessionCreateException/msgCode</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ESB Error Queue</pd:to>
+            <pd:xpathDescription>Other Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GotoEnd-1-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IsNotExistInQueue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>Error, existed</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-LostConn</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ESB Error Queue</pd:from>
+            <pd:to>Confirm 2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Connection-Notify-Queue-1</pd:from>
+            <pd:to>Sleep-LostConn</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm 2</pd:from>
+            <pd:to>errorProcessor-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor-1</pd:from>
+            <pd:to>GotoEnd-1-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IsNotExistInQueue</pd:from>
+            <pd:to>Connection-Notify-Queue-1</pd:to>
+            <pd:xpathDescription>Success</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ESB Error Queue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>736</pd:x>
+            <pd:y>605</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>ESBErrorQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </JMSCorrelationID>
+                    <JMSProperties>
+                        <ns:JMSXGroupID>
+                            <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                        </ns:JMSXGroupID>
+                    </JMSProperties>
+                    <xsl:copy-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/OtherProperties"/>
+                    <Body>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/Body"/>
+                    </Body>
+                    <DynamicProperties>
+                        <property>
+                            <name>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/MsgCode"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/Msg"/>
+                            </value>
+                        </property>
+                    </DynamicProperties>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Connection-Notify-Queue-1">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>828</pd:x>
+            <pd:y>712</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>ConnectionNotifyQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration/>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </JMSCorrelationID>
+                    <JMSProperties>
+                        <ns:JMSXGroupID>
+                            <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                        </ns:JMSXGroupID>
+                    </JMSProperties>
+                    <xsl:copy-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/OtherProperties"/>
+                    <Body>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/Body"/>
+                    </Body>
+                    <DynamicProperties>
+                        <property>
+                            <name>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/MsgCode"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/Msg"/>
+                            </value>
+                        </property>
+                    </DynamicProperties>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm 2">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+            <pd:x>827</pd:x>
+            <pd:y>605</pd:y>
+            <config>
+                <ConfirmEvent>ERP ExchangeRate Subscribe</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Sleep-LostConn">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>963</pd:x>
+            <pd:y>709</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns4:SleepInputSchema>
+                    <IntervalInMillisec>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/ExchangeRatePublish/SleepTime_LostConn_ms"/>
+                    </IntervalInMillisec>
+                </ns4:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="errorProcessor-1">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>923</pd:x>
+            <pd:y>607</pd:y>
+            <config>
+                <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ProcessName>
+                        <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                    </ProcessName>
+                    <GeneratedId>
+                        <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                    </GeneratedId>
+                    <ns14:ExceptionBody>
+                        <ns14:Hostname>
+                            <xsl:value-of select="BW:getHostName()"/>
+                        </ns14:Hostname>
+                        <ns14:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/ErrorRole"/>
+                        </ns14:Category>
+                        <ns14:Type>
+                            <xsl:value-of select="&quot;type&quot;"/>
+                        </ns14:Type>
+                        <ns14:Level>
+                            <xsl:value-of select="&quot;level&quot;"/>
+                        </ns14:Level>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns2:ErrorReport">
+                            <ns14:ErrorReport>
+                                <StackTrace>
+                                    <xsl:value-of select="StackTrace"/>
+                                </StackTrace>
+                                <Msg>
+                                    <xsl:value-of select="Msg"/>
+                                </Msg>
+                                <FullClass>
+                                    <xsl:value-of select="FullClass"/>
+                                </FullClass>
+                                <ObjectClass>
+                                    <xsl:value-of select="Class"/>
+                                </ObjectClass>
+                                <ProcessStack>
+                                    <xsl:value-of select="ProcessStack"/>
+                                </ProcessStack>
+                                <xsl:if test="MsgCode">
+                                    <MsgCode>
+                                        <xsl:value-of select="MsgCode"/>
+                                    </MsgCode>
+                                </xsl:if>
+                                <xsl:copy-of select="Data"/>
+                            </ns14:ErrorReport>
+                        </xsl:for-each>
+                    </ns14:ExceptionBody>
+                    <ServiceInput>
+                        <ns22:AppHdr>
+                            <ns22:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns22:CharSet>
+                            <ns22:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns22:ServVersion>
+                            <ns22:From>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;99&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns22:Name>
+                            </ns22:From>
+                            <ns22:To>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;07&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ERP&quot;"/>
+                                </ns22:Name>
+                            </ns22:To>
+                            <ns22:MsgId>
+                                <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </ns22:MsgId>
+                            <xsl:if test="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                                <ns22:MsgPreId>
+                                    <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                                </ns22:MsgPreId>
+                            </xsl:if>
+                            <xsl:if test="$Parse-XML/pfx:ExchangeRateFlow/pfx:id">
+                                <ns22:MsgSrcId>
+                                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                                </ns22:MsgSrcId>
+                            </xsl:if>
+                            <ns22:BizServ>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;7&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ExchangeRatePublish&quot;"/>
+                                </ns22:Name>
+                            </ns22:BizServ>
+                            <ns22:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns22:CreatedDate>
+                        </ns22:AppHdr>
+                        <ServiceBody/>
+                    </ServiceInput>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GotoEnd-1-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1035</pd:x>
+            <pd:y>608</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="IsNotExistInQueue">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>759</pd:x>
+            <pd:y>797</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns0:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </ns0:input>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="ExchangeRateErrorQueue">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>616</pd:x>
+        <pd:y>202</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ExchangeRateErrorQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <JMSCorrelationID>
+                    <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </JMSCorrelationID>
+                <JMSProperties/>
+                <Body>
+                    <xsl:value-of select="$ERP-ExchangeRate-Subscribe/ns:ActivityOutput/Body"/>
+                </Body>
+                <DynamicProperties>
+                    <property>
+                        <name>
+                            <xsl:value-of select="$_error/ns2:ErrorReport/MsgCode"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$_error/ns2:ErrorReport/Msg"/>
+                        </value>
+                    </property>
+                </DynamicProperties>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>Write Log</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert ERP DB</pd:from>
+        <pd:to>Call Proc</pd:to>
+        <pd:xpathDescription>Succes</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Insert ERP DB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>1. Parse-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1. Parse-Error</pd:from>
+        <pd:to>ExchangeRateErrorQueue</pd:to>
+        <pd:xpathDescription>Send To</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>GotoEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GotoEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Proc</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>Call Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Proc</pd:from>
+        <pd:to>2. CallProcError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2. CallProcError</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>delete msg</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0. Init Service State</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch ALL</pd:from>
+        <pd:to>Error Handling (1)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Handling (1)</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExchangeRateErrorQueue</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ERP ExchangeRate Subscribe</pd:from>
+        <pd:to>0. Init Service State</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

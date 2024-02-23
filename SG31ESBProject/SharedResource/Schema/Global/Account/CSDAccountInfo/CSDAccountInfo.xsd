@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:complexType name="GetBalanceAccRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="enquiryInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="enquiryInputType">
+		<xs:sequence>
+			<xs:element name="T24Account" type="xs:string" minOccurs="0"/>
+			<xs:element name="T24CustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="CitadBankCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			<xs:element name="Category" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GetBalAccResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SGetBalanceAccList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GetBalAccResDetailType">
+		<xs:sequence>
+			<xs:element name="T24AccountNo" type="xs:string"/>
+			<xs:element name="T24AccountName" type="xs:string"/>
+			<xs:element name="CustomerId" type="xs:string"/>
+			<xs:element name="Category" type="xs:string"/>
+			<xs:element name="Currency" type="xs:string"/>
+			<xs:element name="OpenActualBal" type="xs:string"/>
+			<xs:element name="OpenClearedBal" type="xs:string"/>
+			<xs:element name="OnlineActualBal" type="xs:string"/>
+			<xs:element name="OnlineClearedBal" type="xs:string"/>
+			<xs:element name="WorkingBalance" type="xs:string"/>
+			<xs:element name="LockedAmout" type="xs:string"/>
+			<xs:element name="UsableAmount" type="xs:string"/>
+			<xs:element name="LimitTTTT" type="xs:string"/>
+			<xs:element name="CompanyCode" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GetBalAccResDetail" type="GetBalAccResDetailType"/>
+	<xs:element name="GetBalanceAccRes" type="GetBalAccResponseType"/>
+	<xs:element name="GetBalanceAccReq" type="GetBalanceAccRequestType"/>
+	<xs:element name="enquiryInput" type="enquiryInputType"/>
+	<xs:element name="SGetBalanceAccList" type="GetBalanceAccListType"/>
+	<xs:complexType name="GetBalanceAccListType">
+		<xs:sequence>
+			<xs:element ref="GetBalAccResDetail" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

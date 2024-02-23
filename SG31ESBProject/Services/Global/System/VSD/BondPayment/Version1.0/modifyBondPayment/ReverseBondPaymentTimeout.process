@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="schema://www.sbv.gov.vn/schema/global/System/Proposal/FTProposal.xsd" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx14="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd" xmlns:pfx13="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:pfx12="http://schemas.tibco.com/bw/pe/plugin/5.0/exceptions" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://www.sbv.gov.vn/Schema/Global/System/VSD/BondPayment.xsd" xmlns:pfx10="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx4="http://tempuri.org/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://xmlns.example.com/1469432349038" xmlns:pfx2="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx9="sbv/common/envelope/commonheader/1.0" xmlns:pfx8="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx7="vsd/common/envelope/commonheader/1.0" xmlns:pfx6="http://esb.vsd.com/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns5="sbv/common/exceptionhandling/exception/1.0" xmlns:ns6="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns7="http://schemas.tibco.com/bw/plugins/http/5.0/httpExceptions" xmlns:pfx="http://temenos.com/SBV.INTE.T24.VSD.WS" xmlns:ns2="http://www.tibco.com/pe/CheckpointSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="www.tibco.com/plugin/Sleep" xmlns:ns3="sbv/common/logging/enginelog/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.VSD.WS"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/Schema/Global/System/VSD/BondPayment.xsd" schemaLocation="/SharedResource/Schema/Global/System/VSD/BondPayment.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.VSD.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.VSD.WS/SBV.INTE.T24.VSD.WS_xsd1.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1469432349038" location="/SharedResource/Schema/Global/System/VSD/VSDService/VSDService.wsdl"/>
+    <pd:name>Services/Global/System/VSD/BondPayment/Version1.0/modifyBondPayment/ReverseBondPaymentTimeout.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>99</pd:x>
+        <pd:y>509</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>VSDModifyBondPaymentQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1065</pd:endX>
+    <pd:endY>277</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceVariable>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="StartTime" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariable>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1476342473785</pd:targetNamespace>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>227</pd:x>
+        <pd:y>392</pd:y>
+        <config>
+            <variableName>ServiceVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <StartTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </StartTime>
+                <OperationName>
+                    <xsl:value-of select="&quot;ReverseBondPayment&quot;"/>
+                </OperationName>
+                <ServiceName>
+                    <xsl:value-of select="&quot;Global/System/VSD/BondPayment&quot;"/>
+                </ServiceName>
+                <SOAMsgId>
+                    <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:MsgId"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallVSDWS">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>342</pd:x>
+        <pd:y>395</pd:y>
+        <config>
+            <timeout>%%VSDWS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx3:BondPaymentPortTypeService</service>
+            <servicePort>BondPaymentPortTypePort</servicePort>
+            <operation>reverseBondPayment</operation>
+            <soapAction>/Services/Global/System/VSD/BondPaymentService.serviceagent/BondPaymentPortTypeEndpoint0/reverseBondPayment</soapAction>
+            <endpointURL>%%VSDWS/BondPaymentWS%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx6:ReverseBondPaymentReq>
+                    <pfx7:AppHdr>
+                        <pfx7:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </pfx7:CharSet>
+                        <pfx7:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </pfx7:ServVersion>
+                        <pfx7:From>
+                            <pfx7:Id>
+                                <xsl:value-of select="&quot;VSD&quot;"/>
+                            </pfx7:Id>
+                            <pfx7:Name>
+                                <xsl:value-of select="&quot;VSDGOVBOND&quot;"/>
+                            </pfx7:Name>
+                        </pfx7:From>
+                        <pfx7:To>
+                            <pfx7:Id>
+                                <xsl:value-of select="&quot;SBVGW&quot;"/>
+                            </pfx7:Id>
+                            <pfx7:Name>
+                                <xsl:value-of select="&quot;SBVGWGOVBOND&quot;"/>
+                            </pfx7:Name>
+                        </pfx7:To>
+                        <pfx7:MsgId>
+                            <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:MsgId"/>
+                        </pfx7:MsgId>
+                        <pfx7:BizServ>
+                            <pfx7:Id>
+                                <xsl:value-of select="&quot;FORM5&quot;"/>
+                            </pfx7:Id>
+                            <pfx7:Name>
+                                <xsl:value-of select="&quot;GOVBONDPAYMENT&quot;"/>
+                            </pfx7:Name>
+                        </pfx7:BizServ>
+                        <pfx7:CreatedDate>
+                            <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:CreatedDate"/>
+                        </pfx7:CreatedDate>
+                    </pfx7:AppHdr>
+                    <pfx6:ReverseBondPayment>
+                        <xsl:for-each select="$Parse-XML/root/pfx:VSDCreateForm1andForm4Response/SBVVSDFORMType/gSRCTRANSID/mSRCTRANSID">
+                            <pfx6:ReverseBondPaymentDetail>
+                                <pfx6:SrcTransID>
+                                    <xsl:value-of select="SRCTRANSID"/>
+                                </pfx6:SrcTransID>
+                                <pfx6:TransDate>
+                                    <xsl:value-of select="TRANSDATE"/>
+                                </pfx6:TransDate>
+                                <pfx6:BondCode>
+                                    <xsl:value-of select="BONDCODE"/>
+                                </pfx6:BondCode>
+                                <pfx6:SendingBank>
+                                    <xsl:value-of select="SENDINGBANK"/>
+                                </pfx6:SendingBank>
+                                <pfx6:RecevingBank>
+                                    <xsl:value-of select="RECEVINGBANK"/>
+                                </pfx6:RecevingBank>
+                                <pfx6:Amount>
+                                    <xsl:value-of select="AMOUNT"/>
+                                </pfx6:Amount>
+                                <pfx6:Currency>
+                                    <xsl:value-of select="CURRENCY"/>
+                                </pfx6:Currency>
+                                <pfx6:ValueDate>
+                                    <xsl:value-of select="VALUEDATE"/>
+                                </pfx6:ValueDate>
+                                <pfx6:ModifyType>
+                                    <xsl:value-of select="MODIFYTYPE"/>
+                                </pfx6:ModifyType>
+                                <pfx6:ErrCode>
+                                    <xsl:value-of select="if (STATUS = 'SUCCESS') then '0' &#xA;else if (STATUS = 'FAIL') then '1' &#xA;else '2'"/>
+                                </pfx6:ErrCode>
+                                <xsl:if test="MAPERROR">
+                                    <pfx6:ErrDesc>
+                                        <xsl:value-of select="MAPERROR"/>
+                                    </pfx6:ErrDesc>
+                                </xsl:if>
+                            </pfx6:ReverseBondPaymentDetail>
+                        </xsl:for-each>
+                    </pfx6:ReverseBondPayment>
+                </pfx6:ReverseBondPaymentReq>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>558</pd:x>
+        <pd:y>499</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>96</pd:x>
+        <pd:y>392</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx11:BondPaymentModifyReq"/>
+                            <xsd:element ref="pfx:VSDCreateForm1andForm4Response"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Queue-Receiver/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>313</pd:x>
+        <pd:y>635</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>514</pd:x>
+        <pd:y>633</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>VSDModifyBondPaymentQueueError</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:value-of select="concat(&quot;Exception &quot;, $JMS-Queue-Receiver/ns:ActivityOutput/Body)"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm-1">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>1059</pd:x>
+        <pd:y>628</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>759</pd:x>
+        <pd:y>502</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <processNameXPath/>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns3:EngineLog>
+                    <ns3:ServiceName>
+                        <xsl:value-of select="$ServiceVariable/root/ServiceName"/>
+                    </ns3:ServiceName>
+                    <ns3:Message>
+                        <xsl:value-of select="$ServiceVariable/root/OperationName"/>
+                    </ns3:Message>
+                    <ns3:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns3:Category>
+                    <ns3:TrackingId>
+                        <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                    </ns3:TrackingId>
+                </ns3:EngineLog>
+                <pfx8:SOAEnvelope>
+                    <pfx8:SOAServiceHeader>
+                        <pfx8:AppHdr>
+                            <pfx9:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx9:CharSet>
+                            <pfx9:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx9:ServVersion>
+                            <pfx9:From>
+                                <pfx9:Id>
+                                    <xsl:value-of select="&quot;VSD&quot;"/>
+                                </pfx9:Id>
+                                <pfx9:Name>
+                                    <xsl:value-of select="&quot;VSDGOVBOND&quot;"/>
+                                </pfx9:Name>
+                            </pfx9:From>
+                            <pfx9:To>
+                                <pfx9:Id>
+                                    <xsl:value-of select="&quot;SBVGW&quot;"/>
+                                </pfx9:Id>
+                                <pfx9:Name>
+                                    <xsl:value-of select="&quot;SBVGWGOVBOND&quot;"/>
+                                </pfx9:Name>
+                            </pfx9:To>
+                            <pfx9:MsgId>
+                                <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                            </pfx9:MsgId>
+                            <pfx9:BizServ>
+                                <pfx9:Id>
+                                    <xsl:value-of select="&quot;FORM5&quot;"/>
+                                </pfx9:Id>
+                                <pfx9:Name>
+                                    <xsl:value-of select="&quot;REVERSEBONDPAYMENT&quot;"/>
+                                </pfx9:Name>
+                            </pfx9:BizServ>
+                            <pfx9:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx9:CreatedDate>
+                        </pfx8:AppHdr>
+                        <pfx8:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                        </pfx8:SOAMsgId>
+                        <pfx8:ServiceName>
+                            <xsl:value-of select="$ServiceVariable/root/ServiceName"/>
+                        </pfx8:ServiceName>
+                        <pfx8:OperationName>
+                            <xsl:value-of select="$ServiceVariable/root/OperationName"/>
+                        </pfx8:OperationName>
+                    </pfx8:SOAServiceHeader>
+                    <pfx8:ServiceBody>
+                        <ns6:ServiceEnverlop>
+                            <pfx9:AppHdr>
+                                <xsl:if test="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:CharSet">
+                                    <pfx9:CharSet>
+                                        <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:CharSet"/>
+                                    </pfx9:CharSet>
+                                </xsl:if>
+                                <pfx9:ServVersion>
+                                    <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:ServVersion"/>
+                                </pfx9:ServVersion>
+                                <pfx9:From>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:To/pfx9:Id"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:To/pfx9:Name"/>
+                                    </pfx9:Name>
+                                </pfx9:From>
+                                <pfx9:To>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:From/pfx9:Id"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:From/pfx9:Name"/>
+                                    </pfx9:Name>
+                                </pfx9:To>
+                                <pfx9:MsgId>
+                                    <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:MsgId"/>
+                                </pfx9:MsgId>
+                                <pfx9:BizServ>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;FORM5&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;GOVBONDPAYMENT&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:BizServ>
+                                <pfx9:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx9:CreatedDate>
+                            </pfx9:AppHdr>
+                            <pfx9:ResponseStatus>
+                                <pfx9:Status>
+                                    <xsl:value-of select="$CallVSDWS/outputMessage/pfx6:ReverseBondPaymentRes/pfx7:ResponseStatus/pfx7:Status"/>
+                                </pfx9:Status>
+                                <xsl:if test="$CallVSDWS/outputMessage/pfx6:ReverseBondPaymentRes/pfx7:ResponseStatus/pfx7:ErrorCode">
+                                    <pfx9:ErrorCode>
+                                        <xsl:value-of select="$CallVSDWS/outputMessage/pfx6:ReverseBondPaymentRes/pfx7:ResponseStatus/pfx7:ErrorCode"/>
+                                    </pfx9:ErrorCode>
+                                </xsl:if>
+                                <xsl:if test="$CallVSDWS/outputMessage/pfx6:ReverseBondPaymentRes/pfx7:ResponseStatus/pfx7:ErrorMessage">
+                                    <pfx9:ErrorMessage>
+                                        <xsl:value-of select="$CallVSDWS/outputMessage/pfx6:ReverseBondPaymentRes/pfx7:ResponseStatus/pfx7:ErrorMessage"/>
+                                    </pfx9:ErrorMessage>
+                                </xsl:if>
+                            </pfx9:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq"/>
+                                <xsl:copy-of select="$Parse-XML/root/pfx:VSDCreateForm1andForm4Response"/>
+                                <xsl:copy-of select="$CallVSDWS/outputMessage"/>
+                            </ServiceBody>
+                        </ns6:ServiceEnverlop>
+                    </pfx8:ServiceBody>
+                </pfx8:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServiceVariable/root/StartTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEndOver">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>960</pd:x>
+        <pd:y>495</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CheckRetryTime">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>527</pd:x>
+        <pd:y>126</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/VSDQueueRetryTime.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Reset RetryTime">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>693</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <showResult>true</showResult>
+            <variableConfig>/SharedResource/SharedVariables/VSDQueueRetryTime.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <MODIFY_QUEUE_RETRY_TIME>
+                    <xsl:value-of select="0"/>
+                </MODIFY_QUEUE_RETRY_TIME>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Increase RetryTime">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>703</pd:x>
+        <pd:y>179</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/VSDQueueRetryTime.sharedvariable</variableConfig>
+            <showResult>true</showResult>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <MODIFY_QUEUE_RETRY_TIME>
+                    <xsl:value-of select="$CheckRetryTime/root/MODIFY_QUEUE_RETRY_TIME + 1"/>
+                </MODIFY_QUEUE_RETRY_TIME>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Max Retry Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>1055</pd:x>
+        <pd:y>54</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;Has Retry Max Time : 05 Roll&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;ESB 999&quot;"/>
+                </messageCode>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SleepOtherwise">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>911</pd:x>
+        <pd:y>181</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns4:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/VSDBondPayment/SleepTime_Retry"/>
+                </IntervalInMillisec>
+            </ns4:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SleepError">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>535</pd:x>
+        <pd:y>269</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns4:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/VSDBondPayment/SleepTime_Error"/>
+                </IntervalInMillisec>
+            </ns4:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1057</pd:x>
+        <pd:y>470</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/pfx5:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:MsgId"/>
+                </GeneratedId>
+                <ns5:ExceptionBody>
+                    <ns5:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns5:Hostname>
+                    <ns5:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns5:Category>
+                    <ns5:Type>
+                        <xsl:value-of select="&quot;TYPE&quot;"/>
+                    </ns5:Type>
+                    <ns5:Level>
+                        <xsl:value-of select="&quot;LEVEL&quot;"/>
+                    </ns5:Level>
+                    <xsl:for-each select="$_error/pfx5:ErrorReport">
+                        <ns5:ErrorReport>
+                            <StackTrace>
+                                <xsl:value-of select="StackTrace"/>
+                            </StackTrace>
+                            <Msg>
+                                <xsl:value-of select="Msg"/>
+                            </Msg>
+                            <FullClass>
+                                <xsl:value-of select="FullClass"/>
+                            </FullClass>
+                            <ObjectClass>
+                                <xsl:value-of select="Class"/>
+                            </ObjectClass>
+                            <ProcessStack>
+                                <xsl:value-of select="ProcessStack"/>
+                            </ProcessStack>
+                            <xsl:if test="MsgCode">
+                                <MsgCode>
+                                    <xsl:value-of select="MsgCode"/>
+                                </MsgCode>
+                            </xsl:if>
+                            <xsl:copy-of select="Data"/>
+                        </ns5:ErrorReport>
+                    </xsl:for-each>
+                </ns5:ExceptionBody>
+                <ServiceInput>
+                    <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr"/>
+                    <ServiceBody>
+                        <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx11:BondPaymentModify"/>
+                        <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx11:BondPaymentModify"/>
+                        <xsl:copy-of select="$CallVSDWS/outputMessage"/>
+                    </ServiceBody>
+                </ServiceInput>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogExOver">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1174</pd:x>
+        <pd:y>461</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ErrorBracch">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>346</pd:x>
+        <pd:y>219</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEndRetry">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>881</pd:x>
+        <pd:y>46</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns3:EngineLog>
+                    <ns3:ServiceName>
+                        <xsl:value-of select="$ServiceVariable/root/ServiceName"/>
+                    </ns3:ServiceName>
+                    <ns3:Message>
+                        <xsl:value-of select="concat( 'ReverseBondPayment' ,': End ', 'ReverseBondPayment' )"/>
+                    </ns3:Message>
+                    <ns3:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns3:Category>
+                    <ns3:TrackingId>
+                        <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                    </ns3:TrackingId>
+                </ns3:EngineLog>
+                <pfx8:SOAEnvelope>
+                    <pfx8:SOAServiceHeader>
+                        <pfx8:AppHdr>
+                            <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/@*"/>
+                            <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/node()"/>
+                        </pfx8:AppHdr>
+                        <pfx8:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                        </pfx8:SOAMsgId>
+                        <pfx8:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/VSD/VSDForm6_confirmBondPayment&quot;"/>
+                        </pfx8:ServiceName>
+                        <pfx8:OperationName>
+                            <xsl:value-of select="$ServiceVariable/root/OperationName"/>
+                        </pfx8:OperationName>
+                        <pfx8:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/pfx5:ProcessContext/ProcessId)"/>
+                        </pfx8:ProcessName>
+                    </pfx8:SOAServiceHeader>
+                    <pfx8:ServiceBody>
+                        <ns6:ServiceEnverlop>
+                            <pfx9:AppHdr>
+                                <pfx9:ServVersion>
+                                    <xsl:value-of select="1.0"/>
+                                </pfx9:ServVersion>
+                                <pfx9:From>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;SBVGW&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;SBVGWGOVBOND&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:From>
+                                <pfx9:To>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;VSD&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;VSDGOVBOND&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:To>
+                                <pfx9:MsgId>
+                                    <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                                </pfx9:MsgId>
+                                <pfx9:BizServ>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;FORM5&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;GOVBONDPAYMENT&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:BizServ>
+                                <pfx9:CreatedDate>
+                                    <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:CreatedDate"/>
+                                </pfx9:CreatedDate>
+                            </pfx9:AppHdr>
+                            <pfx9:ResponseStatus>
+                                <pfx9:Status>
+                                    <xsl:value-of select="&quot;0&quot;"/>
+                                </pfx9:Status>
+                                <pfx9:ErrorCode>
+                                    <xsl:value-of select="&quot;Form5 Retry&quot;"/>
+                                </pfx9:ErrorCode>
+                                <pfx9:ErrorMessage>
+                                    <xsl:value-of select="&quot;Retry End&quot;"/>
+                                </pfx9:ErrorMessage>
+                                <pfx9:ErrorInfo/>
+                            </pfx9:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq"/>
+                                <xsl:copy-of select="$Parse-XML/root/pfx:VSDCreateForm1andForm4Response"/>
+                                <xsl:copy-of select="$_error/pfx5:ErrorReport"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/defaultFaultElement"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/ns7:HttpClientException"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/ns7:HttpServerException"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/ns7:HttpCommunicationException"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/pfx12:ActivityTimedOutException"/>
+                            </ServiceBody>
+                        </ns6:ServiceEnverlop>
+                    </pfx8:ServiceBody>
+                </pfx8:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServiceVariable/root/StartTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogOtherError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>692</pd:x>
+        <pd:y>403</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns3:EngineLog>
+                    <ns3:ServiceName>
+                        <xsl:value-of select="$ServiceVariable/root/ServiceName"/>
+                    </ns3:ServiceName>
+                    <ns3:Message>
+                        <xsl:value-of select="concat( 'ReverseondPayment' ,': Other Error', 'ReverseondPayment' )"/>
+                    </ns3:Message>
+                    <ns3:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns3:Category>
+                    <ns3:TrackingId>
+                        <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                    </ns3:TrackingId>
+                </ns3:EngineLog>
+                <pfx8:SOAEnvelope>
+                    <pfx8:SOAServiceHeader>
+                        <pfx8:AppHdr>
+                            <pfx9:ServVersion>
+                                <xsl:value-of select="1.0"/>
+                            </pfx9:ServVersion>
+                            <pfx9:From>
+                                <pfx9:Id>
+                                    <xsl:value-of select="&quot;SBVGW&quot;"/>
+                                </pfx9:Id>
+                                <pfx9:Name>
+                                    <xsl:value-of select="&quot;SBVGWGOVBOND&quot;"/>
+                                </pfx9:Name>
+                            </pfx9:From>
+                            <pfx9:To>
+                                <pfx9:Id>
+                                    <xsl:value-of select="&quot;VSD&quot;"/>
+                                </pfx9:Id>
+                                <pfx9:Name>
+                                    <xsl:value-of select="&quot;VSDGOVBOND&quot;"/>
+                                </pfx9:Name>
+                            </pfx9:To>
+                            <pfx9:MsgId>
+                                <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                            </pfx9:MsgId>
+                            <pfx9:BizServ>
+                                <pfx9:Id>
+                                    <xsl:value-of select="&quot;FORM5&quot;"/>
+                                </pfx9:Id>
+                                <pfx9:Name>
+                                    <xsl:value-of select="&quot;GOVBONDPAYMENT&quot;"/>
+                                </pfx9:Name>
+                            </pfx9:BizServ>
+                            <pfx9:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx9:CreatedDate>
+                        </pfx8:AppHdr>
+                        <pfx8:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                        </pfx8:SOAMsgId>
+                        <pfx8:ServiceName>
+                            <xsl:value-of select="$ServiceVariable/root/ServiceName"/>
+                        </pfx8:ServiceName>
+                        <pfx8:OperationName>
+                            <xsl:value-of select="$ServiceVariable/root/OperationName"/>
+                        </pfx8:OperationName>
+                        <pfx8:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/pfx5:ProcessContext/ProcessId)"/>
+                        </pfx8:ProcessName>
+                    </pfx8:SOAServiceHeader>
+                    <pfx8:ServiceBody>
+                        <ns6:ServiceEnverlop>
+                            <pfx9:AppHdr>
+                                <pfx9:ServVersion>
+                                    <xsl:value-of select="1.0"/>
+                                </pfx9:ServVersion>
+                                <pfx9:From>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;SBVGW&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;SBVGWGOVBOND&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:From>
+                                <pfx9:To>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;VSD&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;VSDGOVBOND&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:To>
+                                <pfx9:MsgId>
+                                    <xsl:value-of select="$ServiceVariable/root/SOAMsgId"/>
+                                </pfx9:MsgId>
+                                <pfx9:BizServ>
+                                    <pfx9:Id>
+                                        <xsl:value-of select="&quot;FORM5&quot;"/>
+                                    </pfx9:Id>
+                                    <pfx9:Name>
+                                        <xsl:value-of select="&quot;GOVBONDPAYMENT&quot;"/>
+                                    </pfx9:Name>
+                                </pfx9:BizServ>
+                                <pfx9:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx9:CreatedDate>
+                            </pfx9:AppHdr>
+                            <pfx9:ResponseStatus>
+                                <pfx9:Status>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </pfx9:Status>
+                                <pfx9:ErrorCode>
+                                    <xsl:value-of select="&quot;Form5 Other Err&quot;"/>
+                                </pfx9:ErrorCode>
+                                <pfx9:ErrorMessage>
+                                    <xsl:value-of select="&quot;Form5 Other Err&quot;"/>
+                                </pfx9:ErrorMessage>
+                                <pfx9:ErrorInfo/>
+                            </pfx9:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq"/>
+                                <xsl:copy-of select="$Parse-XML/root/pfx:VSDCreateForm1andForm4Response"/>
+                                <xsl:copy-of select="$_error/pfx5:ErrorReport"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/defaultFaultElement"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/ns7:HttpClientException"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/ns7:HttpServerException"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/ns7:HttpCommunicationException"/>
+                                <xsl:copy-of select="$_error_CallVSDWS/ActivityErrors/pfx12:ActivityTimedOutException"/>
+                            </ServiceBody>
+                        </ns6:ServiceEnverlop>
+                    </pfx8:ServiceBody>
+                </pfx8:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServiceVariable/root/StartTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>690</pd:x>
+        <pd:y>277</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns2:input>
+                <duplicateKey>
+                    <xsl:value-of select="$Parse-XML/root/pfx11:BondPaymentModifyReq/pfx9:AppHdr/pfx9:MsgId"/>
+                </duplicateKey>
+            </ns2:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>LogEndOver</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEndOver</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>CallVSDWS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckRetryTime</pd:from>
+        <pd:to>Reset RetryTime</pd:to>
+        <pd:xpathDescription>OverLoop</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CheckRetryTime/root/MODIFY_QUEUE_RETRY_TIME &gt;= 5</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckRetryTime</pd:from>
+        <pd:to>Increase RetryTime</pd:to>
+        <pd:xpathDescription>InLoop</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CheckRetryTime/root/MODIFY_QUEUE_RETRY_TIME &lt; 5</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Increase RetryTime</pd:from>
+        <pd:to>SleepOtherwise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SleepOtherwise</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallVSDWS</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>Confirm-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-1</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-1</pd:from>
+        <pd:to>LogExOver</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogExOver</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorBracch</pd:from>
+        <pd:to>CheckRetryTime</pd:to>
+        <pd:xpathDescription>Timeout</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($_error/pfx5:ErrorReport/MsgCode = $_error_CallVSDWS/ActivityErrors/pfx12:ActivityTimedOutException/msgCode)  or ($_error/pfx5:ErrorReport/MsgCode = $_error_CallVSDWS/ActivityErrors/ns7:HttpCommunicationException/msgCode)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorBracch</pd:from>
+        <pd:to>SleepError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallVSDWS</pd:from>
+        <pd:to>ErrorBracch</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reset RetryTime</pd:from>
+        <pd:to>LogEndRetry</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEndRetry</pd:from>
+        <pd:to>Throw Max Retry Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SleepError</pd:from>
+        <pd:to>Checkpoint</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>LogOtherError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogOtherError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

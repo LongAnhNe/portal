@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS">
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/Services/Global/System/ALERTSYS/T24check.wsdl"/>
+    <pd:name>Services/Global/System/ALERTSYS/TIMER PROC.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>42</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <StartTime>1443760741000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>15</TimeInterval>
+            <FrequencyIndex>Minute</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>38</pd:endX>
+    <pd:endY>380</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <mailcontent>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="info" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </mailcontent>
+        <maillist>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="maillist" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </maillist>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1443667023375</pd:targetNamespace>
+    <pd:activity name="db-prod">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>184</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <variableName>mailcontent</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <info>
+                    <xsl:value-of select="'DB SERVER: 10.1.22.12:1521&#xA;DB INSTANCE: SG31T242&#xA;DB TABLE: V$ARCHIVED_LOG&#xA;'"/>
+                </info>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="db-uat">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>477</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <variableName>mailcontent</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <info>
+                    <xsl:value-of select="'DB SERVER: 10.192.26.119:1521&#xA;DB INSTANCE: T24DB&#xA;DB TABLE: V$ARCHIVED_LOG&#xA;'"/>
+                </info>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get Size - Prod">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24DB-prod.sharedjdbc</jdbcSharedConfig>
+            <schema>SYS</schema>
+            <catalog>FPT_SG31</catalog>
+            <ProcedureName>FPT_CHK</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>CURRENT_SIZE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get Size - Uat">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>576</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24DB-uat.sharedjdbc</jdbcSharedConfig>
+            <schema>SYS</schema>
+            <catalog>FPT_SG31</catalog>
+            <ProcedureName>FPT_CHK</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>CURRENT_SIZE</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="jagent-prod">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>385</pd:x>
+        <pd:y>379</pd:y>
+        <config>
+            <variableName>mailcontent</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <info>
+                    <xsl:value-of select="'TWS SERVER: http://10.1.21.170:7022/SBV.FT.SETTLE.IBPS.PAYMENT.WS/services&#xA;ACTION CHECK: CoreSystemStatus&#xA;'"/>
+                </info>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="jagent-uat">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>782</pd:x>
+        <pd:y>377</pd:y>
+        <config>
+            <variableName>mailcontent</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <info>
+                    <xsl:value-of select="'TWS SERVER: http://10.192.26.101:7001/SBV.FT.SETTLE.IBPS.PAYMENT.WS/services&#xA;ACTION CHECK: CoreSystemStatus&#xA;'"/>
+                </info>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="jagentCheck-prod">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>263</pd:x>
+        <pd:y>380</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>CoreSystemStatus</operation>
+            <soapAction/>
+            <endpointURL>http://10.1.21.170:7022/SBV.FT.SETTLE.IBPS.PAYMENT.WS/services</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns1:CoreSystemStatus xmlns:ns1="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS">
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="'VN0010001'"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="'ESB123'"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="'ESD001'"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <ENQSYSTEMSTATUSType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="'Y.DATE'"/>
+                            </columnName>
+                            <criteriaValue>
+                                <xsl:value-of select="'20150901'"/>
+                            </criteriaValue>
+                            <operand>
+                                <xsl:value-of select="'EQ'"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </ENQSYSTEMSTATUSType>
+                </ns1:CoreSystemStatus>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="jagentCheck-uat">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>613</pd:x>
+        <pd:y>378</pd:y>
+        <config>
+            <timeout>30</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>CoreSystemStatus</operation>
+            <soapAction/>
+            <endpointURL>http://10.192.26.101:7001/SBV.FT.SETTLE.IBPS.PAYMENT.WS/services</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx:CoreSystemStatus>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="'VN0010001'"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="'ESB123'"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="'ESD001'"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <ENQSYSTEMSTATUSType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="'Y.DATE'"/>
+                            </columnName>
+                            <criteriaValue>
+                                <xsl:value-of select="'20150901'"/>
+                            </criteriaValue>
+                            <operand>
+                                <xsl:value-of select="'EQ'"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </ENQSYSTEMSTATUSType>
+                </pfx:CoreSystemStatus>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Mail-SBV-prod">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>157</pd:x>
+        <pd:y>466</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>10.1.44.9:25</host>
+            <useSsl>false</useSsl>
+            <authenticate>true</authenticate>
+            <username>esbadmin</username>
+            <password>esb@123456</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:mailActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/mail">
+                <from>
+                    <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$maillist/root/maillist"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'WARNING: ALERT SYSTEM - T24 WEB SERVICE  IS TEMPORARY NOT AVAILABLE!'"/>
+                </subject>
+                <ns2:bodyElement xmlns:ns2="http://xmlns.tibco.com/body">
+                    <bodyText>
+                        <xsl:value-of select="concat($mailcontent/root/info,&quot;T24 WEB SERVICE  IS TEMPORARY NOT AVAILABLE!&quot;)"/>
+                    </bodyText>
+                </ns2:bodyElement>
+            </ns1:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Mail-SBV-uat">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>540</pd:x>
+        <pd:y>471</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>10.1.44.9:25</host>
+            <useSsl>false</useSsl>
+            <authenticate>true</authenticate>
+            <username>esbadmin</username>
+            <password>esb@123456</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:mailActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/mail">
+                <from>
+                    <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$maillist/root/maillist"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'WARNING: ALERT SYSTEM - T24 WEB SERVICE  IS TEMPORARY NOT AVAILABLE!'"/>
+                </subject>
+                <ns2:bodyElement xmlns:ns2="http://xmlns.tibco.com/body">
+                    <bodyText>
+                        <xsl:value-of select="concat($mailcontent/root/info,&quot;T24 WEB SERVICE  IS TEMPORARY NOT AVAILABLE!&quot;)"/>
+                    </bodyText>
+                </ns2:bodyElement>
+            </ns1:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>416</pd:x>
+        <pd:y>159</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>475</pd:x>
+        <pd:y>379</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-1-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>777</pd:x>
+        <pd:y>160</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Send-Mail-SBV">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>328</pd:x>
+        <pd:y>45</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>10.1.44.9:25</host>
+            <useSsl>false</useSsl>
+            <authenticate>true</authenticate>
+            <username>esbadmin</username>
+            <password>esb@123456</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:mailActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/mail">
+                <from>
+                    <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$maillist/root/maillist"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'WARNING: ALERT SYSTEM - DB ARCHIVE LOG IS FULL'"/>
+                </subject>
+                <ns2:bodyElement xmlns:ns2="http://xmlns.tibco.com/body">
+                    <bodyText>
+                        <xsl:value-of select="concat($mailcontent/root/info,&quot;SIZE OF DB ARCHIVE LOG IS: &quot;,tib:round-fraction($Get-Size---Prod/resultSet/outputSet/CURRENT_SIZE, 3),' GB/ 50GB MAX')"/>
+                    </bodyText>
+                </ns2:bodyElement>
+            </ns1:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send-Mail-SBV-1">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>663</pd:x>
+        <pd:y>49</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>10.1.44.9:25</host>
+            <useSsl>false</useSsl>
+            <authenticate>true</authenticate>
+            <username>esbadmin</username>
+            <password>esb@123456</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:mailActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/mail">
+                <from>
+                    <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$maillist/root/maillist"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'WARNING: ALERT SYSTEM - DB ARCHIVE LOG IS FULL'"/>
+                </subject>
+                <ns2:bodyElement xmlns:ns2="http://xmlns.tibco.com/body">
+                    <bodyText>
+                        <xsl:value-of select="concat($mailcontent/root/info,&quot;SIZE OF DB ARCHIVE LOG IS: &quot;,tib:round-fraction($Get-Size---Prod/resultSet/outputSet/CURRENT_SIZE, 3),' GB/ 50GB MAX')"/>
+                    </bodyText>
+                </ns2:bodyElement>
+            </ns1:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send-Mail-SBV-2">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>336</pd:x>
+        <pd:y>277</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>10.1.44.9:25</host>
+            <useSsl>false</useSsl>
+            <authenticate>true</authenticate>
+            <username>esbadmin</username>
+            <password>esb@123456</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:mailActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/mail">
+                <from>
+                    <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$maillist/root/maillist"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'WARNING: ALERT SYSTEM - CANNOT CONNECT TO DB SERVER: 10.1.22.12'"/>
+                </subject>
+                <ns2:bodyElement xmlns:ns2="http://xmlns.tibco.com/body">
+                    <bodyText>
+                        <xsl:value-of select="'FAIILED TO CONNECT TO DB SERVER: 10.1.22.12:1521&#xA;DB INSTANCE: SG31T242&#xA;PLEASE CHECK THE SERVER STATUS OR NETWORK CONNECTION!'"/>
+                    </bodyText>
+                </ns2:bodyElement>
+            </ns1:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send-Mail-SBV-2-1">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>673</pd:x>
+        <pd:y>269</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>10.1.44.9:25</host>
+            <useSsl>false</useSsl>
+            <authenticate>true</authenticate>
+            <username>esbadmin</username>
+            <password>esb@123456</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:mailActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/mail">
+                <from>
+                    <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$maillist/root/maillist"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'WARNING: ALERT SYSTEM - CANNOT CONNECT TO DB SERVER: 10.192.26.119'"/>
+                </subject>
+                <ns2:bodyElement xmlns:ns2="http://xmlns.tibco.com/body">
+                    <bodyText>
+                        <xsl:value-of select="'FAIILED TO CONNECT TO DB SERVER: 10.192.26.119:1521&#xA;DB INSTANCE: SG31T242&#xA;PLEASE CHECK THE SERVER STATUS OR NETWORK CONNECTION!'"/>
+                    </bodyText>
+                </ns2:bodyElement>
+            </ns1:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="maillist">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>112</pd:x>
+        <pd:y>157</pd:y>
+        <config>
+            <variableName>maillist</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <maillist>
+                    <xsl:value-of select="'anhnt4@fpt.com.vn,dodv@fpt.com.vn,phongnh@fpt.com.vn,bachld@fpt.com.vn,tungnt2@fpt.com.vn,duylv2@fpt.com.vn,ntlongitdb@sbv.gov.vn,tung.dang@sbv.gov.vn'"/>
+                </maillist>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Get Size - Prod</pd:from>
+        <pd:to>Send-Mail-SBV</pd:to>
+        <pd:xpathDescription>&gt; 75%</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Get-Size---Prod/resultSet/outputSet/CURRENT_SIZE &gt; 35</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>db-prod</pd:from>
+        <pd:to>Get Size - Prod</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>jagent-uat</pd:from>
+        <pd:to>jagentCheck-uat</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>jagentCheck-uat</pd:from>
+        <pd:to>Mail-SBV-uat</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send-Mail-SBV</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Size - Prod</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>jagent-prod</pd:from>
+        <pd:to>jagentCheck-prod</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>jagentCheck-prod</pd:from>
+        <pd:to>Mail-SBV-prod</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>jagentCheck-prod</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Mail-SBV-prod</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Mail-SBV-uat</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>jagentCheck-uat</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>jagent-prod</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Size - Uat</pd:from>
+        <pd:to>Send-Mail-SBV-1</pd:to>
+        <pd:xpathDescription>&gt; 75%</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Get-Size---Uat/resultSet/outputSet/CURRENT_SIZE &gt; 35</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Size - Uat</pd:from>
+        <pd:to>Null-1-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send-Mail-SBV-1</pd:from>
+        <pd:to>Null-1-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1-1</pd:from>
+        <pd:to>jagent-uat</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>db-uat</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>db-uat</pd:from>
+        <pd:to>Get Size - Uat</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Size - Prod</pd:from>
+        <pd:to>Send-Mail-SBV-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send-Mail-SBV-2</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Size - Uat</pd:from>
+        <pd:to>Send-Mail-SBV-2-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send-Mail-SBV-2-1</pd:from>
+        <pd:to>Null-1-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>maillist</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>maillist</pd:from>
+        <pd:to>db-prod</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

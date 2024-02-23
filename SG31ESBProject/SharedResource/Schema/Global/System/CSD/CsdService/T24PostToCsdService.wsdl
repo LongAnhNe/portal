@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" name="T24PostToCsdService" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService">
+    <wsdl:types>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetLendingFrT24" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetLendingFrT24">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetLendingFrT24Request">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetLendingFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetLendingFrT24Request" nillable="true" type="tns:GetLendingFrT24Request"/>
+            <xs:complexType name="ArrayOfGetLendingFrT24RequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetLendingFrT24RequestType" nillable="true" type="tns:GetLendingFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetLendingFrT24RequestType" nillable="true" type="tns:ArrayOfGetLendingFrT24RequestType"/>
+            <xs:complexType name="GetLendingFrT24RequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="BankCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="BusinessCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="DueDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="FineAmount" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="IntRate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LdDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LoanNo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LoanOrgNo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="StatusLiquidate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="StatusOverdue" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetLendingFrT24RequestType" nillable="true" type="tns:GetLendingFrT24RequestType"/>
+            <xs:complexType name="GetLendingFrT24Response">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetLendingFrT24Response" nillable="true" type="tns:GetLendingFrT24Response"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices">
+            <xs:complexType name="RequestHeader">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="MsgReqId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="RequestHeader" nillable="true" type="tns:RequestHeader"/>
+            <xs:complexType name="ResponseHeader">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="MsgResId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ResponseHeader" nillable="true" type="tns:ResponseHeader"/>
+            <xs:complexType name="ResponseStatus">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Errors" nillable="true" type="tns:ArrayOfErrorInfo"/>
+                    <xs:element minOccurs="0" name="Status" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ResponseStatus" nillable="true" type="tns:ResponseStatus"/>
+            <xs:complexType name="ArrayOfErrorInfo">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="ErrorInfo" nillable="true" type="tns:ErrorInfo"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfErrorInfo" nillable="true" type="tns:ArrayOfErrorInfo"/>
+            <xs:complexType name="ErrorInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ErrorCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ErrorInfo" nillable="true" type="tns:ErrorInfo"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCashAcctStatusFrT24" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCashAcctStatusFrT24">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetCashAcctStatusFrT24Request">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetCashAcctStatusFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCashAcctStatusFrT24Request" nillable="true" type="tns:GetCashAcctStatusFrT24Request"/>
+            <xs:complexType name="ArrayOfGetCashAcctStatusFrT24RequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetCashAcctStatusFrT24RequestType" nillable="true" type="tns:GetCashAcctStatusFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetCashAcctStatusFrT24RequestType" nillable="true" type="tns:ArrayOfGetCashAcctStatusFrT24RequestType"/>
+            <xs:complexType name="GetCashAcctStatusFrT24RequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="RefNoInterfaceAomCsd" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="RefNoInterfaceVendor" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCashAcctStatusFrT24RequestType" nillable="true" type="tns:GetCashAcctStatusFrT24RequestType"/>
+            <xs:complexType name="GetCashAcctStatusFrT24Response">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCashAcctStatusFrT24Response" nillable="true" type="tns:GetCashAcctStatusFrT24Response"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCustomerFrT24" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCustomerFrT24">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetCustomerFrT24Request">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetCustomerFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCustomerFrT24Request" nillable="true" type="tns:GetCustomerFrT24Request"/>
+            <xs:complexType name="ArrayOfGetCustomerFrT24RequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetCustomerFrT24RequestType" nillable="true" type="tns:GetCustomerFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetCustomerFrT24RequestType" nillable="true" type="tns:ArrayOfGetCustomerFrT24RequestType"/>
+            <xs:complexType name="GetCustomerFrT24RequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Address" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CitadCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CustIndustry" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CustomerCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CustomerStatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="FaxNo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LegalExpDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LegalIssAuth" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LegalIssDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="LicenceNo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Name1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="PhoneNo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="RelCustomer" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="RelCustomerRole" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Sector" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ShortName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="UploadCompany" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="VsdCode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCustomerFrT24RequestType" nillable="true" type="tns:GetCustomerFrT24RequestType"/>
+            <xs:complexType name="GetCustomerFrT24Response">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCustomerFrT24Response" nillable="true" type="tns:GetCustomerFrT24Response"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetCalendarFrT24Request">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetCalendarFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCalendarFrT24Request" nillable="true" type="tns:GetCalendarFrT24Request"/>
+            <xs:complexType name="ArrayOfGetCalendarFrT24RequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetCalendarFrT24RequestType" nillable="true" type="tns:GetCalendarFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetCalendarFrT24RequestType" nillable="true" type="tns:ArrayOfGetCalendarFrT24RequestType"/>
+            <xs:complexType name="GetCalendarFrT24RequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="CalendarDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="HolidayTrading" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCalendarFrT24RequestType" nillable="true" type="tns:GetCalendarFrT24RequestType"/>
+            <xs:complexType name="GetCalendarFrT24Response">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCalendarFrT24Response" nillable="true" type="tns:GetCalendarFrT24Response"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetExRateFrT24Request">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetExRateFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetExRateFrT24Request" nillable="true" type="tns:GetExRateFrT24Request"/>
+            <xs:complexType name="ArrayOfGetExRateFrT24RequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetExRateFrT24RequestType" nillable="true" type="tns:GetExRateFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetExRateFrT24RequestType" nillable="true" type="tns:ArrayOfGetExRateFrT24RequestType"/>
+            <xs:complexType name="GetExRateFrT24RequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CurrencyType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Date" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Exchangerate" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetExRateFrT24RequestType" nillable="true" type="tns:GetExRateFrT24RequestType"/>
+            <xs:complexType name="GetExRateFrT24Response">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetExRateFrT24Response" nillable="true" type="tns:GetExRateFrT24Response"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetCurrencyFrT24Request">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetCurrencyFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCurrencyFrT24Request" nillable="true" type="tns:GetCurrencyFrT24Request"/>
+            <xs:complexType name="ArrayOfGetCurrencyFrT24RequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetCurrencyFrT24RequestType" nillable="true" type="tns:GetCurrencyFrT24RequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetCurrencyFrT24RequestType" nillable="true" type="tns:ArrayOfGetCurrencyFrT24RequestType"/>
+            <xs:complexType name="GetCurrencyFrT24RequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CurrencyName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Detail" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCurrencyFrT24RequestType" nillable="true" type="tns:GetCurrencyFrT24RequestType"/>
+            <xs:complexType name="GetCurrencyFrT24Response">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetCurrencyFrT24Response" nillable="true" type="tns:GetCurrencyFrT24Response"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
+            <xs:element name="anyType" nillable="true" type="xs:anyType"/>
+            <xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+            <xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+            <xs:element name="boolean" nillable="true" type="xs:boolean"/>
+            <xs:element name="byte" nillable="true" type="xs:byte"/>
+            <xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+            <xs:element name="decimal" nillable="true" type="xs:decimal"/>
+            <xs:element name="double" nillable="true" type="xs:double"/>
+            <xs:element name="float" nillable="true" type="xs:float"/>
+            <xs:element name="int" nillable="true" type="xs:int"/>
+            <xs:element name="long" nillable="true" type="xs:long"/>
+            <xs:element name="QName" nillable="true" type="xs:QName"/>
+            <xs:element name="short" nillable="true" type="xs:short"/>
+            <xs:element name="string" nillable="true" type="xs:string"/>
+            <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+            <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+            <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+            <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+            <xs:element name="char" nillable="true" type="tns:char"/>
+            <xs:simpleType name="char">
+                <xs:restriction base="xs:int"/>
+            </xs:simpleType>
+            <xs:element name="duration" nillable="true" type="tns:duration"/>
+            <xs:simpleType name="duration">
+                <xs:restriction base="xs:duration">
+                    <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+                    <xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+                    <xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="guid" nillable="true" type="tns:guid"/>
+            <xs:simpleType name="guid">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:attribute name="FactoryType" type="xs:QName"/>
+            <xs:attribute name="Id" type="xs:ID"/>
+            <xs:attribute name="Ref" type="xs:IDREF"/>
+        </xs:schema>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/T24PostToCsdService">
+            <xs:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24"/>
+            <xs:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24"/>
+            <xs:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24"/>
+            <xs:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCustomerFrT24"/>
+            <xs:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCashAcctStatusFrT24"/>
+            <xs:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetLendingFrT24"/>
+            <xs:element name="GetCurrencyFrT24">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q1="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24" minOccurs="0" name="request" nillable="true" type="q1:GetCurrencyFrT24Request"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCurrencyFrT24Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q2="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24" minOccurs="0" name="GetCurrencyFrT24Result" nillable="true" type="q2:GetCurrencyFrT24Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetExRateFrT24">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q3="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24" minOccurs="0" name="request" nillable="true" type="q3:GetExRateFrT24Request"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetExRateFrT24Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q4="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24" minOccurs="0" name="GetExRateFrT24Result" nillable="true" type="q4:GetExRateFrT24Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCalendarFrT24">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q5="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" minOccurs="0" name="request" nillable="true" type="q5:GetCalendarFrT24Request"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCalendarFrT24Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q6="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" minOccurs="0" name="GetCalendarFrT24Result" nillable="true" type="q6:GetCalendarFrT24Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCustomerFrT24">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q7="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCustomerFrT24" minOccurs="0" name="request" nillable="true" type="q7:GetCustomerFrT24Request"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCustomerFrT24Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q8="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCustomerFrT24" minOccurs="0" name="GetCustomerFrT24Result" nillable="true" type="q8:GetCustomerFrT24Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCashAcctStatusFrT24">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q9="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCashAcctStatusFrT24" minOccurs="0" name="request" nillable="true" type="q9:GetCashAcctStatusFrT24Request"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCashAcctStatusFrT24Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q10="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCashAcctStatusFrT24" minOccurs="0" name="GetCashAcctStatusFrT24Result" nillable="true" type="q10:GetCashAcctStatusFrT24Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetLendingFrT24">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q11="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetLendingFrT24" minOccurs="0" name="request" nillable="true" type="q11:GetLendingFrT24Request"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetLendingFrT24Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q12="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetLendingFrT24" minOccurs="0" name="GetLendingFrT24Result" nillable="true" type="q12:GetLendingFrT24Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="IT24PostToCsdService_GetCurrencyFrT24_InputMessage">
+        <wsdl:part element="tns:GetCurrencyFrT24" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCurrencyFrT24_OutputMessage">
+        <wsdl:part element="tns:GetCurrencyFrT24Response" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetExRateFrT24_InputMessage">
+        <wsdl:part element="tns:GetExRateFrT24" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetExRateFrT24_OutputMessage">
+        <wsdl:part element="tns:GetExRateFrT24Response" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCalendarFrT24_InputMessage">
+        <wsdl:part element="tns:GetCalendarFrT24" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCalendarFrT24_OutputMessage">
+        <wsdl:part element="tns:GetCalendarFrT24Response" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCustomerFrT24_InputMessage">
+        <wsdl:part element="tns:GetCustomerFrT24" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCustomerFrT24_OutputMessage">
+        <wsdl:part element="tns:GetCustomerFrT24Response" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCashAcctStatusFrT24_InputMessage">
+        <wsdl:part element="tns:GetCashAcctStatusFrT24" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetCashAcctStatusFrT24_OutputMessage">
+        <wsdl:part element="tns:GetCashAcctStatusFrT24Response" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetLendingFrT24_InputMessage">
+        <wsdl:part element="tns:GetLendingFrT24" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IT24PostToCsdService_GetLendingFrT24_OutputMessage">
+        <wsdl:part element="tns:GetLendingFrT24Response" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="IT24PostToCsdService">
+        <wsdl:operation name="GetCurrencyFrT24">
+            <wsdl:input message="tns:IT24PostToCsdService_GetCurrencyFrT24_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCurrencyFrT24"/>
+            <wsdl:output message="tns:IT24PostToCsdService_GetCurrencyFrT24_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCurrencyFrT24Response"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetExRateFrT24">
+            <wsdl:input message="tns:IT24PostToCsdService_GetExRateFrT24_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetExRateFrT24"/>
+            <wsdl:output message="tns:IT24PostToCsdService_GetExRateFrT24_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetExRateFrT24Response"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetCalendarFrT24">
+            <wsdl:input message="tns:IT24PostToCsdService_GetCalendarFrT24_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCalendarFrT24"/>
+            <wsdl:output message="tns:IT24PostToCsdService_GetCalendarFrT24_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCalendarFrT24Response"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetCustomerFrT24">
+            <wsdl:input message="tns:IT24PostToCsdService_GetCustomerFrT24_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCustomerFrT24"/>
+            <wsdl:output message="tns:IT24PostToCsdService_GetCustomerFrT24_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCustomerFrT24Response"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetCashAcctStatusFrT24">
+            <wsdl:input message="tns:IT24PostToCsdService_GetCashAcctStatusFrT24_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCashAcctStatusFrT24"/>
+            <wsdl:output message="tns:IT24PostToCsdService_GetCashAcctStatusFrT24_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCashAcctStatusFrT24Response"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetLendingFrT24">
+            <wsdl:input message="tns:IT24PostToCsdService_GetLendingFrT24_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetLendingFrT24"/>
+            <wsdl:output message="tns:IT24PostToCsdService_GetLendingFrT24_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetLendingFrT24Response"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BasicHttpBinding_IT24PostToCsdService" type="tns:IT24PostToCsdService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="GetCurrencyFrT24">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCurrencyFrT24" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetExRateFrT24">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetExRateFrT24" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetCalendarFrT24">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCalendarFrT24" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetCustomerFrT24">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCustomerFrT24" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetCashAcctStatusFrT24">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetCashAcctStatusFrT24" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetLendingFrT24">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetLendingFrT24" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="T24PostToCsdService">
+        <wsdl:port binding="tns:BasicHttpBinding_IT24PostToCsdService" name="BasicHttpBinding_IT24PostToCsdService">
+            <soap:address location="http://10.192.26.110:9680/T24PostToCsdService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

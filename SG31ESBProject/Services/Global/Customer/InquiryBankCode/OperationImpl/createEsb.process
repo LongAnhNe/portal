@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/soaenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/InquiryBankCode/InquiryBankCode.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1464752582750">
+    <wsdl:import namespace="http://xmlns.example.com/1464752582750" location="/SharedResource/Schema/Global/Customer/InquiryBankCode/InquiryBankCode.wsdl"/>
+    <pd:name>Services/Global/Customer/InquiryBankCode/OperationImpl/createEsb.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createEsbReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:createEsbRes>
+            <Res>
+                <ns3:createEsbRes>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ns2:AppHdr"/>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ns2:ResponseStatus"/>
+                </ns3:createEsbRes>
+            </Res>
+        </wsdlPfx:createEsbRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createEsbRes"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1464771473760</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>318</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:SOAEnvelope>
+                    <ns1:SOAServiceHeader>
+                        <ns1:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createEsbReq/Req/ns3:createEsbReq/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createEsbReq/Req/ns3:createEsbReq/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createEsbReq/Req/ns3:createEsbReq/ns2:AppHdr/node()"/>
+                        </ns1:AppHdr>
+                        <ns1:OperationName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ns1:OperationName>
+                        <ns1:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns1:ProcessName>
+                    </ns1:SOAServiceHeader>
+                    <ns1:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createEsbReq/Req/ns3:createEsbReq/ns3:createEsbInput"/>
+                    </ns1:ServiceBody>
+                </ns1:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

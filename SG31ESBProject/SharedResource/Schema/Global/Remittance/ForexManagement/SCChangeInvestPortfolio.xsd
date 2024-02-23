@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/SCChangeInvestPortfolio.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/SCChangeInvestPortfolio.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../../System/ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="SCChangeInvestPortfolioRequest" type="SCChangeInvestPortfolioRequestType"/>
+	<xs:complexType name="SCChangeInvestPortfolioRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SCChangeInvestPortfolioRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SCChangeInvestPortfolioRequestBody" type="SCChangeInvestPortfolioRequestBodyType"/>
+	<xs:complexType name="SCChangeInvestPortfolioRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SOURCEAPPID" type="xs:string" minOccurs="0"/>
+			<xs:element name="MaChungKhoan" type="xs:string" minOccurs="0"/>
+			<xs:element name="Quy" type="xs:string" minOccurs="0"/>
+			<xs:element name="TradeDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="DonViLuuKy" type="xs:string" minOccurs="0"/>
+			<xs:element name="ThongTinDanhMucGoc" type="xs:string" minOccurs="0"/>
+			<xs:element name="MaDanhMucDauTuGoc" type="xs:string" minOccurs="0"/>
+			<xs:element name="MenhGiaChungKhoanGoc" type="xs:string" minOccurs="0"/>
+			<xs:element name="GiaChungKhoanGoc" type="xs:string" minOccurs="0"/>
+			<xs:element name="ThongTinDanhMucMoi" type="xs:string" minOccurs="0"/>
+			<xs:element name="MaDanhMucDauTuMoi" type="xs:string" minOccurs="0"/>
+			<xs:element name="MenhGiaChungKhoanMoi" type="xs:string" minOccurs="0"/>
+			<xs:element name="GiaChungKhoanMoi" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SCChangeInvestPortfolioResponse" type="SCChangeInvestPortfolioResponseType"/>
+	<xs:complexType name="SCChangeInvestPortfolioResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SCChangeInvestPortfolioResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SCChangeInvestPortfolioResponseBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="RecordStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="SCChangeInvestPortfolioResponseBodyType"/>
+	<xs:element name="ESBRequestAdd">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="ESBResponseAdd">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ESBServiceState"/>
+				<xs:element ref="SCChangeInvestPortfolioRequest"/>
+				<xs:element ref="SCChangeInvestPortfolioResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

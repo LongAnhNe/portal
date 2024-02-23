@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/T24ERPFTPPoller.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>124</pd:x>
+        <pd:y>287</pd:y>
+        <config>
+            <StartTime>1445941656000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>1</TimeInterval>
+            <FrequencyIndex>Second</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>887</pd:endX>
+    <pd:endY>107</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <InputProcess>
+            <xsd:element name="Input">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="StartRecord" type="xsd:int"/>
+                        <xsd:element name="NumberOfRecords" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InputProcess>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1445919176431</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>336</pd:x>
+        <pd:y>16</pd:y>
+        <pd:width>470</pd:width>
+        <pd:height>186</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$CallT24EntriesBatch/Output/EndReadFile='true'</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24EntriesBatch</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReAssignInput</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24EntriesBatch</pd:from>
+            <pd:to>ReAssignInput</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallT24EntriesBatch">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>439</pd:x>
+            <pd:y>112</pd:y>
+            <config>
+                <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatch_filter.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <FileName>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/T24EntriesFileLocation"/>
+                    </FileName>
+                    <StartRecord>
+                        <xsl:value-of select="$InputProcess/Input/StartRecord"/>
+                    </StartRecord>
+                    <NumberOfRecords>
+                        <xsl:value-of select="$InputProcess/Input/NumberOfRecords"/>
+                    </NumberOfRecords>
+                    <EndReadFile>
+                        <xsl:value-of select="'false'"/>
+                    </EndReadFile>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ReAssignInput">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>625</pd:x>
+            <pd:y>109</pd:y>
+            <config>
+                <variableName>InputProcess</variableName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <StartRecord>
+                        <xsl:value-of select="$CallT24EntriesBatch/Output/CurrentIndex"/>
+                    </StartRecord>
+                    <NumberOfRecords>
+                        <xsl:value-of select="$CallT24EntriesBatch/Output/NumberOfRecords"/>
+                    </NumberOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="AssignInput">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>221</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <variableName>InputProcess</variableName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <StartRecord>
+                    <xsl:value-of select="2"/>
+                </StartRecord>
+                <NumberOfRecords>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/BatchCount"/>
+                </NumberOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FTP Dir">
+        <pd:type>com.tibco.plugin.ftp.FTPDirActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPDirActivityUI</pd:resourceType>
+        <pd:x>83</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <SharedUserData>/SharedResource/Connection/ftp/SBVFTP.sharedftp</SharedUserData>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Host>
+                    <xsl:value-of select="'10.1.25.12'"/>
+                </Host>
+                <Port>
+                    <xsl:value-of select="21"/>
+                </Port>
+                <UserName>
+                    <xsl:value-of select="'sbv\ftpuser'"/>
+                </UserName>
+                <Password>
+                    <xsl:value-of select="'ftp@123'"/>
+                </Password>
+                <Directory>
+                    <xsl:value-of select="'T24-ERP/20150904'"/>
+                </Directory>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInput</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>FTP Dir</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP Dir</pd:from>
+        <pd:to>AssignInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

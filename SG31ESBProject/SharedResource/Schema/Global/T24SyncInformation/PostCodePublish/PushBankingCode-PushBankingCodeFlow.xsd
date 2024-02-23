@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/PushBankingCode/PushBankingCodeFlow"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/PushBankingCode/PushBankingCodeFlow"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../../System/T24/QueueSchema/Common-EventCommon.xsd"/>
+	<xsd:element name="PushBankingCodeFlow">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="name" minOccurs="0"/>
+				<xsd:element ref="customerNo" minOccurs="0"/>
+				<xsd:element ref="postCode" minOccurs="0"/>
+				<xsd:element ref="telephoneNoList" minOccurs="0"/>
+				<xsd:element ref="sortCode1List" minOccurs="0"/>
+				<xsd:element ref="lFCompany" minOccurs="0"/>
+				<xsd:element ref="currNo" minOccurs="0"/>
+				<xsd:element ref="lConcentration" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="name" type="xsd:string"/>
+	<xsd:element name="customerNo" type="xsd:decimal"/>
+	<xsd:element name="postCode" type="xsd:string"/>
+	<xsd:element name="telephoneNoList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="telephoneNo" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="sortCode1List">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="sortCode1" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="lFCompany" type="xsd:string"/>
+	<xsd:element name="currNo" type="xsd:string"/>
+	<xsd:element name="lConcentration" type="xsd:string"/>
+</xsd:schema>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="sbv/global/csderp/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="sbv/global/csderp/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="SecPostingReq" type="SecPostingReqType"/>
+	<xs:element name="SecPostingRes" type="SecPostingResType"/>
+	<xs:complexType name="SecPostingReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ListSecPosting"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SecPostingResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SecPostingDocRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SecPostingDocReq" type="SecPostingDocReqType"/>
+	<xs:complexType name="SecPostingDocReqType">
+		<xs:sequence>
+			<xs:element name="REF_NO_INTERFACE_AOM_CSD" type="xs:string"/>
+			<xs:element name="BUSSINESS_CODE" type="xs:string" minOccurs="0"/>
+			<xs:element name="FE_NUMBER" type="xs:string" minOccurs="0"/>
+			<xs:element name="DEAL_NUMBER" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCT_NUMBER" type="xs:string"/>
+			<xs:element name="BANK_CODE" type="xs:string" minOccurs="0"/>
+			<xs:element name="BANK_NAME" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCT_NO" type="xs:string" minOccurs="0"/>
+			<xs:element name="DR_OR_CR" type="xs:string" minOccurs="0"/>
+			<xs:element name="SECURITES_TYPE" type="xs:string" minOccurs="0"/>
+			<xs:element name="SECURITES" type="xs:string" minOccurs="0"/>
+			<xs:element name="CURRENCY" type="xs:string" minOccurs="0"/>
+			<xs:element name="AMOUNT" type="xs:string" minOccurs="0"/>
+			<xs:element name="DEAL_DATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCT_DATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="REVERSE" type="xs:string" minOccurs="0"/>
+			<xs:element name="PERIOD" type="xs:string" minOccurs="0"/>
+			<xs:element name="INTEREST_RATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="EXEC_INT_RATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="PAR_VALUE" type="xs:string" minOccurs="0"/>
+			<xs:element name="ISSUE_DATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="DUE_DATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="LAST_CREATED_BY" type="xs:string" minOccurs="0"/>
+			<xs:element name="LAST_APPROVED_BY" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SecPostingDocRes" type="SecPostingDocResType"/>
+	<xs:complexType name="SecPostingDocResType">
+		<xs:sequence>
+			<xs:element name="REF_NO_INTERFACE_AOM_CSD" type="xs:string"/>
+			<xs:element name="Status" type="xs:string"/>
+			<xs:element name="ErrMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SecPostingStatusReq" type="SecPostingStatusReqType"/>
+	<xs:element name="SecPostingStatusRes" type="SecPostingStatusResType"/>
+	<xs:complexType name="SecPostingStatusReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SecPostingStatusDocReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SecPostingStatusResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SecPostingStatusDocRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SecPostingStatusDocReq" type="SecPostStatusDocReqType"/>
+	<xs:element name="SecPostingStatusDocRes" type="SecPostStatusDocResType"/>
+	<xs:complexType name="SecPostStatusDocReqType">
+		<xs:sequence>
+			<xs:element name="REF_NO_INTERFACE_AOM_CSD" type="xs:string"/>
+			<xs:element name="STATUS" type="xs:string"/>
+			<xs:element name="REASON" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SecPostStatusDocResType">
+		<xs:sequence>
+			<xs:element name="REF_NO_INTERFACE_AOM_CSD" type="xs:string"/>
+			<xs:element name="Status" type="xs:string"/>
+			<xs:element name="ErrMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AccountReq" type="AccountReqType"/>
+	<xs:element name="AccountRes" type="AccountResType"/>
+	<xs:complexType name="AccountReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="AccountList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AccountResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="AccountDocRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="AccountDocReq" type="AccountDocReqType"/>
+	<xs:element name="AccountDocRes" type="AccountDocResType"/>
+	<xs:complexType name="AccountDocReqType">
+		<xs:sequence>
+			<xs:element name="ACCOUNT_NO" type="xs:string"/>
+			<xs:element name="ACCOUNT_NAME" type="xs:string" minOccurs="0"/>
+			<xs:element name="PARENT_ACCOUNT" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCOUNT_LEVEL" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCOUNT_TYPE" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCOUNT_GROUP" type="xs:string" minOccurs="0"/>
+			<xs:element name="ACCOUNT_STATUS" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AccountDocResType">
+		<xs:sequence>
+			<xs:element name="Status" type="xs:string"/>
+			<xs:element name="ErrMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AccountList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AccountDocReq" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ListSecPosting">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SecPostingDocReq" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

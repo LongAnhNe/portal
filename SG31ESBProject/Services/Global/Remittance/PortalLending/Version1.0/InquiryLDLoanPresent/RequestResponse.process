@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:pfx15="http://tempuri.org/" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx13="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx12="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx11="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx19="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx18="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:pfx17="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns12="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/LendingCustomerInfo/Schema.xsd" xmlns:ns6="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:ns10="http://www.sbv.gov.vn/global/CheckAccountBalance/CheckAccountBalance/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns11="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx22="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:pfx23="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx20="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx21="http://xmlns.example.com/1438330850951" xmlns:pfx26="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/Schema.xsd" xmlns:pfx24="http://www.sbv.gov.vn/schema/global/customer/brokerinfo/BrokerInfo.xsd" xmlns:pfx25="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/CheckAccountBalance/CheckAccountBalance/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/CheckAccountBalance/CheckAccountBalance.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" schemaLocation="/SharedResource/Schema/Global/System/CSD/InquiryLoanState/InquiryLoanState.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/customer/brokerinfo/BrokerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/BrokerInfo/BrokerInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/SecuritiesCustomerInfo/SecuritiesCustomerInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/LendingCustomerInfo/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/LendingCustomerInfo/LendingCustomerInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/PortalLending/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalLending/PortalLending.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/TTBTDT/BTCTPosting/SBV.FT.TTBT.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.T24Service.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <pd:name>Services/Global/Remittance/PortalLending/Version1.0/InquiryLDLoanPresent/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>51</pd:startX>
+    <pd:startY>206</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseStatus/root/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$ResponseStatus/root/Msg"/>
+                    </ns3:ErrorMessage>
+                    <ns3:ErrorInfo>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$SoapInquiryLending/outputMessage/pfx23:LDLoanPresentResponse/Status/messages[1]"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx26:LDLoanPresentInfoList>
+                        <pfx26:LDLoanPresentInfoDetail>
+                            <xsl:copy-of select="$List/List/pfx26:LDLoanPresentDetail/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$List/List/pfx26:LDLoanPresentDetail/@*"/>
+                            <xsl:copy-of select="$List/List/pfx26:LDLoanPresentDetail/node()"/>
+                        </pfx26:LDLoanPresentInfoDetail>
+                    </pfx26:LDLoanPresentInfoList>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>928</pd:endX>
+    <pd:endY>417</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseStatus>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseStatus>
+        <List>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx26:LDLoanPresentDetail" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </List>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/portallending/Inquiryldloanpresent/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="SetStatusSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>833</pd:x>
+        <pd:y>176</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="if($SoapInquiryLending/outputMessage/pfx23:LDLoanPresentResponse/Status/successIndicator = 'Success') then 0&#xA;else&#xA;1"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetStatusErr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>241</pd:x>
+        <pd:y>515</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;LOI GOI WEBSERVICE&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>126</pd:x>
+        <pd:y>569</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetStatusException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>332</pd:x>
+        <pd:y>572</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;LOI EXCEPTION&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetStatusT24Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>422</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="$SoapInquiryLending/outputMessage/pfx23:LDLoanPresentResponse/Status/messages[1]"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>286</pd:x>
+        <pd:y>21</pd:y>
+        <pd:width>463</pd:width>
+        <pd:height>297</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$SoapInquiryLending/outputMessage/pfx23:LDLoanPresentResponse/LDLOANPRODWISESVType/gLDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType</pd:over>
+            <pd:iterationElementSlot>LDLOANPRODWISESVDetailType</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>MapInquiryESBModel</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapInquiryESBModel</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MapInquiryESBModel">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>424</pd:x>
+            <pd:y>178</pd:y>
+            <config>
+                <element ref="pfx26:LDLoanPresentInfoDetail"/>
+            </config>
+            <pd:inputBindings>
+                <pfx26:LDLoanPresentInfoDetail>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/TransactionRef">
+                        <pfx26:TransactionRef>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/TransactionRef"/>
+                        </pfx26:TransactionRef>
+                    </xsl:if>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Customer">
+                        <pfx26:Customer>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Customer"/>
+                        </pfx26:Customer>
+                    </xsl:if>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Ccy">
+                        <pfx26:Currency>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Ccy"/>
+                        </pfx26:Currency>
+                    </xsl:if>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Product">
+                        <pfx26:Product>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Product"/>
+                        </pfx26:Product>
+                    </xsl:if>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Amount">
+                        <pfx26:Amount>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/Amount"/>
+                        </pfx26:Amount>
+                    </xsl:if>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/ValueDate">
+                        <pfx26:ValueDate>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/ValueDate"/>
+                        </pfx26:ValueDate>
+                    </xsl:if>
+                    <xsl:if test="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/MaturityDate">
+                        <pfx26:MaturityDate>
+                            <xsl:value-of select="$LDLOANPRODWISESVDetailType/mLDLOANPRODWISESVDetailType/MaturityDate"/>
+                        </pfx26:MaturityDate>
+                    </xsl:if>
+                </pfx26:LDLoanPresentInfoDetail>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>583</pd:x>
+            <pd:y>174</pd:y>
+            <config>
+                <variableName>List</variableName>
+            </config>
+            <pd:inputBindings>
+                <List>
+                    <xsl:copy-of select="$List/List/pfx26:LDLoanPresentDetail"/>
+                    <xsl:for-each select="$MapInquiryESBModel/pfx26:LDLoanPresentInfoDetail">
+                        <pfx26:LDLoanPresentDetail>
+                            <xsl:if test="pfx26:TransactionRef">
+                                <pfx26:TransactionRef>
+                                    <xsl:value-of select="pfx26:TransactionRef"/>
+                                </pfx26:TransactionRef>
+                            </xsl:if>
+                            <xsl:if test="pfx26:Customer">
+                                <pfx26:Customer>
+                                    <xsl:value-of select="pfx26:Customer"/>
+                                </pfx26:Customer>
+                            </xsl:if>
+                            <xsl:if test="pfx26:Currency">
+                                <pfx26:Currency>
+                                    <xsl:value-of select="pfx26:Currency"/>
+                                </pfx26:Currency>
+                            </xsl:if>
+                            <xsl:if test="pfx26:Product">
+                                <pfx26:Product>
+                                    <xsl:value-of select="pfx26:Product"/>
+                                </pfx26:Product>
+                            </xsl:if>
+                            <xsl:if test="pfx26:Amount">
+                                <pfx26:Amount>
+                                    <xsl:value-of select="pfx26:Amount"/>
+                                </pfx26:Amount>
+                            </xsl:if>
+                            <xsl:if test="pfx26:ValueDate">
+                                <pfx26:ValueDate>
+                                    <xsl:value-of select="pfx26:ValueDate"/>
+                                </pfx26:ValueDate>
+                            </xsl:if>
+                            <xsl:if test="pfx26:MaturityDate">
+                                <pfx26:MaturityDate>
+                                    <xsl:value-of select="pfx26:MaturityDate"/>
+                                </pfx26:MaturityDate>
+                            </xsl:if>
+                        </pfx26:LDLoanPresentDetail>
+                    </xsl:for-each>
+                </List>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="SoapInquiryLending">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>153</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx23:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>LDLoanPresent</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortal%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx26:LDLoanPresentInfoInput"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx23:LDLoanPresent>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <LDLOANPRODWISESVType>
+                        <xsl:if test="tib:trim($Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx26:LDLoanPresentInfoInput[1]/pfx26:CustomerId) !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CUSTOMER.ID&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx26:LDLoanPresentInfoInput[1]/pfx26:CustomerId"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                        <xsl:if test="tib:trim($Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx26:LDLoanPresentInfoInput[1]/pfx26:Currency) !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CURRENCY&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx26:LDLoanPresentInfoInput[1]/pfx26:Currency"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                        <xsl:if test="tib:trim($Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx26:LDLoanPresentInfoInput[1]/pfx26:Category) !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CATEGORY&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx26:LDLoanPresentInfoInput[1]/pfx26:Category"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                    </LDLOANPRODWISESVType>
+                </pfx23:LDLoanPresent>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SoapInquiryLending</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusSuccess</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusErr</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>SetStatusException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetStatusT24Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>SetStatusSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapInquiryLending</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapInquiryLending</pd:from>
+        <pd:to>SetStatusT24Error</pd:to>
+        <pd:xpathDescription>T24ReturnError</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$SoapInquiryLending/outputMessage/pfx23:LDLoanPresentResponse/Status/successIndicator = 'T24Error'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SoapInquiryLending</pd:from>
+        <pd:to>SetStatusErr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

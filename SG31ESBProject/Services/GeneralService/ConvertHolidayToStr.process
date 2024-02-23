@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:ns3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/schemas/15. Utils Projects/SharedResource/Schema/Global/System/CSD/CSDCalendarSubscribe/CSDCalendar.xsd" xmlns:pfx3="http://www.temenos.com/T24/event/Holiday/HolidayFlow" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx8="http://www.sbv.gov.vn/global/system/ESB/CSDT24/CalendarPublic/Date365.xsd" xmlns:pfx7="http://www.sbv.gov.vn/global/system//ESB/CSDT24/CalendarPublic/Date365.xsd" xmlns:pfx6="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/15. Utils Projects/SharedResource/Schema/Global/System/CSD/CSDCalendarSubscribe/CSDCalendar.xsd" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CalendarPublic/CSDCalendar.xsd"/>
+    <xsd:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService" schemaLocation="/SharedResource/Schema/Global/System/CSD/CsdService/T24PostToCsdService.wsdl"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system//ESB/CSDT24/CalendarPublic/Date365.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/CSDT24/CalendarPublic/Date365.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/Holiday/HolidayFlow" schemaLocation="/SharedResource/Schema/Global/T24Sync/CalendarPublic/T24HolidaySchema.xsd"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService" location="/SharedResource/Schema/Global/System/CSD/CsdService/T24PostToCsdService.wsdl"/>
+    <pd:name>Services/GeneralService/ConvertHolidayToStr.process</pd:name>
+    <pd:description>Author: tuedn</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx3:HolidayFlow"/>
+    <pd:startX>70</pd:startX>
+    <pd:startY>66</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Date365/pfx7:Date365"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:any/>
+    </pd:endType>
+    <pd:endX>772</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Date365 ref="pfx7:Date365"/>
+        <CalendarTable>
+            <xsd:element name="CalendarTable">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx3:HolidayFlow"/>
+                        <xsd:element name="YEAR" type="xsd:string"/>
+                        <xsd:element name="MonthList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="month" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </CalendarTable>
+        <CurrentMonth>
+            <xsd:element name="CurrentMonth" type="xsd:string"/>
+        </CurrentMonth>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/CSDCalendarSubscribe/requestresponse/version1.0</pd:targetNamespace>
+    <pd:group name="Loop each month">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>84</pd:y>
+        <pd:width>475</pd:width>
+        <pd:height>229</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$CalendarTable/CalendarTable/MonthList/month</pd:over>
+            <pd:iterationElementSlot>month</pd:iterationElementSlot>
+            <pd:indexSlot>monthIndex</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetCurrentMonth</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Loop each date</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetCurrentMonth</pd:from>
+            <pd:to>Loop each date</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GetCurrentMonth">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>262</pd:x>
+            <pd:y>208</pd:y>
+            <config>
+                <variableName>CurrentMonth</variableName>
+            </config>
+            <pd:inputBindings>
+                <CurrentMonth>
+                    <xsl:value-of select="if ($monthIndex &lt; 10) &#xA;then concat(&quot;0&quot;, $monthIndex )&#xA;else string($monthIndex)"/>
+                </CurrentMonth>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="Loop each date">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>346</pd:x>
+            <pd:y>120</pd:y>
+            <pd:width>201</pd:width>
+            <pd:height>155</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>repeat</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:indexSlot>dateIndex</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:repeatCondition>$dateIndex &gt; 30</pd:repeatCondition>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>Add to String Calendar</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Add to String Calendar</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="Add to String Calendar">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>448</pd:x>
+                <pd:y>213</pd:y>
+                <config>
+                    <variableName>Date365</variableName>
+                </config>
+                <pd:inputBindings>
+                    <pfx7:Date365>
+                        <xsl:copy-of select="$Date365/pfx7:Date365/pfx7:Date"/>
+                        <pfx7:Date>
+                            <pfx7:day>
+                                <xsl:value-of select="if ($dateIndex &lt; 10 )&#xA;then concat($CalendarTable/CalendarTable/YEAR, $CurrentMonth/CurrentMonth,  concat( &quot;0&quot;, $dateIndex ) )&#xA;else concat($CalendarTable/CalendarTable/YEAR, $CurrentMonth/CurrentMonth,  $dateIndex)"/>
+                            </pfx7:day>
+                            <pfx7:state>
+                                <xsl:value-of select="if (substring($month, $dateIndex, 1 ) = 'H' ) &#xA;then 1&#xA;else 0"/>
+                            </pfx7:state>
+                        </pfx7:Date>
+                    </pfx7:Date365>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+    </pd:group>
+    <pd:activity name="Assign data">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>72</pd:x>
+        <pd:y>207</pd:y>
+        <config>
+            <variableName>CalendarTable</variableName>
+        </config>
+        <pd:inputBindings>
+            <CalendarTable>
+                <xsl:copy-of select="$Start/pfx3:HolidayFlow"/>
+                <YEAR>
+                    <xsl:value-of select="substring($Start/pfx3:HolidayFlow/pfx3:id, string-length($Start/pfx3:HolidayFlow/pfx3:id) -3 , 4 )"/>
+                </YEAR>
+                <MonthList>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth01Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth01Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth02Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth02Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth03Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth03Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth04Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth04Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth05Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth05Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth06Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth06Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth07Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth07Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth08Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth08Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth09Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth09Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth10Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth10Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth11Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth11Table"/>
+                        </month>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx3:HolidayFlow/pfx3:mth12Table">
+                        <month>
+                            <xsl:value-of select="$Start/pfx3:HolidayFlow/pfx3:mth12Table"/>
+                        </month>
+                    </xsl:if>
+                </MonthList>
+            </CalendarTable>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Loop each month</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Assign data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign data</pd:from>
+        <pd:to>Loop each month</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

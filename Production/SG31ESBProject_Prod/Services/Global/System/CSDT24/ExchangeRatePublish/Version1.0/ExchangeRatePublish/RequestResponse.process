@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <pd:name>Services/Global/System/CSDT24/ExchangeRatePublish/Version1.0/ExchangeRatePublish/RequestResponse.process</pd:name>
+    <pd:description>Author: tuedn</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:startType>
+    <pd:startX>142</pd:startX>
+    <pd:startY>68</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:endType>
+    <pd:endX>511</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/services/ExchangeRatePublish/RequestResponse/1.0</pd:targetNamespace>
+    <pd:activity name="EMS ExchangeRate Topic">
+        <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
+        <pd:x>313</pd:x>
+        <pd:y>77</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBExchangeRateTopic</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" type="xsd:string" cardinality=""/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <ns1:ActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms">
+                <OtherProperties>
+                    <application>
+                        <xsl:value-of select="&quot;CURRENCY&quot;"/>
+                    </application>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>510</pd:x>
+        <pd:y>238</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>EMS ExchangeRate Topic</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>EMS ExchangeRate Topic</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

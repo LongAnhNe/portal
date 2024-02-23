@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.example.com/1436322400562" xmlns:ns9="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns7="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries" xmlns:ns8="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns2="www.tibco.com/plugin/Sleep" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns4="sbv/common/logging/enginelog/1.0" xmlns:ns3="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:ns0="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="sbv/common/envelope/commonheader/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://ws-i.org/profiles/basic/1.1/xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries" schemaLocation="/SharedResource/Schema/Global/System/T24/T24-T24COBEntries.xsd"/>
+    <pd:name>Services/Global/System/T24ERP/COBT24EntriesScan/COBEntries.process</pd:name>
+    <pd:startName>COBScan</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="COBScan">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>33</pd:x>
+        <pd:y>34</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <selector>application = 'SBV.T24.ERP.MAPPING.COB' and entryId is NULL</selector>
+                <destination>jms/requestQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/T24JMSQueue_Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>986</pd:endX>
+    <pd:endY>521</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <apphdr ref="pfx2:AppHdr"/>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="ServiceName" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="OperationName" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1441772272856</pd:targetNamespace>
+    <pd:group name="Group T24Event">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>424</pd:x>
+        <pd:y>25</pd:y>
+        <pd:width>258</pd:width>
+        <pd:height>195</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$COBEntries/T24Events/T24Event</pd:over>
+            <pd:iterationElementSlot>t24event</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>COBEntry</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallCOB</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>COBEntry</pd:from>
+            <pd:to>CallCOB</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallCOB">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>612</pd:x>
+            <pd:y>126</pd:y>
+            <config>
+                <processName>/Services/Global/Remittance/GLPosting/OperationImpl/createCOBGLPosting.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns:COBGLPostingReq>
+                    <COBReq>
+                        <ns0:COBGLPostingReq>
+                            <pfx2:AppHdr>
+                                <xsl:if test="$apphdr/pfx2:AppHdr/pfx2:CharSet">
+                                    <pfx2:CharSet>
+                                        <xsl:value-of select="$apphdr/pfx2:AppHdr/pfx2:CharSet"/>
+                                    </pfx2:CharSet>
+                                </xsl:if>
+                                <pfx2:ServVersion>
+                                    <xsl:value-of select="$apphdr/pfx2:AppHdr/pfx2:ServVersion"/>
+                                </pfx2:ServVersion>
+                                <xsl:copy-of select="$apphdr/pfx2:AppHdr/pfx2:From"/>
+                                <xsl:copy-of select="$apphdr/pfx2:AppHdr/pfx2:To"/>
+                                <pfx2:MsgId>
+                                    <xsl:value-of select="$apphdr/pfx2:AppHdr/pfx2:MsgId"/>
+                                </pfx2:MsgId>
+                                <xsl:if test="$apphdr/pfx2:AppHdr/pfx2:MsgPreId">
+                                    <pfx2:MsgPreId>
+                                        <xsl:value-of select="$apphdr/pfx2:AppHdr/pfx2:MsgPreId"/>
+                                    </pfx2:MsgPreId>
+                                </xsl:if>
+                                <xsl:if test="$apphdr/pfx2:AppHdr/pfx2:MsgSrcId">
+                                    <pfx2:MsgSrcId>
+                                        <xsl:value-of select="$apphdr/pfx2:AppHdr/pfx2:MsgSrcId"/>
+                                    </pfx2:MsgSrcId>
+                                </xsl:if>
+                                <xsl:copy-of select="$apphdr/pfx2:AppHdr/pfx2:BizServ"/>
+                                <pfx2:CreatedDate>
+                                    <xsl:value-of select="$apphdr/pfx2:AppHdr/pfx2:CreatedDate"/>
+                                </pfx2:CreatedDate>
+                            </pfx2:AppHdr>
+                            <xsl:copy-of select="$COBEntry/pfx:T24COBEntries"/>
+                        </ns0:COBGLPostingReq>
+                    </COBReq>
+                </ns:COBGLPostingReq>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="COBEntry">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>498</pd:x>
+            <pd:y>126</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>true</validateOutput>
+                <term ref="pfx:T24COBEntries"/>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="substring-after($t24event/T24Event, '?>')"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="AppHdr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>163</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <variableName>apphdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:AppHdr>
+                <pfx2:CharSet>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </pfx2:CharSet>
+                <pfx2:ServVersion>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </pfx2:ServVersion>
+                <pfx2:From>
+                    <pfx2:Id>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </pfx2:Id>
+                    <pfx2:Name>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </pfx2:Name>
+                </pfx2:From>
+                <pfx2:To>
+                    <pfx2:Id>
+                        <xsl:value-of select="&quot;2&quot;"/>
+                    </pfx2:Id>
+                    <pfx2:Name>
+                        <xsl:value-of select="&quot;ERP&quot;"/>
+                    </pfx2:Name>
+                </pfx2:To>
+                <pfx2:MsgId>
+                    <xsl:value-of select="&quot;123&quot;"/>
+                </pfx2:MsgId>
+                <pfx2:MsgSrcId>
+                    <xsl:value-of select="substring($COBScan/ns1:ActivityOutput/JMSHeaders/ns1:JMSMessageID, 5, string-length($COBScan/ns1:ActivityOutput/JMSHeaders/ns1:JMSMessageID)-5)"/>
+                </pfx2:MsgSrcId>
+                <pfx2:BizServ>
+                    <pfx2:Id>
+                        <xsl:value-of select="&quot;02&quot;"/>
+                    </pfx2:Id>
+                    <pfx2:Name>
+                        <xsl:value-of select="&quot;GLPosting&quot;"/>
+                    </pfx2:Name>
+                </pfx2:BizServ>
+                <pfx2:CreatedDate>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx2:CreatedDate>
+            </pfx2:AppHdr>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallProcERP">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>424</pd:x>
+        <pd:y>333</pd:y>
+        <config>
+            <timeout>1200</timeout>
+            <maxRows>0</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <schema>APPS</schema>
+            <catalog>FSAH_CREATE_EVENTS_PKG_T24</catalog>
+            <ProcedureName>MAIN</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_INTERFACE_ID</colName>
+                    <colType>2</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_STATUS</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_MESSAGE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_INTERFACE_ID>
+                        <xsl:choose>
+                            <xsl:when test="exists($COBEnd/pfx:T24COBEntries/pfx:entryIdGroup[1]/pfx:txnDate)">
+                                <xsl:value-of select="$COBEnd/pfx:T24COBEntries/pfx:entryIdGroup[1]/pfx:txnDate"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_INTERFACE_ID>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>42</pd:x>
+        <pd:y>521</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="COBEnd">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>282</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:T24COBEntries"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$COBScan/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="COBEntries">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>368</pd:x>
+        <pd:y>123</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="T24Events">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="T24Event" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$COBScan/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="COBStart-X">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>823</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:T24COBEntries"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$GetCOBStart/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>588</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <ConfirmEvent>COBScan</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm-cobs">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>980</pd:x>
+        <pd:y>127</pd:y>
+        <config>
+            <ConfirmEvent>COBScan</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GetCOBStart">
+        <pd:type>com.tibco.plugin.jms.JMSQueueGetMessageActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueGetMessageActivity</pd:resourceType>
+        <pd:x>704</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <selector>application = 'SBV.T24.ERP.MAPPING.COB' and entryId='COBSTART'</selector>
+                <destination>jms/requestQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/T24JMSQueue_Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log2File">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>160</pd:x>
+        <pd:y>333</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <createMissingDirectories>true</createMissingDirectories>
+        </config>
+        <pd:inputBindings>
+            <ns9:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($_globalVariables/ns6:GlobalVariables/esblogdir,substring($COBScan/ns1:ActivityOutput/JMSHeaders/ns1:JMSMessageID, 5, string-length($COBScan/ns1:ActivityOutput/JMSHeaders/ns1:JMSMessageID)-5),'.xml')"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$COBScan/ns1:ActivityOutput/Body"/>
+                </textContent>
+            </ns9:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogCOB-End">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>821</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="'DEBUG'"/>
+                </EnableRoles>
+                <ns4:EngineLog>
+                    <ns4:ServiceName>
+                        <xsl:value-of select="'COBT24Entries'"/>
+                    </ns4:ServiceName>
+                    <ns4:Message>
+                        <xsl:value-of select="concat(&quot;COBT24Entries&quot;,': End ',&quot;COBT24Entries&quot;)"/>
+                    </ns4:Message>
+                    <ns4:Category>
+                        <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/EnableRoles"/>
+                    </ns4:Category>
+                    <ns4:TrackingId>
+                        <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                    </ns4:TrackingId>
+                </ns4:EngineLog>
+                <ns7:SOAEnvelope>
+                    <ns7:SOAServiceHeader>
+                        <ns7:AppHdr>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/node()"/>
+                        </ns7:AppHdr>
+                        <ns7:SOAMsgId>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                        </ns7:SOAMsgId>
+                        <ns7:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24ERP/COBT24Entries&quot;"/>
+                        </ns7:ServiceName>
+                        <ns7:OperationName>
+                            <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                        </ns7:OperationName>
+                        <ns7:ProcessName>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProjectName"/>
+                        </ns7:ProcessName>
+                    </ns7:SOAServiceHeader>
+                    <ns7:ServiceBody>
+                        <ns8:ServiceEnverlop>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr"/>
+                            <pfx2:ResponseStatus>
+                                <pfx2:Status>
+                                    <xsl:value-of select="'0'"/>
+                                </pfx2:Status>
+                                <pfx2:ErrorCode>
+                                    <xsl:value-of select="'000'"/>
+                                </pfx2:ErrorCode>
+                                <pfx2:ErrorMessage>
+                                    <xsl:value-of select="concat($COBEntry/pfx:T24COBEntries/pfx:entryIdGroup[ 1]/pfx:txnDate,' COB posted successfully')"/>
+                                </pfx2:ErrorMessage>
+                                <pfx2:ErrorInfo>
+                                    <pfx2:Id>
+                                        <xsl:value-of select="'0'"/>
+                                    </pfx2:Id>
+                                    <pfx2:ErrorCode>
+                                        <xsl:value-of select="'000'"/>
+                                    </pfx2:ErrorCode>
+                                    <pfx2:ErrorMessage>
+                                        <xsl:value-of select="concat($COBEntry/pfx:T24COBEntries/pfx:entryIdGroup[ 1]/pfx:txnDate,' COB posted successfully')"/>
+                                    </pfx2:ErrorMessage>
+                                </pfx2:ErrorInfo>
+                            </pfx2:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$COBEntry/pfx:T24COBEntries/pfx:entryIdGroup/pfx:txnDate"/>
+                            </ServiceBody>
+                        </ns8:ServiceEnverlop>
+                    </ns7:ServiceBody>
+                </ns7:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="'End'"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>521</pd:x>
+        <pd:y>410</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns4:EngineLog>
+                    <ns4:ServiceName>
+                        <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                    </ns4:ServiceName>
+                    <ns4:Message>
+                        <xsl:value-of select="concat(&quot;COBT24Entries&quot;,': End ',&quot;COBT24Entries&quot;)"/>
+                    </ns4:Message>
+                    <ns4:Category>
+                        <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/EnableRoles"/>
+                    </ns4:Category>
+                    <ns4:TrackingId>
+                        <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                    </ns4:TrackingId>
+                </ns4:EngineLog>
+                <ns7:SOAEnvelope>
+                    <ns7:SOAServiceHeader>
+                        <ns7:AppHdr>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/node()"/>
+                        </ns7:AppHdr>
+                        <ns7:SOAMsgId>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                        </ns7:SOAMsgId>
+                        <ns7:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24ERP/COBT24Entries&quot;"/>
+                        </ns7:ServiceName>
+                        <ns7:OperationName>
+                            <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                        </ns7:OperationName>
+                        <ns7:ProcessName>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProjectName"/>
+                        </ns7:ProcessName>
+                    </ns7:SOAServiceHeader>
+                    <ns7:ServiceBody>
+                        <ns8:ServiceEnverlop>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr"/>
+                            <pfx2:ResponseStatus>
+                                <pfx2:Status>
+                                    <xsl:value-of select="'0'"/>
+                                </pfx2:Status>
+                                <xsl:if test="not(($CallProcERP/resultSet/outputSet/P_STATUS/@xsi:nil=(&quot;true&quot;)) or ($CallProcERP/resultSet/outputSet/P_STATUS/@xsi:nil=(&quot;1&quot;)))">
+                                    <pfx2:ErrorCode>
+                                        <xsl:value-of select="$CallProcERP/resultSet/outputSet/P_STATUS"/>
+                                    </pfx2:ErrorCode>
+                                </xsl:if>
+                                <xsl:if test="not(($CallProcERP/resultSet/outputSet/P_MESSAGE/@xsi:nil=(&quot;true&quot;)) or ($CallProcERP/resultSet/outputSet/P_MESSAGE/@xsi:nil=(&quot;1&quot;)))">
+                                    <pfx2:ErrorMessage>
+                                        <xsl:value-of select="$CallProcERP/resultSet/outputSet/P_MESSAGE"/>
+                                    </pfx2:ErrorMessage>
+                                </xsl:if>
+                                <pfx2:ErrorInfo>
+                                    <xsl:if test="not(($CallProcERP/resultSet/outputSet/P_INTERFACE_ID/@xsi:nil=(&quot;true&quot;)) or ($CallProcERP/resultSet/outputSet/P_INTERFACE_ID/@xsi:nil=(&quot;1&quot;)))">
+                                        <pfx2:Id>
+                                            <xsl:value-of select="$CallProcERP/resultSet/outputSet/P_INTERFACE_ID"/>
+                                        </pfx2:Id>
+                                    </xsl:if>
+                                    <xsl:if test="not(($CallProcERP/resultSet/outputSet/P_STATUS/@xsi:nil=(&quot;true&quot;)) or ($CallProcERP/resultSet/outputSet/P_STATUS/@xsi:nil=(&quot;1&quot;)))">
+                                        <pfx2:ErrorCode>
+                                            <xsl:value-of select="$CallProcERP/resultSet/outputSet/P_STATUS"/>
+                                        </pfx2:ErrorCode>
+                                    </xsl:if>
+                                    <xsl:if test="not(($CallProcERP/resultSet/outputSet/P_MESSAGE/@xsi:nil=(&quot;true&quot;)) or ($CallProcERP/resultSet/outputSet/P_MESSAGE/@xsi:nil=(&quot;1&quot;)))">
+                                        <pfx2:ErrorMessage>
+                                            <xsl:value-of select="$CallProcERP/resultSet/outputSet/P_MESSAGE"/>
+                                        </pfx2:ErrorMessage>
+                                    </xsl:if>
+                                </pfx2:ErrorInfo>
+                            </pfx2:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$CallProcERP/resultSet/outputSet/P_INTERFACE_ID"/>
+                            </ServiceBody>
+                        </ns8:ServiceEnverlop>
+                    </ns7:ServiceBody>
+                </ns7:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd-Err">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>429</pd:x>
+        <pd:y>439</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="'DEBUG'"/>
+                </EnableRoles>
+                <ns4:EngineLog>
+                    <ns4:ServiceName>
+                        <xsl:value-of select="'COBT24Entries'"/>
+                    </ns4:ServiceName>
+                    <ns4:Message>
+                        <xsl:value-of select="concat(&quot;COBT24Entries&quot;,': Start ',&quot;COBT24Entries&quot;)"/>
+                    </ns4:Message>
+                    <ns4:Category>
+                        <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/EnableRoles"/>
+                    </ns4:Category>
+                    <ns4:TrackingId>
+                        <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                    </ns4:TrackingId>
+                </ns4:EngineLog>
+                <ns7:SOAEnvelope>
+                    <ns7:SOAServiceHeader>
+                        <ns7:AppHdr>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/node()"/>
+                        </ns7:AppHdr>
+                        <ns7:SOAMsgId>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                        </ns7:SOAMsgId>
+                        <ns7:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24ERP/COBT24Entries&quot;"/>
+                        </ns7:ServiceName>
+                        <ns7:OperationName>
+                            <xsl:value-of select="'COBT24Entries'"/>
+                        </ns7:OperationName>
+                        <ns7:ProcessName>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProjectName"/>
+                        </ns7:ProcessName>
+                    </ns7:SOAServiceHeader>
+                    <ns7:ServiceBody>
+                        <ns8:ServiceEnverlop>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr"/>
+                            <pfx2:ResponseStatus>
+                                <pfx2:Status>
+                                    <xsl:value-of select="'1'"/>
+                                </pfx2:Status>
+                                <pfx2:ErrorCode>
+                                    <xsl:value-of select="'005'"/>
+                                </pfx2:ErrorCode>
+                                <pfx2:ErrorMessage>
+                                    <xsl:value-of select="concat($apphdr/pfx2:AppHdr/pfx2:MsgSrcId,': failed at CallProcERP')"/>
+                                </pfx2:ErrorMessage>
+                                <pfx2:ErrorInfo>
+                                    <pfx2:ErrorCode>
+                                        <xsl:value-of select="'005'"/>
+                                    </pfx2:ErrorCode>
+                                    <pfx2:ErrorMessage>
+                                        <xsl:value-of select="concat($apphdr/pfx2:AppHdr/pfx2:MsgSrcId,': failed at CallProcERP')"/>
+                                    </pfx2:ErrorMessage>
+                                </pfx2:ErrorInfo>
+                            </pfx2:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$apphdr/pfx2:AppHdr/pfx2:MsgSrcId"/>
+                            </ServiceBody>
+                        </ns8:ServiceEnverlop>
+                    </ns7:ServiceBody>
+                </ns7:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="'End'"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogStart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>350</pd:x>
+        <pd:y>439</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns4:EngineLog>
+                    <ns4:ServiceName>
+                        <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                    </ns4:ServiceName>
+                    <ns4:Message>
+                        <xsl:value-of select="concat(&quot;COBT24Entries&quot;,': Start ',&quot;COBT24Entries&quot;)"/>
+                    </ns4:Message>
+                    <ns4:Category>
+                        <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/EnableRoles"/>
+                    </ns4:Category>
+                    <ns4:TrackingId>
+                        <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                    </ns4:TrackingId>
+                </ns4:EngineLog>
+                <ns7:SOAEnvelope>
+                    <ns7:SOAServiceHeader>
+                        <ns7:AppHdr>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/node()"/>
+                        </ns7:AppHdr>
+                        <ns7:SOAMsgId>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                        </ns7:SOAMsgId>
+                        <ns7:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24ERP/COBT24Entries&quot;"/>
+                        </ns7:ServiceName>
+                        <ns7:OperationName>
+                            <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                        </ns7:OperationName>
+                        <ns7:ProcessName>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProjectName"/>
+                        </ns7:ProcessName>
+                    </ns7:SOAServiceHeader>
+                    <ns7:ServiceBody>
+                        <xsl:copy-of select="$COBEnd/pfx:T24COBEntries"/>
+                    </ns7:ServiceBody>
+                </ns7:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="'999'"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogStart-2">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>939</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns4:EngineLog>
+                    <ns4:ServiceName>
+                        <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                    </ns4:ServiceName>
+                    <ns4:Message>
+                        <xsl:value-of select="concat(&quot;COBT24Entries&quot;,': Start ',&quot;COBT24Entries&quot;)"/>
+                    </ns4:Message>
+                    <ns4:Category>
+                        <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/EnableRoles"/>
+                    </ns4:Category>
+                    <ns4:TrackingId>
+                        <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                    </ns4:TrackingId>
+                </ns4:EngineLog>
+                <ns7:SOAEnvelope>
+                    <ns7:SOAServiceHeader>
+                        <ns7:AppHdr>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$apphdr/pfx2:AppHdr/node()"/>
+                        </ns7:AppHdr>
+                        <ns7:SOAMsgId>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProcessId"/>
+                        </ns7:SOAMsgId>
+                        <ns7:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24ERP/COBT24Entries&quot;"/>
+                        </ns7:ServiceName>
+                        <ns7:OperationName>
+                            <xsl:value-of select="&quot;COBT24Entries&quot;"/>
+                        </ns7:OperationName>
+                        <ns7:ProcessName>
+                            <xsl:value-of select="$_processContext/ns5:ProcessContext/ProjectName"/>
+                        </ns7:ProcessName>
+                    </ns7:SOAServiceHeader>
+                    <ns7:ServiceBody>
+                        <xsl:copy-of select="$COBStart-X/pfx:T24COBEntries"/>
+                    </ns7:ServiceBody>
+                </ns7:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;999&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>273</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:T24COBEntries"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$COBScan/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ServiceVariables">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>54</pd:x>
+        <pd:y>123</pd:y>
+        <config>
+            <variableName>ServiceVariables</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </startTime>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>291</pd:x>
+        <pd:y>521</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns2:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="10000"/>
+                </IntervalInMillisec>
+            </ns2:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CallProcERP</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AppHdr</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>COBEntries</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>COBEntries</pd:from>
+        <pd:to>Group T24Event</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>COBEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>COBEnd</pd:from>
+        <pd:to>CallProcERP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>GetCOBStart</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCOBStart</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group T24Event</pd:from>
+        <pd:to>Confirm-cobs</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-cobs</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>COBEnd</pd:from>
+        <pd:to>LogStart</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart</pd:from>
+        <pd:to>CallProcERP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart-2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCOBStart</pd:from>
+        <pd:to>COBStart-X</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>COBStart-X</pd:from>
+        <pd:to>LogStart-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallProcERP</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>COBScan</pd:from>
+        <pd:to>ServiceVariables</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ServiceVariables</pd:from>
+        <pd:to>AppHdr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd-Err</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallProcERP</pd:from>
+        <pd:to>LogEnd-Err</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log2File</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ServiceVariables</pd:from>
+        <pd:to>Log2File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group T24Event</pd:from>
+        <pd:to>LogCOB-End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogCOB-End</pd:from>
+        <pd:to>Confirm-cobs</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

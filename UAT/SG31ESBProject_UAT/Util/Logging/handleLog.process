@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="sbv/common/logging/enginelog/1.0">
+    <xsd:import namespace="sbv/common/logging/enginelog/1.0" schemaLocation="/SharedResource/Schema/Common/Logging/EngineLog.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <pd:name>Util/Logging/handleLog.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="EnableRoles" type="xsd:string"/>
+                    <xsd:element ref="pfx:EngineLog"/>
+                    <xsd:element ref="pfx3:SOAEnvelope" minOccurs="0"/>
+                    <xsd:element name="Direction" type="xsd:string"/>
+                    <xsd:element name="TimeDuration" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>91</pd:startX>
+    <pd:startY>212</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>878</pd:endX>
+    <pd:endY>214</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/util/logging/handlelog/1.0</pd:targetNamespace>
+    <pd:group name="ForEachLogCategory">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>226</pd:x>
+        <pd:y>37</pd:y>
+        <pd:width>554</pd:width>
+        <pd:height>332</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>tib:tokenize($Start/root/EnableRoles, ',')</pd:over>
+            <pd:iterationElementSlot>current-Category</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Category</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Publish Log</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Category</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Write To Engine Log</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Category</pd:from>
+            <pd:to>Logging path</pd:to>
+            <pd:xpathDescription>Enabled</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>contains($Start/root/pfx:EngineLog/pfx:Category, tib:tokenize($Start/root/EnableRoles, ',')[$i])</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Logging path</pd:from>
+            <pd:to>Publish Log</pd:to>
+            <pd:xpathDescription>CommonLE?</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>boolean($Start/root/pfx3:SOAEnvelope)</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Logging path</pd:from>
+            <pd:to>Write To Engine Log</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Publish Log">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>523</pd:x>
+            <pd:y>102</pd:y>
+            <config>
+                <processName>/Util/Logging/publishLog.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:copy-of select="$Start/root/pfx3:SOAEnvelope"/>
+                    <Direction>
+                        <xsl:value-of select="$Start/root/Direction"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="$Start/root/TimeDuration"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Category">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>342</pd:x>
+            <pd:y>289</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Logging path">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>338</pd:x>
+            <pd:y>105</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Write To Engine Log">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>529</pd:x>
+            <pd:y>188</pd:y>
+            <config>
+                <processName>/Util/Logging/writeToEngineLog.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:for-each select="$Start/root/pfx:EngineLog">
+                    <pfx:EngineLog>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="pfx:ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:Message>
+                            <xsl:value-of select="pfx:Message"/>
+                        </pfx:Message>
+                        <pfx:Category>
+                            <xsl:value-of select="tib:tokenize(../EnableRoles, ',')[$i]"/>
+                        </pfx:Category>
+                        <xsl:if test="pfx:TrackingId">
+                            <pfx:TrackingId>
+                                <xsl:value-of select="pfx:TrackingId"/>
+                            </pfx:TrackingId>
+                        </xsl:if>
+                    </pfx:EngineLog>
+                </xsl:for-each>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>566</pd:x>
+        <pd:y>421</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="writeToEngineLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>748</pd:x>
+        <pd:y>421</pd:y>
+        <config>
+            <processName>/Util/Logging/writeToEngineLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:EngineLog>
+                <pfx:ServiceName>
+                    <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                </pfx:ServiceName>
+                <pfx:Message>
+                    <xsl:value-of select="$_error/ns:ErrorReport/StackTrace"/>
+                </pfx:Message>
+                <pfx:Category>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LogCategory/ErrorRole"/>
+                </pfx:Category>
+                <xsl:if test="$Start/root/pfx:EngineLog/pfx:TrackingId">
+                    <pfx:TrackingId>
+                        <xsl:value-of select="$Start/root/pfx:EngineLog/pfx:TrackingId"/>
+                    </pfx:TrackingId>
+                </xsl:if>
+            </pfx:EngineLog>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ForEachLogCategory</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ForEachLogCategory</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>writeToEngineLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>writeToEngineLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

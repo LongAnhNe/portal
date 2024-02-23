@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://temenos.com/SBV.FT.BULK.IBPS.LV" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://tempuri.org/" xmlns:pfx13="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx12="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx11="http://temenos.com/QUERY.ACCOUNT" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://temenos.com/T24.SYSTEM.STATUS" xmlns:pfx19="http://xmlns.example.com/1438330850951" xmlns:pfx18="sbv/service/global/utilities/cbsstatus/inquiry/version1.0" xmlns:pfx17="http://xmlns.example.com/1441106175252" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/T24.SYSTEM.STATE" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="sbv/global/utilities/cbsstatus/inquiry/version1.0" xmlns:ns7="http://www.sbv.gov.vn/global/utilities/cbsinfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns10="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/Schema.xsd" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns11="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/NotifyBackendAlert.xsd" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="sbv/global/utilities/cbsstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/utilities/cbsinfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Utilities/CBSInfo/CBSInfo.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/T24.SYSTEM.STATUS" location="/SharedResource/Schema/Global/System/T24/SystemState/T24SystemState.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <pd:name>Services/Global/Utilities/CBSInfo/Version1.0/getCBSStatus/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>64</pd:startX>
+    <pd:startY>166</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To"/>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                    </ns3:MsgId>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId">
+                        <ns3:MsgPreId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId"/>
+                        </ns3:MsgPreId>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ"/>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <ns3:Signature>
+                        <xsl:value-of select="if($LogRes/HasLog='1') then &quot;&quot; else $_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/WriteQueryLog"/>
+                    </ns3:Signature>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="if ($CallT24CoreState/outputMessage/pfx12:CoreSystemStatusResponse/Status/successIndicator=&quot;Success&quot;) then '0'&#xA;else&#xA;'1'"/>
+                    </ns3:Status>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:ErrorInfo[1]/ns3:ErrorMessage">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:ErrorInfo[1]/ns3:ErrorMessage"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                    <ns3:ErrorInfo/>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <ns7:CBSStatus>
+                        <ns7:RunDate>
+                            <xsl:value-of select="$CallT24CoreState/outputMessage/pfx12:CoreSystemStatusResponse/ENQSYSTEMSTATUSType[1]/gENQSYSTEMSTATUSDetailType[1]/mENQSYSTEMSTATUSDetailType[1]/IBPSSystemDate"/>
+                        </ns7:RunDate>
+                        <ns7:Status>
+                            <xsl:value-of select="if ($CallT24CoreState/outputMessage/pfx12:CoreSystemStatusResponse/Status/successIndicator=&quot;Success&quot;) then &#xA;$CallT24CoreState/outputMessage/pfx12:CoreSystemStatusResponse/ENQSYSTEMSTATUSType[1]/gENQSYSTEMSTATUSDetailType[1]/mENQSYSTEMSTATUSDetailType[1]/StateCode&#xA;else&#xA;'9103'"/>
+                        </ns7:Status>
+                        <ns7:CurrentDate>
+                            <xsl:value-of select="$CallT24CoreState/outputMessage/pfx12:CoreSystemStatusResponse/ENQSYSTEMSTATUSType[1]/gENQSYSTEMSTATUSDetailType[1]/mENQSYSTEMSTATUSDetailType[1]/T24SystemDate"/>
+                        </ns7:CurrentDate>
+                    </ns7:CBSStatus>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>463</pd:endX>
+    <pd:endY>164</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <LogRes>
+            <xsd:element name="HasLog" type="xsd:boolean"/>
+        </LogRes>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/accountstatus/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="CallT24CoreState">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>197</pd:x>
+        <pd:y>135</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx12:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>CoreSystemStatus</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSIBPS%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx12:CoreSystemStatus>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/CompanyCode"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24IBPSPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24IBPSUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <ENQSYSTEMSTATUSType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;Y.DATE&quot;"/>
+                            </columnName>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns7:RunDate[1]">
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns7:RunDate[1]"/>
+                                </criteriaValue>
+                            </xsl:if>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </ENQSYSTEMSTATUSType>
+                </pfx12:CoreSystemStatus>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignLogError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>311</pd:x>
+        <pd:y>279</pd:y>
+        <config>
+            <variableName>LogRes</variableName>
+        </config>
+        <pd:inputBindings>
+            <HasLog>
+                <xsl:value-of select="1"/>
+            </HasLog>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignNoLog">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>131</pd:y>
+        <config>
+            <variableName>LogRes</variableName>
+        </config>
+        <pd:inputBindings>
+            <HasLog>
+                <xsl:value-of select="0"/>
+            </HasLog>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallT24CoreState</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24CoreState</pd:from>
+        <pd:to>AssignNoLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24CoreState</pd:from>
+        <pd:to>AssignLogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignLogError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignNoLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fis.vn/iMaximusGateway/ErpPostToCsdService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns12="sbv/common/exceptionhandling/exception/1.0" xmlns:pfx="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:ns2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx5="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://tempuri.org/" xmlns:pfx3="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx2="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx9="http://www.tibco.com/pe/EngineTypes" xmlns:pfx8="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp" xmlns:pfx7="http://xmlns.example.com/1433466938916" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="sbv/common/envelope/serviceenvelope/1.0">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/ERPAccountInfo/ERPAccountInfo.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" location="/Services/Global/Account/ERPAccountInfo/OperationImpl/ERPAccountInfo.serviceagent"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService" location="/SharedResource/Schema/Global/System/CSD/ErpPostToCSDService/ErpPostToCsdService.wsdl"/>
+    <pd:name>Services/Global/Account/ERPAccountInfo/Version1.0/getAccountInfo/RequestResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx6:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>95</pd:startX>
+    <pd:startY>123</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx6:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx6:ServiceEnverlop/ns1:AppHdr"/>
+                <ns1:ResponseStatus>
+                    <ns1:Status>
+                        <xsl:value-of select="$ResponseVariable/pfx5:getAccountInfoRes/pfx5:Status"/>
+                    </ns1:Status>
+                    <xsl:if test="$ResponseVariable/pfx5:getAccountInfoRes/pfx5:ErrMsg">
+                        <ns1:ErrorCode>
+                            <xsl:value-of select="$ResponseVariable/pfx5:getAccountInfoRes/pfx5:ErrMsg"/>
+                        </ns1:ErrorCode>
+                    </xsl:if>
+                    <xsl:if test="$ResponseVariable/pfx5:getAccountInfoRes/pfx5:ErrMsg">
+                        <ns1:ErrorMessage>
+                            <xsl:value-of select="$ResponseVariable/pfx5:getAccountInfoRes/pfx5:ErrMsg"/>
+                        </ns1:ErrorMessage>
+                    </xsl:if>
+                    <xsl:for-each select="$SOAPRequestReply/outputMessage/ns:GetAccListFrErpResponse/ns:GetAccListFrErpResult/pfx8:ResponseStatus/ns2:Errors/ns2:ErrorInfo">
+                        <ns1:ErrorInfo>
+                            <xsl:if test="ns2:ErrorCode">
+                                <ns1:ErrorCode>
+                                    <xsl:value-of select="ns2:ErrorCode"/>
+                                </ns1:ErrorCode>
+                            </xsl:if>
+                            <xsl:if test="ns2:ErrorMessage">
+                                <ns1:ErrorMessage>
+                                    <xsl:value-of select="ns2:ErrorMessage"/>
+                                </ns1:ErrorMessage>
+                            </xsl:if>
+                        </ns1:ErrorInfo>
+                    </xsl:for-each>
+                </ns1:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$SOAPRequestReply/outputMessage/ns:GetAccListFrErpResponse/ns:GetAccListFrErpResult"/>
+                </ServiceBody>
+            </pfx6:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx6:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>744</pd:endX>
+    <pd:endY>133</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseVariable ref="pfx5:getAccountInfoRes"/>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/ERPAccountInfo/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>237</pd:x>
+        <pd:y>120</pd:y>
+        <config>
+            <element ref="pfx5:getAccountInfoReq"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx6:ServiceEnverlop/ServiceBody/*" element="pfx5:ERPAccountInfo"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx5:getAccountInfoReq>
+                <xsl:copy-of select="$Start/root/pfx6:ServiceEnverlop/ns1:AppHdr"/>
+                <xsl:for-each select="$Start/root/pfx6:ServiceEnverlop/ServiceBody/pfx5:ERPAccountInfo">
+                    <pfx5:ERPAccountInfo>
+                        <xsl:if test="pfx5:AccountGroup">
+                            <pfx5:AccountGroup>
+                                <xsl:value-of select="pfx5:AccountGroup"/>
+                            </pfx5:AccountGroup>
+                        </xsl:if>
+                        <xsl:if test="pfx5:AccountName">
+                            <pfx5:AccountName>
+                                <xsl:value-of select="pfx5:AccountName"/>
+                            </pfx5:AccountName>
+                        </xsl:if>
+                        <xsl:if test="pfx5:AccountNo">
+                            <pfx5:AccountNo>
+                                <xsl:value-of select="pfx5:AccountNo"/>
+                            </pfx5:AccountNo>
+                        </xsl:if>
+                        <xsl:if test="pfx5:AccountType">
+                            <pfx5:AccountType>
+                                <xsl:value-of select="pfx5:AccountType"/>
+                            </pfx5:AccountType>
+                        </xsl:if>
+                        <xsl:if test="pfx5:Level">
+                            <pfx5:Level>
+                                <xsl:value-of select="pfx5:Level"/>
+                            </pfx5:Level>
+                        </xsl:if>
+                        <xsl:if test="pfx5:ParentAccount">
+                            <pfx5:ParentAccount>
+                                <xsl:value-of select="pfx5:ParentAccount"/>
+                            </pfx5:ParentAccount>
+                        </xsl:if>
+                        <xsl:if test="pfx5:Status">
+                            <pfx5:Status>
+                                <xsl:value-of select="pfx5:Status"/>
+                            </pfx5:Status>
+                        </xsl:if>
+                    </pfx5:ERPAccountInfo>
+                </xsl:for-each>
+            </pfx5:getAccountInfoReq>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>383</pd:x>
+        <pd:y>122</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>ns:ErpPostToCsdService</service>
+            <servicePort>BasicHttpBinding_IErpPostToCsdService</servicePort>
+            <operation>GetAccListFrErp</operation>
+            <soapAction>http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAccListFrErp</soapAction>
+            <endpointURL>%%CsdWS/CSDT24Service%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns:GetAccListFrErp>
+                    <ns:request>
+                        <pfx8:Header/>
+                        <pfx8:Request>
+                            <xsl:for-each select="$Map-Data/pfx5:getAccountInfoReq/pfx5:ERPAccountInfo">
+                                <pfx8:GetAccListFrErpRequestType>
+                                    <xsl:if test="pfx5:AccountGroup">
+                                        <pfx8:AccountGroup>
+                                            <xsl:value-of select="pfx5:AccountGroup"/>
+                                        </pfx8:AccountGroup>
+                                    </xsl:if>
+                                    <xsl:if test="pfx5:AccountName">
+                                        <pfx8:AccountName>
+                                            <xsl:value-of select="pfx5:AccountName"/>
+                                        </pfx8:AccountName>
+                                    </xsl:if>
+                                    <xsl:if test="pfx5:AccountNo">
+                                        <pfx8:AccountNo>
+                                            <xsl:value-of select="pfx5:AccountNo"/>
+                                        </pfx8:AccountNo>
+                                    </xsl:if>
+                                    <xsl:if test="pfx5:AccountType">
+                                        <pfx8:AccountType>
+                                            <xsl:value-of select="pfx5:AccountType"/>
+                                        </pfx8:AccountType>
+                                    </xsl:if>
+                                    <xsl:if test="pfx5:Level">
+                                        <pfx8:Level>
+                                            <xsl:value-of select="pfx5:Level"/>
+                                        </pfx8:Level>
+                                    </xsl:if>
+                                    <xsl:if test="pfx5:ParentAccount">
+                                        <pfx8:ParentAccount>
+                                            <xsl:value-of select="pfx5:ParentAccount"/>
+                                        </pfx8:ParentAccount>
+                                    </xsl:if>
+                                    <xsl:if test="pfx5:Status">
+                                        <pfx8:Status>
+                                            <xsl:value-of select="pfx5:Status"/>
+                                        </pfx8:Status>
+                                    </xsl:if>
+                                </pfx8:GetAccListFrErpRequestType>
+                            </xsl:for-each>
+                        </pfx8:Request>
+                    </ns:request>
+                </ns:GetAccListFrErp>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>581</pd:x>
+        <pd:y>42</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:getAccountInfoRes>
+                <pfx5:Status>
+                    <xsl:value-of select="$SOAPRequestReply/outputMessage/ns:GetAccListFrErpResponse/ns:GetAccListFrErpResult/pfx8:ResponseStatus/ns2:Status"/>
+                </pfx5:Status>
+            </pfx5:getAccountInfoRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>529</pd:x>
+        <pd:y>255</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:getAccountInfoRes>
+                <pfx5:Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </pfx5:Status>
+                <pfx5:ErrMsg>
+                    <xsl:value-of select="concat($_error/pfx9:ErrorReport/Msg, &quot;. KHONG GOI DUOC WEBSERVICES&quot;)"/>
+                </pfx5:ErrMsg>
+            </pfx5:getAccountInfoRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>304</pd:x>
+        <pd:y>354</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>542</pd:x>
+        <pd:y>137</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:getAccountInfoRes>
+                <pfx5:Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </pfx5:Status>
+                <xsl:if test="$SOAPRequestReply/outputMessage/ns:GetAccListFrErpResponse/ns:GetAccListFrErpResult/pfx8:ResponseStatus/ns2:Errors/ns2:ErrorInfo[1]/ns2:ErrorMessage">
+                    <pfx5:ErrMsg>
+                        <xsl:value-of select="concat($SOAPRequestReply/outputMessage/ns:GetAccListFrErpResponse/ns:GetAccListFrErpResult/pfx8:ResponseStatus/ns2:Errors/ns2:ErrorInfo[1]/ns2:ErrorMessage, &quot;. WEB SERVICES TRA VE LOI&quot;)"/>
+                    </pfx5:ErrMsg>
+                </xsl:if>
+            </pfx5:getAccountInfoRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>447</pd:x>
+        <pd:y>354</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx6:ServiceEnverlop/ServiceBody/*" element="pfx5:ERPAccountInfo"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/pfx9:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="generate-id($_processContext/pfx9:ProcessContext/ProcessId)"/>
+                </GeneratedId>
+                <ns12:ExceptionBody>
+                    <ns12:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns12:Hostname>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns12:Category>
+                    <ns12:Type>
+                        <xsl:value-of select="&quot;TECHINICAL&quot;"/>
+                    </ns12:Type>
+                    <ns12:Level>
+                        <xsl:value-of select="&quot;HIGH&quot;"/>
+                    </ns12:Level>
+                    <ns12:ErrorReport>
+                        <StackTrace>
+                            <xsl:value-of select="$_error/pfx9:ErrorReport/StackTrace"/>
+                        </StackTrace>
+                        <Msg>
+                            <xsl:value-of select="$_error/pfx9:ErrorReport/Msg"/>
+                        </Msg>
+                        <FullClass>
+                            <xsl:value-of select="$_error/pfx9:ErrorReport/FullClass"/>
+                        </FullClass>
+                        <ObjectClass>
+                            <xsl:value-of select="$_error/pfx9:ErrorReport/Class"/>
+                        </ObjectClass>
+                        <ProcessStack>
+                            <xsl:value-of select="$_error/pfx9:ErrorReport/ProcessStack"/>
+                        </ProcessStack>
+                        <MsgCode>
+                            <xsl:value-of select="$_error/pfx9:ErrorReport/MsgCode"/>
+                        </MsgCode>
+                        <xsl:copy-of select="$_error/pfx9:ErrorReport/Data"/>
+                    </ns12:ErrorReport>
+                </ns12:ExceptionBody>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="contains($_error/pfx9:ErrorReport/StackTrace, concat(BW:getCurrentProcessName($_processContext/pfx9:ProcessContext/ProcessId),&quot;/Start]&quot;))"/>
+                    <xsl:otherwise>
+                        <ServiceInput>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Start/root/pfx6:ServiceEnverlop/ServiceBody/pfx5:ERPAccountInfo"/>
+                            </ServiceBody>
+                        </ServiceInput>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>570</pd:x>
+        <pd:y>354</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:getAccountInfoRes>
+                <pfx5:Status>
+                    <xsl:value-of select="$errorProcessor/Result/ns1:ResponseStatus/ns1:Status"/>
+                </pfx5:Status>
+                <xsl:if test="$errorProcessor/Result/ns1:ResponseStatus/ns1:ErrorMessage">
+                    <pfx5:ErrMsg>
+                        <xsl:value-of select="$errorProcessor/Result/ns1:ResponseStatus/ns1:ErrorMessage"/>
+                    </pfx5:ErrMsg>
+                </xsl:if>
+            </pfx5:getAccountInfoRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Assign-Success</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$SOAPRequestReply/outputMessage/ns:GetAccListFrErpResponse/ns:GetAccListFrErpResult/pfx8:ResponseStatus/ns2:Status = "0"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Assign-Error</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:xpathDescription>Call Soap Err</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/SecuritiesPosting/SecuritiesPosting.xsd"/>
+    <pd:name>Services/Global/Remittance/SecuritiesPosting/Version1.0/createPosting/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>92</pd:startX>
+    <pd:startY>129</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/@*"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/node()"/>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseVariable/root/Status"/>
+                    </ns3:Status>
+                    <xsl:if test="$ResponseVariable/root/ErrMsg">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseVariable/root/ErrMsg"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$Map-Data/pfx3:SecuritiesPosting/pfx3:InterfaceId"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1029</pd:endX>
+    <pd:endY>164</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseVariable>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ErrMsg" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Status" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseVariable>
+        <ErrWhenInsVariable>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ErrMsg" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="InterfaceId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ErrWhenInsVariable>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/securitiesposting/createposting/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>190</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <element ref="pfx3:SecuritiesPosting"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx3:SecuritiesPosting"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx3:SecuritiesPosting>
+                <pfx3:InterfaceId>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:SecuritiesPosting[1]/pfx3:InterfaceId"/>
+                </pfx3:InterfaceId>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:SecuritiesPosting/pfx3:LineInfo"/>
+            </pfx3:SecuritiesPosting>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>268</pd:x>
+        <pd:y>53</pd:y>
+        <pd:width>232</pd:width>
+        <pd:height>190</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Map-Data/pfx3:SecuritiesPosting/pfx3:LineInfo</pd:over>
+            <pd:iterationElementSlot>SecuritiesRec</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Insert to CSD</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Insert to CSD</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>error</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Insert to CSD</pd:from>
+            <pd:to>error</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Insert to CSD">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>337</pd:x>
+            <pd:y>127</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                <schema/>
+                <catalog>PKG_ESB_CSDERP</catalog>
+                <ProcedureName>SBV_CSD_TL_INSERT</ProcedureName>
+                <oraObjects/>
+                <oraTables/>
+                <parameterTypes>
+                    <parameter>
+                        <colName>PI_REF_NO_INTERFACE_AOM_CSD</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_BUSSINESS_CODE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_FE_NUMBER</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_DEAL_NUMBER</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_ACCT_NUMBER</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_BANK_CODE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_BANK_NAME</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_ACCT_NO</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_DR_OR_CR</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_SECURITES_TYPE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_SECURITES</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_CURRENCY</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_AMOUNT</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_DEAL_DATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_ACCT_DATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_REVERSE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_PERIOD</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_INTEREST_RATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_EXEC_INT_RATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_PAR_VALUE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_ISSUE_DATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_DUE_DATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_LAST_CREATED_BY</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_LAST_APPROVED_BY</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <PI_REF_NO_INTERFACE_AOM_CSD>
+                            <xsl:value-of select="$Map-Data/pfx3:SecuritiesPosting/pfx3:InterfaceId"/>
+                        </PI_REF_NO_INTERFACE_AOM_CSD>
+                        <PI_BUSSINESS_CODE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:BusinessCode)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:BusinessCode"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_BUSSINESS_CODE>
+                        <PI_FE_NUMBER>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:FENo)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:FENo"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_FE_NUMBER>
+                        <PI_DEAL_NUMBER>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:DealNo)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:DealNo"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_DEAL_NUMBER>
+                        <PI_ACCT_NUMBER>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:TransType)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:TransType"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_ACCT_NUMBER>
+                        <PI_BANK_CODE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:BankCode)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:BankCode"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_BANK_CODE>
+                        <PI_BANK_NAME>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:BankName)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:BankName"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_BANK_NAME>
+                        <PI_ACCT_NO>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:AccountNo)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:AccountNo"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_ACCT_NO>
+                        <PI_DR_OR_CR>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:PostingType)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:PostingType"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_DR_OR_CR>
+                        <PI_SECURITES_TYPE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:SecuritiesType)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:SecuritiesType"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_SECURITES_TYPE>
+                        <PI_SECURITES>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:SecuritiesCode)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:SecuritiesCode"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_SECURITES>
+                        <PI_CURRENCY>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Currency)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Currency"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_CURRENCY>
+                        <PI_AMOUNT>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Amount)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Amount"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_AMOUNT>
+                        <PI_DEAL_DATE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:DealDate)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:DealDate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_DEAL_DATE>
+                        <PI_ACCT_DATE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:PostingDate)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:PostingDate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_ACCT_DATE>
+                        <PI_REVERSE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Reverse)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Reverse"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_REVERSE>
+                        <PI_PERIOD>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Period)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Period"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_PERIOD>
+                        <PI_INTEREST_RATE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:InterestRate)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:InterestRate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_INTEREST_RATE>
+                        <PI_EXEC_INT_RATE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:ExecInterestRate)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:ExecInterestRate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_EXEC_INT_RATE>
+                        <PI_PAR_VALUE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:ParValue)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:ParValue"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_PAR_VALUE>
+                        <PI_ISSUE_DATE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Issuedate)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Issuedate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_ISSUE_DATE>
+                        <PI_DUE_DATE>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:DueDate)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:DueDate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_DUE_DATE>
+                        <PI_LAST_CREATED_BY>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Creator)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Creator"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_LAST_CREATED_BY>
+                        <PI_LAST_APPROVED_BY>
+                            <xsl:choose>
+                                <xsl:when test="exists($SecuritiesRec/pfx3:LineInfo/pfx3:Approver)">
+                                    <xsl:value-of select="$SecuritiesRec/pfx3:LineInfo/pfx3:Approver"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_LAST_APPROVED_BY>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="error">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>417</pd:x>
+            <pd:y>189</pd:y>
+            <config>
+                <variableName>ErrWhenInsVariable</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ErrMsg>
+                        <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                    </ErrMsg>
+                    <Status>
+                        <xsl:value-of select="&quot;-1&quot;"/>
+                    </Status>
+                    <InterfaceId>
+                        <xsl:value-of select="$Map-Data/pfx3:SecuritiesPosting/pfx3:InterfaceId"/>
+                    </InterfaceId>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Confirm Insert Success">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>596</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <schema/>
+            <catalog>PKG_ESB_CSDERP</catalog>
+            <ProcedureName>PROC_TRANSSTATUS</ProcedureName>
+            <oraObjects/>
+            <oraTables/>
+            <parameterTypes>
+                <parameter>
+                    <colName>PI_REF_NO_INTERFACE_AOM_CSD</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>PI_STATUS</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <PI_REF_NO_INTERFACE_AOM_CSD>
+                        <xsl:value-of select="$Map-Data/pfx3:SecuritiesPosting/pfx3:InterfaceId"/>
+                    </PI_REF_NO_INTERFACE_AOM_CSD>
+                    <PI_STATUS>
+                        <xsl:value-of select="if ($ErrWhenInsVariable/root/Status = &quot;-1&quot;) then &quot;-1&quot;&#xA;else &quot;0&quot;"/>
+                    </PI_STATUS>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>754</pd:x>
+        <pd:y>230</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$ErrWhenInsVariable/root/ErrMsg">
+                    <ErrMsg>
+                        <xsl:value-of select="$ErrWhenInsVariable/root/ErrMsg"/>
+                    </ErrMsg>
+                </xsl:if>
+                <Status>
+                    <xsl:value-of select="&quot;-1&quot;"/>
+                </Status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Response">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>750</pd:x>
+        <pd:y>85</pd:y>
+        <config>
+            <variableName>ResponseVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$ErrWhenInsVariable/root/ErrMsg">
+                    <ErrMsg>
+                        <xsl:value-of select="$ErrWhenInsVariable/root/ErrMsg"/>
+                    </ErrMsg>
+                </xsl:if>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>880</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>queue.securitiesposting</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns5:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$Map-Data/pfx3:SecuritiesPosting/pfx3:InterfaceId"/>
+                </Body>
+            </ns5:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Confirm Insert Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Insert Success</pd:from>
+        <pd:to>Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Response</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Insert Success</pd:from>
+        <pd:to>Assign-error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

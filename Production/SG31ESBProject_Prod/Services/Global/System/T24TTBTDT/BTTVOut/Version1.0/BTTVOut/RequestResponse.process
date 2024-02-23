@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadOut/FTSBVCITAD.xsd"/>
+    <pd:name>Services/Global/System/T24TTBTDT/BTTVOut/Version1.0/BTTVOut/RequestResponse.process</pd:name>
+    <pd:description>Main Project</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:startType>
+    <pd:startX>103</pd:startX>
+    <pd:startY>131</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:endType>
+    <pd:endX>494</pd:endX>
+    <pd:endY>131</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/services/BTTVOut/requestresponse/1.0</pd:targetNamespace>
+    <pd:activity name="Insert Citad DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>304</pd:x>
+        <pd:y>129</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CitadOut/JDBC_Time_Out%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/Citad DB.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into TBLTRANSACTIONMSG_GTW (O_CI_CODE,TRX_DATE,RELATION_NO,TYPE_FLAG,CHECK_CODE,TRX_TYPE,SD_TIME,R_CI_CODE,O_INDIRECT_CODE,R_INDIRECT_CODE,FEE_CI_CODE,CURRENCY,AMOUNT,SD_NAME,SD_ACCNT,RV_NAME,RV_ACCNT,CONTENT,OPERT1,OPERT2,REFERENCE) 
+values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>O_CI_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TRX_DATE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>RELATION_NO</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TYPE_FLAG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CHECK_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TRX_TYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SD_TIME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>R_CI_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>O_INDIRECT_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>R_INDIRECT_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FEE_CI_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CURRENCY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>AMOUNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SD_NAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SD_ACCNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>RV_NAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>RV_ACCNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CONTENT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>OPERT1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>OPERT2</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>REFERENCE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns1:FTSBVCITAD"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <O_CI_CODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:lOCiCode)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:lOCiCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </O_CI_CODE>
+                <TRX_DATE>
+                    <xsl:choose>
+                        <xsl:when test="exists(tib:format-date( &quot;yyyyMMdd&quot; , $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitValueDate))">
+                            <xsl:value-of select="tib:format-date( &quot;yyyyMMdd&quot; , $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitValueDate)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </TRX_DATE>
+                <RELATION_NO>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:id)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </RELATION_NO>
+                <TYPE_FLAG>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TYPE_FLAG>
+                <CHECK_CODE>
+                    <xsl:value-of select="&quot;00&quot;"/>
+                </CHECK_CODE>
+                <TRX_TYPE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:citadType)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:citadType"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </TRX_TYPE>
+                <SD_TIME>
+                    <xsl:value-of select="tib:format-dateTime( 'yyyyMMddHHmmss' , current-dateTime())"/>
+                </SD_TIME>
+                <R_CI_CODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:bcBankSortCode)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:bcBankSortCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </R_CI_CODE>
+                <O_INDIRECT_CODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:oIndirectCode)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:oIndirectCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </O_INDIRECT_CODE>
+                <R_INDIRECT_CODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:bcBankSortCode)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:bcBankSortCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </R_INDIRECT_CODE>
+                <FEE_CI_CODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:benOurCharges)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:benOurCharges"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </FEE_CI_CODE>
+                <CURRENCY>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitCurrency)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitCurrency"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CURRENCY>
+                <AMOUNT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitAmount)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitAmount"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </AMOUNT>
+                <SD_NAME>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:orderingCustList/ns1:orderingCust[1]"/>
+                </SD_NAME>
+                <SD_ACCNT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitAcctNo)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:debitAcctNo"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </SD_ACCNT>
+                <RV_NAME>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:benCustomerList/ns1:benCustomer[1])">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:benCustomerList/ns1:benCustomer[1]"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </RV_NAME>
+                <RV_ACCNT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:benAcctNo)">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:benAcctNo"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </RV_ACCNT>
+                <CONTENT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:paymentDetailsList/ns1:paymentDetails[1])">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD[1]/ns1:paymentDetailsList/ns1:paymentDetails[1]"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CONTENT>
+                <OPERT1>
+                    <xsl:choose>
+                        <xsl:when test="exists(if (($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD/ns1:citadType=&quot;101001&quot;) or ($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD/ns1:citadType=&quot;201001&quot;)  )&#xA;then '30'&#xA;else '31')">
+                            <xsl:value-of select="if (($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD/ns1:citadType=&quot;101001&quot;) or ($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns1:FTSBVCITAD/ns1:citadType=&quot;201001&quot;)  )&#xA;then '30'&#xA;else '31'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </OPERT1>
+                <OPERT2>
+                    <xsl:choose>
+                        <xsl:when test="exists('101')">
+                            <xsl:value-of select="'101'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </OPERT2>
+                <REFERENCE>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </REFERENCE>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Insert Citad DB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert Citad DB</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

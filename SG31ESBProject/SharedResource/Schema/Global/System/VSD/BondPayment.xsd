@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/Schema/Global/System/VSD/BondPayment.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/Schema/Global/System/VSD/BondPayment.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="BondListPaymentDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SrcTransID"/>
+				<xs:element ref="TransDate"/>
+				<xs:element ref="ValueDate"/>
+				<xs:element ref="BondCode"/>
+				<xs:element ref="SendingBank"/>
+				<xs:element ref="RecevingBank"/>
+				<xs:element ref="Amount"/>
+				<xs:element ref="Currency"/>
+				<xs:element ref="Notes"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="BondListPaymentType">
+		<xs:sequence>
+			<xs:element ref="BondListPaymentDetail"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BondListPaymentReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="BondListPayment"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="BondListPayment">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SendingNumber"/>
+				<xs:element ref="FinishFlag"/>
+				<xs:element ref="BondListPaymentDetail" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BondListPaymentReq" type="BondListPaymentReqType"/>
+	<xs:complexType name="BondListPaymentResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="BondListPaymentRes" type="BondListPaymentResType"/>
+	<xs:element name="BondPaymentModifyDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SrcTransID"/>
+				<xs:element ref="TransDate"/>
+				<xs:element ref="BondCode"/>
+				<xs:element ref="SendingBank"/>
+				<xs:element ref="RecevingBank"/>
+				<xs:element ref="Amount"/>
+				<xs:element ref="Currency"/>
+				<xs:element ref="ValueDate"/>
+				<xs:element ref="ModifyType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrcTransID" type="xs:string"/>
+	<xs:element name="TransDate" type="xs:string"/>
+	<xs:element name="ValueDate" type="xs:string"/>
+	<xs:element name="BondCode" type="xs:string"/>
+	<xs:element name="SendingBank" type="xs:string"/>
+	<xs:element name="RecevingBank" type="xs:string"/>
+	<xs:element name="Amount" type="xs:string"/>
+	<xs:element name="Currency" type="xs:string"/>
+	<xs:element name="ModifyType" type="xs:int"/>
+	<xs:complexType name="BondPaymentModifyType">
+		<xs:sequence>
+			<xs:element ref="BondPaymentModifyDetail"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BondPaymentModifyReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="BondPaymentModify"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BondPaymentModifyResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="BondPaymentModifyReq" type="BondPaymentModifyReqType"/>
+	<xs:element name="BondPaymentModifyRes" type="BondPaymentModifyResType"/>
+	<xs:element name="BondPaymentModify">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="BondPaymentModifyDetail" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BondPaymentReconcileDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SrcTransID"/>
+				<xs:element ref="TransDate"/>
+				<xs:element ref="ValueDate"/>
+				<xs:element ref="BondCode"/>
+				<xs:element ref="SendingBank"/>
+				<xs:element ref="RecevingBank"/>
+				<xs:element ref="Amount"/>
+				<xs:element ref="Currency"/>
+				<xs:element ref="TransCompleted"/>
+				<xs:element ref="Status"/>
+				<xs:element ref="Notes"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BondPaymentReconcile">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="BondPaymentReconcileDetail" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="BondPaymentReconcileReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="BondPaymentReconcile"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BondPaymentReconcileResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="BondPaymentReconcileReq" type="BondPaymentReconcileReqType"/>
+	<xs:element name="BondPaymentReconcileRes" type="BondPaymentReconcileResType"/>
+	<xs:element name="Notes" type="xs:string"/>
+	<xs:element name="Status" type="xs:boolean"/>
+	<xs:element name="TransCompleted" type="xs:boolean"/>
+	<xs:element name="FinishFlag" type="xs:boolean"/>
+	<xs:element name="SendingNumber" type="xs:int"/>
+	<xs:element name="errCode" type="xs:string"/>
+	<xs:element name="errDesc" type="xs:string"/>
+</xs:schema>

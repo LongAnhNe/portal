@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/Schema.xsd">
+    <pd:name>Services/Global/Remittance/SecuritiesPosting/Version1.0/createPosting/Test.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>134</pd:startX>
+    <pd:startY>75</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1438236782186</pd:targetNamespace>
+    <pd:activity name="Notify">
+        <pd:type>com.tibco.plugin.waitnotify.NotifyActivity</pd:type>
+        <pd:resourceType>ae.activities.notifyActivity</pd:resourceType>
+        <pd:x>280</pd:x>
+        <pd:y>183</pd:y>
+        <config>
+            <sharedConfig>/SharedResource/Configuration/BackEndNotification.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <ns:NotifyAlert>
+                    <ns:MsgId>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns:MsgId>
+                    <ns:ServiceName>
+                        <xsl:value-of select="&quot;Services&quot;"/>
+                    </ns:ServiceName>
+                    <ns:OperationName>
+                        <xsl:value-of select="&quot;Operation&quot;"/>
+                    </ns:OperationName>
+                    <ns:ErrorDescription>
+                        <xsl:value-of select="&quot;Description&quot;"/>
+                    </ns:ErrorDescription>
+                    <ns:CreatedTimeError>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns:CreatedTimeError>
+                    <ns:ErrorSystem>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </ns:ErrorSystem>
+                    <ns:FromSystem>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </ns:FromSystem>
+                    <ns:Severity>
+                        <xsl:value-of select="&quot;Info&quot;"/>
+                    </ns:Severity>
+                    <ns:SubjectContent>
+                        <xsl:value-of select="&quot;Test&quot;"/>
+                    </ns:SubjectContent>
+                </ns:NotifyAlert>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Notify</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notify</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

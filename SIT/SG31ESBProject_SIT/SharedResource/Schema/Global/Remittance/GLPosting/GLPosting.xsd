@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2015 rel. 4 sp1 (http://www.altova.com) by Tuan Anh Nguyen (FIS) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:t24="http://www.temenos.com/T24/event/T242ERP/T24Entries"
+	 xmlns:cob="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries"	 
+	 targetNamespace="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries" schemaLocation="../../System/T24/QueueSchema/T24-Entries.xsd"/>
+	<xs:import namespace="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries" schemaLocation="../../System/T24/QueueSchema/T24-T24COBEntries.xsd"/>
+	<xs:element name="GLPostingReq" type="GLPostingReqType"/>
+	<xs:element name="GLPostingRes" type="GLPostingResType"/>
+	<xs:complexType name="GLPostingReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="t24:T24Entries"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GLPostingResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element name="TransactionStatus" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="COBGLPostingReq" type="COBGLPostingReqType"/>
+	<xs:element name="COBGLPostingRes" type="COBGLPostingResType"/>
+	<xs:complexType name="COBGLPostingReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="cob:T24COBEntries"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="COBGLPostingResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element name="TransactionStatus" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

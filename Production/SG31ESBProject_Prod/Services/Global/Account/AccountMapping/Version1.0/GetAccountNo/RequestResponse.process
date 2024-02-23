@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fis.vn/iMaximusGateway/ErpPostToCsdService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:ns2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns3="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:pfx5="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://tempuri.org/" xmlns:pfx3="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx2="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx8="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp" xmlns:pfx7="http://xmlns.example.com/1433466938916" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="sbv/common/envelope/serviceenvelope/1.0">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/ERPAccountInfo/ERPAccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountMapping/AccountMapping.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" location="/Services/Global/Account/ERPAccountInfo/OperationImpl/ERPAccountInfo.serviceagent"/>
+    <wsdl:import namespace="http://tempuri.org/" location="/SharedResource/Schema/Global/System/CSD/ErpPostToCsd/ErpPostToCsd.wsdl"/>
+    <pd:name>Services/Global/Account/AccountMapping/Version1.0/GetAccountNo/RequestResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns3:AccountMappingReq"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>95</pd:startX>
+    <pd:startY>123</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <ns3:AccountMappingRes>
+                <xsl:for-each select="$Call-Process/root/AccountNoResult">
+                    <ns3:AccountNoResult>
+                        <xsl:value-of select="."/>
+                    </ns3:AccountNoResult>
+                </xsl:for-each>
+            </ns3:AccountMappingRes>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns3:AccountMappingRes"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>379</pd:endX>
+    <pd:endY>118</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437462684809</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>228</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <processName>/Services/Common/CommonProcess/Account/SearchDataFromCache.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Start/root/ns3:AccountMappingReq/ns3:AccountNo">
+                    <AccountNo>
+                        <xsl:value-of select="."/>
+                    </AccountNo>
+                </xsl:for-each>
+                <id>
+                    <xsl:value-of select="$Start/root/ns3:AccountMappingReq/@id"/>
+                </id>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

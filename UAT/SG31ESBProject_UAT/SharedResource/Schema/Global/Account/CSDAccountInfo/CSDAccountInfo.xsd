@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:complexType name="GetBalanceAOMRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="enquiryInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="enquiryInputType">
+		<xs:sequence>
+			<xs:element name="Company" type="xs:string"/>
+			<xs:element name="BankCode" type="xs:string"/>
+			<xs:element name="Currency" type="xs:string"/>
+			<xs:element name="Category" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GetBalAOMResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="GetBalAOMResDetail" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GetBalAOMResDetailType">
+		<xs:sequence>
+			<xs:element name="CitadCode" type="xs:string"/>
+			<xs:element name="AccountID" type="xs:string"/>
+			<xs:element name="PenaltyAccount" type="xs:string"/>
+			<xs:element name="BalanceType" type="xs:string"/>
+			<xs:element name="Balance" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GetBalAOMResDetail" type="GetBalAOMResDetailType"/>
+	<xs:element name="GetBalanceAOMRes" type="GetBalAOMResponseType"/>
+	<xs:element name="GetBalanceAOMReq" type="GetBalanceAOMRequestType"/>
+	<xs:element name="enquiryInput" type="enquiryInputType"/>
+</xs:schema>

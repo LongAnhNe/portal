@@ -1,0 +1,1234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx15="sbv/global/cashmanagement/cashwithdraw/version1.0" xmlns:pfx14="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagement/CashWithdraw.xsd" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx13="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagemen/CashDeposit.xsd" xmlns:pfx12="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx10="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx19="http://schemas.datacontract.org/2004/07/SBV.Portal.Service.Models" xmlns:pfx18="http://tempuri.org/" xmlns:pfx17="http://www.temenos.com/T24/event/CashWithdrawalLocal/CashWithdralLocalFlow" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:ns16="http://schemas.tibco.com/bw/plugins/ae/5.0/aeExceptions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="http://www.tibco.com/pe/CheckpointSchema" xmlns:ns15="http://schemas.datacontract.org/2004/07/SBV.Portal.Models.EsbModels.OrderCashTransaction" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns12="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/702/basic/functionModules" xmlns:ns6="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" xmlns:ns10="sbv/common/exceptionhandling/exception/1.0" xmlns:ns11="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx20="http://temenos.com/SBV.INTE.T24.CMO.PORTAL.WS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/CSDAccountInfo/CSDAccountInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagemen/CashDeposit.xsd" schemaLocation="/SharedResource/Schema/Global/CashManagement/CashDeposit.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagement/CashWithdraw.xsd" schemaLocation="/SharedResource/Schema/Global/CashManagement/CashWithdraw.xsd"/>
+    <xsd:import namespace="sbv/global/cashmanagement/cashwithdraw/version1.0" schemaLocation="/SharedResource/Schema/Global/CashManagement/CashWithdraw/CashWithdraw.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CashWithdrawalLocal/CashWithdralLocalFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CashWithdrawal/CashWithdralLocalFlow.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="http://tempuri.org/" schemaLocation="/SharedResource/Schema/Global/System/Portal/CashManagement/OrderCashTransactionService.svc_xsd0.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" location="/SharedResource/Schema/Global/Account/CSDAccountInfo/CSDAccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.GOLD.AUCTION.MANAGEMENT.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/CashManagement/CashWithdrawal/EB.SBV.INTE.T24.PORTAL.WS.wsdl"/>
+    <wsdl:import namespace="http://tempuri.org/" location="/SharedResource/Schema/Global/System/Portal/CashManagement/OrderCashTransactionService_1.wsdl"/>
+    <pd:name>Services/Global/CashManagement/Version1.0/CashWithdrawT24ToCMO/RequestResponse_me.process</pd:name>
+    <pd:description/>
+    <pd:startName>JMSFromT24</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <ns3:CharSet>
+                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                    </ns3:CharSet>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="&quot;1001&quot;"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="&quot;T24&quot;"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="&quot;1002&quot;"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="&quot;CMO&quot;"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                    </ns3:MsgId>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="&quot;001&quot;"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="&quot;CashWithdrawOut&quot;"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns3:CreatedDate>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/Root/Status"/>
+                    </ns3:Status>
+                    <xsl:if test="$ResponseResult/Root/Msg">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/Root/Msg"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                </ns3:ResponseStatus>
+                <ServiceBody/>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:starter name="JMSFromT24">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>jms/requestQueue</destination>
+                <receiverTimeout/>
+                <selector>application='TELLER'</selector>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/T24JMSQueue_Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1400</pd:endX>
+    <pd:endY>240</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseResult>
+            <xsd:element name="Root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/CSDAccountInfo/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>552</pd:x>
+        <pd:y>538</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ParseXMLcashWitthLocal">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>308</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx17:CashWithdralLocalFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMSFromT24/ns11:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>749</pd:x>
+        <pd:y>538</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;01&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ServiceVariables">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <variableName>ServiceVariables</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </startTime>
+                <ServiceName>
+                    <xsl:value-of select="substring-before(substring-after(BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId), 'Services/'),'/Version1.0' )"/>
+                </ServiceName>
+                <OperationName>
+                    <xsl:value-of select="substring-before(substring-after(BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId), 'Version1.0/'),'/RequestResponse.process' )"/>
+                </OperationName>
+                <SOAMsgId>
+                    <xsl:value-of select="concat(generate-id($_processContext/ns:ProcessContext), tib:timestamp())"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1244</pd:x>
+        <pd:y>262</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat($ServiceVariables/root/ServiceName,': End ',$ServiceVariables/root/OperationName)"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <pfx:SOAEnvelope>
+                    <pfx:SOAServiceHeader>
+                        <pfx:AppHdr>
+                            <ns3:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns3:CharSet>
+                            <ns3:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns3:ServVersion>
+                            <ns3:From>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1004&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns3:Name>
+                            </ns3:From>
+                            <ns3:To>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1005&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CMO&quot;"/>
+                                </ns3:Name>
+                            </ns3:To>
+                            <ns3:MsgId>
+                                <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                            </ns3:MsgId>
+                            <ns3:MsgSrcId>
+                                <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                            </ns3:MsgSrcId>
+                            <ns3:BizServ>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;T24ToCMOOut&quot;"/>
+                                </ns3:Name>
+                            </ns3:BizServ>
+                            <ns3:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns3:CreatedDate>
+                        </pfx:AppHdr>
+                        <pfx:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </pfx:SOAMsgId>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </pfx:OperationName>
+                        <pfx:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </pfx:ProcessName>
+                    </pfx:SOAServiceHeader>
+                    <pfx:ServiceBody>
+                        <pfx:SOAEnvelope>
+                            <pfx:SOAServiceHeader>
+                                <pfx:AppHdr>
+                                    <ns3:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </ns3:CharSet>
+                                    <ns3:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns3:ServVersion>
+                                    <ns3:From>
+                                        <ns3:Id>
+                                            <xsl:value-of select="&quot;1&quot;"/>
+                                        </ns3:Id>
+                                        <ns3:Name>
+                                            <xsl:value-of select="&quot;ESB&quot;"/>
+                                        </ns3:Name>
+                                    </ns3:From>
+                                    <ns3:To>
+                                        <ns3:Id>
+                                            <xsl:value-of select="&quot;2&quot;"/>
+                                        </ns3:Id>
+                                        <ns3:Name>
+                                            <xsl:value-of select="&quot;CMO&quot;"/>
+                                        </ns3:Name>
+                                    </ns3:To>
+                                    <ns3:MsgId>
+                                        <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                                    </ns3:MsgId>
+                                    <xsl:if test="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id">
+                                        <ns3:MsgSrcId>
+                                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                                        </ns3:MsgSrcId>
+                                    </xsl:if>
+                                    <ns3:BizServ>
+                                        <ns3:Id>
+                                            <xsl:value-of select="&quot;1&quot;"/>
+                                        </ns3:Id>
+                                        <ns3:Name>
+                                            <xsl:value-of select="&quot;CashWithdrawOut&quot;"/>
+                                        </ns3:Name>
+                                    </ns3:BizServ>
+                                    <ns3:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </ns3:CreatedDate>
+                                </pfx:AppHdr>
+                                <pfx:SOAMsgId>
+                                    <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                                </pfx:SOAMsgId>
+                                <pfx:ServiceName>
+                                    <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                                </pfx:ServiceName>
+                                <pfx:OperationName>
+                                    <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                                </pfx:OperationName>
+                                <pfx:ProcessName>
+                                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                                </pfx:ProcessName>
+                            </pfx:SOAServiceHeader>
+                            <pfx:ServiceBody>
+                                <xsl:copy-of select="$ResponseResult/Root"/>
+                                <xsl:copy-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow"/>
+                                <xsl:copy-of select="$Invoke-an-Adapter-Request-Response-Service/aeRequestOutputType/ns12:__caret_reply_caret_ZFM__SG31__N1_caret_ZFM__SG31__N1/T__SG31__T24/item"/>
+                                <xsl:copy-of select="$Portal_Input/root/pfx18:UpdateWithdrawls"/>
+                                <xsl:copy-of select="$CallPortal/outputMessage/pfx18:UpdateWithdrawlsResponse/pfx18:UpdateWithdrawlsResult"/>
+                            </pfx:ServiceBody>
+                        </pfx:SOAEnvelope>
+                    </pfx:ServiceBody>
+                </pfx:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ExceptionLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>917</pd:x>
+        <pd:y>636</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat($ServiceVariables/root/ServiceName,': End ',$ServiceVariables/root/OperationName)"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="concat(generate-id($_processContext/ns:ProcessContext),tib:timestamp())"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <pfx:SOAEnvelope>
+                    <pfx:SOAServiceHeader>
+                        <pfx:AppHdr>
+                            <ns3:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns3:CharSet>
+                            <ns3:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns3:ServVersion>
+                            <ns3:From>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns3:Name>
+                            </ns3:From>
+                            <ns3:To>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;2&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CMO&quot;"/>
+                                </ns3:Name>
+                            </ns3:To>
+                            <ns3:MsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns:ProcessContext),tib:timestamp())"/>
+                            </ns3:MsgId>
+                            <ns3:MsgSrcId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns:ProcessContext),tib:timestamp())"/>
+                            </ns3:MsgSrcId>
+                            <ns3:BizServ>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CashWithdrawT24ToCMOOutError&quot;"/>
+                                </ns3:Name>
+                            </ns3:BizServ>
+                            <ns3:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns3:CreatedDate>
+                        </pfx:AppHdr>
+                        <pfx:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </pfx:SOAMsgId>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </pfx:OperationName>
+                        <pfx:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </pfx:ProcessName>
+                    </pfx:SOAServiceHeader>
+                    <pfx:ServiceBody>
+                        <pfx:SOAEnvelope>
+                            <pfx:SOAServiceHeader>
+                                <pfx:AppHdr>
+                                    <ns3:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </ns3:CharSet>
+                                    <ns3:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns3:ServVersion>
+                                    <ns3:From>
+                                        <ns3:Id>
+                                            <xsl:value-of select="&quot;1&quot;"/>
+                                        </ns3:Id>
+                                        <ns3:Name>
+                                            <xsl:value-of select="&quot;ESB&quot;"/>
+                                        </ns3:Name>
+                                    </ns3:From>
+                                    <ns3:To>
+                                        <ns3:Id>
+                                            <xsl:value-of select="&quot;2&quot;"/>
+                                        </ns3:Id>
+                                        <ns3:Name>
+                                            <xsl:value-of select="&quot;CMO&quot;"/>
+                                        </ns3:Name>
+                                    </ns3:To>
+                                    <ns3:MsgId>
+                                        <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                                    </ns3:MsgId>
+                                    <xsl:if test="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id">
+                                        <ns3:MsgSrcId>
+                                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                                        </ns3:MsgSrcId>
+                                    </xsl:if>
+                                    <ns3:BizServ>
+                                        <ns3:Id>
+                                            <xsl:value-of select="&quot;3&quot;"/>
+                                        </ns3:Id>
+                                        <ns3:Name>
+                                            <xsl:value-of select="&quot;CashWithdrawOut&quot;"/>
+                                        </ns3:Name>
+                                    </ns3:BizServ>
+                                    <ns3:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </ns3:CreatedDate>
+                                </pfx:AppHdr>
+                                <pfx:SOAMsgId>
+                                    <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                                </pfx:SOAMsgId>
+                                <pfx:ServiceName>
+                                    <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                                </pfx:ServiceName>
+                                <pfx:OperationName>
+                                    <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                                </pfx:OperationName>
+                                <pfx:ProcessName>
+                                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                                </pfx:ProcessName>
+                            </pfx:SOAServiceHeader>
+                            <pfx:ServiceBody>
+                                <xsl:copy-of select="$JMSFromT24/ns11:ActivityOutput/Body"/>
+                                <xsl:copy-of select="$_error/ns:ErrorReport"/>
+                            </pfx:ServiceBody>
+                        </pfx:SOAEnvelope>
+                    </pfx:ServiceBody>
+                </pfx:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>573</pd:x>
+        <pd:y>239</pd:y>
+        <config>
+            <ConfirmEvent>JMSFromT24</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseResult">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1074</pd:x>
+        <pd:y>201</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="if($ResponseResult/Root/Status=&quot;&quot;) then &quot;0&quot;&#xA;else &quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="concat($ResponseResult/Root/Msg,&quot;&#xA;&quot;,$_error/ns:ErrorReport/Msg)"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>907</pd:x>
+        <pd:y>537</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns14:input>
+                <xsl:if test="$JMSFromT24/ns11:ActivityOutput/JMSHeaders/ns11:JMSMessageID">
+                    <duplicateKey>
+                        <xsl:value-of select="$JMSFromT24/ns11:ActivityOutput/JMSHeaders/ns11:JMSMessageID"/>
+                    </duplicateKey>
+                </xsl:if>
+            </ns14:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParserError">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>305</pd:x>
+        <pd:y>54</pd:y>
+        <config>
+            <ConfirmEvent>JMSFromT24</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CallPortal">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>936</pd:x>
+        <pd:y>342</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx18:OrderCashTransactionService</service>
+            <servicePort>BasicHttpBinding_IOrderCashTransactionService</servicePort>
+            <operation/>
+            <soapAction>http://tempuri.org/IOrderCashTransactionService/UpdateWithdrawls</soapAction>
+            <endpointURL>%%PortalWS/UrlCashManagement%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx18:UpdateWithdrawls>
+                    <xsl:copy-of select="$Portal_Input/root/pfx18:UpdateWithdrawls/pfx18:model"/>
+                </pfx18:UpdateWithdrawls>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sender_PortalWSError">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>1140</pd:x>
+        <pd:y>342</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>portal_error</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResource/Connection/Jms/SOA_Application_Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns11:ActivityInput>
+                <OtherProperties>
+                    <application>
+                        <xsl:value-of select="&quot;cashwithdraw&quot;"/>
+                    </application>
+                </OtherProperties>
+                <Body>
+                    <xsl:value-of select="$JMSFromT24/ns11:ActivityOutput/Body"/>
+                </Body>
+            </ns11:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint-1">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>1293</pd:x>
+        <pd:y>106</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns14:input>
+                <xsl:if test="$JMSFromT24/ns11:ActivityOutput/JMSHeaders/ns11:JMSMessageID">
+                    <duplicateKey>
+                        <xsl:value-of select="$JMSFromT24/ns11:ActivityOutput/JMSHeaders/ns11:JMSMessageID"/>
+                    </duplicateKey>
+                </xsl:if>
+            </ns14:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PortalErr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1084</pd:x>
+        <pd:y>412</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <xsl:if test="not(($CallPortal/outputMessage/pfx18:UpdateWithdrawlsResponse/pfx18:UpdateWithdrawlsResult/pfx19:ErrorMessage/@xsi:nil=(&quot;true&quot;)) or ($CallPortal/outputMessage/pfx18:UpdateWithdrawlsResponse/pfx18:UpdateWithdrawlsResult/pfx19:ErrorMessage/@xsi:nil=(&quot;1&quot;)))">
+                    <Msg>
+                        <xsl:value-of select="$CallPortal/outputMessage/pfx18:UpdateWithdrawlsResponse/pfx18:UpdateWithdrawlsResult/pfx19:ErrorMessage"/>
+                    </Msg>
+                </xsl:if>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint-2">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>700</pd:x>
+        <pd:y>232</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns14:input>
+                <xsl:if test="$JMSFromT24/ns11:ActivityOutput/JMSHeaders/ns11:JMSMessageID">
+                    <duplicateKey>
+                        <xsl:value-of select="$JMSFromT24/ns11:ActivityOutput/JMSHeaders/ns11:JMSMessageID"/>
+                    </duplicateKey>
+                </xsl:if>
+            </ns14:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Portal_Input">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>802</pd:x>
+        <pd:y>342</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx18:UpdateWithdrawls"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx18:UpdateWithdrawls>
+                    <pfx18:model>
+                        <ns15:AccountNo>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:account2)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:account2"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:AccountNo>
+                        <ns15:Address>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiverAdd)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiverAdd"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:Address>
+                        <ns15:Amount>
+                            <xsl:value-of select="round($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:amountLocal1Group[1]/pfx17:amountLocal1)"/>
+                        </ns15:Amount>
+                        <ns15:CompanyCode>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:coCode)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:coCode"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:CompanyCode>
+                        <ns15:Currency>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:currency1)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:currency1"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:Currency>
+                        <ns15:Description>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:lTtContent)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:lTtContent"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:Description>
+                        <ns15:FullName>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiver)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiver"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:FullName>
+                        <ns15:OrderOn>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns15:OrderOn>
+                        <ns15:Status>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:recordStatus)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:recordStatus"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:Status>
+                        <ns15:T24Code>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id)">
+                                    <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ns15:T24Code>
+                    </pfx18:model>
+                </pfx18:UpdateWithdrawls>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InsertError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>452</pd:x>
+        <pd:y>103</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InsetCMOWithDraw">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>449</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into CMO_WITHDRAW (t24id, amount, account2,currency1,valueDate1,lTtContent,transactionCode,coCode,ttReceiver,ttReceiverAdd,lBcSortCode,recordStatus) 
+values(?,?,?,?,?,?,?,?,?,?,?,?)	</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>t24id</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>amount</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>account2</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>currency1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>valueDate1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>lTtContent</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>transactionCode</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>coCode</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ttReceiver</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ttReceiverAdd</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>lBcSortCode</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>recordStatus</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <t24id>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </t24id>
+                <amount>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:amountLocal1Group[&lt;&lt; Filter >>]/pfx17:amountLocal1)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:amountLocal1Group[&lt;&lt; Filter >>]/pfx17:amountLocal1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </amount>
+                <account2>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:account2)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:account2"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </account2>
+                <currency1>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:currency1)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:currency1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </currency1>
+                <valueDate1>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:valueDate1)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:valueDate1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </valueDate1>
+                <lTtContent>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:lTtContent)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:lTtContent"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </lTtContent>
+                <transactionCode>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:transactionCode)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:transactionCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </transactionCode>
+                <coCode>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:coCode)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:coCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </coCode>
+                <ttReceiver>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiver)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiver"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ttReceiver>
+                <ttReceiverAdd>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiverAdd)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:ttReceiverAdd"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ttReceiverAdd>
+                <lBcSortCode>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:lBcSortCode)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:lBcSortCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </lBcSortCode>
+                <recordStatus>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:recordStatus)">
+                            <xsl:value-of select="$ParseXMLcashWitthLocal/pfx17:CashWithdralLocalFlow/pfx17:recordStatus"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </recordStatus>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseResult-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>837</pd:x>
+        <pd:y>169</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;Duplicatedt&quot;"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ServiceVariables</pd:from>
+        <pd:to>ParseXMLcashWitthLocal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>Checkpoint</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>Checkpoint-2</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseResult</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>ExceptionLog</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParserError</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMSFromT24</pd:from>
+        <pd:to>ServiceVariables</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortal</pd:from>
+        <pd:to>ResponseResult</pd:to>
+        <pd:xpathDescription>success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallPortal/outputMessage/pfx18:UpdateWithdrawlsResponse/pfx18:UpdateWithdrawlsResult/pfx19:Successful="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortal</pd:from>
+        <pd:to>Sender_PortalWSError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sender_PortalWSError</pd:from>
+        <pd:to>ResponseResult</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortal</pd:from>
+        <pd:to>PortalErr</pd:to>
+        <pd:xpathDescription>UpdateFail</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallPortal/outputMessage/pfx18:UpdateWithdrawlsResponse/pfx18:UpdateWithdrawlsResult/pfx19:Successful!="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PortalErr</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint-2</pd:from>
+        <pd:to>Portal_Input</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Portal_Input</pd:from>
+        <pd:to>CallPortal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsertError</pd:from>
+        <pd:to>Checkpoint-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseXMLcashWitthLocal</pd:from>
+        <pd:to>InsetCMOWithDraw</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsetCMOWithDraw</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsetCMOWithDraw</pd:from>
+        <pd:to>InsertError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:description>Error là exist</pd:description>
+        <pd:from>Checkpoint-2</pd:from>
+        <pd:to>ResponseResult-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseResult-1</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint-1</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseXMLcashWitthLocal</pd:from>
+        <pd:to>ParserError</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:cmd-header="sbv/common/envelope/commonheader/1.0"
+	 targetNamespace="sbv/common/envelope/serviceenvelope/1.0"
+	 version="1.0"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="CommonHeader.xsd"/>
+
+	<!-- Global Attributes.  The following attributes are intended to be usable via qualified attribute names on any complex type referencing them.  -->
+	<attribute name="mustUnderstand">
+		<simpleType>
+			<restriction base="xs:boolean">
+				<pattern value="0|1"/>
+			</restriction>
+		</simpleType>
+	</attribute>
+	<attribute name="actor" type="xs:anyURI"/>
+	<complexType name="BaseServiceEnvelopeRequestType">
+		<sequence>
+			<element ref="cmd-header:AppHdr"/>
+		</sequence>
+	</complexType>
+	<complexType name="BaseServiceEnvelopeResponseType">
+		<sequence>
+			<element ref="cmd-header:AppHdr"/>
+			<element ref="cmd-header:ResponseStatus"/>
+		</sequence>
+	</complexType>
+	<element name="BaseServiceEnvelopeRequest" type="cmd-envelope:BaseServiceEnvelopeRequestType"/>
+	<element name="BaseServiceEnvelopeResponse" type="cmd-envelope:BaseServiceEnvelopeResponseType"/>
+	<complexType name="ServiceEnverlopType">
+		<sequence>
+			<element ref="cmd-header:AppHdr"/>
+			<element ref="cmd-header:ResponseStatus" minOccurs="0"/>
+			<element name="ServiceBody" type="cmd-envelope:ServiceBodyType"/>
+			<element name="Other" type="xs:string" minOccurs="0"/>
+		</sequence>
+		<anyAttribute namespace="##any" processContents="lax"/>
+	</complexType>
+	<complexType name="ServiceBodyType">
+		<sequence>
+			<any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<anyAttribute namespace="##any" processContents="lax"/>
+	</complexType>
+	<element name="ServiceEnverlop" type="cmd-envelope:ServiceEnverlopType"/>
+</schema>

@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:complexType name="Record">
+        <xs:sequence>
+            <xs:element name="TRANSACTION_TYPE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="ID" form="unqualified" type="xs:string"/>
+            <xs:element name="SOGIAODICH" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="DEBIT_ACCOUNT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CREDIT_ACCOUNT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="AMOUNT" form="unqualified" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="CURRENCY" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="VALUE_DATE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="DR_OR_CR" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SENDING_BANK_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="BANK_SORT_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="ORDERING_CUSTOMER" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="ORDERING_CUSTOMER1" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="IN_SEND_BANK" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="IN_BENEFICIARY" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="IN_BENEFICIARY_ACCOUNT_NO" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="IN_RECEIVING_BANK" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="PAYMNET_DETAILS" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="STATUS" form="unqualified" type="xs:integer" minOccurs="0"/>
+            <xs:element name="ERR_MSG" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="L_R_INDIRECT_NAME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="L_ORD_CUST_ADD" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="L_ORD_CUST_ACCT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="L_BEN_CUST_ADD" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="MA_DONVI_T24" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="MA_DONVI" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="TENDONVI" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="MNEMONIC" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="STT_NGAY" form="unqualified" type="xs:decimal" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jdbcQueryActivityInput">
+        <xs:sequence>
+            <xs:element name="status" form="unqualified" nillable="true" type="xs:string"/>
+            <xs:element name="RowCount" form="unqualified" nillable="true" type="xs:int"/>
+            <xs:element name="ServerTimeZone" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="timeout" form="unqualified" type="xs:int" minOccurs="0"/>
+            <xs:element name="maxRows" form="unqualified" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jdbcQueryActivityOutput">
+        <xs:sequence>
+            <xs:element name="Record" form="unqualified" type="Record" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="jdbcQueryActivityInput" type="jdbcQueryActivityInput"/>
+    <xs:element name="resultSet" type="jdbcQueryActivityOutput"/>
+</xs:schema>

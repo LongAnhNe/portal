@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="sbv/common/exceptionhandling/exception/1.0" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns22="sbv/common/envelope/commonheader/1.0" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns13="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns0="www.tibco.com/plugin/Sleep" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="sbv/sharedresource/CitadIn/CitadUpdateSchema.xsd" xmlns:pfx4="http://www.tibco.com/pe/CheckpointSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:pfx2="http://www.temenos.com/T24/event/CitadOutRemittance/CitadOutRemittanceFlow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTUpdateModel.xsd">
+    <xsd:import namespace="http://www.temenos.com/T24/event/CitadOutRemittance/CitadOutRemittanceFlow" schemaLocation="/SharedResource/Schema/Global/T24Citad/CitadOut/T24TransMsg.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadOut/FTSBVCITAD.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/CitadUpdateSchema.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/CitadUpdateSchema.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTUpdateModel.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24TTBTDT/BTCTUpdateModel.xsd"/>
+    <pd:name>Services/Global/System/T24TTBTDT/BTCTPosting/Backup/OperationImpl/UpdateTTBTDB.process</pd:name>
+    <pd:startName>ESB Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ESB Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>69</pd:x>
+        <pd:y>51</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>BTCTUpdateQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1290</pd:endX>
+    <pd:endY>261</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <DBResponse>
+            <xsd:element name="DBResponse" type="xsd:string"/>
+        </DBResponse>
+        <ReceiveTimestamps>
+            <xsd:element name="ReceiveTimestamps" type="xsd:long"/>
+        </ReceiveTimestamps>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1435739549601</pd:targetNamespace>
+    <pd:activity name="Confirm 1">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:description>Confirm to delete Message in CBS Queue</pd:description>
+        <pd:x>901</pd:x>
+        <pd:y>262</pd:y>
+        <config>
+            <ConfirmEvent>ESB Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>314</pd:x>
+        <pd:y>704</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Error Handling">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>635</pd:x>
+        <pd:y>582</pd:y>
+        <pd:width>300</pd:width>
+        <pd:height>229</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ESB Error Queue</pd:to>
+            <pd:xpathDescription>Other Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Connection Notify Queue</pd:to>
+            <pd:xpathDescription>Lost Connection</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns1:ErrorReport/MsgCode = "BW-JDBC-100014" or contains($_error/ns1:ErrorReport/MsgCode, "SQLState = 6100" )</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm 2</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Connection Notify Queue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ESB Error Queue</pd:from>
+            <pd:to>Confirm 2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ESB Error Queue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>720</pd:x>
+            <pd:y>640</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>ESBErrorQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                    </JMSCorrelationID>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/BTCTPosting/UpdateQueueMessSelector"/>
+                        </application>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Connection Notify Queue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>775</pd:x>
+            <pd:y>754</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>ConnectionNotifyQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                    </JMSCorrelationID>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CitadIn/UpdateQueueMessSelector"/>
+                        </application>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm 2">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+            <pd:x>831</pd:x>
+            <pd:y>640</pd:y>
+            <config>
+                <ConfirmEvent>ESB Queue Receiver</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="ErrorCode">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>552</pd:x>
+        <pd:y>702</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="UpdateSuccess">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>539</pd:x>
+        <pd:y>180</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CitadIn/CitadDBTimeOut_ms%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/Citad DB.sharedjdbc</jdbcSharedConfig>
+            <statement>update CHU_TRI 
+set SENT_TO_T24 = ?
+, ERR_MSG = ?
+where 1 = 1
+and THANHVIEN_REF = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>SENT_TO_T24</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERR_MSG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>THANHVIEN_REF</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <SENT_TO_T24>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/BTCTPosting/RecordDB_T24Success"/>
+                </SENT_TO_T24>
+                <ERR_MSG>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:messages"/>
+                </ERR_MSG>
+                <THANHVIEN_REF>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                </THANHVIEN_REF>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateError">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>537</pd:x>
+        <pd:y>263</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CitadIn/CitadDBTimeOut_ms%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/Citad DB.sharedjdbc</jdbcSharedConfig>
+            <statement>update CHU_TRI 
+set SENT_TO_T24 = ?
+, ERR_MSG = ?
+where 1 = 1
+and THANHVIEN_REF = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>SENT_TO_T24</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERR_MSG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>THANHVIEN_REF</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <SENT_TO_T24>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/BTCTPosting/RecordDB_T24Failed"/>
+                </SENT_TO_T24>
+                <ERR_MSG>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:messages"/>
+                </ERR_MSG>
+                <THANHVIEN_REF>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                </THANHVIEN_REF>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateResult">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>701</pd:x>
+        <pd:y>261</pd:y>
+        <config>
+            <variableName>DBResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <DBResponse>
+                <xsl:value-of select="if (($UpdateError/jdbcUpdateActivityOutput/noOfUpdates &lt; 1)&#xA;and ( $UpdateExistStatus/jdbcUpdateActivityOutput/noOfUpdates &lt; 1) &#xA;and ( $UpdateSuccess/jdbcUpdateActivityOutput/noOfUpdates &lt;1 )&#xA;and ( $UpdateErrorOnly/jdbcUpdateActivityOutput/noOfUpdates &lt;1 )   )&#xA;then 1&#xA;else 0"/>
+            </DBResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sleep-1">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>905</pd:x>
+        <pd:y>392</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns0:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CitadOut/Sleep_time"/>
+                </IntervalInMillisec>
+            </ns0:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1011</pd:x>
+        <pd:y>261</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat( 'T24TTBTDT' ,': End ', 'T24TTBTDT' )"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns22:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns22:CharSet>
+                            <ns22:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns22:ServVersion>
+                            <ns22:From>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;99&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns22:Name>
+                            </ns22:From>
+                            <ns22:To>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;08&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;TTBT&quot;"/>
+                                </ns22:Name>
+                            </ns22:To>
+                            <ns22:MsgId>
+                                <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                            </ns22:MsgId>
+                            <xsl:if test="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                                <ns22:MsgSrcId>
+                                    <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                </ns22:MsgSrcId>
+                            </xsl:if>
+                            <ns22:BizServ>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;5&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                </ns22:Name>
+                            </ns22:BizServ>
+                            <ns22:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns22:CreatedDate>
+                        </ns13:AppHdr>
+                        <ns13:SOAMsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                        </ns13:SOAMsgId>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24TTBTDT/BTCTPosting&quot;"/>
+                        </ns13:ServiceName>
+                        <ns13:OperationName>
+                            <xsl:value-of select="&quot;UpdateTTBTDB&quot;"/>
+                        </ns13:OperationName>
+                        <ns13:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns13:ProcessName>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody>
+                        <ns3:ServiceEnverlop>
+                            <ns22:AppHdr>
+                                <ns22:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns22:CharSet>
+                                <ns22:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns22:ServVersion>
+                                <ns22:From>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;99&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;ESB&quot;"/>
+                                    </ns22:Name>
+                                </ns22:From>
+                                <ns22:To>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;08&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;TTBT&quot;"/>
+                                    </ns22:Name>
+                                </ns22:To>
+                                <ns22:MsgId>
+                                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                                </ns22:MsgId>
+                                <xsl:if test="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                                    <ns22:MsgSrcId>
+                                        <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                    </ns22:MsgSrcId>
+                                </xsl:if>
+                                <ns22:BizServ>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;6&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                    </ns22:Name>
+                                </ns22:BizServ>
+                                <ns22:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns22:CreatedDate>
+                            </ns22:AppHdr>
+                            <ns22:ResponseStatus>
+                                <ns22:Status>
+                                    <xsl:value-of select="$DBResponse/DBResponse"/>
+                                </ns22:Status>
+                                <ns22:ErrorCode>
+                                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/T24SystemResponseStatus/ErrorCode_NoError"/>
+                                </ns22:ErrorCode>
+                                <ns22:ErrorMessage>
+                                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/T24SystemResponseStatus/ErrorMessage_ConnectSuccess"/>
+                                </ns22:ErrorMessage>
+                                <ns22:ErrorInfo>
+                                    <ns22:Id>
+                                        <xsl:value-of select="$DBResponse/DBResponse"/>
+                                    </ns22:Id>
+                                </ns22:ErrorInfo>
+                            </ns22:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Parse-XML/pfx6:BTCTUpdate"/>
+                            </ServiceBody>
+                        </ns3:ServiceEnverlop>
+                        <xsl:copy-of select="$DBResponse/DBResponse"/>
+                    </ns13:ServiceBody>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ReceiveTimestamps/ReceiveTimestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogStart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>262</pd:x>
+        <pd:y>385</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat(&quot;T24TTBTDT&quot;,': Start ',&quot;T24TTBTDT&quot;)"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns22:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns22:CharSet>
+                            <ns22:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns22:ServVersion>
+                            <ns22:From>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;99&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns22:Name>
+                            </ns22:From>
+                            <ns22:To>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;08&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;TTBT&quot;"/>
+                                </ns22:Name>
+                            </ns22:To>
+                            <ns22:MsgId>
+                                <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                            </ns22:MsgId>
+                            <xsl:if test="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                                <ns22:MsgSrcId>
+                                    <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                </ns22:MsgSrcId>
+                            </xsl:if>
+                            <ns22:BizServ>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;5&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                </ns22:Name>
+                            </ns22:BizServ>
+                            <ns22:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns22:CreatedDate>
+                        </ns13:AppHdr>
+                        <ns13:SOAMsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                        </ns13:SOAMsgId>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/T24TTBTDT/BTCTPosting&quot;"/>
+                        </ns13:ServiceName>
+                        <ns13:OperationName>
+                            <xsl:value-of select="&quot;UpdateTTBTDB&quot;"/>
+                        </ns13:OperationName>
+                        <ns13:ProcessName>
+                            <xsl:value-of select="$_processContext/ns1:ProcessContext/ProjectName"/>
+                        </ns13:ProcessName>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody>
+                        <xsl:copy-of select="$ESB-Queue-Receiver/ns:ActivityOutput/Body"/>
+                    </ns13:ServiceBody>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ReceiveTimestamps/ReceiveTimestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check JMSMessageID">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>191</pd:x>
+        <pd:y>261</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <pfx4:input>
+                <xsl:if test="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <duplicateKey>
+                        <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </xsl:if>
+            </pfx4:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse-XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>70</pd:x>
+        <pd:y>261</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx6:BTCTUpdate"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Navigate point">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>351</pd:x>
+        <pd:y>262</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep-Exception">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>433</pd:x>
+        <pd:y>704</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns0:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/BTCTPosting/Sleeptime_Exception_ms"/>
+                </IntervalInMillisec>
+            </ns0:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check JMSMessageID 2">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>1149</pd:x>
+        <pd:y>708</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <pfx4:input>
+                <xsl:if test="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <duplicateKey>
+                        <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </xsl:if>
+            </pfx4:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1293</pd:x>
+        <pd:y>702</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                </GeneratedId>
+                <ns14:ExceptionBody>
+                    <ns14:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns14:Hostname>
+                    <ns14:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns14:Category>
+                    <ns14:Type>
+                        <xsl:value-of select="&quot;TYPE&quot;"/>
+                    </ns14:Type>
+                    <ns14:Level>
+                        <xsl:value-of select="&quot;LEVEL&quot;"/>
+                    </ns14:Level>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                        <ns14:ErrorReport>
+                            <StackTrace>
+                                <xsl:value-of select="StackTrace"/>
+                            </StackTrace>
+                            <Msg>
+                                <xsl:value-of select="Msg"/>
+                            </Msg>
+                            <FullClass>
+                                <xsl:value-of select="FullClass"/>
+                            </FullClass>
+                            <ObjectClass>
+                                <xsl:value-of select="Class"/>
+                            </ObjectClass>
+                            <ProcessStack>
+                                <xsl:value-of select="ProcessStack"/>
+                            </ProcessStack>
+                            <xsl:if test="MsgCode">
+                                <MsgCode>
+                                    <xsl:value-of select="MsgCode"/>
+                                </MsgCode>
+                            </xsl:if>
+                            <xsl:copy-of select="Data"/>
+                        </ns14:ErrorReport>
+                    </xsl:for-each>
+                </ns14:ExceptionBody>
+                <ServiceInput>
+                    <ns22:AppHdr>
+                        <ns22:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </ns22:CharSet>
+                        <ns22:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </ns22:ServVersion>
+                        <ns22:From>
+                            <ns22:Id>
+                                <xsl:value-of select="&quot;99&quot;"/>
+                            </ns22:Id>
+                            <ns22:Name>
+                                <xsl:value-of select="&quot;ESB&quot;"/>
+                            </ns22:Name>
+                        </ns22:From>
+                        <ns22:To>
+                            <ns22:Id>
+                                <xsl:value-of select="&quot;08&quot;"/>
+                            </ns22:Id>
+                            <ns22:Name>
+                                <xsl:value-of select="&quot;TTBT&quot;"/>
+                            </ns22:Name>
+                        </ns22:To>
+                        <ns22:MsgId>
+                            <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                        </ns22:MsgId>
+                        <xsl:if test="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                            <ns22:MsgSrcId>
+                                <xsl:value-of select="$ESB-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </ns22:MsgSrcId>
+                        </xsl:if>
+                        <ns22:BizServ>
+                            <ns22:Id>
+                                <xsl:value-of select="&quot;8&quot;"/>
+                            </ns22:Id>
+                            <ns22:Name>
+                                <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                            </ns22:Name>
+                        </ns22:BizServ>
+                        <ns22:CreatedDate>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns22:CreatedDate>
+                    </ns22:AppHdr>
+                    <ServiceBody/>
+                </ServiceInput>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateExistStatus">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>538</pd:x>
+        <pd:y>346</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CitadIn/CitadDBTimeOut_ms%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/Citad DB.sharedjdbc</jdbcSharedConfig>
+            <statement>update CHU_TRI 
+set SENT_TO_T24 = ?
+, ERR_MSG = ?
+where 1 = 1
+and THANHVIEN_REF = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>SENT_TO_T24</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERR_MSG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>THANHVIEN_REF</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <SENT_TO_T24>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/BTCTPosting/RecordDB_T24Success"/>
+                </SENT_TO_T24>
+                <ERR_MSG>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:messages"/>
+                </ERR_MSG>
+                <THANHVIEN_REF>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                </THANHVIEN_REF>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateErrorOnly">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>539</pd:x>
+        <pd:y>463</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CitadIn/CitadDBTimeOut_ms%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/Citad DB.sharedjdbc</jdbcSharedConfig>
+            <statement>update CHU_TRI 
+set ERR_MSG = ?
+where 1 = 1
+and THANHVIEN_REF = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>ERR_MSG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>THANHVIEN_REF</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <ERR_MSG>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:messages"/>
+                </ERR_MSG>
+                <THANHVIEN_REF>
+                    <xsl:value-of select="$Parse-XML/pfx6:BTCTUpdate/pfx6:THANHVIEN_REF"/>
+                </THANHVIEN_REF>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign ReceiveTimestamps">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>70</pd:x>
+        <pd:y>155</pd:y>
+        <config>
+            <variableName>ReceiveTimestamps</variableName>
+        </config>
+        <pd:inputBindings>
+            <ReceiveTimestamps>
+                <xsl:value-of select="tib:timestamp()"/>
+            </ReceiveTimestamps>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ESB Queue Receiver</pd:from>
+        <pd:to>Assign ReceiveTimestamps</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm 1</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep-Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Handling</pd:from>
+        <pd:to>Check JMSMessageID 2</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorCode</pd:from>
+        <pd:to>Error Handling</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateSuccess</pd:from>
+        <pd:to>UpdateResult</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateError</pd:from>
+        <pd:to>UpdateResult</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateResult</pd:from>
+        <pd:to>Confirm 1</pd:to>
+        <pd:xpathDescription>Update Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$DBResponse/DBResponse = 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateResult</pd:from>
+        <pd:to>Sleep-1</pd:to>
+        <pd:xpathDescription>No Update</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$DBResponse/DBResponse =1</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML</pd:from>
+        <pd:to>Check JMSMessageID</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check JMSMessageID</pd:from>
+        <pd:to>LogStart</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigate point</pd:from>
+        <pd:to>UpdateError</pd:to>
+        <pd:xpathDescription>Update Error, No exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($Parse-XML/pfx6:BTCTUpdate/pfx6:successIndicator = "T24Error" ) and not(contains($Parse-XML/pfx6:BTCTUpdate/pfx6:messages[1] , "ALREADY EXIST"  ))</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigate point</pd:from>
+        <pd:to>UpdateSuccess</pd:to>
+        <pd:xpathDescription>Update Success</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx6:BTCTUpdate/pfx6:successIndicator="Success"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart</pd:from>
+        <pd:to>Navigate point</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check JMSMessageID</pd:from>
+        <pd:to>Navigate point</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep-Exception</pd:from>
+        <pd:to>ErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check JMSMessageID 2</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check JMSMessageID 2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigate point</pd:from>
+        <pd:to>UpdateExistStatus</pd:to>
+        <pd:xpathDescription>Update Exist</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($Parse-XML/pfx6:BTCTUpdate/pfx6:successIndicator = "T24Error" ) and contains($Parse-XML/pfx6:BTCTUpdate/pfx6:messages[1] , "ALREADY EXIST"  )</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateExistStatus</pd:from>
+        <pd:to>UpdateResult</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigate point</pd:from>
+        <pd:to>UpdateErrorOnly</pd:to>
+        <pd:xpathDescription>Update ResponseProcessorException   </pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($Parse-XML/pfx6:BTCTUpdate/pfx6:successIndicator =  "TWSError" ) and contains($Parse-XML/pfx6:BTCTUpdate/pfx6:messages[1] , "com.temenos.tws.webservices.responseprocessor.ResponseProcessorException"  )</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateErrorOnly</pd:from>
+        <pd:to>UpdateResult</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign ReceiveTimestamps</pd:from>
+        <pd:to>Parse-XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

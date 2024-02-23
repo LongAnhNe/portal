@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002" xmlns:AESDK="http://www.tibco.com/xmlns/aemeta/adapter/2002" xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <adswift:adapter xmlns:adswift="http://www.tibco.com/xmlns/adapter/adswift/2002" name="SwiftAdapter">
+        <AESDK:instanceId>SWIFTNet-FINReceiverConfiguration</AESDK:instanceId>
+        <AESDK:startup>
+            <AESDK:defaultStartup>active</AESDK:defaultStartup>
+            <AESDK:banner>true</AESDK:banner>
+            <AESDK:hasStdMicroAgent>true</AESDK:hasStdMicroAgent>
+            <AESDK:stdMicroAgentName>COM.TIBCO.ADAPTER.adswift.%%Deployment%%.%%InstanceId%%</AESDK:stdMicroAgentName>
+            <AESDK:stdMicroAgentTimeout>10000</AESDK:stdMicroAgentTimeout>
+            <AESDK:hasClassMicroAgent>%%HawkEnabled%%</AESDK:hasClassMicroAgent>
+            <AESDK:classMicroAgentTimeout>10000</AESDK:classMicroAgentTimeout>
+            <AESDK:classMicroAgentName>COM.TIBCO.adswift.%%Deployment%%.%%InstanceId%%</AESDK:classMicroAgentName>
+            <AESDK:defaultMicroAgentSession>HawkSession</AESDK:defaultMicroAgentSession>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>JDBCMessageSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>DefaultRVSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>ExitSubscriberEndPoint</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>DefaultRVCMSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>TIBSubscriberEndPoint</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>AdminPublisherEndPoint</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>DefaultJmsQueueSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>MessagePublisherEndPoint</AESDK:name>
+            </AESDK:startComponent>
+        </AESDK:startup>
+        <AESDK:deployment>
+            <AESDK:advisories xsi:nil="true"/>
+            <AESDK:sessions>
+                <AESDK:messaging>
+                    <AESDK:jmsSession isRef="true">#jmsSession.DefaultJmsQueueSession</AESDK:jmsSession>
+                    <AESDK:rvCmSession isRef="true">#rvCmSession.DefaultRVCMSession</AESDK:rvCmSession>
+                    <AESDK:rvSession isRef="true">#rvSession.DefaultRVSession</AESDK:rvSession>
+                    <AESDK:jdbcSession isRef="true">#jdbcSession.JDBCMessageSession</AESDK:jdbcSession>
+                </AESDK:messaging>
+            </AESDK:sessions>
+            <AESDK:consumers>
+                <AESDK:rvCmSubscriber isRef="true">#consumer.TIBSubscriberEndPoint</AESDK:rvCmSubscriber>
+                <AESDK:rvSubscriber isRef="true">#consumer.ExitSubscriberEndPoint</AESDK:rvSubscriber>
+            </AESDK:consumers>
+            <AESDK:producers>
+                <AESDK:jmsPublisher isRef="true">#jmsProducer.MessagePublisherEndPoint</AESDK:jmsPublisher>
+                <AESDK:rvCmPublisher isRef="true">#producer.AdminPublisherEndPoint</AESDK:rvCmPublisher>
+            </AESDK:producers>
+        </AESDK:deployment>
+        <AESDK:timers xsi:nil="true"/>
+        <AESDK:txControls xsi:nil="true"/>
+        <AESDK:reporting>
+            <AESDK:fileSink>
+                <AESDK:fileName>%%DirTrace%%/%%Deployment%%.%%InstanceId%%.log</AESDK:fileName>
+                <AESDK:fileCount>3</AESDK:fileCount>
+                <AESDK:fileLimit>30000</AESDK:fileLimit>
+                <AESDK:appendMode>true</AESDK:appendMode>
+                <AESDK:name>fileSink</AESDK:name>
+                <AESDK:role>
+                    <AESDK:name>infoRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>errorRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>warnRole</AESDK:name>
+                </AESDK:role>
+            </AESDK:fileSink>
+            <AESDK:stdioSink>
+                <AESDK:ioName>stdout</AESDK:ioName>
+                <AESDK:name>stdioSink</AESDK:name>
+                <AESDK:role>
+                    <AESDK:name>infoRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>errorRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>warnRole</AESDK:name>
+                </AESDK:role>
+            </AESDK:stdioSink>
+        </AESDK:reporting>
+        <AESDK:metadata xsi:nil="true"/>
+        <AESDK:designer>
+            <AESDK:advancedLogging>false</AESDK:advancedLogging>
+            <AESDK:adapterVersion>sdk51</AESDK:adapterVersion>
+            <AESDK:serviceOwnedSessions>
+                <AESDK:session>DefaultRVSession</AESDK:session>
+                <AESDK:session>DefaultRVCMSession</AESDK:session>
+                <AESDK:session>DefaultJmsQueueSession</AESDK:session>
+            </AESDK:serviceOwnedSessions>
+            <AESDK:fixedChildren>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions</AESDK:resource>
+                    <AESDK:children>JDBCMessageSession,DefaultRVSession,DefaultRVCMSession,DefaultJmsQueueSession</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession</AESDK:resource>
+                    <AESDK:children>ExitSubscriberEndPoint</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession</AESDK:resource>
+                    <AESDK:children>TIBSubscriberEndPoint,AdminPublisherEndPoint</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultJmsQueueSession</AESDK:resource>
+                    <AESDK:children>MessagePublisherEndPoint</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/AdapterServices</AESDK:resource>
+                    <AESDK:children>ExitSubscriber,AdminPublisher,MessagePublisher,TIBSubscriber</AESDK:children>
+                </AESDK:fixed>
+            </AESDK:fixedChildren>
+            <AESDK:lockedProperties>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/JDBCMessageSession</AESDK:resource>
+                    <AESDK:properties>name,state</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession/ExitSubscriberEndPoint</AESDK:resource>
+                    <AESDK:properties>subject,name,sessionType,wireFormat</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession/TIBSubscriberEndPoint</AESDK:resource>
+                    <AESDK:properties>subject,name,sessionType,wireFormat</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession/AdminPublisherEndPoint</AESDK:resource>
+                    <AESDK:properties>replySubject,subject,name,sessionType,wireFormat</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultJmsQueueSession</AESDK:resource>
+                    <AESDK:properties>connectionFactoryType,providerContextFactory,name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultJmsQueueSession/MessagePublisherEndPoint</AESDK:resource>
+                    <AESDK:properties>name,deliveryMode,sessionType,replyDestination,destination</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/AdapterServices/TIBSubscriber</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/AdapterServices/MessagePublisher</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/AdapterServices/AdminPublisher</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/AdapterServices/ExitSubscriber</AESDK:resource>
+                    <AESDK:properties>qualityOfService,name,sessionReference</AESDK:properties>
+                </AESDK:locked>
+            </AESDK:lockedProperties>
+            <AESDK:resourceDescriptions>
+                <AESDK:node>
+                    <AESDK:description>T24OutgoingMsg</AESDK:description>
+                </AESDK:node>
+            </AESDK:resourceDescriptions>
+            <AESDK:adapterTester>
+                <AESDK:exe>C:\tibco\adapter\adswift\5.11\bin\adswiftReceiver.exe</AESDK:exe>
+                <AESDK:args>--run --propFile</AESDK:args>
+                <AESDK:workingDir>C:\tibco\adapter\adswift\5.11\bin</AESDK:workingDir>
+            </AESDK:adapterTester>
+        </AESDK:designer>
+        <adswift:services xmlns:adswift="http://www.tibco.com/xmlns/adapter/adswift/2002">
+            <adswift:subscriber>
+                <adswift:resourceType>swift.subscriber</adswift:resourceType>
+                <adswift:serviceName>ExitSubscriber</adswift:serviceName>
+                <adswift:messageSubject>%%Domain%%.%%Deployment%%.adswift.%%ReceiverInstanceId%%.exit</adswift:messageSubject>
+                <adswift:transportType>rv</adswift:transportType>
+                <adswift:qualityOfService>ae.sessions.rvsession</adswift:qualityOfService>
+                <adswift:wireFormat>aeRvMsg</adswift:wireFormat>
+                <adswift:sessionReference isRef="true">#rvSession.DefaultRVSession</adswift:sessionReference>
+                <adswift:endpointReference isRef="true">#consumer.ExitSubscriberEndPoint</adswift:endpointReference>
+            </adswift:subscriber>
+            <adswift:publisher>
+                <adswift:resourceType>swift.publisher</adswift:resourceType>
+                <adswift:serviceName>AdminPublisher</adswift:serviceName>
+                <adswift:messageSubject>%%Domain%%.%%Deployment%%.adswift.%%ReceiverInstanceId%%.admin</adswift:messageSubject>
+                <adswift:transportType>rv</adswift:transportType>
+                <adswift:qualityOfService>ae.sessions.rvcmsession</adswift:qualityOfService>
+                <adswift:wireFormat>aeRvMsg</adswift:wireFormat>
+                <adswift:sessionReference isRef="true">#rvCmSession.DefaultRVCMSession</adswift:sessionReference>
+                <adswift:endpointReference isRef="true">#producer.AdminPublisherEndPoint</adswift:endpointReference>
+            </adswift:publisher>
+            <adswift:publisher>
+                <adswift:resourceType>swift.publisher</adswift:resourceType>
+                <adswift:serviceName>MessagePublisher</adswift:serviceName>
+                <adswift:transportType>jms</adswift:transportType>
+                <adswift:endpointReference isRef="true">#jmsProducer.MessagePublisherEndPoint</adswift:endpointReference>
+                <adswift:deliveryMode>2</adswift:deliveryMode>
+                <adswift:wireFormat>aeXml</adswift:wireFormat>
+                <adswift:sessionReference isRef="true">#jmsSession.DefaultJmsQueueSession</adswift:sessionReference>
+                <adswift:connFactoryType>1</adswift:connFactoryType>
+                <adswift:destination>receivermessage</adswift:destination>
+            </adswift:publisher>
+            <adswift:subscriber>
+                <adswift:resourceType>swift.subscriber</adswift:resourceType>
+                <adswift:serviceName>TIBSubscriber</adswift:serviceName>
+                <adswift:messageSubject>%%Domain%%.%%Deployment%%.adswift.%%ReceiverInstanceId%%.tibsubscriber</adswift:messageSubject>
+                <adswift:transportType>rv</adswift:transportType>
+                <adswift:qualityOfService>ae.sessions.rvcmsession</adswift:qualityOfService>
+                <adswift:wireFormat>aeRvMsg</adswift:wireFormat>
+                <adswift:sessionReference isRef="true">#rvCmSession.DefaultRVCMSession</adswift:sessionReference>
+                <adswift:endpointReference isRef="true">#consumer.TIBSubscriberEndPoint</adswift:endpointReference>
+            </adswift:subscriber>
+        </adswift:services>
+        <adswift:swift xmlns:adswift="http://www.tibco.com/xmlns/adapter/adswift/2002">
+            <adswift:casmfMapId/>
+            <adswift:databaseFailureFatal>false</adswift:databaseFailureFatal>
+            <adswift:dispose>FTP</adswift:dispose>
+            <adswift:ftpFileExtension>.txt</adswift:ftpFileExtension>
+            <adswift:ftpHost>103.9.0.176</adswift:ftpHost>
+            <adswift:ftpName/>
+            <adswift:ftpPassword>yaiba123</adswift:ftpPassword>
+            <adswift:ftpPersistFilePrefix>ESBReceiver</adswift:ftpPersistFilePrefix>
+            <adswift:ftpPollingCount>10</adswift:ftpPollingCount>
+            <adswift:ftpPort>21</adswift:ftpPort>
+            <adswift:ftpRemoteBackUpDirectory>/Setup/SWIFTTest/ReceiveRemoteDirectoryBackup/</adswift:ftpRemoteBackUpDirectory>
+            <adswift:ftpRemoteDirectory>/Setup/SWIFTTest/ReceiveRemoteDirectory/</adswift:ftpRemoteDirectory>
+            <adswift:ftpRemoteErrorDirectory/>
+            <adswift:ftpTimeOut>30000</adswift:ftpTimeOut>
+            <adswift:ftpUser>tuedn</adswift:ftpUser>
+            <adswift:languageEncoding>ASCII</adswift:languageEncoding>
+            <adswift:logPrefix/>
+            <adswift:mqsaReplyToQueue/>
+            <adswift:mqsaReplyToQueueManager/>
+            <adswift:mqsaReport/>
+            <adswift:parse>true</adswift:parse>
+            <adswift:receiveTimeOut>30</adswift:receiveTimeOut>
+            <adswift:retriesBeforeSuspend>1</adswift:retriesBeforeSuspend>
+            <adswift:retryTotal>0</adswift:retryTotal>
+            <adswift:sleepBetweenRetries>1000</adswift:sleepBetweenRetries>
+            <adswift:validatorCTFile/>
+            <adswift:validatorCUFile/>
+            <adswift:validatorFIFile/>
+            <adswift:validationFilterFile/>
+            <adswift:role>SwiftReceiver</adswift:role>
+            <adswift:ftpPollingPeriod>1000</adswift:ftpPollingPeriod>
+            <adswift:validationLevel>0</adswift:validationLevel>
+        </adswift:swift>
+    </adswift:adapter>
+    <AEService:jmsSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.JMS" name="DefaultJmsQueueSession">
+        <AEService:clientId/>
+        <AEService:emsServerUserName>%%SOAJMS/UserName%%</AEService:emsServerUserName>
+        <AEService:emsServerPassword>%%SOAJMS/Password%%</AEService:emsServerPassword>
+        <AEService:connectionFactorySslPassword/>
+        <AEService:connFactoryType>1</AEService:connFactoryType>
+        <AEService:connFactoryName>QueueConnectionFactory</AEService:connFactoryName>
+        <AEService:jndiLookups>true</AEService:jndiLookups>
+        <AEService:providerUrl>%%SOAJMS/URL%%</AEService:providerUrl>
+        <AEService:providerCtxFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</AEService:providerCtxFactory>
+        <AEService:connUsername>%%SOAJMS/UserName%%</AEService:connUsername>
+        <AEService:connPassword>%%SOAJMS/Password%%</AEService:connPassword>
+    </AEService:jmsSession>
+    <AEService:rvCmSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.RVCM" name="DefaultRVCMSession">
+        <AEService:daemon>%%RvDaemon%%</AEService:daemon>
+        <AEService:service>%%RvService%%</AEService:service>
+        <AEService:network>%%RvNetwork%%</AEService:network>
+        <AEService:cmName>%%Domain%%.%%Deployment%%.%%AppName%%.%%InstanceId%%.CM</AEService:cmName>
+        <AEService:relayAgent/>
+        <AEService:ledgerFile>%%DirLedger%%/%%Domain%%.%%Deployment%%.%%AppName%%.%%InstanceId%%.ldg</AEService:ledgerFile>
+        <AEService:syncLedger>true</AEService:syncLedger>
+        <AEService:defaultTimeLimit>0</AEService:defaultTimeLimit>
+        <AEService:requireOldMessages>true</AEService:requireOldMessages>
+    </AEService:rvCmSession>
+    <AEService:rvSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.RV" name="DefaultRVSession">
+        <AEService:daemon>%%RvDaemon%%</AEService:daemon>
+        <AEService:service>%%RvService%%</AEService:service>
+        <AEService:network>%%RvNetwork%%</AEService:network>
+    </AEService:rvSession>
+    <AEService:jdbcSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.JDBC" name="JDBCMessageSession">
+        <AEService:driverClass>tibcosoftwareinc.jdbc.oracle.OracleDriver</AEService:driverClass>
+        <AEService:url>jdbc:tibcosoftwareinc:oracle://localhost:1521;SID=DB</AEService:url>
+        <AEService:user>system</AEService:user>
+        <AEService:password>system</AEService:password>
+    </AEService:jdbcSession>
+    <AEService:jmsProducer xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.JMSPublisher" name="MessagePublisherEndPoint">
+        <AEService:wireFormat>aeXml</AEService:wireFormat>
+        <AEService:destination>receivermessage</AEService:destination>
+        <AEService:deliveryMode>2</AEService:deliveryMode>
+        <AEService:deliveryMode2>2</AEService:deliveryMode2>
+        <AEService:messageTimeout>0</AEService:messageTimeout>
+        <AEService:messagePriority>4</AEService:messagePriority>
+        <AEService:isCompressed>false</AEService:isCompressed>
+        <AEService:session isRef="true">#jmsSession.DefaultJmsQueueSession</AEService:session>
+    </AEService:jmsProducer>
+    <AEService:producer xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVCMPublisher" name="AdminPublisherEndPoint">
+        <AEService:subject>%%Domain%%.%%Deployment%%.adswift.%%ReceiverInstanceId%%.admin</AEService:subject>
+        <AEService:wireFormat>aeRvMsg</AEService:wireFormat>
+        <AEService:session isRef="true">#rvCmSession.DefaultRVCMSession</AEService:session>
+    </AEService:producer>
+    <AEService:consumer xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVCMSubscriber" name="TIBSubscriberEndPoint">
+        <AEService:subject>%%Domain%%.%%Deployment%%.adswift.%%ReceiverInstanceId%%.tibsubscriber</AEService:subject>
+        <AEService:wireFormat>aeRvMsg</AEService:wireFormat>
+        <AEService:session isRef="true">#rvCmSession.DefaultRVCMSession</AEService:session>
+    </AEService:consumer>
+    <AEService:consumer xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVSubscriber" name="ExitSubscriberEndPoint">
+        <AEService:subject>%%Domain%%.%%Deployment%%.adswift.%%ReceiverInstanceId%%.exit</AEService:subject>
+        <AEService:wireFormat>aeRvMsg</AEService:wireFormat>
+        <AEService:session isRef="true">#rvSession.DefaultRVSession</AEService:session>
+    </AEService:consumer>
+</Repository:repository>

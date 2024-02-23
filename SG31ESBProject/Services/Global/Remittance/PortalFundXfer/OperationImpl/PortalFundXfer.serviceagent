@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceResource xmlns:wsdl="http://xmlns.example.com/1433466938916">
+    <ns0:import xmlns:ns0="http://schemas.xmlsoap.org/wsdl/" namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.wsdl"/>
+    <config>
+        <class>com.tibco.bw.service.serviceAgent.ServiceServiceAgent</class>
+        <name>PortalFundXfer</name>
+        <resourceType>service.definition</resourceType>
+        <implType>bw</implType>
+        <groups>
+            <row isDefault="true" groupName="Default"/>
+        </groups>
+        <serviceChange>Tue Jun 14 14:51:43 ICT 2016</serviceChange>
+        <wsdl namespace="http://xmlns.example.com/1459134273397" embedWsdlComponents="true" embedSchemaComponents="true" embedJndiProperties="false"/>
+        <interfaceImpl>
+            <tab>
+                <tabName>PortType</tabName>
+                <tabType>bw</tabType>
+                <config>
+                    <wsdlDetail location="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.wsdl" portType="PortType" ns="http://xmlns.example.com/1433466938916"/>
+                    <detail>
+                        <tab>
+                            <tabName>service.definition.impl.tab.label</tabName>
+                            <tabType>impl</tabType>
+                            <config>
+                                <operations>
+                                    <row opName="createCBPFund" opImpl="/Services/Global/Remittance/PortalFundXfer/OperationImpl/createCBPFund.process"/>
+                                    <row opName="createCDPFund" opImpl="/Services/Global/Remittance/PortalFundXfer/OperationImpl/createCDPFund.process"/>
+                                    <row opName="createCBPFundCITAD" opImpl="/Services/Global/Remittance/PortalFundXfer/OperationImpl/createCBPFundCITAD.process"/>
+                                    <row opName="ENQTransactionFeeByID" opImpl="/Services/Global/Remittance/PortalFundXfer/OperationImpl/ENQTransactionFeeByID.process"/>
+                                    <row opName="ENQTransactionFeeByType" opImpl="/Services/Global/Remittance/PortalFundXfer/OperationImpl/ENQTransactionFeeByType.process"/>
+                                    <row opName="createInquiryFTTransaction" opImpl="/Services/Global/Remittance/PortalFundXfer/OperationImpl/createInquiryFTTransaction.process"/>
+                                </operations>
+                            </config>
+                        </tab>
+                        <tab>
+                            <tabName>service.definition.ep.tab.label</tabName>
+                            <tabType>ep</tabType>
+                            <config>
+                                <epBindings>
+                                    <row epName="PortTypeEndpoint0" epType="soap">
+                                        <config>
+                                            <epDetail>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.transport.tab.label</tabName>
+                                                    <tabType>transport</tabType>
+                                                    <config>
+                                                        <sharedChannel>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</sharedChannel>
+                                                        <transport>
+                                                            <config>
+                                                                <JMSTo>portalfundxfer1.0</JMSTo>
+                                                                <JMSDestinationType>queue</JMSDestinationType>
+                                                                <JMSMessageType>Bytes</JMSMessageType>
+                                                                <SoapJmsW3cFlag>false</SoapJmsW3cFlag>
+                                                                <targetService/>
+                                                                <useIncomingDeliveryMode>false</useIncomingDeliveryMode>
+                                                                <JMSDeliveryMode>2</JMSDeliveryMode>
+                                                                <JMSAcknowledgementMode>1</JMSAcknowledgementMode>
+                                                                <ApplicationProperties/>
+                                                                <ApplicationPropertiesOutMessage/>
+                                                                <JMSMaxSessions/>
+                                                                <operations>
+                                                                    <operation name="createCBPFund">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="createCDPFund">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="createCBPFundCITAD">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="ENQTransactionFeeByID">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="ENQTransactionFeeByType">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="createInquiryFTTransaction"/>
+                                                                </operations>
+                                                            </config>
+                                                        </transport>
+                                                    </config>
+                                                </tab>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.details.tab.label</tabName>
+                                                    <tabType>details</tabType>
+                                                    <config>
+                                                        <operationStyle>document</operationStyle>
+                                                        <soapVersion>SOAP 1.1</soapVersion>
+                                                        <soap>
+                                                            <operation name="createCBPFund">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/Remittance/PortalFundXfer/OperationImpl/PortalFundXfer.serviceagent/PortTypeEndpoint0/createCBPFund</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="createCDPFund">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/Remittance/PortalFundXfer/OperationImpl/PortalFundXfer.serviceagent/PortTypeEndpoint0/createCDPFund</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="createCBPFundCITAD">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/Remittance/PortalFundXfer/OperationImpl/PortalFundXfer.serviceagent/PortTypeEndpoint0/createCBPFundCITAD</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="ENQTransactionFeeByID">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/Remittance/PortalFundXfer/OperationImpl/PortalFundXfer.serviceagent/PortTypeEndpoint0/ENQTransactionFeeByID</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="ENQTransactionFeeByType">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/Remittance/PortalFundXfer/OperationImpl/PortalFundXfer.serviceagent/PortTypeEndpoint0/ENQTransactionFeeByType</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="createInquiryFTTransaction">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/Remittance/PortalFundXfer/OperationImpl/PortalFundXfer.serviceagent//createInquiryFTTransaction</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                        </soap>
+                                                    </config>
+                                                </tab>
+                                            </epDetail>
+                                        </config>
+                                    </row>
+                                </epBindings>
+                            </config>
+                        </tab>
+                    </detail>
+                </config>
+            </tab>
+        </interfaceImpl>
+    </config>
+</serviceResource>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/LendingCustomerInfo/Schema.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/LendingCustomerInfo/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="getLendingByCusCatReq" type="getLendingByCusCatReqType"/>
+	<xs:element name="getLendingByCusCatRes" type="getLendingByCusCatResType"/>
+	<xs:complexType name="getLendingByCusCatReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="LendingByCusCatInfoInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getLendingByCusCatResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="LendingByCusCatInfoList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="LendingByCusCatInfoInput" type="LendingByCusCatInfoReqType"/>
+	<xs:element name="LendingByCusCatInfoList" type="LendingByCusCatInfoResType"/>
+	<xs:complexType name="LendingByCusCatInfoReqType">
+		<xs:sequence>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="Category" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LendingByCusCatInfoResType">
+		<xs:sequence>
+			<xs:element ref="LendingByCusCatInfoDetail" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LendingByCusCatInfoDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TransactionRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="Customer" type="xs:string" minOccurs="0"/>
+				<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+				<xs:element name="Category" type="xs:string" minOccurs="0"/>
+				<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+				<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="MaturityDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="InterestRate" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

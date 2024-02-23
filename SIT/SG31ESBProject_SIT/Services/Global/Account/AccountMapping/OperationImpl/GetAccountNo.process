@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1436322400563" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountMapping/AccountMapping.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1436322400563" location="/SharedResource/Schema/Global/Account/AccountMapping/AccountMapping.wsdl"/>
+    <pd:name>Services/Global/Account/AccountMapping/OperationImpl/GetAccountNo.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:GetAccountNoReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns1:AccountNoResult" cardinality="*"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:GetAccountNoRes>
+            <AccountMappingRes>
+                <ns1:AccountMappingRes>
+                    <xsl:for-each select="$RequestResponse/root/ns1:AccountMappingRes/ns1:AccountNoResult">
+                        <ns1:AccountNoResult>
+                            <xsl:value-of select="."/>
+                        </ns1:AccountNoResult>
+                    </xsl:for-each>
+                </ns1:AccountMappingRes>
+            </AccountMappingRes>
+        </wsdlPfx:GetAccountNoRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:GetAccountNoRes"/>
+    <pd:endX>457</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1438330851171</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <processName>/Services/Global/Account/AccountMapping/Version1.0/GetAccountNo/RequestResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:AccountMappingReq>
+                    <xsl:if test="$Start/wsdlPfx:GetAccountNoReq/AccountMappingReq/ns1:AccountMappingReq/@id">
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="$Start/wsdlPfx:GetAccountNoReq/AccountMappingReq/ns1:AccountMappingReq/@id"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:for-each select="$Start/wsdlPfx:GetAccountNoReq/AccountMappingReq/ns1:AccountMappingReq/ns1:AccountNo">
+                        <ns1:AccountNo>
+                            <xsl:value-of select="."/>
+                        </ns1:AccountNo>
+                    </xsl:for-each>
+                </ns1:AccountMappingReq>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

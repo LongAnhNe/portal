@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/System/ESB/T24TTBTDT/CheckBalance/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/System/ESB/T24TTBTDT/CheckBalance/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="CheckBalanceReq" type="CheckBalanceReqType"/>
+	<xs:element name="CheckBalanceRes" type="CheckBalanceResType"/>
+	<xs:complexType name="CheckBalanceReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CheckBalance" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CheckBalanceResType"/>
+	<xs:element name="CheckBalance" type="CheckBalanceType"/>
+	<xs:complexType name="CheckBalanceType">
+		<xs:sequence>
+			<xs:element name="BankCode" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

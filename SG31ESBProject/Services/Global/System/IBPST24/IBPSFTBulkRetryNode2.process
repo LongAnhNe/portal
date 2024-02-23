@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="sbv/common/envelope/commonheader/1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx3="http://xmlns.example.com/1433466938916" xmlns:pfx2="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:pfx6="http://www.sbv.gov.vn/global/remittance/ftbulk/version1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/remittance/ftbulk/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FTBulk/FTBulk.xsd"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" location="/SharedResource/Schema/Global/Local/FTBulk/FTBulk.wsdl"/>
+    <pd:name>Services/Global/System/IBPST24/IBPSFTBulkRetryNode2.process</pd:name>
+    <pd:startName>ReceiveFTBulkDataNode2</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ReceiveFTBulkDataNode2">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>102</pd:x>
+        <pd:y>99</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>IBPSFTBulkNode2</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>789</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1449286929740</pd:targetNamespace>
+    <pd:activity name="ParseFTBulkData">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>285</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx6:NettingInfoReq"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$ReceiveFTBulkDataNode2/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallFTBulkNetting">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>467</pd:x>
+        <pd:y>112</pd:y>
+        <config>
+            <timeout>%%T24WS/TimeoutKQ%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx:FTBulk</service>
+            <servicePort>PortTypeEndpoint0</servicePort>
+            <operation>createFTBulk</operation>
+            <soapAction>/Services/Global/Remittance/FTBulk/OperationImpl/FTBulk-service0.serviceagent/PortTypeEndpoint0/createFTBulk</soapAction>
+            <sharedChannels>
+                <jmsChannel>
+                    <targetService/>
+                    <JMSPriority>4</JMSPriority>
+                    <JMSTimeToLive>0</JMSTimeToLive>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSMessageType>Bytes</JMSMessageType>
+                    <NamingURL>%%SOAJMS/ContextURL%%</NamingURL>
+                    <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+                    <NamingPrincipal>%%SOAJMS/UserName%%</NamingPrincipal>
+                    <NamingCredential>%%SOAJMS/Password%%</NamingCredential>
+                    <ConnectionFactory>FTQueueConnectionFactory</ConnectionFactory>
+                    <JMSTo>ftbulk1.0</JMSTo>
+                    <JMSUserName>%%SOAJMS/UserName%%</JMSUserName>
+                    <JMSPassword>%%SOAJMS/Password%%</JMSPassword>
+                    <SoapJmsW3cFlag>false</SoapJmsW3cFlag>
+                </jmsChannel>
+            </sharedChannels>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx6:createFTBulkReq>
+                    <pfx5:AppHdr>
+                        <pfx5:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </pfx5:CharSet>
+                        <pfx5:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </pfx5:ServVersion>
+                        <pfx5:From>
+                            <pfx5:Id>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </pfx5:Id>
+                            <pfx5:Name>
+                                <xsl:value-of select="&quot;ESB&quot;"/>
+                            </pfx5:Name>
+                        </pfx5:From>
+                        <pfx5:To>
+                            <pfx5:Id>
+                                <xsl:value-of select="&quot;2&quot;"/>
+                            </pfx5:Id>
+                            <pfx5:Name>
+                                <xsl:value-of select="&quot;T24&quot;"/>
+                            </pfx5:Name>
+                        </pfx5:To>
+                        <pfx5:MsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                        </pfx5:MsgId>
+                        <pfx5:MsgSrcId>
+                            <xsl:value-of select="$ParseFTBulkData/pfx6:NettingInfoReq/pfx6:NettingId"/>
+                        </pfx5:MsgSrcId>
+                        <pfx5:BizServ>
+                            <pfx5:Id>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </pfx5:Id>
+                            <pfx5:Name>
+                                <xsl:value-of select="&quot;FTBulkRetry&quot;"/>
+                            </pfx5:Name>
+                        </pfx5:BizServ>
+                        <pfx5:CreatedDate>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </pfx5:CreatedDate>
+                        <pfx5:Signature>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </pfx5:Signature>
+                    </pfx5:AppHdr>
+                    <xsl:copy-of select="$ParseFTBulkData/pfx6:NettingInfoReq"/>
+                </pfx6:createFTBulkReq>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>645</pd:x>
+        <pd:y>108</pd:y>
+        <config>
+            <ConfirmEvent>ReceiveFTBulkDataNode2</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="PushFTBulkToNode1">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>562</pd:x>
+        <pd:y>278</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>IBPSFTBulkNode1</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$ReceiveFTBulkDataNode2/ns:ActivityOutput/Body"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ReceiveFTBulkDataNode2</pd:from>
+        <pd:to>ParseFTBulkData</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseFTBulkData</pd:from>
+        <pd:to>CallFTBulkNetting</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallFTBulkNetting</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallFTBulkNetting</pd:from>
+        <pd:to>PushFTBulkToNode1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PushFTBulkToNode1</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

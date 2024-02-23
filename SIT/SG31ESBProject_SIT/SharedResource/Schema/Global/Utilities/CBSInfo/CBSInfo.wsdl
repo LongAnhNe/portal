@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns="http://www.sbv.gov.vn/global/utilities/cbsinfo/version1.0" xmlns:tns="http://www.sbv.org.vn/service/global/utilities/cbsinfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" name="Untitled" targetNamespace="http://www.sbv.org.vn/service/global/utilities/cbsinfo/version1.0">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sbv.gov.vn/global/utilities/cbsinfo/version1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:include schemaLocation="../../../../../SharedResource/Schema/Global/Utilities/CBSInfo/CBSInfo.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="CBSInfo">
+        <wsdl:port name="PortTypeEndpoint3" binding="tns:PortTypeEndpoint3Binding">
+            <soap:address location=""/>
+            <jms:connectionFactory>FTQueueConnectionFactory</jms:connectionFactory>
+            <jms:targetAddress destination="queue">CBSInfo1.0</jms:targetAddress>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="PortType">
+        <wsdl:operation name="getCBSStatus">
+            <wsdl:input message="tns:getCBSStatusReq"/>
+            <wsdl:output message="tns:getCBSStatusRes"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PortTypeEndpoint3Binding" type="tns:PortType">
+        <soap:binding style="document" transport="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS"/>
+        <jms:binding messageFormat="bytes"/>
+        <wsdl:operation name="getCBSStatus">
+            <soap:operation style="document" soapAction="/Services/Global/Utilities/CBSInfo/OperationImpl/CBSInfo-service3.serviceagent/PortTypeEndpoint3/getCBSStatus"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Req"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="Res"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="getCBSStatusReq">
+        <wsdl:part name="Req" element="ns:getCBSStatusReq"/>
+    </wsdl:message>
+    <wsdl:message name="getCBSStatusRes">
+        <wsdl:part name="Res" element="ns:getCBSStatusRes"/>
+    </wsdl:message>
+</wsdl:definitions>

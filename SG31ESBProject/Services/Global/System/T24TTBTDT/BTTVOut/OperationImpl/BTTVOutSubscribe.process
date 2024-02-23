@@ -1,0 +1,2887 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="http://www.tibco.com/pe/CheckpointSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns13="sbv/common/exceptionhandling/exception/1.0" xmlns:pfx="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns3="sbv/common/envelope/soaenvelope/1.0" xmlns:ns0="www.tibco.com/plugin/Sleep" xmlns:pfx5="http://www.temenos.com/T24/event/FTSBVCLR/FTSBVCLR" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/common/envelope/commonheader/1.0" xmlns:pfx3="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:pfx2="http://www.temenos.com/T24/event/CitadOutRemittance/CitadOutRemittanceFlow" xmlns:pfx8="http://schemas.tibco.com/bw/plugins/jdbc/5.0/jdbcExceptions" xmlns:pfx7="http://www.temenos.com/T24/event/CLRDebit/CLRDebitFlow" xmlns:pfx6="http://www.temenos.com/T24/event/CLRDebit/CLR.Debit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.temenos.com/T24/event/CitadOutRemittance/CitadOutRemittanceFlow" schemaLocation="/SharedResource/Schema/Global/T24Citad/CitadOut/T24TransMsg.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadOut/FTSBVCITAD.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/FTSBVCLR/FTSBVCLR" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/BTTVOut/FTSBVCLR.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CLRDebit/CLRDebitFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/BTTVOut/CLR.Debit.xsd"/>
+    <pd:name>Services/Global/System/T24TTBTDT/BTTVOut/OperationImpl/BTTVOutSubscribe.process</pd:name>
+    <pd:description>// 2015.14.09 : init, Sẽ dùng</pd:description>
+    <pd:startName>JMS Topic Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Topic Subscriber">
+        <pd:type>com.tibco.plugin.jms.JMSTopicEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicEventSource</pd:resourceType>
+        <pd:x>70</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBBTTVTopic</destination>
+                <durable>true</durable>
+                <subscriptionName>BTTVOutSubscribe</subscriptionName>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>976</pd:endX>
+    <pd:endY>362</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServicesVariable>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServicesVariable>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1435739549601</pd:targetNamespace>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>221</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term ref="pfx5:FTSBVCLR"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm to delete CBSQueue">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:description>Confirm to delete Message in CBS Queue</pd:description>
+        <pd:x>601</pd:x>
+        <pd:y>364</pd:y>
+        <config>
+            <ConfirmEvent>JMS Topic Subscriber</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>56</pd:x>
+        <pd:y>954</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Error Handling">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>195</pd:x>
+        <pd:y>704</pd:y>
+        <pd:width>627</pd:width>
+        <pd:height>491</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>DuplicateBTTVQueue</pd:to>
+            <pd:xpathDescription>DuplicateBTTV</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>contains($_error_Insert-BCBT-CTDT-DB/ActivityErrors/pfx8:JDBCSQLException/msg, 'SQLIntegrityConstraintViolationException')
+or
+contains($_error_Insert-BICB-CTDT-DB/ActivityErrors/pfx8:JDBCSQLException/msg, 'SQLIntegrityConstraintViolationException')
+or
+contains($_error_Insert-ACBD-CTDT-DB/ActivityErrors/pfx8:JDBCSQLException/msg, 'SQLIntegrityConstraintViolationException')
+or
+contains($_error_Insert-ACCB-CTDT-DB/ActivityErrors/pfx8:JDBCSQLException/msg, 'SQLIntegrityConstraintViolationException')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Sleep</pd:to>
+            <pd:xpathDescription>Lost Connection</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>exists($_error_Insert-BCBT-CTDT-DB/ActivityErrors/pfx8:JDBCDriverLoadingException) 
+or
+exists($_error_Insert-BCBT-CTDT-DB/ActivityErrors/pfx8:JDBCConnectionNotFoundException)
+or
+exists($_error_Insert-BCBT-CTDT-DB/ActivityErrors/pfx8:JDBCTimedOutException)
+or
+exists($_error_Insert-BCBT-CTDT-DB/ActivityErrors/pfx8:LoginTimedOutException)
+or
+exists($_error_Insert-BICB-CTDT-DB/ActivityErrors/pfx8:JDBCDriverLoadingException) 
+or
+exists($_error_Insert-BICB-CTDT-DB/ActivityErrors/pfx8:JDBCConnectionNotFoundException)
+or
+exists($_error_Insert-BICB-CTDT-DB/ActivityErrors/pfx8:JDBCTimedOutException)
+or
+exists($_error_Insert-BICB-CTDT-DB/ActivityErrors/pfx8:LoginTimedOutException)
+or
+exists($_error_Insert-ACBD-CTDT-DB/ActivityErrors/pfx8:JDBCDriverLoadingException) 
+or
+exists($_error_Insert-ACBD-CTDT-DB/ActivityErrors/pfx8:JDBCConnectionNotFoundException)
+or
+exists($_error_Insert-ACBD-CTDT-DB/ActivityErrors/pfx8:JDBCTimedOutException)
+or
+exists($_error_Insert-ACBD-CTDT-DB/ActivityErrors/pfx8:LoginTimedOutException)
+or
+exists($_error_Insert-ACCB-CTDT-DB/ActivityErrors/pfx8:JDBCDriverLoadingException) 
+or
+exists($_error_Insert-ACCB-CTDT-DB/ActivityErrors/pfx8:JDBCConnectionNotFoundException)
+or
+exists($_error_Insert-ACCB-CTDT-DB/ActivityErrors/pfx8:JDBCTimedOutException)
+or
+exists($_error_Insert-ACCB-CTDT-DB/ActivityErrors/pfx8:LoginTimedOutException)
+or
+$_error/ns1:ErrorReport/MsgCode = "BW-JDBC-100014" 
+or
+ contains($_error/ns1:ErrorReport/Msg, "SQLState = 6100" )</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>BTTVErrorQueue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm-to-delete-CBSQueue2-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Connection Notify Queue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm to delete CBSQueue2</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LostConnection</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>BTTVErrorQueue</pd:from>
+            <pd:to>Confirm to delete CBSQueue2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>DuplicateBTTVQueue</pd:from>
+            <pd:to>Confirm-to-delete-CBSQueue2-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep</pd:from>
+            <pd:to>Checkpoint-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint-1</pd:from>
+            <pd:to>LostConnection</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint-1</pd:from>
+            <pd:to>Connection Notify Queue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="BTTVErrorQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>417</pd:x>
+            <pd:y>799</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>BTTVErrorQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </JMSCorrelationID>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                        </application>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Connection Notify Queue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>560</pd:x>
+            <pd:y>1133</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%ServiceGlobalVar/TTBT/Connection_Notify_Queue%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </JMSCorrelationID>
+                    <OtherProperties/>
+                    <Body>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm to delete CBSQueue2">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+            <pd:x>619</pd:x>
+            <pd:y>808</pd:y>
+            <config>
+                <ConfirmEvent>JMS Topic Subscriber</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="DuplicateBTTVQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>448</pd:x>
+            <pd:y>956</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>DuplicateBTTVQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <Body>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm-to-delete-CBSQueue2-1">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+            <pd:x>612</pd:x>
+            <pd:y>954</pd:y>
+            <config>
+                <ConfirmEvent>JMS Topic Subscriber</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Sleep">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>305</pd:x>
+            <pd:y>1098</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns0:SleepInputSchema>
+                    <IntervalInMillisec>
+                        <xsl:value-of select="&quot;10000&quot;"/>
+                    </IntervalInMillisec>
+                </ns0:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Checkpoint-1">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>409</pd:x>
+            <pd:y>1097</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns14:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </ns14:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LostConnection">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>559</pd:x>
+            <pd:y>1039</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Checkpoint">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>71</pd:x>
+        <pd:y>303</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns14:input>
+                <duplicateKey>
+                    <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </duplicateKey>
+            </ns14:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1079</pd:x>
+        <pd:y>959</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                </GeneratedId>
+                <ns13:ExceptionBody>
+                    <ns13:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns13:Hostname>
+                    <ns13:Category>
+                        <xsl:value-of select="&quot;ERROR&quot;"/>
+                    </ns13:Category>
+                    <ns13:Type>
+                        <xsl:value-of select="&quot;TECHNICAL&quot;"/>
+                    </ns13:Type>
+                    <ns13:Level>
+                        <xsl:value-of select="&quot;NORMAL&quot;"/>
+                    </ns13:Level>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                        <ns13:ErrorReport>
+                            <StackTrace>
+                                <xsl:value-of select="StackTrace"/>
+                            </StackTrace>
+                            <Msg>
+                                <xsl:value-of select="Msg"/>
+                            </Msg>
+                            <FullClass>
+                                <xsl:value-of select="FullClass"/>
+                            </FullClass>
+                            <ObjectClass>
+                                <xsl:value-of select="Class"/>
+                            </ObjectClass>
+                            <ProcessStack>
+                                <xsl:value-of select="ProcessStack"/>
+                            </ProcessStack>
+                            <xsl:if test="MsgCode">
+                                <MsgCode>
+                                    <xsl:value-of select="MsgCode"/>
+                                </MsgCode>
+                            </xsl:if>
+                            <xsl:copy-of select="Data"/>
+                        </ns13:ErrorReport>
+                    </xsl:for-each>
+                </ns13:ExceptionBody>
+                <ServiceInput>
+                    <pfx4:AppHdr>
+                        <pfx4:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </pfx4:CharSet>
+                        <pfx4:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </pfx4:ServVersion>
+                        <pfx4:From>
+                            <pfx4:Id>
+                                <xsl:value-of select="1002"/>
+                            </pfx4:Id>
+                            <pfx4:Name>
+                                <xsl:value-of select="&quot;T24&quot;"/>
+                            </pfx4:Name>
+                        </pfx4:From>
+                        <pfx4:To>
+                            <pfx4:Id>
+                                <xsl:value-of select="&quot;07&quot;"/>
+                            </pfx4:Id>
+                            <pfx4:Name>
+                                <xsl:value-of select="&quot;BTTV&quot;"/>
+                            </pfx4:Name>
+                        </pfx4:To>
+                        <pfx4:MsgId>
+                            <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                        </pfx4:MsgId>
+                        <pfx4:BizServ>
+                            <pfx4:Id>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </pfx4:Id>
+                            <pfx4:Name>
+                                <xsl:value-of select="&quot;T24BTTV&quot;"/>
+                            </pfx4:Name>
+                        </pfx4:BizServ>
+                        <pfx4:CreatedDate>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </pfx4:CreatedDate>
+                    </pfx4:AppHdr>
+                    <ServiceBody>
+                        <xsl:copy-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                    </ServiceBody>
+                </ServiceInput>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint 2">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>925</pd:x>
+        <pd:y>960</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns14:input>
+                <duplicateKey>
+                    <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </duplicateKey>
+            </ns14:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert-BCBT-CTDT DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>411</pd:x>
+        <pd:y>228</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/TTBTTT DB.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into CTDT (NHA, NHB, SO_CT , NG_CT, NO_CO, LOAITIEN, STIEN, SBT, LNV, LNV1, NH_CH, NH_NH, NOIDUNG, DV_CH, CM_CH, TK_CH, DV_NH ,CM_NH, TK_NH, HL_TT, LCT, SBTB,
+CK_MT, CK_KT, NGAY_KS, NGAY_CIB, NGAY_NHB, NGAY_DC, NGAY_DC1, MA_TTV, MA_KST, TTKS, SOBANIN      ,CK_KTDEN     ,XACNHAN ,DACHUYEN     ,TINHTRANG_DC ,TINHTRANG_DC1,
+TINHTRANG, MA_KTGD, NH_CH1,TEN_CH1, NH_NH1, TEN_NH1, MA_THUE,CKM) 
+values(?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>p_NHA</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SO_CT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NG_CT</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NO_CO</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LOAITIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_STIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NOIDUNG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_HL_TT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LCT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBTB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_MT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_KS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_CIB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_TTV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KST</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TTKS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SOBANIN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KTDEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_XACNHAN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DACHUYEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KTGD</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_THUE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CKM</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <p_NHA>
+                    <xsl:value-of select="&quot;.&quot;"/>
+                </p_NHA>
+                <p_NHB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:lOCiCode)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:lOCiCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NHB>
+                <p_SO_CT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SO_CT>
+                <p_NG_CT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:debitValueDate)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:debitValueDate"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NG_CT>
+                <p_NO_CO>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 2&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 1&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 2&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 1&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NO_CO>
+                <p_LOAITIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:debitCurrency)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:debitCurrency"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LOAITIEN>
+                <p_STIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:debitAmount)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:debitAmount"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_STIEN>
+                <p_SBT>
+                    <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef and not(contains($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef, 'ERP')) and string-length($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef) > 25) then&#xA;substring($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef, string-length($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef) - 24, 8)&#xA;else&#xA;''"/>
+                </p_SBT>
+                <p_LNV>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 30&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 31&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 30&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 31&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LNV>
+                <p_LNV1>
+                    <xsl:value-of select="101"/>
+                </p_LNV1>
+                <p_NH_CH>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NH_CH>
+                <p_NH_NH>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:bcBankSortCode"/>
+                </p_NH_NH>
+                <p_NOIDUNG>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring(tib:concat-sequence(tib:tokenize($Parse-XML/pfx5:FTSBVCLR/pfx5:payDetail, &quot;$`$&quot;)), 1, 210))">
+                            <xsl:value-of select="substring(tib:concat-sequence(tib:tokenize($Parse-XML/pfx5:FTSBVCLR/pfx5:payDetail, &quot;$`$&quot;)), 1, 210)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NOIDUNG>
+                <p_DV_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[2]))">
+                            <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_CH>
+                <p_CM_CH>
+                    <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAddList/pfx5:lOrdCustAdd[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAddList/pfx5:lOrdCustAdd[2])"/>
+                </p_CM_CH>
+                <p_TK_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAcct)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAcct"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TK_CH>
+                <p_DV_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML/pfx5:FTSBVCLR/pfx5:benCustomerList/pfx5:benCustomer[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:benCustomerList/pfx5:benCustomer[2]))">
+                            <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:benCustomerList/pfx5:benCustomer[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:benCustomerList/pfx5:benCustomer[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_NH>
+                <p_CM_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[2]))">
+                            <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_CM_NH>
+                <p_TK_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:benAcctNo)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:benAcctNo"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TK_NH>
+                <p_HL_TT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_HL_TT>
+                <p_LCT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_LCT>
+                <p_SBTB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:lStbt)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:lStbt"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_SBTB>
+                <p_CK_MT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_MT>
+                <p_CK_KT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KT>
+                <p_NGAY_KS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_KS>
+                <p_NGAY_CIB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_CIB>
+                <p_NGAY_NHB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_NHB>
+                <p_NGAY_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC>
+                <p_NGAY_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC1>
+                <p_MA_TTV>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_TTV>
+                <p_MA_KST>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_KST>
+                <p_TTKS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TTKS>
+                <p_SOBANIN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SOBANIN>
+                <p_CK_KTDEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KTDEN>
+                <p_XACNHAN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_XACNHAN>
+                <p_DACHUYEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_DACHUYEN>
+                <p_TINHTRANG_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC>
+                <p_TINHTRANG_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC1>
+                <p_TINHTRANG>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG>
+                <p_MA_KTGD>
+                    <xsl:value-of select="substring($Parse-XML/pfx5:FTSBVCLR/pfx5:id, 3, 10)"/>
+                </p_MA_KTGD>
+                <p_NH_CH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:oIndirectCode"/>
+                </p_NH_CH1>
+                <p_TEN_CH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:oIndirectCodeName"/>
+                </p_TEN_CH1>
+                <p_NH_NH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:rIndirectCode"/>
+                </p_NH_NH1>
+                <p_TEN_NH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:rIndirectCodeName"/>
+                </p_TEN_NH1>
+                <p_MA_THUE>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_THUE>
+                <p_CKM>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CKM>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogStart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>69</pd:x>
+        <pd:y>476</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;T24BTTVOut&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat($ServicesVariable/root/OperationName, ': Start ',$ServicesVariable/root/OperationName)"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns3:SOAEnvelope>
+                    <ns3:SOAServiceHeader>
+                        <ns3:AppHdr>
+                            <pfx4:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx4:CharSet>
+                            <pfx4:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx4:ServVersion>
+                            <pfx4:From>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;1002&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:From>
+                            <pfx4:To>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;07&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;BTTV&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:To>
+                            <pfx4:MsgId>
+                                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </pfx4:MsgId>
+                            <pfx4:BizServ>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;T24BTTVOut&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:BizServ>
+                            <pfx4:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx4:CreatedDate>
+                        </ns3:AppHdr>
+                        <ns3:SOAMsgId>
+                            <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                        </ns3:SOAMsgId>
+                        <ns3:ServiceName>
+                            <xsl:value-of select="$ServicesVariable/root/ServiceName"/>
+                        </ns3:ServiceName>
+                        <ns3:OperationName>
+                            <xsl:value-of select="$ServicesVariable/root/OperationName"/>
+                        </ns3:OperationName>
+                        <ns3:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns3:ProcessName>
+                    </ns3:SOAServiceHeader>
+                    <ns3:ServiceBody>
+                        <xsl:copy-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                    </ns3:ServiceBody>
+                </ns3:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>739</pd:x>
+        <pd:y>360</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;T24BTTVOut&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat( $ServicesVariable/root/OperationName ,': End ', $ServicesVariable/root/OperationName )"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns3:SOAEnvelope>
+                    <ns3:SOAServiceHeader>
+                        <ns3:AppHdr>
+                            <pfx4:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx4:CharSet>
+                            <pfx4:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx4:ServVersion>
+                            <pfx4:From>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;1002&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:From>
+                            <pfx4:To>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;07&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;BTTV&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:To>
+                            <pfx4:MsgId>
+                                <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR) then &#xA;$Parse-XML/pfx5:FTSBVCLR/pfx5:id&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow) then &#xA;$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:id&#xA;else&#xA;''"/>
+                            </pfx4:MsgId>
+                            <pfx4:MsgPreId>
+                                <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR) then &#xA;$Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow) then &#xA;$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef&#xA;else&#xA;''"/>
+                            </pfx4:MsgPreId>
+                            <pfx4:MsgSrcId>
+                                <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR) then &#xA;$Parse-XML/pfx5:FTSBVCLR/pfx5:id&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow) then &#xA;$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:id&#xA;else&#xA;''"/>
+                            </pfx4:MsgSrcId>
+                            <pfx4:BizServ>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;T24BTTVOut&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:BizServ>
+                            <pfx4:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx4:CreatedDate>
+                        </ns3:AppHdr>
+                        <ns3:SOAMsgId>
+                            <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                        </ns3:SOAMsgId>
+                        <ns3:ServiceName>
+                            <xsl:value-of select="$ServicesVariable/root/ServiceName"/>
+                        </ns3:ServiceName>
+                        <ns3:OperationName>
+                            <xsl:value-of select="$ServicesVariable/root/OperationName"/>
+                        </ns3:OperationName>
+                        <ns3:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns3:ProcessName>
+                    </ns3:SOAServiceHeader>
+                    <ns3:ServiceBody>
+                        <ns4:ServiceEnverlop>
+                            <pfx4:AppHdr>
+                                <pfx4:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx4:CharSet>
+                                <pfx4:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx4:ServVersion>
+                                <pfx4:From>
+                                    <pfx4:Id>
+                                        <xsl:value-of select="&quot;1002&quot;"/>
+                                    </pfx4:Id>
+                                    <pfx4:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx4:Name>
+                                </pfx4:From>
+                                <pfx4:To>
+                                    <pfx4:Id>
+                                        <xsl:value-of select="&quot;07&quot;"/>
+                                    </pfx4:Id>
+                                    <pfx4:Name>
+                                        <xsl:value-of select="&quot;BTTV&quot;"/>
+                                    </pfx4:Name>
+                                </pfx4:To>
+                                <pfx4:MsgId>
+                                    <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                </pfx4:MsgId>
+                                <pfx4:MsgPreId>
+                                    <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR) then &#xA;$Parse-XML/pfx5:FTSBVCLR/pfx5:lStbt&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow) then &#xA;$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lStbt&#xA;else&#xA;''"/>
+                                </pfx4:MsgPreId>
+                                <pfx4:MsgSrcId>
+                                    <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR) then &#xA;$Parse-XML/pfx5:FTSBVCLR/pfx5:id&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow) then &#xA;$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:id&#xA;else&#xA;''"/>
+                                </pfx4:MsgSrcId>
+                                <pfx4:BizServ>
+                                    <pfx4:Id>
+                                        <xsl:value-of select="&quot;1&quot;"/>
+                                    </pfx4:Id>
+                                    <pfx4:Name>
+                                        <xsl:value-of select="&quot;T24BTTVOut&quot;"/>
+                                    </pfx4:Name>
+                                </pfx4:BizServ>
+                                <pfx4:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx4:CreatedDate>
+                            </pfx4:AppHdr>
+                            <pfx4:ResponseStatus>
+                                <pfx4:Status>
+                                    <xsl:value-of select="if($Insert-BCBT-CTDT-DB/jdbcUpdateActivityOutput) then&#xA; (if($Insert-BCBT-CTDT-DB/jdbcUpdateActivityOutput/noOfUpdates = 1) then 0&#xA;else 1)&#xA;else if($Insert-BICB-CTDT-DB/jdbcUpdateActivityOutput) then&#xA;(if($Insert-BICB-CTDT-DB/jdbcUpdateActivityOutput/noOfUpdates = 1) then 0&#xA;else 1)&#xA;else if($Insert-ACBD-CTDT-DB/jdbcUpdateActivityOutput) then&#xA;(if($Insert-ACBD-CTDT-DB/jdbcUpdateActivityOutput/noOfUpdates = 1) then 0&#xA;else 1)&#xA;else if($Insert-ACCB-CTDT-DB/jdbcUpdateActivityOutput) then&#xA;(if($Insert-ACCB-CTDT-DB/jdbcUpdateActivityOutput/noOfUpdates = 1) then 0&#xA;else 1)&#xA;else&#xA;&quot;&quot;"/>
+                                </pfx4:Status>
+                                <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                                    <pfx4:ErrorCode>
+                                        <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                    </pfx4:ErrorCode>
+                                </xsl:if>
+                                <xsl:if test="$_error/ns1:ErrorReport/Msg">
+                                    <pfx4:ErrorMessage>
+                                        <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                                    </pfx4:ErrorMessage>
+                                </xsl:if>
+                                <pfx4:ErrorInfo>
+                                    <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                                        <pfx4:ErrorCode>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                        </pfx4:ErrorCode>
+                                    </xsl:if>
+                                    <xsl:if test="$_error/ns1:ErrorReport/Msg">
+                                        <pfx4:ErrorMessage>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                                        </pfx4:ErrorMessage>
+                                    </xsl:if>
+                                </pfx4:ErrorInfo>
+                            </pfx4:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Parse-XML/pfx5:FTSBVCLR"/>
+                                <xsl:copy-of select="$Parse-XML-1/pfx7:CLRDebitFlow"/>
+                            </ServiceBody>
+                        </ns4:ServiceEnverlop>
+                    </ns3:ServiceBody>
+                </ns3:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServicesVariable/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>71</pd:x>
+        <pd:y>188</pd:y>
+        <config>
+            <variableName>ServicesVariable</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="tib:timestamp()"/>
+                </startTime>
+                <ServiceName>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;Global/System/T24TTBTDT/BTTVOut&quot;"/>
+                </ServiceName>
+                <OperationName>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;BTTVOut&quot;"/>
+                </OperationName>
+                <SOAMsgId>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert-BICB-CTDT-DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>408</pd:x>
+        <pd:y>314</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/TTBTTT DB.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into CTDT (NHA, NHB, SO_CT , NG_CT, NO_CO, LOAITIEN, STIEN, SBT, LNV, LNV1, NH_CH, NH_NH, NOIDUNG, DV_CH, CM_CH, TK_CH, DV_NH ,CM_NH, TK_NH, HL_TT, LCT, SBTB,
+CK_MT, CK_KT, NGAY_KS, NGAY_CIB, NGAY_NHB, NGAY_DC, NGAY_DC1, MA_TTV, MA_KST, TTKS, SOBANIN,CK_KTDEN,XACNHAN ,DACHUYEN     ,TINHTRANG_DC ,TINHTRANG_DC1,
+TINHTRANG, MA_KTGD, NH_CH1,TEN_CH1, NH_NH1, TEN_NH1, MA_THUE,CKM) 
+values(?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>p_NHA</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SO_CT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NG_CT</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NO_CO</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LOAITIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_STIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NOIDUNG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_HL_TT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LCT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBTB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_MT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_KS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_CIB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_TTV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KST</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TTKS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SOBANIN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KTDEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_XACNHAN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DACHUYEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KTGD</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_THUE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CKM</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <p_NHA>
+                    <xsl:value-of select="&quot;.&quot;"/>
+                </p_NHA>
+                <p_NHB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:lOCiCode)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:lOCiCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NHB>
+                <p_SO_CT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SO_CT>
+                <p_NG_CT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:debitValueDate)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:debitValueDate"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NG_CT>
+                <p_NO_CO>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 2&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 1&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 2&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 1&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NO_CO>
+                <p_LOAITIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:debitCurrency)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:debitCurrency"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LOAITIEN>
+                <p_STIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:debitAmount)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:debitAmount"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_STIEN>
+                <p_SBT>
+                    <xsl:value-of select="if($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef and not(contains($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef, 'ERP')) and string-length($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef) > 25) then&#xA;substring($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef, string-length($Parse-XML/pfx5:FTSBVCLR/pfx5:lIbpsRef) - 24, 8)&#xA;else&#xA;''"/>
+                </p_SBT>
+                <p_LNV>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 30&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 31&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'CR') then 30&#xA;else if($Parse-XML/pfx5:FTSBVCLR/pfx5:lBtType = 'DR') then 31&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LNV>
+                <p_LNV1>
+                    <xsl:value-of select="101"/>
+                </p_LNV1>
+                <p_NH_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists(&quot;&quot;)">
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NH_CH>
+                <p_NH_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:bcBankSortCode)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:bcBankSortCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NH_NH>
+                <p_NOIDUNG>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring(tib:concat-sequence(tib:tokenize($Parse-XML/pfx5:FTSBVCLR/pfx5:payDetail, &quot;$`$&quot;)), 1, 210))">
+                            <xsl:value-of select="substring(tib:concat-sequence(tib:tokenize($Parse-XML/pfx5:FTSBVCLR/pfx5:payDetail, &quot;$`$&quot;)), 1, 210)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NOIDUNG>
+                <p_DV_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[2]))">
+                            <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:orderingCustList/pfx5:orderingCust[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_CH>
+                <p_CM_CH>
+                    <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAddList/pfx5:lOrdCustAdd[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAddList/pfx5:lOrdCustAdd[2])"/>
+                </p_CM_CH>
+                <p_TK_CH>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:lOrdCustAcct"/>
+                </p_TK_CH>
+                <p_DV_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML/pfx5:FTSBVCLR/pfx5:inBenCustomerList/pfx5:inBenCustomer[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:inBenCustomerList/pfx5:inBenCustomer[2]))">
+                            <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:inBenCustomerList/pfx5:inBenCustomer[1], $Parse-XML/pfx5:FTSBVCLR/pfx5:inBenCustomerList/pfx5:inBenCustomer[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_NH>
+                <p_CM_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[1],$Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[2]))">
+                            <xsl:value-of select="concat($Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[1],$Parse-XML/pfx5:FTSBVCLR/pfx5:lBenCustAddList/pfx5:lBenCustAdd[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_CM_NH>
+                <p_TK_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:inBenAcctNo)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:inBenAcctNo"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TK_NH>
+                <p_HL_TT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_HL_TT>
+                <p_LCT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_LCT>
+                <p_SBTB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx5:FTSBVCLR/pfx5:lStbt)">
+                            <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:lStbt"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_SBTB>
+                <p_CK_MT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_MT>
+                <p_CK_KT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KT>
+                <p_NGAY_KS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_KS>
+                <p_NGAY_CIB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_CIB>
+                <p_NGAY_NHB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_NHB>
+                <p_NGAY_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC>
+                <p_NGAY_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC1>
+                <p_MA_TTV>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_TTV>
+                <p_MA_KST>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_KST>
+                <p_TTKS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TTKS>
+                <p_SOBANIN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SOBANIN>
+                <p_CK_KTDEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KTDEN>
+                <p_XACNHAN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_XACNHAN>
+                <p_DACHUYEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_DACHUYEN>
+                <p_TINHTRANG_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC>
+                <p_TINHTRANG_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC1>
+                <p_TINHTRANG>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG>
+                <p_MA_KTGD>
+                    <xsl:value-of select="substring($Parse-XML/pfx5:FTSBVCLR/pfx5:id, 3, 10)"/>
+                </p_MA_KTGD>
+                <p_NH_CH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:oIndirectCode"/>
+                </p_NH_CH1>
+                <p_TEN_CH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:oIndirectCodeName"/>
+                </p_TEN_CH1>
+                <p_NH_NH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:rIndirectCode"/>
+                </p_NH_NH1>
+                <p_TEN_NH1>
+                    <xsl:value-of select="$Parse-XML/pfx5:FTSBVCLR/pfx5:rIndirectCodeName"/>
+                </p_TEN_NH1>
+                <p_MA_THUE>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_THUE>
+                <p_CKM>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CKM>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert-ACBD-CTDT-DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>417</pd:x>
+        <pd:y>532</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/TTBTTT DB.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into CTDT (NHA, NHB, SO_CT , NG_CT, NO_CO, LOAITIEN, STIEN, SBT, LNV, LNV1, NH_CH, NH_NH, NOIDUNG, DV_CH, CM_CH, TK_CH, DV_NH ,CM_NH, TK_NH, HL_TT, LCT, SBTB,
+CK_MT, CK_KT, NGAY_KS, NGAY_CIB, NGAY_NHB, NGAY_DC, NGAY_DC1, MA_TTV, MA_KST, TTKS, SOBANIN      ,CK_KTDEN     ,XACNHAN ,DACHUYEN     ,TINHTRANG_DC ,TINHTRANG_DC1,
+TINHTRANG, MA_KTGD, NH_CH1,TEN_CH1, NH_NH1, TEN_NH1, MA_THUE,CKM) 
+values(?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>p_NHA</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SO_CT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NG_CT</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NO_CO</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LOAITIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_STIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NOIDUNG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_HL_TT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LCT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBTB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_MT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_KS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_CIB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_TTV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KST</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TTKS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SOBANIN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KTDEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_XACNHAN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DACHUYEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KTGD</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_THUE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CKM</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <p_NHA>
+                    <xsl:value-of select="&quot;.&quot;"/>
+                </p_NHA>
+                <p_NHB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOCiCode1)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOCiCode1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NHB>
+                <p_SO_CT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SO_CT>
+                <p_NG_CT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitValueDate)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitValueDate"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NG_CT>
+                <p_NO_CO>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 2&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 1&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 2&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 1&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NO_CO>
+                <p_LOAITIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitCurrency)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitCurrency"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LOAITIEN>
+                <p_STIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitAmount1)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitAmount1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_STIEN>
+                <p_SBT>
+                    <xsl:value-of select="if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef and not(contains($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef, 'ERP')) and string-length($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef) > 25) then&#xA;substring($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef, string-length($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef) - 24, 8)&#xA;else&#xA;''"/>
+                </p_SBT>
+                <p_LNV>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 30&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 31&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 30&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 31&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LNV>
+                <p_LNV1>
+                    <xsl:value-of select="101"/>
+                </p_LNV1>
+                <p_NH_CH>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NH_CH>
+                <p_NH_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lRCiCode)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lRCiCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NH_NH>
+                <p_NOIDUNG>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring(tib:concat-sequence(tib:tokenize($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:payDetail, &quot;$`$&quot;)), 1, 210))">
+                            <xsl:value-of select="substring(tib:concat-sequence(tib:tokenize($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:payDetail, &quot;$`$&quot;)), 1, 210)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NOIDUNG>
+                <p_DV_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[2]))">
+                            <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_CH>
+                <p_CM_CH>
+                    <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOrdCustAddList/pfx7:lOrdCustAdd[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOrdCustAddList/pfx7:lOrdCustAdd[2])"/>
+                </p_CM_CH>
+                <p_TK_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:ordCustAcct)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:ordCustAcct"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TK_CH>
+                <p_DV_NH>
+                    <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenList/pfx7:lBen[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenList/pfx7:lBen[2])"/>
+                </p_DV_NH>
+                <p_CM_NH>
+                    <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenCustAddList/pfx7:lBenCustAdd[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenCustAddList/pfx7:lBenCustAdd[2])"/>
+                </p_CM_NH>
+                <p_TK_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenAcct)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenAcct"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TK_NH>
+                <p_HL_TT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_HL_TT>
+                <p_LCT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_LCT>
+                <p_SBTB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lStbt)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lStbt"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_SBTB>
+                <p_CK_MT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_MT>
+                <p_CK_KT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KT>
+                <p_NGAY_KS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_KS>
+                <p_NGAY_CIB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_CIB>
+                <p_NGAY_NHB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_NHB>
+                <p_NGAY_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC>
+                <p_NGAY_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC1>
+                <p_MA_TTV>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_TTV>
+                <p_MA_KST>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_KST>
+                <p_TTKS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TTKS>
+                <p_SOBANIN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SOBANIN>
+                <p_CK_KTDEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KTDEN>
+                <p_XACNHAN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_XACNHAN>
+                <p_DACHUYEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_DACHUYEN>
+                <p_TINHTRANG_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC>
+                <p_TINHTRANG_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC1>
+                <p_TINHTRANG>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG>
+                <p_MA_KTGD>
+                    <xsl:value-of select="substring($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:id, 3, 10)"/>
+                </p_MA_KTGD>
+                <p_NH_CH1>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectCode)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NH_CH1>
+                <p_TEN_CH1>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectName)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectName"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TEN_CH1>
+                <p_NH_NH1>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectCode)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NH_NH1>
+                <p_TEN_NH1>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectName)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectName"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TEN_NH1>
+                <p_MA_THUE>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_THUE>
+                <p_CKM>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CKM>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse-XML-1">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>228</pd:x>
+        <pd:y>644</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term ref="pfx7:CLRDebitFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>223</pd:x>
+        <pd:y>474</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Insert-ACCB-CTDT-DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>427</pd:x>
+        <pd:y>644</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/TTBTTT DB.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into CTDT (NHA, NHB, SO_CT , NG_CT, NO_CO, LOAITIEN, STIEN, SBT, LNV, LNV1, NH_CH, NH_NH, NOIDUNG, DV_CH, CM_CH, TK_CH, DV_NH ,CM_NH, TK_NH, HL_TT, LCT, SBTB,
+CK_MT, CK_KT, NGAY_KS, NGAY_CIB, NGAY_NHB, NGAY_DC, NGAY_DC1, MA_TTV, MA_KST, TTKS, SOBANIN      ,CK_KTDEN     ,XACNHAN ,DACHUYEN     ,TINHTRANG_DC ,TINHTRANG_DC1,
+TINHTRANG, MA_KTGD, NH_CH1,TEN_CH1, NH_NH1, TEN_NH1, MA_THUE,CKM) 
+values(?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>p_NHA</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SO_CT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NG_CT</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NO_CO</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LOAITIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_STIEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LNV1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NOIDUNG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_CH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DV_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CM_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TK_NH</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_HL_TT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_LCT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SBTB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_MT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_KS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_CIB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_NHB</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NGAY_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_TTV</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KST</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TTKS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_SOBANIN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CK_KTDEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_XACNHAN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_DACHUYEN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG_DC1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TINHTRANG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_KTGD</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_CH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_NH_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_TEN_NH1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_MA_THUE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>p_CKM</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <p_NHA>
+                    <xsl:value-of select="&quot;.&quot;"/>
+                </p_NHA>
+                <p_NHB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOCiCode1)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOCiCode1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NHB>
+                <p_SO_CT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SO_CT>
+                <p_NG_CT>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitValueDate)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitValueDate"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NG_CT>
+                <p_NO_CO>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 2&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 1&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 2&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 1&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NO_CO>
+                <p_LOAITIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitCurrency)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitCurrency"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LOAITIEN>
+                <p_STIEN>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitAmount1)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:debitAmount1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_STIEN>
+                <p_SBT>
+                    <xsl:value-of select="if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef and not(contains($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef, 'ERP')) and string-length($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef) > 25) then&#xA;substring($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef, string-length($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lIbpsRef) - 24, 8)&#xA;else&#xA;''"/>
+                </p_SBT>
+                <p_LNV>
+                    <xsl:choose>
+                        <xsl:when test="exists(if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 30&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 31&#xA; else '')">
+                            <xsl:value-of select="if ($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'CR') then 30&#xA;else if($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBtType1 = 'DR') then 31&#xA; else ''"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_LNV>
+                <p_LNV1>
+                    <xsl:value-of select="101"/>
+                </p_LNV1>
+                <p_NH_CH>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NH_CH>
+                <p_NH_NH>
+                    <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lRCiCode"/>
+                </p_NH_NH>
+                <p_NOIDUNG>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring(tib:concat-sequence(tib:tokenize($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:payDetail, &quot;$`$&quot;)), 1, 210))">
+                            <xsl:value-of select="substring(tib:concat-sequence(tib:tokenize($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:payDetail, &quot;$`$&quot;)), 1, 210)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_NOIDUNG>
+                <p_DV_CH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[2]))">
+                            <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:orderingCustList/pfx7:orderingCust[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_CH>
+                <p_CM_CH>
+                    <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOrdCustAddList/pfx7:lOrdCustAdd[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lOrdCustAddList/pfx7:lOrdCustAdd[2])"/>
+                </p_CM_CH>
+                <p_TK_CH>
+                    <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:ordCustAcct"/>
+                </p_TK_CH>
+                <p_DV_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenList/pfx7:lBen[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenList/pfx7:lBen[2]))">
+                            <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenList/pfx7:lBen[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenList/pfx7:lBen[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_DV_NH>
+                <p_CM_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists(concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenCustAddList/pfx7:lBenCustAdd[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenCustAddList/pfx7:lBenCustAdd[2]))">
+                            <xsl:value-of select="concat($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenCustAddList/pfx7:lBenCustAdd[1], $Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenCustAddList/pfx7:lBenCustAdd[2])"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_CM_NH>
+                <p_TK_NH>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenAcct)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lBenAcct"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TK_NH>
+                <p_HL_TT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_HL_TT>
+                <p_LCT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_LCT>
+                <p_SBTB>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lStbt)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:lStbt"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_SBTB>
+                <p_CK_MT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_MT>
+                <p_CK_KT>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KT>
+                <p_NGAY_KS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_KS>
+                <p_NGAY_CIB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_CIB>
+                <p_NGAY_NHB>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_NHB>
+                <p_NGAY_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC>
+                <p_NGAY_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_NGAY_DC1>
+                <p_MA_TTV>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_TTV>
+                <p_MA_KST>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_KST>
+                <p_TTKS>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TTKS>
+                <p_SOBANIN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_SOBANIN>
+                <p_CK_KTDEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CK_KTDEN>
+                <p_XACNHAN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_XACNHAN>
+                <p_DACHUYEN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_DACHUYEN>
+                <p_TINHTRANG_DC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC>
+                <p_TINHTRANG_DC1>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG_DC1>
+                <p_TINHTRANG>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_TINHTRANG>
+                <p_MA_KTGD>
+                    <xsl:value-of select="substring($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:id, 3, 10)"/>
+                </p_MA_KTGD>
+                <p_NH_CH1>
+                    <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectCode"/>
+                </p_NH_CH1>
+                <p_TEN_CH1>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectName)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:oIndirectName"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TEN_CH1>
+                <p_NH_NH1>
+                    <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectCode"/>
+                </p_NH_NH1>
+                <p_TEN_NH1>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectName)">
+                            <xsl:value-of select="$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:rIndirectName"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </p_TEN_NH1>
+                <p_MA_THUE>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_MA_THUE>
+                <p_CKM>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </p_CKM>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogErrorProcessorError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1232</pd:x>
+        <pd:y>862</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEndError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>794</pd:x>
+        <pd:y>483</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="WrongTypeBTTVOut">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>381</pd:x>
+        <pd:y>399</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>WrongBTTVQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Error Handling</pd:from>
+        <pd:to>Checkpoint 2</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm to delete CBSQueue</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>LogStart</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint 2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint 2</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Insert-BCBT-CTDT DB</pd:to>
+        <pd:xpathDescription>BCBT</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx5:FTSBVCLR/pfx5:transactionType = 'BCBT'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert-BCBT-CTDT DB</pd:from>
+        <pd:to>Confirm to delete CBSQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>Checkpoint</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Insert-BICB-CTDT-DB</pd:to>
+        <pd:xpathDescription>BICB</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx5:FTSBVCLR/pfx5:transactionType = 'BICB'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert-BICB-CTDT-DB</pd:from>
+        <pd:to>Confirm to delete CBSQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert-ACBD-CTDT-DB</pd:from>
+        <pd:to>Confirm to delete CBSQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML-1</pd:from>
+        <pd:to>Insert-ACBD-CTDT-DB</pd:to>
+        <pd:xpathDescription>ACBD</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:transactionType = 'ACBD'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:xpathDescription>FTSBVCLR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'FTSBVCLR')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Parse-XML-1</pd:to>
+        <pd:xpathDescription>CLRDebitFlow</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'CLRDebitFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML-1</pd:from>
+        <pd:to>Insert-ACCB-CTDT-DB</pd:to>
+        <pd:xpathDescription>ACCB</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML-1/pfx7:CLRDebitFlow/pfx7:transactionType = 'ACCB'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert-ACCB-CTDT-DB</pd:from>
+        <pd:to>Confirm to delete CBSQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Error Handling</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>LogErrorProcessorError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogErrorProcessorError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>LogEndError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEndError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>WrongTypeBTTVOut</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WrongTypeBTTVOut</pd:from>
+        <pd:to>Confirm to delete CBSQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML-1</pd:from>
+        <pd:to>WrongTypeBTTVOut</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Subscriber</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

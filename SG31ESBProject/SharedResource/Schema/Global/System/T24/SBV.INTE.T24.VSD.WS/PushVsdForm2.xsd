@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/PushVsdForm2/PushVsdForm2Flow"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/PushVsdForm2/PushVsdForm2Flow"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../QueueSchema/Common-EventCommon.xsd"/>
+	<xsd:element name="PushVsdForm2Flow">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="formName" minOccurs="0"/>
+				<xsd:element ref="srcTransIdGroup" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="formName" type="xsd:string"/>
+	<xsd:element name="srcTransIdGroup">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="srcTransId" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="transDate" type="xsd:date" minOccurs="0"/>
+				<xsd:element name="valueDate" type="xsd:date" minOccurs="0"/>
+				<xsd:element name="bondCode" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="sendingBank" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="recevingBank" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="amount" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="currency" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="notes" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="status" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="transCompleted" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="mapError" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:attribute name="index" type="xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

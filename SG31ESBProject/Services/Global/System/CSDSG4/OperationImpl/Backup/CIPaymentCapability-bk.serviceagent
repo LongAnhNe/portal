@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceResource xmlns:wsdl="http://wsdl.www.sbv.gov.vn/schema/global/system/csdtosg4/CSDToSG4.wsdl">
+    <ns0:import xmlns:ns0="http://schemas.xmlsoap.org/wsdl/" namespace="http://wsdl.www.sbv.gov.vn/schema/global/system/csdtosg4/CSDToSG4.wsdl" location="/SharedResource/Schema/Global/System/CSDSG4/CIPaymentCapability.wsdl"/>
+    <config>
+        <wsdl namespace="http://xmlns.example.com/1465459510791" embedWsdlComponents="true" embedSchemaComponents="true" embedJndiProperties="false"/>
+        <class>com.tibco.bw.service.serviceAgent.ServiceServiceAgent</class>
+        <name>CIPaymentCapability-bk</name>
+        <resourceType>service.definition</resourceType>
+        <implType>bw</implType>
+        <groups>
+            <row isDefault="true" groupName="Default"/>
+        </groups>
+        <serviceChange>Tue Jun 14 10:28:03 ICT 2016</serviceChange>
+        <interfaceImpl>
+            <tab>
+                <tabName>CSDToSG4</tabName>
+                <tabType>bw</tabType>
+                <config>
+                    <wsdlDetail location="/SharedResource/Schema/Global/System/CSDSG4/CIPaymentCapability.wsdl" portType="CIPaymentCapability" ns="http://wsdl.www.sbv.gov.vn/schema/global/system/csdtosg4/CSDToSG4.wsdl"/>
+                    <detail>
+                        <tab>
+                            <tabName>service.definition.impl.tab.label</tabName>
+                            <tabType>impl</tabType>
+                            <config>
+                                <operations>
+                                    <row opName="UpdateCICollaterizedAssets" opImpl="/Services/Global/System/CSDSG4/OperationImpl/UpdateCICollaterizedAssets.process"/>
+                                    <row opName="UpdateCINetCreditLimit" opImpl="/Services/Global/System/CSDSG4/OperationImpl/UpdateCINetCreditLimit.process"/>
+                                    <row opName="UpdateCIPledgedAsset" opImpl="/Services/Global/System/CSDSG4/OperationImpl/UpdateCIPledgedAsset.process"/>
+                                </operations>
+                            </config>
+                        </tab>
+                        <tab>
+                            <tabName>service.definition.ep.tab.label</tabName>
+                            <tabType>ep</tabType>
+                            <config>
+                                <epBindings>
+                                    <row epName="CIPaymentCapabilityEndpoint0" epType="soap">
+                                        <config>
+                                            <epDetail>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.transport.tab.label</tabName>
+                                                    <tabType>transport</tabType>
+                                                    <config>
+                                                        <sharedChannel>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</sharedChannel>
+                                                        <transport>
+                                                            <config>
+                                                                <JMSTo>CIPaymentCapability.Queue</JMSTo>
+                                                                <JMSDestinationType>queue</JMSDestinationType>
+                                                                <JMSMessageType>Bytes</JMSMessageType>
+                                                                <SoapJmsW3cFlag>false</SoapJmsW3cFlag>
+                                                                <targetService/>
+                                                                <useIncomingDeliveryMode>false</useIncomingDeliveryMode>
+                                                                <JMSDeliveryMode>2</JMSDeliveryMode>
+                                                                <JMSAcknowledgementMode>1</JMSAcknowledgementMode>
+                                                                <ApplicationProperties/>
+                                                                <ApplicationPropertiesOutMessage/>
+                                                                <JMSMaxSessions/>
+                                                                <operations>
+                                                                    <operation name="UpdateCICollaterizedAssets">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="UpdateCINetCreditLimit">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                    <operation name="UpdateCIPledgedAsset">
+                                                                        <general>
+                                                                            <config>
+                                                                                <JMSDurable>false</JMSDurable>
+                                                                                <JMSDurableName/>
+                                                                            </config>
+                                                                        </general>
+                                                                    </operation>
+                                                                </operations>
+                                                            </config>
+                                                        </transport>
+                                                    </config>
+                                                </tab>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.details.tab.label</tabName>
+                                                    <tabType>details</tabType>
+                                                    <config>
+                                                        <operationStyle>document</operationStyle>
+                                                        <soapVersion>SOAP 1.1</soapVersion>
+                                                        <soap>
+                                                            <operation name="UpdateCICollaterizedAssets">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/System/CSDSG4/OperationImpl/CSDToSG4.serviceagent/CSDToSG4Endpoint0/UpdateCICollaterizedAssets</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="UpdateCINetCreditLimit">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/System/CSDSG4/OperationImpl/CSDToSG4.serviceagent/CSDToSG4Endpoint0/UpdateCINetCreditLimit</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="UpdateCIPledgedAsset">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/Global/System/CSDSG4/OperationImpl/CSDToSG4.serviceagent/CSDToSG4Endpoint0/UpdateCIPledgedAsset</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                        </soap>
+                                                    </config>
+                                                </tab>
+                                            </epDetail>
+                                        </config>
+                                    </row>
+                                </epBindings>
+                            </config>
+                        </tab>
+                    </detail>
+                </config>
+            </tab>
+        </interfaceImpl>
+    </config>
+</serviceResource>

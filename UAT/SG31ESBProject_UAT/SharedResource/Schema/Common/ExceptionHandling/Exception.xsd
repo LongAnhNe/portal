@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-err="sbv/common/exceptionhandling/errorreport/1.0"
+	 xmlns:cmd-soa="sbv/common/envelope/soaenvelope/1.0"
+	 xmlns:cmd-exc="sbv/common/exceptionhandling/exception/1.0"
+	 targetNamespace="sbv/common/exceptionhandling/exception/1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/exceptionhandling/errorreport/1.0" schemaLocation="ErrorReport.xsd"/>
+	<xs:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="../Envelope/SOAEnvelope.xsd"/>
+	<xs:complexType name="ExceptionBodyType">
+		<xs:sequence>
+			<xs:element name="Hostname" type="xs:string" minOccurs="0"/>
+			<xs:element name="Category" type="xs:string"/>
+			<xs:element name="Type" type="xs:string"/>
+			<xs:element name="Level" type="xs:string"/>
+			<xs:element name="ErrorReport" type="cmd-err:ErrorReportType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ExceptionBody" type="cmd-exc:ExceptionBodyType"/>
+	<xs:element name="Exception">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cmd-soa:SOAEnvelope" minOccurs="0"/>
+				<xs:element ref="cmd-exc:ExceptionBody"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

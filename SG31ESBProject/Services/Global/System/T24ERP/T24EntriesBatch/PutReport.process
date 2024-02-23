@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://temenos.com/SBV.FT.TOTAL.FEE.WS" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns13="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://temenos.com/SBV.FT.TOTAL.FEE">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TOTAL.FEE.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TOTAL.FEE.WS" location="/SharedResource/Schema/Global/System/T24/T24EntriesBatch/SBV.FT.TOTAL.FEE.WS.wsdl"/>
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/PutReport.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Date" type="xsd:string"/>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>204</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1499</pd:endX>
+    <pd:endY>202</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <T24WSResponse>
+            <xsd:element name="Response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="List" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="id" type="xsd:string"/>
+                                    <xsd:element name="message" type="xsd:string"/>
+                                    <xsd:element name="status" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </T24WSResponse>
+        <Response>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Response>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1460110354042</pd:targetNamespace>
+    <pd:activity name="Call_Procedure_T24">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>266</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <maxRows>1000</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24Report.sharedjdbc</jdbcSharedConfig>
+            <schema>T24R</schema>
+            <catalog>PKG_FEES_CALCULATE</catalog>
+            <ProcedureName>FN_FEES_CALCULATE</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>RETURN_VALUE</colName>
+                    <colType>5</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>V_DATE</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <V_DATE>
+                        <xsl:value-of select="$Start/Date"/>
+                    </V_DATE>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="QueryDataReport">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>512</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <timeout>%%T24DB/TimeOut%%</timeout>
+            <commit>false</commit>
+            <maxRows>0</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24Report.sharedjdbc</jdbcSharedConfig>
+            <statement>select * from FBNK_IBPS_TOTAL_FEES_TO_T24 where pro_date=?</statement>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>SEQ</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FT_TYPE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TOTAL_FEE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>PRO_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>1</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>CHAR</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ACCOUNT_CHARGE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FEE_CHARGE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>PAYMENT_DETAIL</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CO_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>IS_RUN</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>T24_DESC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CREATE_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DEBIT_ACCOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BANK_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>proDate</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <proDate>
+                    <xsl:value-of select="tib:trim($Start/Date)"/>
+                </proDate>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateT24Report">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>1085</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <timeout>%%T24DB/TimeOut%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>true</emptyStrAsNil>
+            <batchUpdate>true</batchUpdate>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24Report.sharedjdbc</jdbcSharedConfig>
+            <statement>UPDATE FBNK_IBPS_TOTAL_FEES_TO_T24 SET IS_RUN=?, T24_DESC=?  WHERE ID=? AND PRO_DATE=?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>IS_RUN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>T24_DESC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>PRO_DATE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <xsl:for-each select="$T24WSResponse/Response/List">
+                    <Record>
+                        <IS_RUN>
+                            <xsl:value-of select="status"/>
+                        </IS_RUN>
+                        <T24_DESC>
+                            <xsl:value-of select="message"/>
+                        </T24_DESC>
+                        <ID>
+                            <xsl:value-of select="id"/>
+                        </ID>
+                        <PRO_DATE>
+                            <xsl:value-of select="$Start/Date"/>
+                        </PRO_DATE>
+                    </Record>
+                </xsl:for-each>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>626</pd:x>
+        <pd:y>73</pd:y>
+        <pd:width>392</pd:width>
+        <pd:height>244</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$QueryDataReport/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>Record</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SBV.FT.TOTAL.FEE_WS</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>res-success</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>res-error</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SBV.FT.TOTAL.FEE_WS</pd:from>
+            <pd:to>res-success</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SBV.FT.TOTAL.FEE_WS</pd:from>
+            <pd:to>res-error</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SBV.FT.TOTAL.FEE_WS">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>706</pd:x>
+            <pd:y>203</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>ns4:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>InsertTotalFee</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSFEE%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <ns4:InsertTotalFee>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="$Record/Record/CO_CODE"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24Authentication/T24PassFee"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24Authentication/T24UserFee"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <SBVFTTOTALFEEINPType>
+                            <xsl:if test="$Record/Record/ID">
+                                <xsl:attribute name="id">
+                                    <xsl:value-of select="$Record/Record/ID"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/FT_TYPE">
+                                <FTTYPE>
+                                    <xsl:value-of select="$Record/Record/FT_TYPE"/>
+                                </FTTYPE>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/BANK_CODE">
+                                <BANKCODE>
+                                    <xsl:value-of select="$Record/Record/BANK_CODE"/>
+                                </BANKCODE>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/PRO_DATE">
+                                <PROCESSDATE>
+                                    <xsl:value-of select="$Record/Record/PRO_DATE"/>
+                                </PROCESSDATE>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/CREATE_DATE">
+                                <VALUEDATE>
+                                    <xsl:value-of select="$Record/Record/CREATE_DATE"/>
+                                </VALUEDATE>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/DEBIT_ACCOUNT">
+                                <DEBITACCOUNT>
+                                    <xsl:value-of select="$Record/Record/DEBIT_ACCOUNT"/>
+                                </DEBITACCOUNT>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/TOTAL_FEE">
+                                <TOTALFEE>
+                                    <xsl:value-of select="$Record/Record/TOTAL_FEE"/>
+                                </TOTALFEE>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/ACCOUNT_CHARGE">
+                                <ACCOUNTCHARGE>
+                                    <xsl:value-of select="$Record/Record/ACCOUNT_CHARGE"/>
+                                </ACCOUNTCHARGE>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/PAYMENT_DETAIL">
+                                <PAYMENTDETAIL>
+                                    <xsl:value-of select="$Record/Record/PAYMENT_DETAIL"/>
+                                </PAYMENTDETAIL>
+                            </xsl:if>
+                            <xsl:if test="$Record/Record/FEE_CHARGE">
+                                <FEECHARGE>
+                                    <xsl:value-of select="$Record/Record/FEE_CHARGE"/>
+                                </FEECHARGE>
+                            </xsl:if>
+                        </SBVFTTOTALFEEINPType>
+                    </ns4:InsertTotalFee>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="res-success">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>839</pd:x>
+            <pd:y>131</pd:y>
+            <config>
+                <variableName>T24WSResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Response>
+                    <xsl:copy-of select="$T24WSResponse/Response/List"/>
+                    <List>
+                        <id>
+                            <xsl:value-of select="$Record/Record/ID"/>
+                        </id>
+                        <message>
+                            <xsl:value-of select="if($SBV.FT.TOTAL.FEE_WS/outputMessage/ns4:InsertTotalFeeResponse/Status/successIndicator!='Success')&#xA; then $SBV.FT.TOTAL.FEE_WS/outputMessage/ns4:InsertTotalFeeResponse/Status/messages[1]&#xA;else &quot;Success&quot;"/>
+                        </message>
+                        <status>
+                            <xsl:value-of select="if($SBV.FT.TOTAL.FEE_WS/outputMessage/ns4:InsertTotalFeeResponse/Status/successIndicator!='Success')&#xA;then '-1'&#xA;else '1'"/>
+                        </status>
+                    </List>
+                </Response>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="res-error">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>839</pd:x>
+            <pd:y>258</pd:y>
+            <config>
+                <variableName>T24WSResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Response>
+                    <xsl:copy-of select="$T24WSResponse/Response/List"/>
+                    <List>
+                        <id>
+                            <xsl:value-of select="$Record/Record/ID"/>
+                        </id>
+                        <message>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                        </message>
+                        <status>
+                            <xsl:value-of select="&quot;-1&quot;"/>
+                        </status>
+                    </List>
+                </Response>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>876</pd:x>
+        <pd:y>548</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1367</pd:x>
+        <pd:y>203</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="&quot;T24Fee-Report&quot;"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns2:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns2:CharSet>
+                            <ns2:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns2:ServVersion>
+                            <ns2:From>
+                                <ns2:Id>
+                                    <xsl:value-of select="&quot;1000&quot;"/>
+                                </ns2:Id>
+                                <ns2:Name>
+                                    <xsl:value-of select="&quot;T24DB&quot;"/>
+                                </ns2:Name>
+                            </ns2:From>
+                            <ns2:To>
+                                <ns2:Id>
+                                    <xsl:value-of select="&quot;1001&quot;"/>
+                                </ns2:Id>
+                                <ns2:Name>
+                                    <xsl:value-of select="&quot;T24Report&quot;"/>
+                                </ns2:Name>
+                            </ns2:To>
+                            <ns2:MsgId>
+                                <xsl:value-of select="$Start/Date"/>
+                            </ns2:MsgId>
+                            <ns2:BizServ>
+                                <ns2:Id>
+                                    <xsl:value-of select="1"/>
+                                </ns2:Id>
+                                <ns2:Name>
+                                    <xsl:value-of select="&quot;T24EntriesBatch&quot;"/>
+                                </ns2:Name>
+                            </ns2:BizServ>
+                            <ns2:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns2:CreatedDate>
+                        </ns13:AppHdr>
+                        <ns13:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </ns13:SOAMsgId>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </ns13:ServiceName>
+                        <ns13:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </ns13:OperationName>
+                        <ns13:ProcessName>
+                            <xsl:value-of select="&quot;GenerateReport&quot;"/>
+                        </ns13:ProcessName>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody>
+                        <ns3:ServiceEnverlop>
+                            <ns2:AppHdr>
+                                <ns2:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns2:CharSet>
+                                <ns2:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns2:ServVersion>
+                                <ns2:From>
+                                    <ns2:Id>
+                                        <xsl:value-of select="&quot;1000&quot;"/>
+                                    </ns2:Id>
+                                    <ns2:Name>
+                                        <xsl:value-of select="&quot;T24DB&quot;"/>
+                                    </ns2:Name>
+                                </ns2:From>
+                                <ns2:To>
+                                    <ns2:Id>
+                                        <xsl:value-of select="&quot;1001&quot;"/>
+                                    </ns2:Id>
+                                    <ns2:Name>
+                                        <xsl:value-of select="&quot;T24Report&quot;"/>
+                                    </ns2:Name>
+                                </ns2:To>
+                                <ns2:MsgId>
+                                    <xsl:value-of select="$Start/Date"/>
+                                </ns2:MsgId>
+                                <ns2:BizServ>
+                                    <ns2:Id>
+                                        <xsl:value-of select="&quot;1003&quot;"/>
+                                    </ns2:Id>
+                                    <ns2:Name>
+                                        <xsl:value-of select="&quot;T24EntriesBatch&quot;"/>
+                                    </ns2:Name>
+                                </ns2:BizServ>
+                                <ns2:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns2:CreatedDate>
+                            </ns2:AppHdr>
+                            <ns2:ResponseStatus>
+                                <ns2:Status>
+                                    <xsl:value-of select="$Response/root/Status"/>
+                                </ns2:Status>
+                                <xsl:if test="$Response/root/Msg">
+                                    <ns2:ErrorMessage>
+                                        <xsl:value-of select="$Response/root/Msg"/>
+                                    </ns2:ErrorMessage>
+                                </xsl:if>
+                            </ns2:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$T24WSResponse/Response"/>
+                            </ServiceBody>
+                        </ns3:ServiceEnverlop>
+                    </ns13:ServiceBody>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ServiceVariablesInit">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>138</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <variableName>ServiceVariables</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </startTime>
+                <OperationName>
+                    <xsl:value-of select="&quot;T24Fee-Report&quot;"/>
+                </OperationName>
+                <ServiceName>
+                    <xsl:value-of select="&quot;T24Fee&quot;"/>
+                </ServiceName>
+                <SOAMsgId>
+                    <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>515</pd:x>
+        <pd:y>319</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseErr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>437</pd:x>
+        <pd:y>425</pd:y>
+        <config>
+            <variableName>Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="substring-after($Call_Procedure_T24/resultSet/outputSet/RETURN_VALUE, '_')"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1225</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <variableName>Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd-Err">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1271</pd:x>
+        <pd:y>547</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="&quot;T24Fee-Report&quot;"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns2:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns2:CharSet>
+                            <ns2:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns2:ServVersion>
+                            <ns2:From>
+                                <ns2:Id>
+                                    <xsl:value-of select="&quot;1000&quot;"/>
+                                </ns2:Id>
+                                <ns2:Name>
+                                    <xsl:value-of select="&quot;T24DB&quot;"/>
+                                </ns2:Name>
+                            </ns2:From>
+                            <ns2:To>
+                                <ns2:Id>
+                                    <xsl:value-of select="&quot;1001&quot;"/>
+                                </ns2:Id>
+                                <ns2:Name>
+                                    <xsl:value-of select="&quot;T24Report&quot;"/>
+                                </ns2:Name>
+                            </ns2:To>
+                            <ns2:MsgId>
+                                <xsl:value-of select="$Start/Date"/>
+                            </ns2:MsgId>
+                            <ns2:BizServ>
+                                <ns2:Id>
+                                    <xsl:value-of select="1"/>
+                                </ns2:Id>
+                                <ns2:Name>
+                                    <xsl:value-of select="&quot;T24EntriesBatch&quot;"/>
+                                </ns2:Name>
+                            </ns2:BizServ>
+                            <ns2:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns2:CreatedDate>
+                        </ns13:AppHdr>
+                        <ns13:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </ns13:SOAMsgId>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </ns13:ServiceName>
+                        <ns13:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </ns13:OperationName>
+                        <ns13:ProcessName>
+                            <xsl:value-of select="&quot;GenerateReport&quot;"/>
+                        </ns13:ProcessName>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody>
+                        <ns3:ServiceEnverlop>
+                            <ns2:AppHdr>
+                                <ns2:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns2:CharSet>
+                                <ns2:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns2:ServVersion>
+                                <ns2:From>
+                                    <ns2:Id>
+                                        <xsl:value-of select="&quot;1000&quot;"/>
+                                    </ns2:Id>
+                                    <ns2:Name>
+                                        <xsl:value-of select="&quot;T24DB&quot;"/>
+                                    </ns2:Name>
+                                </ns2:From>
+                                <ns2:To>
+                                    <ns2:Id>
+                                        <xsl:value-of select="&quot;1001&quot;"/>
+                                    </ns2:Id>
+                                    <ns2:Name>
+                                        <xsl:value-of select="&quot;T24Report&quot;"/>
+                                    </ns2:Name>
+                                </ns2:To>
+                                <ns2:MsgId>
+                                    <xsl:value-of select="$Start/Date"/>
+                                </ns2:MsgId>
+                                <ns2:BizServ>
+                                    <ns2:Id>
+                                        <xsl:value-of select="&quot;1003&quot;"/>
+                                    </ns2:Id>
+                                    <ns2:Name>
+                                        <xsl:value-of select="&quot;T24EntriesBatch&quot;"/>
+                                    </ns2:Name>
+                                </ns2:BizServ>
+                                <ns2:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns2:CreatedDate>
+                            </ns2:AppHdr>
+                            <ns2:ResponseStatus>
+                                <ns2:Status>
+                                    <xsl:value-of select="$Response/root/Status"/>
+                                </ns2:Status>
+                                <xsl:if test="$Response/root/Msg">
+                                    <ns2:ErrorMessage>
+                                        <xsl:value-of select="$Response/root/Msg"/>
+                                    </ns2:ErrorMessage>
+                                </xsl:if>
+                            </ns2:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                            </ServiceBody>
+                        </ns3:ServiceEnverlop>
+                    </ns13:ServiceBody>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Err">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1022</pd:x>
+        <pd:y>548</pd:y>
+        <config>
+            <variableName>Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <xsl:if test="$_error/ns1:ErrorReport/Msg">
+                    <Msg>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                    </Msg>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ServiceVariablesInit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_Procedure_T24</pd:from>
+        <pd:to>QueryDataReport</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>substring($Call_Procedure_T24/resultSet/outputSet/RETURN_VALUE, '1', '1')="1"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateT24Report</pd:from>
+        <pd:to>ResponseSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryDataReport</pd:from>
+        <pd:to>Loop</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop</pd:from>
+        <pd:to>UpdateT24Report</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Err</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ServiceVariablesInit</pd:from>
+        <pd:to>Call_Procedure_T24</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_Procedure_T24</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:xpathDescription>Exist</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>substring($Call_Procedure_T24/resultSet/outputSet/RETURN_VALUE, '1', '1')='0'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>QueryDataReport</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_Procedure_T24</pd:from>
+        <pd:to>ResponseErr</pd:to>
+        <pd:xpathDescription>ErrProcedure</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>substring($Call_Procedure_T24/resultSet/outputSet/RETURN_VALUE, '1', '1')='-1'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseErr</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseSuccess</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd-Err</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Err</pd:from>
+        <pd:to>LogEnd-Err</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

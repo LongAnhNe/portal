@@ -1,0 +1,1322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatch_filter.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="FileName" type="xsd:string"/>
+                    <xsd:element name="StartRecord" type="xsd:int"/>
+                    <xsd:element name="NumberOfRecords" type="xsd:int"/>
+                    <xsd:element name="EndReadFile" type="xsd:boolean"/>
+                    <xsd:element name="State" type="xsd:string"/>
+                    <xsd:element name="DestSystem" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>56</pd:startX>
+    <pd:startY>123</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <CurrentIndex>
+                <xsl:value-of select="$CurentIndex/index"/>
+            </CurrentIndex>
+            <NumberOfRecords>
+                <xsl:value-of select="floor( $Start/Input/NumberOfRecords div 10)"/>
+            </NumberOfRecords>
+            <EndReadFile>
+                <xsl:value-of select="$EndReadFile/EndReadFile"/>
+            </EndReadFile>
+            <TotalReceived>
+                <xsl:value-of select="$TotalRecord/TotalRecord/Received"/>
+            </TotalReceived>
+            <TotalProcessed>
+                <xsl:value-of select="$TotalRecord/TotalRecord/Processed"/>
+            </TotalProcessed>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="CurrentIndex" type="xsd:int"/>
+                    <xsd:element name="NumberOfRecords" type="xsd:int"/>
+                    <xsd:element name="EndReadFile" type="xsd:boolean"/>
+                    <xsd:element name="TotalReceived" type="xsd:int"/>
+                    <xsd:element name="TotalProcessed" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1490</pd:endX>
+    <pd:endY>236</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <CurentIndex>
+            <xsd:element name="index" type="xsd:int"/>
+        </CurentIndex>
+        <EndReadFile>
+            <xsd:element name="EndReadFile" type="xsd:boolean"/>
+        </EndReadFile>
+        <TotalRecord>
+            <xsd:element name="TotalRecord">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Received" type="xsd:int"/>
+                        <xsd:element name="Processed" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </TotalRecord>
+        <EndProcess>
+            <xsd:element name="End" type="xsd:boolean"/>
+        </EndProcess>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1445601723125</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>864</pd:width>
+        <pd:height>583</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>string($ParseBatch/Output/EOF) = string(true()) or $EndProcess/End='true'</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ParseBatch</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogicProcess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WriteErrorFile</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncreRecordBatchProcessedT24</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncreRecordBatchProcessed</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WriteErrorMsg</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WriteT24ImportErrorMsg</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseBatch</pd:from>
+            <pd:to>MapErrorBatch</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>insertT24EntriesBatch</pd:from>
+            <pd:to>WriteErrorMsg</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseBatch</pd:from>
+            <pd:to>IncreRecordBatchReceived</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapErrorBatch</pd:from>
+            <pd:to>SetCurrentIndexError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WriteErrorFile</pd:from>
+            <pd:to>AssignEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapErrorBatch</pd:from>
+            <pd:to>SetCurrentIndex</pd:to>
+            <pd:xpathDescription>Not Enough Data</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$MapErrorBatch/root/ErrorMsg='There are not enough data for the number of required fields in a row.'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetCurrentIndex</pd:from>
+            <pd:to>AssignEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetCurrentIndex</pd:from>
+            <pd:to>AssignEndReadFile</pd:to>
+            <pd:xpathDescription>EndFile</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Start/Input/NumberOfRecords=1</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignEndReadFile</pd:from>
+            <pd:to>AssignEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogicProcess</pd:from>
+            <pd:to>insertT24EntriesBatch</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>count($LogicProcess/root/Rows/T24Entries)&gt;0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetCurrentIndexError</pd:from>
+            <pd:to>WriteErrorFile</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetCurrentIndexError</pd:from>
+            <pd:to>AssignEndReadFile</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseBatch</pd:from>
+            <pd:to>Null</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$ParseBatch/Output/EOF='true'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Null</pd:from>
+            <pd:to>MapErrorBatch</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncreRecordBatchReceived</pd:from>
+            <pd:to>LogicProcess</pd:to>
+            <pd:xpathDescription>ERP</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Start/Input/DestSystem='ERP'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>insertT24EntriesBatch</pd:from>
+            <pd:to>IncreRecordBatchProcessed</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncreRecordBatchReceived</pd:from>
+            <pd:to>insertT24ImportData</pd:to>
+            <pd:xpathDescription>T24Report</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Start/Input/DestSystem='T24Report'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>insertT24ImportData</pd:from>
+            <pd:to>IncreRecordBatchProcessedT24</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>insertT24ImportData</pd:from>
+            <pd:to>WriteT24ImportErrorMsg</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ParseBatch">
+            <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+            <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+            <pd:x>417</pd:x>
+            <pd:y>264</pd:y>
+            <config>
+                <InputType>File</InputType>
+                <Encoding>UTF8</Encoding>
+                <SpecifyStartRecord>true</SpecifyStartRecord>
+                <ParseSharedConfig>/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24OnlineEntries.sharedparse</ParseSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <fileName>
+                        <xsl:value-of select="$Start/Input/FileName"/>
+                    </fileName>
+                    <startRecord>
+                        <xsl:value-of select="($i  - 1)*$Start/Input/NumberOfRecords +$Start/Input/StartRecord"/>
+                    </startRecord>
+                    <noOfRecords>
+                        <xsl:value-of select="$Start/Input/NumberOfRecords"/>
+                    </noOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="MapErrorBatch">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>554</pd:x>
+            <pd:y>495</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="ErrorMsg" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ErrorMsg>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                    </ErrorMsg>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="insertT24EntriesBatch">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>627</pd:x>
+            <pd:y>165</pd:y>
+            <config>
+                <timeout>%%ERPDB/Timeout%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>true</emptyStrAsNil>
+                <statement>INSERT INTO SBV_T24_TL (STMT_NO,COMPANY_CODE,SYSTEM_ID,STMT_TYPE,ACCOUNT_NUMBER,CURRENCY,AMOUNT_LCY,CRF_TYPE,VALUE_DATE,INPUTTER,AUTHORISER,CUSTOMER_ID,CUSTOMER_NAME,TRANS_REFERENCE,CURRENCY_RATE,INTEREST_RATE,TRANS_DUE_DATE,REF_NO_INTERFACE_T24ERP,AMOUNT_FCY,STMT_DESC,REVERSE,CURRENCY_ORIGINAL,T24ACCOUNT,SUBACCOUNT,DESCRIPTION)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+                <batchUpdate>true</batchUpdate>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>STMT_NO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>COMPANY_CODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>SYSTEM_ID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>STMT_TYPE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ACCOUNT_NUMBER</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CURRENCY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>AMOUNT_LCY</parameterName>
+                        <dataType>NUMERIC</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CRF_TYPE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>VALUE_DATE</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>INPUTTER</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>AUTHORISER</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CUSTOMER_ID</parameterName>
+                        <dataType>INTEGER</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CUSTOMER_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TRANS_REFERENCE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CURRENCY_RATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>INTEREST_RATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TRANS_DUE_DATE</parameterName>
+                        <dataType>TIMESTAMP</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>REF_NO_INTERFACE_T24ERP</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>AMOUNT_FCY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>STMT_DESC</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>REVERSE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CURRENCY_ORIGINAL</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>T24ACCOUNT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>SUBACCOUNT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DESCRIPTION</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <xsl:for-each select="$LogicProcess/root/Rows/T24Entries">
+                        <Record>
+                            <STMT_NO>
+                                <xsl:value-of select="ENTRY.ID"/>
+                            </STMT_NO>
+                            <COMPANY_CODE>
+                                <xsl:value-of select="T24.CO.CODE"/>
+                            </COMPANY_CODE>
+                            <SYSTEM_ID>
+                                <xsl:value-of select="PROD.MODULE"/>
+                            </SYSTEM_ID>
+                            <STMT_TYPE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TRANS.CODE)">
+                                        <xsl:value-of select="TRANS.CODE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </STMT_TYPE>
+                            <ACCOUNT_NUMBER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if (string-length(current()/ERP.ACCT) >8) then  substring(current()/ERP.ACCT, 1, 8) else current()/ERP.ACCT)">
+                                        <xsl:value-of select="if (string-length(current()/ERP.ACCT) >8) then  substring(current()/ERP.ACCT, 1, 8) else current()/ERP.ACCT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ACCOUNT_NUMBER>
+                            <CURRENCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ENTRY.CCY)">
+                                        <xsl:value-of select="ENTRY.CCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CURRENCY>
+                            <AMOUNT_LCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(AMT.LCY)">
+                                        <xsl:value-of select="AMT.LCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AMOUNT_LCY>
+                            <CRF_TYPE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(DR.CR.MARKER)">
+                                        <xsl:value-of select="DR.CR.MARKER"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CRF_TYPE>
+                            <VALUE_DATE>
+                                <xsl:value-of select="if (exists(current()/VALUE.DATE) and string-length(current()/VALUE.DATE) > 0 ) then&#xA;tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',tib:trim(current()/VALUE.DATE)))&#xA;else tib:format-date(&quot;yyyy-MM-dd&quot;,tib:parse-date('MM/dd/yyyy','01/01/1900'))"/>
+                            </VALUE_DATE>
+                            <INPUTTER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TXN.INPUTTER)">
+                                        <xsl:value-of select="TXN.INPUTTER"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </INPUTTER>
+                            <AUTHORISER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TXN.AUTHORISER)">
+                                        <xsl:value-of select="TXN.AUTHORISER"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AUTHORISER>
+                            <CUSTOMER_ID>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CUSTOMER.ID)">
+                                        <xsl:value-of select="CUSTOMER.ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CUSTOMER_ID>
+                            <CUSTOMER_NAME>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if (exists(current()/CUSTOMER.NAME)) then current()/CUSTOMER.NAME else &quot;&quot;)">
+                                        <xsl:value-of select="if (exists(current()/CUSTOMER.NAME)) then current()/CUSTOMER.NAME else &quot;&quot;"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CUSTOMER_NAME>
+                            <TRANS_REFERENCE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CONTRACT.ID)">
+                                        <xsl:value-of select="CONTRACT.ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TRANS_REFERENCE>
+                            <CURRENCY_RATE>
+                                <xsl:value-of select="if (exists(current()/EXCH.RATE)) then current()/EXCH.RATE else &quot;&quot;"/>
+                            </CURRENCY_RATE>
+                            <INTEREST_RATE>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </INTEREST_RATE>
+                            <TRANS_DUE_DATE>
+                                <xsl:value-of select="if (exists(current()/TIME) and string-length(current()/TIME) > 0 ) then&#xA;tib:parse-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;,tib:format-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;, tib:parse-dateTime(&quot;yyMMdd HH:mm&quot;,tib:trim(current()/TIME))))&#xA;else&#xA;tib:parse-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;,tib:format-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;, tib:parse-dateTime(&quot;yyyyMMdd HH:mm&quot;,'19000101 00:00')))"/>
+                            </TRANS_DUE_DATE>
+                            <REF_NO_INTERFACE_T24ERP>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CONTRACT.ID)">
+                                        <xsl:value-of select="CONTRACT.ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </REF_NO_INTERFACE_T24ERP>
+                            <AMOUNT_FCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(AMT.FCY)">
+                                        <xsl:value-of select="AMT.FCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AMOUNT_FCY>
+                            <STMT_DESC>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TRANS.DESC)">
+                                        <xsl:value-of select="TRANS.DESC"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </STMT_DESC>
+                            <REVERSE>
+                                <xsl:value-of select="REVERSE"/>
+                            </REVERSE>
+                            <CURRENCY_ORIGINAL>
+                                <xsl:value-of select="CURRENCY_ORIGIN"/>
+                            </CURRENCY_ORIGINAL>
+                            <T24ACCOUNT>
+                                <xsl:choose>
+                                    <xsl:when test="exists(T24ACCOUNT)">
+                                        <xsl:value-of select="T24ACCOUNT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </T24ACCOUNT>
+                            <SUBACCOUNT>
+                                <xsl:value-of select="if (string-length(current()/ERP.ACCT) >8) then current()/ERP.ACCT else &quot;&quot;"/>
+                            </SUBACCOUNT>
+                            <DESCRIPTION>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if(string-length(current()/DESCRIPTION)>=500) then substring(current()/DESCRIPTION, 1, 499)&#xA;else current()/DESCRIPTION)">
+                                        <xsl:value-of select="if(string-length(current()/DESCRIPTION)>=500) then substring(current()/DESCRIPTION, 1, 499)&#xA;else current()/DESCRIPTION"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </DESCRIPTION>
+                        </Record>
+                    </xsl:for-each>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="WriteErrorMsg">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>746</pd:x>
+            <pd:y>231</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <append>true</append>
+            </config>
+            <pd:inputBindings>
+                <ns12:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/T24ERP/ErrorFileName"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="concat(&quot;batchID:&quot;, $i,&quot;; Start line: &quot;,$Start/Input/StartRecord,&quot;; End line: &quot;,$Start/Input/StartRecord+ $Start/Input/NumberOfRecords,&quot;; Error Message: &quot;, $_error/ns1:ErrorReport/Msg,&quot;&#xA;&quot;,&quot;StackTrace:&quot;,$_error/ns1:ErrorReport/StackTrace)"/>
+                    </textContent>
+                </ns12:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="WriteErrorFile">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>1043</pd:x>
+            <pd:y>501</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <append>true</append>
+            </config>
+            <pd:inputBindings>
+                <ns12:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/T24ERP/ErrorFileName"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="concat($MapErrorBatch/root/ErrorMsg,'&#xA;')"/>
+                    </textContent>
+                </ns12:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignEnd">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1014</pd:x>
+            <pd:y>368</pd:y>
+            <config>
+                <variableName>EndProcess</variableName>
+            </config>
+            <pd:inputBindings>
+                <End>
+                    <xsl:value-of select="'true'"/>
+                </End>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetCurrentIndex">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>659</pd:x>
+            <pd:y>385</pd:y>
+            <config>
+                <variableName>CurentIndex</variableName>
+            </config>
+            <pd:inputBindings>
+                <index>
+                    <xsl:value-of select="($i  - 1)*$Start/Input/NumberOfRecords +$Start/Input/StartRecord"/>
+                </index>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignEndReadFile">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>907</pd:x>
+            <pd:y>435</pd:y>
+            <config>
+                <variableName>EndReadFile</variableName>
+            </config>
+            <pd:inputBindings>
+                <EndReadFile>
+                    <xsl:value-of select="'true'"/>
+                </EndReadFile>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogicProcess">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>530</pd:x>
+            <pd:y>273</pd:y>
+            <config>
+                <processName>/Services/Global/System/T24ERP/T24EntriesBatch/LogicProcess.process</processName>
+            </config>
+            <pd:inputBindings>
+                <T24Entries>
+                    <Rows>
+                        <xsl:copy-of select="$ParseBatch/Output/Rows/T24Entries"/>
+                    </Rows>
+                    <State>
+                        <xsl:value-of select="$Start/Input/State"/>
+                    </State>
+                </T24Entries>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetCurrentIndexError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>735</pd:x>
+            <pd:y>494</pd:y>
+            <config>
+                <variableName>CurentIndex</variableName>
+            </config>
+            <pd:inputBindings>
+                <index>
+                    <xsl:value-of select="($i  - 1)*$Start/Input/NumberOfRecords +$Start/Input/StartRecord"/>
+                </index>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Null">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>412</pd:x>
+            <pd:y>494</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="IncreRecordBatchReceived">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>455</pd:x>
+            <pd:y>95</pd:y>
+            <config>
+                <variableName>TotalRecord</variableName>
+            </config>
+            <pd:inputBindings>
+                <TotalRecord>
+                    <Received>
+                        <xsl:value-of select="$TotalRecord/TotalRecord/Received + count($ParseBatch/Output/Rows/T24Entries)"/>
+                    </Received>
+                    <Processed>
+                        <xsl:value-of select="$TotalRecord/TotalRecord/Processed"/>
+                    </Processed>
+                </TotalRecord>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="IncreRecordBatchProcessed">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>835</pd:x>
+            <pd:y>170</pd:y>
+            <config>
+                <variableName>TotalRecord</variableName>
+            </config>
+            <pd:inputBindings>
+                <TotalRecord>
+                    <Received>
+                        <xsl:value-of select="$TotalRecord/TotalRecord/Received"/>
+                    </Received>
+                    <Processed>
+                        <xsl:value-of select="if ($insertT24EntriesBatch/jdbcUpdateActivityOutput/noOfUpdates>0) then ($TotalRecord/TotalRecord/Processed + $insertT24EntriesBatch/jdbcUpdateActivityOutput/noOfUpdates)&#xA;else  $TotalRecord/TotalRecord/Processed"/>
+                    </Processed>
+                </TotalRecord>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="insertT24ImportData">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>664</pd:x>
+            <pd:y>76</pd:y>
+            <config>
+                <timeout>%%ERPDB/Timeout%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>true</emptyStrAsNil>
+                <statement>INSERT INTO FBNK_SBV_T24_ERP_MAPPING_N (ID,ENTRY_ID,CONSOL_ENT,CONSOL_KEY,T24_CO_CODE,PROD_MODULE,TRANS_CODE,TRANS_DESC,T24_ACCT,DR_CR_MARKER,ERP_ACCT,ENTRY_CCY,AMT_LCY,AMT_FCY,EXCH_RATE,VALUE_DATE,TXN_DATE,TXN_INPUTTER,TXN_AUTHORISER,CUSTOMER_ID,CUSTOMER_NAME,CONTRACT_ID,LD_TERM_MTH,INT_RATE,DUE_DATE,ORGN_CO_CODE,NO_OF_ENTRIES,ONLINE_OR_COB,ENTRY_TIME,DEALER_DESK,REVERT,DESCRIPTION,TIME)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+                <batchUpdate>true</batchUpdate>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24Report.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>ID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ENTRY_ID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CONSOL_ENT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CONSOL_KEY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>T24_CO_CODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>PROD_MODULE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TRANS_CODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TRANS_DESC</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>T24_ACCT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DR_CR_MARKER</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ERP_ACCT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ENTRY_CCY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>AMT_LCY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>AMT_FCY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>EXCH_RATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>VALUE_DATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TXN_DATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TXN_INPUTTER</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TXN_AUTHORISER</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CUSTOMER_ID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CUSTOMER_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CONTRACT_ID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>LD_TERM_MTH</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>INT_RATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DUE_DATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ORGN_CO_CODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>NO_OF_ENTRIES</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ONLINE_OR_COB</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ENTRY_TIME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DEALER_DESK</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>REVERT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DESCRIPTION</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TIME</parameterName>
+                        <dataType>TIMESTAMP</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ParseBatch/Output/Rows/T24Entries">
+                        <Record>
+                            <ID>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CONTRACT.ID)">
+                                        <xsl:value-of select="CONTRACT.ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ID>
+                            <ENTRY_ID>
+                                <xsl:value-of select="ENTRY.ID"/>
+                            </ENTRY_ID>
+                            <CONSOL_ENT>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CONSOL.ENT)">
+                                        <xsl:value-of select="CONSOL.ENT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CONSOL_ENT>
+                            <CONSOL_KEY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CONSOL.KEY)">
+                                        <xsl:value-of select="CONSOL.KEY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CONSOL_KEY>
+                            <T24_CO_CODE>
+                                <xsl:value-of select="T24.CO.CODE"/>
+                            </T24_CO_CODE>
+                            <PROD_MODULE>
+                                <xsl:value-of select="PROD.MODULE"/>
+                            </PROD_MODULE>
+                            <TRANS_CODE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TRANS.CODE)">
+                                        <xsl:value-of select="TRANS.CODE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TRANS_CODE>
+                            <TRANS_DESC>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TRANS.DESC)">
+                                        <xsl:value-of select="TRANS.DESC"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TRANS_DESC>
+                            <T24_ACCT>
+                                <xsl:choose>
+                                    <xsl:when test="exists(T24.ACCT)">
+                                        <xsl:value-of select="T24.ACCT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </T24_ACCT>
+                            <DR_CR_MARKER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(DR.CR.MARKER)">
+                                        <xsl:value-of select="DR.CR.MARKER"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </DR_CR_MARKER>
+                            <ERP_ACCT>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ERP.ACCT)">
+                                        <xsl:value-of select="ERP.ACCT"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ERP_ACCT>
+                            <ENTRY_CCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(ENTRY.CCY)">
+                                        <xsl:value-of select="ENTRY.CCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ENTRY_CCY>
+                            <AMT_LCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(AMT.LCY)">
+                                        <xsl:value-of select="AMT.LCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AMT_LCY>
+                            <AMT_FCY>
+                                <xsl:choose>
+                                    <xsl:when test="exists(AMT.FCY)">
+                                        <xsl:value-of select="AMT.FCY"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </AMT_FCY>
+                            <EXCH_RATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(EXCH.RATE)">
+                                        <xsl:value-of select="EXCH.RATE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </EXCH_RATE>
+                            <VALUE_DATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(VALUE.DATE)">
+                                        <xsl:value-of select="VALUE.DATE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </VALUE_DATE>
+                            <TXN_DATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TXN.DATE)">
+                                        <xsl:value-of select="TXN.DATE"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TXN_DATE>
+                            <TXN_INPUTTER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TXN.INPUTTER)">
+                                        <xsl:value-of select="TXN.INPUTTER"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TXN_INPUTTER>
+                            <TXN_AUTHORISER>
+                                <xsl:choose>
+                                    <xsl:when test="exists(TXN.AUTHORISER)">
+                                        <xsl:value-of select="TXN.AUTHORISER"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </TXN_AUTHORISER>
+                            <CUSTOMER_ID>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CUSTOMER.ID)">
+                                        <xsl:value-of select="CUSTOMER.ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CUSTOMER_ID>
+                            <CUSTOMER_NAME>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CUSTOMER.NAME)">
+                                        <xsl:value-of select="CUSTOMER.NAME"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CUSTOMER_NAME>
+                            <CONTRACT_ID>
+                                <xsl:choose>
+                                    <xsl:when test="exists(CONTRACT.ID)">
+                                        <xsl:value-of select="CONTRACT.ID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </CONTRACT_ID>
+                            <LD_TERM_MTH>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </LD_TERM_MTH>
+                            <INT_RATE>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </INT_RATE>
+                            <DUE_DATE>
+                                <xsl:choose>
+                                    <xsl:when test="exists(&quot;&quot;)">
+                                        <xsl:value-of select="&quot;&quot;"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </DUE_DATE>
+                            <ORGN_CO_CODE>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </ORGN_CO_CODE>
+                            <NO_OF_ENTRIES>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </NO_OF_ENTRIES>
+                            <ONLINE_OR_COB>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </ONLINE_OR_COB>
+                            <ENTRY_TIME>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </ENTRY_TIME>
+                            <DEALER_DESK>
+                                <xsl:choose>
+                                    <xsl:when test="exists(DEALER.DESK)">
+                                        <xsl:value-of select="DEALER.DESK"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </DEALER_DESK>
+                            <REVERT>
+                                <xsl:value-of select="if(contains(current()/CONTRACT.ID,'-R')) then&#xA;'Y'&#xA;else 'N'"/>
+                            </REVERT>
+                            <DESCRIPTION>
+                                <xsl:value-of select="DESCRIPTION"/>
+                            </DESCRIPTION>
+                            <TIME>
+                                <xsl:value-of select="if (exists(current()/TIME) and string-length(current()/TIME) > 0 ) then&#xA;tib:parse-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;,tib:format-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;, tib:parse-dateTime(&quot;yyMMdd HH:mm&quot;,current()/TIME)))&#xA;else&#xA;tib:parse-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;,tib:format-dateTime(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;, tib:parse-dateTime(&quot;yyyyMMdd HH:mm&quot;,'19000101 00:00')))"/>
+                            </TIME>
+                        </Record>
+                    </xsl:for-each>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="WriteT24ImportErrorMsg">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>1062</pd:x>
+            <pd:y>76</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <append>true</append>
+            </config>
+            <pd:inputBindings>
+                <ns12:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/T24ERP/T24ImportErrorFile"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="concat('Insert T24 Report error - Error Message: ', $_error/ns1:ErrorReport/Msg,'&#xA;')"/>
+                    </textContent>
+                </ns12:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="IncreRecordBatchProcessedT24">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>948</pd:x>
+            <pd:y>135</pd:y>
+            <config>
+                <variableName>TotalRecord</variableName>
+            </config>
+            <pd:inputBindings>
+                <TotalRecord>
+                    <Received>
+                        <xsl:value-of select="$TotalRecord/TotalRecord/Received"/>
+                    </Received>
+                    <Processed>
+                        <xsl:value-of select="if ($insertT24ImportData/jdbcUpdateActivityOutput/noOfUpdates>0) then ($TotalRecord/TotalRecord/Processed + $insertT24ImportData/jdbcUpdateActivityOutput/noOfUpdates)&#xA;else  $TotalRecord/TotalRecord/Processed"/>
+                    </Processed>
+                </TotalRecord>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="AssignEndReadFileInit">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>160</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <variableName>EndReadFile</variableName>
+        </config>
+        <pd:inputBindings>
+            <EndReadFile>
+                <xsl:value-of select="$Start/Input/EndReadFile"/>
+            </EndReadFile>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InitTotalRecord">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>151</pd:x>
+        <pd:y>233</pd:y>
+        <config>
+            <variableName>TotalRecord</variableName>
+        </config>
+        <pd:inputBindings>
+            <TotalRecord>
+                <Received>
+                    <xsl:value-of select="0"/>
+                </Received>
+                <Processed>
+                    <xsl:value-of select="0"/>
+                </Processed>
+            </TotalRecord>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AssignEndReadFileInit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignEndReadFileInit</pd:from>
+        <pd:to>InitTotalRecord</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitTotalRecord</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

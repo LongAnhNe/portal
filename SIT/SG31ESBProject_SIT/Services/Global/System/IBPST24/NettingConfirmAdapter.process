@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns5="sbv/common/envelope/commonheader/1.0" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns6="http://www.tibco.com/pe/CheckpointSchema" xmlns:ns13="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns2="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="www.tibco.com/plugin/Sleep" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.temenos.com/T24/event/PushNettingIBPS/PushNettingIBPSFlow" xmlns:pfx2="http://www.temenos.com/T24/event/ResultNettingIBPS/ResultNettingIBPSFlow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.temenos.com/T24/event/ResultNettingIBPS/ResultNettingIBPSFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/NettingResult/ResultNettingIBPS-ResultNettingIBPSFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/PushNettingIBPS/PushNettingIBPSFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/NettingResult/PushNettingIBPS-PushNettingIBPSFlow.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse"/>
+    <pd:name>Services/Global/System/IBPST24/NettingConfirmAdapter.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>100</pd:x>
+        <pd:y>247</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>jms/requestQueue</destination>
+                <selector>application='SBV.FT.LV.BULK'</selector>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/T24JMSQueue_Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1273</pd:endX>
+    <pd:endY>277</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <resultData>
+            <xsd:element name="strResultData" type="xsd:string"/>
+        </resultData>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437550821793</pd:targetNamespace>
+    <pd:activity name="Invoke an Adapter Request-Response Service">
+        <pd:type>com.tibco.plugin.ae.AERPCRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.aepalette.aeOpClientReqActivity</pd:resourceType>
+        <pd:x>702</pd:x>
+        <pd:y>278</pd:y>
+        <config>
+            <ae.aepalette.sharedProperties.transportChoice>default</ae.aepalette.sharedProperties.transportChoice>
+            <ae.aepalette.sharedProperties.useRequestReply>false</ae.aepalette.sharedProperties.useRequestReply>
+            <ae.aepalette.sharedProperties.adapterService>/SharedResource/Connection/Adapter/TuxedoAdapterConfiguration.adtuxedo#adapterService.RequestResponseService</ae.aepalette.sharedProperties.adapterService>
+            <tpPluginEndpointName>RequestResponseServiceEndPoint</tpPluginEndpointName>
+            <ae.aepalette.sharedProperties.transportType>rv</ae.aepalette.sharedProperties.transportType>
+            <ae.aepalette.sharedProperties.rvSubject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseService</ae.aepalette.sharedProperties.rvSubject>
+            <ae.aepalette.sharedProperties.rvSessionService>%%RvService%%</ae.aepalette.sharedProperties.rvSessionService>
+            <ae.aepalette.sharedProperties.rvSessionNetwork>%%RvNetwork%%</ae.aepalette.sharedProperties.rvSessionNetwork>
+            <ae.aepalette.sharedProperties.rvSessionDaemon>%%RvDaemon%%</ae.aepalette.sharedProperties.rvSessionDaemon>
+            <ae.aepalette.aeOpClientReqActivity.ops>operation</ae.aepalette.aeOpClientReqActivity.ops>
+            <ae.aepalette.sharedProperties.outputMeta>
+                <aeMeta>/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#rpcClass.RequestResponseServiceRPCClass</aeMeta>
+            </ae.aepalette.sharedProperties.outputMeta>
+        </config>
+        <pd:inputBindings>
+            <aeRequestInputType>
+                <ns2:__caret_request_caret_RequestResponseServiceRPCClass_caret_operation>
+                    <input>
+                        <ROUTING__CODE__167773161>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ROUTING__CODE__167773161>
+                        <ERROR__CODE__167773162>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ERROR__CODE__167773162>
+                        <OPTION__167773163>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </OPTION__167773163>
+                        <DATA__167773164>
+                            <xsl:value-of select="$resultData/strResultData"/>
+                        </DATA__167773164>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;NS_NPA_0300003&quot;"/>
+                        </ServiceName>
+                    </input>
+                </ns2:__caret_request_caret_RequestResponseServiceRPCClass_caret_operation>
+            </aeRequestInputType>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>945</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="AssignResponseStr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>565</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <variableName>resultData</variableName>
+        </config>
+        <pd:inputBindings>
+            <strResultData>
+                <xsl:value-of select="concat(tib:pad($MapResponse/responseXML/systemType, 10, ' '),tib:pad($MapResponse/responseXML/nettingID,25,' '),$MapResponse/responseXML/Flag,tib:pad($MapResponse/responseXML/status,4,' '),tib:pad($MapResponse/responseXML/processDate,14,' '),tib:concat-sequence($MapResponse/responseXML/Transaction))"/>
+            </strResultData>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapResponse">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>415</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <element>
+                <xsd:element name="responseXML">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="nettingID" type="xsd:string"/>
+                            <xsd:element name="systemType" type="xsd:string"/>
+                            <xsd:element name="status" type="xsd:string"/>
+                            <xsd:element name="processDate" type="xsd:string"/>
+                            <xsd:element name="Flag" type="xsd:string"/>
+                            <xsd:element name="Transaction" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="sourceSysID" type="xsd:string"/>
+                                        <xsd:element name="AccountNo" type="xsd:string"/>
+                                        <xsd:element name="CurrentBal" type="xsd:string"/>
+                                        <xsd:element name="Amount" type="xsd:string"/>
+                                        <xsd:element name="CreditDebit" type="xsd:string"/>
+                                        <xsd:element name="Status" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <responseXML>
+                <nettingID>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:id"/>
+                </nettingID>
+                <systemType>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:systemType"/>
+                </systemType>
+                <status>
+                    <xsl:value-of select="if ($ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:ftGeneratelStat=&quot;PROCESSED&quot;) then &quot;6000&quot; else &#xA;if ($ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:ftGeneratelStat=&quot;HOLD&quot;) then &quot;6106&quot; else&#xA;&quot;6605&quot;"/>
+                </status>
+                <processDate>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:processingDate"/>
+                </processDate>
+                <Flag>
+                    <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:transFlag"/>
+                </Flag>
+                <xsl:for-each select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:ibpsRefGroup">
+                    <Transaction>
+                        <sourceSysID>
+                            <xsl:value-of select="tib:pad(pfx3:ibpsRef, 40,' ')"/>
+                        </sourceSysID>
+                        <AccountNo>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitCitadNo)) then  tib:pad(current()/pfx3:debitCitadNo, 16,' ')       else &#xA;if (exists(current()/pfx3:creditCitadNo)) then  tib:pad(current()/pfx3:creditCitadNo, 16,' ') &#xA;else &quot;&quot;"/>
+                        </AccountNo>
+                        <CurrentBal>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitCurBal)) then tib:pad(current()/pfx3:debitCurBal,18,' ') else &#xA;if (exists(current()/pfx3:creditCurBal)) then tib:pad(current()/pfx3:creditCurBal,18,' ')&#xA;else tib:pad(&quot; &quot;,18,' ')"/>
+                        </CurrentBal>
+                        <Amount>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitAmount)) then tib:pad(pfx3:debitAmount,18,' ')&#xA;else if (exists(current()/pfx3:creditAmount)) then tib:pad(current()/pfx3:creditAmount,18,' ')&#xA;else tib:pad(&quot; &quot;,18, ' ')"/>
+                        </Amount>
+                        <CreditDebit>
+                            <xsl:value-of select="if (exists(current()/pfx3:debitCitadNo)) then 'D'&#xA;else if (exists(current()/pfx3:creditCitadNo)) then 'C'&#xA;else ' '"/>
+                        </CreditDebit>
+                        <Status>
+                            <xsl:value-of select="if (pfx3:ftStatus=&quot;SUCCESS&quot;) then &quot;6000&quot; else &#xA;if (pfx3:ftStatus=&quot;EXISTED&quot;) then &quot;6003&quot; else  &quot;6106&quot;"/>
+                        </Status>
+                    </Transaction>
+                </xsl:for-each>
+            </responseXML>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>890</pd:x>
+        <pd:y>520</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>1186</pd:x>
+        <pd:y>493</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns3:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="100"/>
+                </IntervalInMillisec>
+            </ns3:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseNettingResult">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>249</pd:x>
+        <pd:y>254</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx3:PushNettingIBPSFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$JMS-Queue-Receiver/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1069</pd:x>
+        <pd:y>210</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;NettingConfirmAdapter&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="&quot;Netting Confirm Adapter: End&quot;"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$Invoke-an-Adapter-Request-Response-Service/aeRequestOutputType/trackingInfo/id"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns5:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns5:CharSet>
+                            <ns5:ServVersion>
+                                <xsl:value-of select="1.0"/>
+                            </ns5:ServVersion>
+                            <ns5:From>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;2&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns5:Name>
+                            </ns5:From>
+                            <ns5:To>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;NPSC&quot;"/>
+                                </ns5:Name>
+                            </ns5:To>
+                            <ns5:MsgId>
+                                <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:id"/>
+                            </ns5:MsgId>
+                            <ns5:BizServ>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;111&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;NettingConfirm&quot;"/>
+                                </ns5:Name>
+                            </ns5:BizServ>
+                            <ns5:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns5:CreatedDate>
+                        </ns13:AppHdr>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody>
+                        <xsl:copy-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow"/>
+                    </ns13:ServiceBody>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>882</pd:x>
+        <pd:y>310</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns6:input>
+                <duplicateKey>
+                    <xsl:value-of select="$MapResponse/responseXML/nettingID"/>
+                </duplicateKey>
+            </ns6:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert SOAException">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>894</pd:x>
+        <pd:y>430</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>insert into soap_exception values(?,?, sysdate)</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ESBDB.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>interface_id</parameterName>
+                    <dataType>DECIMAL</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>fault_description</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <interface_id>
+                    <xsl:value-of select="123"/>
+                </interface_id>
+                <fault_description>
+                    <xsl:copy-of select="$Invoke-an-Adapter-Request-Response-Service/aeRequestOutputType/ns2:__caret_reply_caret_RequestResponseServiceRPCClass_caret_operation/__caret_returnValue_caret_/ErrorDetails/@xsi:nil"/>
+                    <xsl:value-of select="$Invoke-an-Adapter-Request-Response-Service/aeRequestOutputType/ns2:__caret_reply_caret_RequestResponseServiceRPCClass_caret_operation/__caret_returnValue_caret_/ErrorDetails"/>
+                </fault_description>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm-1">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>1021</pd:x>
+        <pd:y>325</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1129</pd:x>
+        <pd:y>322</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;NettingConfirmAdapter&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="&quot;Netting Confirm Adapter: End&quot;"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$Invoke-an-Adapter-Request-Response-Service/aeRequestOutputType/trackingInfo/id"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns13:SOAEnvelope>
+                    <ns13:SOAServiceHeader>
+                        <ns13:AppHdr>
+                            <ns5:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns5:CharSet>
+                            <ns5:ServVersion>
+                                <xsl:value-of select="1.0"/>
+                            </ns5:ServVersion>
+                            <ns5:From>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;2&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns5:Name>
+                            </ns5:From>
+                            <ns5:To>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;NPSC&quot;"/>
+                                </ns5:Name>
+                            </ns5:To>
+                            <ns5:MsgId>
+                                <xsl:value-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow/pfx3:id"/>
+                            </ns5:MsgId>
+                            <ns5:BizServ>
+                                <ns5:Id>
+                                    <xsl:value-of select="&quot;111&quot;"/>
+                                </ns5:Id>
+                                <ns5:Name>
+                                    <xsl:value-of select="&quot;NettingConfirm&quot;"/>
+                                </ns5:Name>
+                            </ns5:BizServ>
+                            <ns5:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns5:CreatedDate>
+                        </ns13:AppHdr>
+                    </ns13:SOAServiceHeader>
+                    <ns13:ServiceBody>
+                        <xsl:copy-of select="$ParseNettingResult/pfx3:PushNettingIBPSFlow"/>
+                    </ns13:ServiceBody>
+                </ns13:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Invoke an Adapter Request-Response Service</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Invoke-an-Adapter-Request-Response-Service/aeRequestOutputType/ns2:__caret_reply_caret_RequestResponseServiceRPCClass_caret_operation/__caret_returnValue_caret_/DATA__167773164)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignResponseStr</pd:from>
+        <pd:to>Invoke an Adapter Request-Response Service</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapResponse</pd:from>
+        <pd:to>AssignResponseStr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseNettingResult</pd:from>
+        <pd:to>MapResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>ParseNettingResult</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Invoke an Adapter Request-Response Service</pd:from>
+        <pd:to>Checkpoint</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>Confirm-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>Insert SOAException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert SOAException</pd:from>
+        <pd:to>Confirm-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-1</pd:from>
+        <pd:to>LogEnd-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

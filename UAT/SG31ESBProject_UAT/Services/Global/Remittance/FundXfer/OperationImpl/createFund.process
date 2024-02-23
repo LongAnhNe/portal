@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns3="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1433466938916" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0">
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.wsdl"/>
+    <pd:name>Services/Global/Remittance/FundXfer/OperationImpl/createFund.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createFundReq"/>
+    <pd:startX>85</pd:startX>
+    <pd:startY>135</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns:ServiceEnverlop/ServiceBody/*" element="ns3:FundXferInfoRes"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:createFundRes>
+            <Res>
+                <ns3:createFundRes>
+                    <xsl:copy-of select="$RequestResponse/root/ns:ServiceEnverlop/ns1:AppHdr"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns:ServiceEnverlop/ns1:ResponseStatus"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns:ServiceEnverlop/ServiceBody/ns3:FundXferInfoRes"/>
+                </ns3:createFundRes>
+            </Res>
+        </wsdlPfx:createFundRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createFundRes"/>
+    <pd:endX>525</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1436348859710</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>280</pd:x>
+        <pd:y>148</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createFundReq/Req/ns3:createFundReq/ns1:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createFundReq/Req/ns3:createFundReq/ns1:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createFundReq/Req/ns3:createFundReq/ns1:AppHdr/node()"/>
+                        </ns12:AppHdr>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createFundReq/Req/ns3:createFundReq/ns3:FundXferInfoReq"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

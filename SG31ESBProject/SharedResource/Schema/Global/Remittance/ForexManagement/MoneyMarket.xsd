@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../../System/ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="MMNewPlacementRequest" type="MMNewPlacementRequesType"/>
+	<xs:complexType name="MMNewPlacementRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundFrom" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankFrom" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankTo" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundTo" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="EndDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="Int.Rate" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencyCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMNewPlacementResponse" type="MMNewPlacementResponseType"/>
+	<xs:complexType name="MMNewPlacementResponseBodyType">
+		<xs:sequence>
+			<xs:element name="MMStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			<xs:element name="TotalInterestAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="PrinLiqAcct" type="xs:string" minOccurs="0"/>
+			<xs:element name="IntLiqAcct" type="xs:string" minOccurs="0"/>
+			<xs:element name="InterestBasic" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBRequestAdd" type="ESBRequestAddType"/>
+	<xs:complexType name="ESBRequestAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBResponseAdd" type="ESBResponseAddType"/>
+	<xs:complexType name="ESBResponseAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MMNewPlacementRequest" minOccurs="0"/>
+				<xs:element ref="MMNewPlacementResponse" minOccurs="0"/>
+				<xs:element ref="ESBRequestAdd" minOccurs="0"/>
+				<xs:element ref="ESBResponseAdd"/>
+				<xs:element ref="MMResponse"/>
+				<xs:element ref="MMResponseBody"/>
+				<xs:element ref="MMLiquidationRequest"/>
+				<xs:element ref="MMRolloverRequest"/>
+				<xs:element ref="MMEnquiryRequest"/>
+				<xs:element ref="MMEnquiryResponse"/>
+				<xs:element ref="MMLiquidationResponse" minOccurs="0"/>
+				<xs:element ref="MMRolloverResponse" minOccurs="0"/>
+				<xs:element ref="ESBServiceState"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="MMNewPlacementRequesType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="MMNewPlacementRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMNewPlacementRequestBody" type="MMNewPlacementRequestBodyType"/>
+	<xs:element name="MMNewPlacementResponseBody" type="MMNewPlacementResponseBodyType"/>
+	<xs:complexType name="MMNewPlacementResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="MMNewPlacementResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMRolloverRequest" type="MMRolloverRequestType"/>
+	<xs:complexType name="MMRolloverRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="MMRolloverRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMRolloverRequestBody" type="MMRolloverRequestBodyType"/>
+	<xs:complexType name="MMRolloverRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="MMID" type="xs:string" minOccurs="0"/>
+			<xs:element name="InvestOrigin" type="xs:string" minOccurs="0"/>
+			<xs:element name="int.Transfer" type="xs:string" minOccurs="0"/>
+			<xs:element name="Fund" type="xs:string" minOccurs="0"/>
+			<xs:element name="Bank" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundIn" type="xs:string" minOccurs="0"/>
+			<xs:element name="Term" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="EndDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="Int.Rate" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMResponse" type="MMResponseType"/>
+	<xs:complexType name="MMResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="MMResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMResponseBody" type="MMResponseBodyType"/>
+	<xs:complexType name="MMResponseBodyType">
+		<xs:sequence>
+			<xs:element name="MMStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMLiquidationRequest" type="MMLiquidationRequestType"/>
+	<xs:complexType name="MMLiquidationRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="MMLiquidationRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMLiquidationRequestBody" type="MMLiquidationRequestBodyType"/>
+	<xs:complexType name="MMLiquidationRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="MMID" type="xs:string" minOccurs="0"/>
+			<xs:element name="OriginTransfer" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankFrom" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundFrom" type="xs:string" minOccurs="0"/>
+			<xs:element name="Int.Transfer" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankTo" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundTo" type="xs:string" minOccurs="0"/>
+			<xs:element name="EndDate" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMEnquiryRequest" type="MMEnquiryRequestType"/>
+	<xs:complexType name="MMEnquiryRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="MMEnquiryRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMEnquiryRequestBody" type="MMEnquiryRequestBodyType"/>
+	<xs:complexType name="MMEnquiryRequestBodyType">
+		<xs:sequence>
+			<xs:element name="BankCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMEnquiryResponse" type="MMEnquiryResponseType"/>
+	<xs:complexType name="MMEnquiryResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="MMEnquiryResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMEnquiryResponseBody" type="MMEnquiryResponseBodyType"/>
+	<xs:complexType name="MMEnquiryResponseBodyType">
+		<xs:sequence>
+			<xs:element name="SBVTotalAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundBalance" type="xs:string" minOccurs="0"/>
+			<xs:element name="PrincipalAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="InterestAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMLiquidationResponse" type="MMLiquidationResponseType"/>
+	<xs:complexType name="MMLiquidationResponseBodyType">
+		<xs:sequence>
+			<xs:element name="MMStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMLiquidationResponseBody" type="MMNewPlacementResponseBodyType"/>
+	<xs:complexType name="MMLiquidationResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="MMLiquidationResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MMRolloverResponse" type="MMRolloverResponseType"/>
+	<xs:complexType name="MMRolloverResponseBodyType">
+		<xs:sequence>
+			<xs:element name="MMStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			<xs:element name="NextIntAmount" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MMRolloverResponseBody" type="MMRolloverResponseBodyType"/>
+	<xs:complexType name="MMRolloverResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="MMRolloverResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

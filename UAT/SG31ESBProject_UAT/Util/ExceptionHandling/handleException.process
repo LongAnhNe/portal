@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/soaenvelope/1.0" xmlns:ns3="sbv/common/logging/enginelog/1.0" xmlns:pfx="sbv/common/exceptionhandling/exception/1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="sbv/common/exceptionhandling/exception/1.0" schemaLocation="/SharedResource/Schema/Common/ExceptionHandling/Exception.xsd"/>
+    <pd:name>Util/ExceptionHandling/handleException.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:Exception"/>
+    <pd:startX>149</pd:startX>
+    <pd:startY>106</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>631</pd:endX>
+    <pd:endY>106</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/process/global/handleException/1.0</pd:targetNamespace>
+    <pd:activity name="Publish Exception">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/publishException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx:Exception"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write to Engine Log">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>339</pd:x>
+        <pd:y>202</pd:y>
+        <config>
+            <processName>/Util/Logging/writeToEngineLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns3:EngineLog>
+                <ns3:ServiceName>
+                    <xsl:value-of select="$Start/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:ServiceName"/>
+                </ns3:ServiceName>
+                <ns3:Message>
+                    <xsl:value-of select="concat(&quot;Category &quot;,  $Start/pfx:Exception/pfx:ExceptionBody/pfx:Category, &#xA;&quot;  - Type &quot;, $Start/pfx:Exception/pfx:ExceptionBody/pfx:Type, &#xA;&quot; - Severity &quot;,$Start/pfx:Exception/pfx:ExceptionBody/pfx:Level,&#xA;&quot; - Code &quot;, $Start/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/MsgCode,&#xA;&quot; - Msg &quot;, $Start/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/Msg,&#xA;&quot; - DumpAnalysis &quot;, $Start/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/StackTrace)"/>
+                </ns3:Message>
+                <ns3:Category>
+                    <xsl:value-of select="$Start/pfx:Exception/pfx:ExceptionBody/pfx:Category"/>
+                </ns3:Category>
+                <ns3:TrackingId>
+                    <xsl:value-of select="$Start/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:SOAMsgId"/>
+                </ns3:TrackingId>
+            </ns3:EngineLog>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Publish Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Write to Engine Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Publish Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write to Engine Log</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

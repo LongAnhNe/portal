@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <pd:name>Services/GeneralService/Template Phase 2.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1457602572528</pd:targetNamespace>
+    <pd:activity name="0.Success-5">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>440</pd:x>
+        <pd:y>387</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:ESBServiceState xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <ns1:Status>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="0"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/Status/messages[1]"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;&quot;"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;false&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </ns1:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="3.WSTimeout-5">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>424</pd:x>
+        <pd:y>592</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:ESBServiceState xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <ns1:Status>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="7"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;T24WS Timeout : &quot; , $_error/ns1:ErrorReport/Msg )"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;T24WS Timeout : &quot; , $_error/ns1:ErrorReport/Msg )"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </ns1:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="4.OtherError-5">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>414</pd:x>
+        <pd:y>668</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:ESBServiceState xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <ns1:Status>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="8"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns1:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns1:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </ns1:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="2.OtherResponse-5">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>435</pd:x>
+        <pd:y>482</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:ESBServiceState xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <ns1:Status>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="6"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot; T24 WS Response  : &quot; ,$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/Status/successIndicator, &quot;Msg : &quot;  , $CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/Status/messages[1] )"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot; T24 WS Response  : &quot; ,$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/Status/successIndicator, &quot;Msg : &quot;  , $CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/Status/messages[1] )"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </ns1:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="99.CatchException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>759</pd:x>
+        <pd:y>449</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:ESBServiceState xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <ns1:Status>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="5"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;Has Exception in service : &quot;, $_error/ns1:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;Has Exception in service : &quot;, $_error/ns1:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ESBServiceState/pfx3:ESBServiceState/pfx3:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </ns1:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ENQ5Response">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>918</pd:x>
+        <pd:y>447</pd:y>
+        <config>
+            <variableName>MMEnquiryResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:MMEnquiryResponseBody xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/NOFILEPOTMMTOTALAMTType[1]/gNOFILEPOTMMTOTALAMTDetailType/mNOFILEPOTMMTOTALAMTDetailType[1]/TOTPROCIPAL">
+                    <ns1:PrincipalAmount>
+                        <xsl:value-of select="$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/NOFILEPOTMMTOTALAMTType[1]/gNOFILEPOTMMTOTALAMTDetailType/mNOFILEPOTMMTOTALAMTDetailType[1]/TOTPROCIPAL"/>
+                    </ns1:PrincipalAmount>
+                </xsl:if>
+                <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/NOFILEPOTMMTOTALAMTType[1]/gNOFILEPOTMMTOTALAMTDetailType/mNOFILEPOTMMTOTALAMTDetailType[1]/TOTINTAMT">
+                    <ns1:InterestAmount>
+                        <xsl:value-of select="$CallT24ENQ/outputMessage/pfx5:MMTotalAmountResponse/NOFILEPOTMMTOTALAMTType[1]/gNOFILEPOTMMTOTALAMTDetailType/mNOFILEPOTMMTOTALAMTDetailType[1]/TOTINTAMT"/>
+                    </ns1:InterestAmount>
+                </xsl:if>
+                <ns1:ENQStatus>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="if ($ESBServiceState/pfx3:ESBServiceState/pfx3:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </ns1:ENQStatus>
+                <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$ESBServiceState/pfx3:ESBServiceState/pfx3:ErrorMessage">
+                    <ns1:ErrorMsg>
+                        <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/pfx3:ErrorMessage"/>
+                    </ns1:ErrorMsg>
+                </xsl:if>
+            </ns1:MMEnquiryResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ENQResponse-Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>873</pd:x>
+        <pd:y>615</pd:y>
+        <config>
+            <variableName>MMEnquiryResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:MMEnquiryResponseBody xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd">
+                <ns1:ENQStatus>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="if ($ESBServiceState/pfx3:ESBServiceState/pfx3:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </ns1:ENQStatus>
+                <ns1:ErrorMsg>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="concat(&quot;Unexpected Error . &quot; , $ESBServiceState/pfx3:ESBServiceState/pfx3:ErrorMessage)"/>
+                </ns1:ErrorMsg>
+            </ns1:MMEnquiryResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WSError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>261</pd:x>
+        <pd:y>638</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="WSResponse">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>438</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>99.CatchException</pd:from>
+        <pd:to>ENQ5Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSResponse</pd:from>
+        <pd:to>0.Success-5</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSResponse</pd:from>
+        <pd:to>2.OtherResponse-5</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError</pd:from>
+        <pd:to>3.WSTimeout-5</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError</pd:from>
+        <pd:to>4.OtherError-5</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

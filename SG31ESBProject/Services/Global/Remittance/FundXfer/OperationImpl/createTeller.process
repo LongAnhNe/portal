@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="sbv/common/envelope/serviceenvelope/1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0">
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" location="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.wsdl"/>
+    <pd:name>Services/Global/Remittance/FundXfer/OperationImpl/createTeller.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx:createTellerReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/*" element="pfx:TellerResType"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <pfx:createTellerRes>
+            <Res>
+                <pfx:createTellerRes>
+                    <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ns1:AppHdr"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ns1:ResponseStatus"/>
+                    <pfx:TellerResType>
+                        <pfx:TransId>
+                            <xsl:value-of select="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/pfx:TellerResType[1]/pfx:TransId"/>
+                        </pfx:TransId>
+                        <xsl:if test="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/pfx:TellerResType[1]/pfx:SourceAppId">
+                            <pfx:SourceAppId>
+                                <xsl:value-of select="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/pfx:TellerResType[1]/pfx:SourceAppId"/>
+                            </pfx:SourceAppId>
+                        </xsl:if>
+                    </pfx:TellerResType>
+                </pfx:createTellerRes>
+            </Res>
+        </pfx:createTellerRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx:createTellerRes"/>
+    <pd:endX>447</pd:endX>
+    <pd:endY>63</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1445487873013</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>282</pd:x>
+        <pd:y>92</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <ns1:CharSet>
+                                <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:CharSet"/>
+                            </ns1:CharSet>
+                            <ns1:ServVersion>
+                                <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:ServVersion"/>
+                            </ns1:ServVersion>
+                            <ns1:From>
+                                <ns1:Id>
+                                    <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:From/ns1:Id"/>
+                                </ns1:Id>
+                                <ns1:Name>
+                                    <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:From/ns1:Name"/>
+                                </ns1:Name>
+                            </ns1:From>
+                            <ns1:To>
+                                <ns1:Id>
+                                    <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:To/ns1:Id"/>
+                                </ns1:Id>
+                                <ns1:Name>
+                                    <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:To/ns1:Name"/>
+                                </ns1:Name>
+                            </ns1:To>
+                            <ns1:MsgId>
+                                <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:MsgId"/>
+                            </ns1:MsgId>
+                            <ns1:MsgPreId>
+                                <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:MsgPreId"/>
+                            </ns1:MsgPreId>
+                            <ns1:MsgSrcId>
+                                <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:MsgSrcId"/>
+                            </ns1:MsgSrcId>
+                            <ns1:BizServ>
+                                <ns1:Id>
+                                    <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:BizServ/ns1:Id"/>
+                                </ns1:Id>
+                                <ns1:Name>
+                                    <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:BizServ/ns1:Name"/>
+                                </ns1:Name>
+                            </ns1:BizServ>
+                            <ns1:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns1:CreatedDate>
+                            <ns1:Signature>
+                                <xsl:value-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/ns1:AppHdr/ns1:Signature"/>
+                            </ns1:Signature>
+                        </ns12:AppHdr>
+                        <ns12:OperationName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns12:OperationName>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/pfx:createTellerReq/Req/pfx:createTellerReq/pfx:TellerReqType"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

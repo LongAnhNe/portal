@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="sbv/common/envelope/serviceenvelope/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="www.tibco.com/plugin/Sleep" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns3="http://fis.vn/iMaximusGateway/ErpPostToCsdService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:pfx3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx2="http://tempuri.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp"/>
+    <wsdl:import namespace="http://tempuri.org/"/>
+    <wsdl:import namespace="http://tempuri.org/" location="/SharedResource/Schema/Global/System/CSD/ErpPostToCSDService/ErpPostToCsdService_1.wsdl"/>
+    <pd:name>Services/Global/Remittance/SecuritiesPosting/Version1.0/createPosting/securitiesPostingScanResult.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <pfx:ServiceEnverlop>
+            <xsl:copy-of select="$ServiceEnvelop/pfx:ServiceEnverlop/ns1:AppHdr"/>
+            <ns1:ResponseStatus>
+                <ns1:Status>
+                    <xsl:value-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_STATUS"/>
+                </ns1:Status>
+                <xsl:if test="not(($JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE/@xsi:nil=(&quot;true&quot;)) or ($JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE/@xsi:nil=(&quot;1&quot;)))">
+                    <ns1:ErrorMessage>
+                        <xsl:value-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE"/>
+                    </ns1:ErrorMessage>
+                </xsl:if>
+            </ns1:ResponseStatus>
+            <xsl:copy-of select="$ServiceEnvelop/pfx:ServiceEnverlop/ServiceBody"/>
+        </pfx:ServiceEnverlop>
+    </pd:returnBindings>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>178</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>queue.securitiesposting</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:ServiceEnverlop"/>
+    <pd:endX>788</pd:endX>
+    <pd:endY>140</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceEnvelop ref="pfx:ServiceEnverlop"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437621178570</pd:targetNamespace>
+    <pd:activity name="JDBC Call Procedure">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>360</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <catalog>FSAH_CREATE_EVENTS_PKG_CSD</catalog>
+            <ProcedureName>MAIN</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_INTERFACE_ID</colName>
+                    <colType>2</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_STATUS</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_MESSAGE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_INTERFACE_ID>
+                        <xsl:value-of select="$JMS-Queue-Receiver/ns:ActivityOutput/Body"/>
+                    </P_INTERFACE_ID>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>650</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>531</pd:x>
+        <pd:y>166</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns2:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="100"/>
+                </IntervalInMillisec>
+            </ns2:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>104</pd:x>
+        <pd:y>366</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>217</pd:x>
+        <pd:y>369</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Error Handle">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>244</pd:y>
+        <pd:width>471</pd:width>
+        <pd:height>267</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SecuritiesErrorQueue</pd:to>
+            <pd:xpathDescription>Other Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Sleep-1</pd:to>
+            <pd:xpathDescription>Connect Lost</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/pfx3:ErrorReport/MsgCode = "BW-JDBC-100014" or contains($_error/pfx3:ErrorReport/MsgCode, "SQLState = 6100" )</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Connection Notify Queue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SecuritiesErrorQueue</pd:from>
+            <pd:to>Confirm-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-1</pd:from>
+            <pd:to>Connection Notify Queue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SecuritiesErrorQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>478</pd:x>
+            <pd:y>318</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>queue.securitiesposting.error</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$_error/pfx3:ErrorReport/Data/*" element="pfx4:GetAcctStatusFrErpRequest"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <Body>
+                        <xsl:value-of select="concat( 'Connection Lost: ', $_error/pfx3:ErrorReport/Msg, $_error/pfx3:ErrorReport/MsgCode,  BW:getCurrentProcessName($_processContext/pfx3:ProcessContext/ProcessId),tib:concat-sequence($_error/pfx3:ErrorReport/Data/pfx4:GetAcctStatusFrErpRequest/pfx4:Request/pfx4:GetAcctStatusFrErpRequestType))"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm-1">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:x>624</pd:x>
+            <pd:y>317</pd:y>
+            <config>
+                <ConfirmEvent>JMS Queue Receiver</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Sleep-1">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>462</pd:x>
+            <pd:y>419</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns2:SleepInputSchema>
+                    <IntervalInMillisec>
+                        <xsl:value-of select="100"/>
+                    </IntervalInMillisec>
+                </ns2:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Connection Notify Queue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>618</pd:x>
+            <pd:y>428</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%ServiceGlobalVar/receivedCreatePosting/Connection_Notify_Queue%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <Body>
+                        <xsl:value-of select="concat( 'Connection Lost: ', $_error/pfx3:ErrorReport/Msg, $_error/pfx3:ErrorReport/MsgCode,  BW:getCurrentProcessName($_processContext/pfx3:ProcessContext/ProcessId))"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="CallCSDService">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>523</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx2:ErpPostToCsdService</service>
+            <servicePort>BasicHttpBinding_IErpPostToCsdService</servicePort>
+            <operation>GetAcctStatusFrErp</operation>
+            <soapAction>http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAcctStatusFrErp</soapAction>
+            <endpointURL>http://10.1.26.20:9680/ErpPostToCsdService</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns3:GetAcctStatusFrErp>
+                    <ns3:request>
+                        <pfx4:Header>
+                            <pfx5:MsgReqId>
+                                <xsl:choose>
+                                    <xsl:when test="exists($JMS-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID)">
+                                        <xsl:value-of select="$JMS-Queue-Receiver/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </pfx5:MsgReqId>
+                        </pfx4:Header>
+                        <pfx4:Request>
+                            <pfx4:GetAcctStatusFrErpRequestType>
+                                <xsl:if test="$JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE">
+                                    <pfx4:Reason>
+                                        <xsl:copy-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE/@xsi:nil"/>
+                                        <xsl:value-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE"/>
+                                    </pfx4:Reason>
+                                </xsl:if>
+                                <pfx4:RefNoInterfaceAomCsd>
+                                    <xsl:value-of select="string($JDBC-Call-Procedure/resultSet/outputSet/P_INTERFACE_ID)"/>
+                                </pfx4:RefNoInterfaceAomCsd>
+                                <pfx4:RefNoInterfaceVendor>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </pfx4:RefNoInterfaceVendor>
+                                <pfx4:Status>
+                                    <xsl:value-of select="string($JDBC-Call-Procedure/resultSet/outputSet/P_STATUS)"/>
+                                </pfx4:Status>
+                            </pfx4:GetAcctStatusFrErpRequestType>
+                        </pfx4:Request>
+                    </ns3:request>
+                </ns3:GetAcctStatusFrErp>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>JDBC Call Procedure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>Error Handle</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Handle</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>CallCSDService</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallCSDService</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:TT01Schema="schema://www.sbv.gov.vn/schema/global/System/TT01/TT01Schema.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/System/TT01/TT01Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../ESB/Common/ESBCommonModel.xsd"/>
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="FTFeeInterestRequest" type="TT01Schema:FTFeeInterestRequestType"/>
+	<xs:complexType name="FTFeeInterestRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="TT01Schema:FTFeeInterestRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTFeeInterestRequestBody" type="TT01Schema:FTFeeInterestRequestBodyType"/>
+	<xs:complexType name="FTFeeInterestRequestBodyType"/>
+	<xs:element name="FTFeeInterestResponse" type="TT01Schema:FTFeeInterestResponseType"/>
+	<xs:complexType name="FTFeeInterestResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="TT01Schema:FTFeeInterestResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTFeeInterestResponseBody">
+		<xs:complexType/>
+	</xs:element>
+	<xs:complexType name="FTFeeInterestResponseBodyType"/>
+	<xs:element name="ESBRequestAdd" type="TT01Schema:ESBRequestAddType"/>
+	<xs:complexType name="ESBRequestAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBResponseAdd" type="TT01Schema:ESBResponseAddType"/>
+	<xs:complexType name="ESBResponseAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="TT01Schema:ESBRequestAdd"/>
+				<xs:element ref="TT01Schema:ESBResponseAdd"/>
+				<xs:element ref="TT01Schema:ESBServiceState"/>
+				<xs:element ref="TT01Schema:FTFeeInterestRequest"/>
+				<xs:element ref="TT01Schema:FTFeeInterestResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

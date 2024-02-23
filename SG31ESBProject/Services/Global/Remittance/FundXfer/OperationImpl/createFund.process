@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="sbv/common/envelope/serviceenvelope/1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0">
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" location="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.wsdl"/>
+    <pd:name>Services/Global/Remittance/FundXfer/OperationImpl/createFund.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx:createFundReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/*" element="pfx:createFundRes"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <pfx:createFundRes>
+            <Res>
+                <xsl:copy-of select="$RequestResponse/root/ns2:ServiceEnverlop/ServiceBody/pfx:createFundRes"/>
+            </Res>
+        </pfx:createFundRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx:createFundRes"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1445487872768</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>295</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <ns:CharSet>
+                                <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:CharSet"/>
+                            </ns:CharSet>
+                            <ns:ServVersion>
+                                <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:ServVersion"/>
+                            </ns:ServVersion>
+                            <ns:From>
+                                <ns:Id>
+                                    <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:From/ns:Id"/>
+                                </ns:Id>
+                                <ns:Name>
+                                    <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:From/ns:Name"/>
+                                </ns:Name>
+                            </ns:From>
+                            <ns:To>
+                                <ns:Id>
+                                    <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:To/ns:Id"/>
+                                </ns:Id>
+                                <ns:Name>
+                                    <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:To/ns:Name"/>
+                                </ns:Name>
+                            </ns:To>
+                            <ns:MsgId>
+                                <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:MsgId"/>
+                            </ns:MsgId>
+                            <ns:MsgPreId>
+                                <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:MsgPreId"/>
+                            </ns:MsgPreId>
+                            <ns:MsgSrcId>
+                                <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:MsgSrcId"/>
+                            </ns:MsgSrcId>
+                            <ns:BizServ>
+                                <ns:Id>
+                                    <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:BizServ/ns:Id"/>
+                                </ns:Id>
+                                <ns:Name>
+                                    <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:BizServ/ns:Name"/>
+                                </ns:Name>
+                            </ns:BizServ>
+                            <ns:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns:CreatedDate>
+                            <ns:Signature>
+                                <xsl:value-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/ns:AppHdr/ns:Signature"/>
+                            </ns:Signature>
+                        </ns12:AppHdr>
+                        <ns12:OperationName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns12:OperationName>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/pfx:createFundReq/Req/pfx:createFundReq/pfx:FundXferInfoReq"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

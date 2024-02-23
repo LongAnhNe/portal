@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Services/GeneralService/testSubStr.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>139</pd:startX>
+    <pd:startY>89</pd:startY>
+    <pd:returnBindings>
+        <result>
+            <xsl:value-of select="$translate/str"/>
+        </result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="result" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>478</pd:endX>
+    <pd:endY>87</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <translate>
+            <xsd:element name="translate" type="xsd:string"/>
+        </translate>
+        <tokenize>
+            <xsd:element name="tokenize" type="xsd:string"/>
+        </tokenize>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1448013640293</pd:targetNamespace>
+    <pd:activity name="translate">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <variableName>translate</variableName>
+        </config>
+        <pd:inputBindings>
+            <translate>
+                <xsl:value-of select="translate( &quot;HOAN TRA LCC SHGD$`$ 10000001/30.11.2015 DO NGUOI NHAN KHONG CO TAI$`$NHNN HCM.&quot;, &quot;$`$&quot;, &quot;&quot;)"/>
+            </translate>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="tokenize">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>198</pd:y>
+        <config>
+            <variableName>tokenize</variableName>
+        </config>
+        <pd:inputBindings>
+            <tokenize>
+                <xsl:value-of select="tib:concat-sequence-format(tib:tokenize(&quot;HOAN TRA LCC $`$SHGD 10000001/30.11.2015 DO NGUOI NHAN KHONG CO TAI$`$NHNN HCM.&quot; , &quot;$`$&quot;),&quot;&quot;)"/>
+            </tokenize>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>translate</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>translate</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>tokenize</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>tokenize</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

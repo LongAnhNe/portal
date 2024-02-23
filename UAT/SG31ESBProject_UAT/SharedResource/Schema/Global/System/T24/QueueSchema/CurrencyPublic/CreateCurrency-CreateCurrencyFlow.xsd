@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/CreateCurrency/CreateCurrencyFlow"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/CreateCurrency/CreateCurrencyFlow"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../Common-EventCommon.xsd"/>
+	<xsd:element name="CreateCurrencyFlow">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="numericCcyCode" minOccurs="0"/>
+				<xsd:element ref="coCode" minOccurs="0"/>
+				<xsd:element ref="ccyNameList" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="numericCcyCode" type="xsd:string"/>
+	<xsd:element name="coCode" type="xsd:string"/>
+	<xsd:element name="ccyNameList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ccyName" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="language" type="xsd:string"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

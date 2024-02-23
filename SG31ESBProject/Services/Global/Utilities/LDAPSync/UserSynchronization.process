@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="www.tibco.com/plugin/java/JavaMethodActivityOutput" xmlns:ns="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Utilities/LDAPSync/LDAPSync.xsd" xmlns:pfx="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Utilities/LDAPSync/Schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Utilities/LDAPSync/LDAPSync.xsd" schemaLocation="/SharedResource/Schema/Global/Utilities/LDAPSync/ListLDAPUser.xsd"/>
+    <pd:name>Services/Global/Utilities/LDAPSync/UserSynchronization.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>68</pd:startX>
+    <pd:startY>72</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>946</pd:endX>
+    <pd:endY>285</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Existed>
+            <xsd:element name="Existed" type="xsd:boolean"/>
+        </Existed>
+        <cnt>
+            <xsd:element name="cnt" type="xsd:string"/>
+        </cnt>
+        <ListUser ref="pfx2:LDAPUser"/>
+        <ListUpdatedUser ref="pfx2:LDAPUser"/>
+        <loopIndex1>
+            <xsd:element name="loopIndex1" type="xsd:int"/>
+        </loopIndex1>
+        <loopIndex2>
+            <xsd:element name="loopIndex2" type="xsd:int"/>
+        </loopIndex2>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1461576646516</pd:targetNamespace>
+    <pd:activity name="initLoopIndex1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>433</pd:x>
+        <pd:y>285</pd:y>
+        <config>
+            <variableName>loopIndex1</variableName>
+        </config>
+        <pd:inputBindings>
+            <loopIndex1>
+                <xsl:value-of select="0"/>
+            </loopIndex1>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="QueryListAOM">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>174</pd:x>
+        <pd:y>288</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>select distinct(username) from OMO.AD_USERS_CRL where CA_TOKENSN is null</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AOMDB.sharedjdbc</jdbcSharedConfig>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>USERNAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group (1)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>73</pd:x>
+        <pd:y>439</pd:y>
+        <pd:width>992</pd:width>
+        <pd:height>534</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>index1</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$loopIndex1/loopIndex1=count($ListUser/pfx2:LDAPUser/pfx2:User)</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>resetIndex2-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>resetIndex2</pd:to>
+            <pd:xpathDescription>User exist</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>resetExisted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InsertNewUser</pd:from>
+            <pd:to>resetExisted</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncLoopIndex1</pd:from>
+            <pd:to>InsertNewUser</pd:to>
+            <pd:xpathDescription>new user</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Existed/Existed="false"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncLoopIndex1</pd:from>
+            <pd:to>resetExisted</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>resetIndex2</pd:from>
+            <pd:to>Group</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Group</pd:from>
+            <pd:to>IncLoopIndex1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>resetIndex2-1</pd:from>
+            <pd:to>Null</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Null</pd:from>
+            <pd:to>IncLoopIndex1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="resetIndex2">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>161</pd:x>
+            <pd:y>564</pd:y>
+            <config>
+                <variableName>loopIndex2</variableName>
+            </config>
+            <pd:inputBindings>
+                <loopIndex2>
+                    <xsl:value-of select="0"/>
+                </loopIndex2>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="InsertNewUser">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>908</pd:x>
+            <pd:y>789</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AOMDB.sharedjdbc</jdbcSharedConfig>
+                <statement>INSERT INTO OMO.AD_USERS_CRL(USERNAME,DISPLAY_NAME,STATUS,IP_ADDRESS,MICODE,CREATED_BY,CREATED_DATE,DESCRIPTION,USERTYPE,TYPE,CA_TOKENSN,CA_LDAP) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>USERNAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DISPLAY_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>STATUS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>IP_ADDRESS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MICODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CREATED_BY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CREATED_DATE</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DESCRIPTION</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>USERTYPE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TYPE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CA_TOKENSN</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CA_LDAP</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <USERNAME>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:username)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:username"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </USERNAME>
+                    <DISPLAY_NAME>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:displayname)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:displayname"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </DISPLAY_NAME>
+                    <STATUS>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:userAccountControl)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:userAccountControl"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </STATUS>
+                    <IP_ADDRESS>
+                        <xsl:value-of select="&quot;10.0.52.38&quot;"/>
+                    </IP_ADDRESS>
+                    <MICODE>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </MICODE>
+                    <CREATED_BY>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </CREATED_BY>
+                    <CREATED_DATE>
+                        <xsl:value-of select="current-date()"/>
+                    </CREATED_DATE>
+                    <DESCRIPTION>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:description)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:description"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </DESCRIPTION>
+                    <USERTYPE>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:appRole)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:appRole"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </USERTYPE>
+                    <TYPE>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:type)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:type"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </TYPE>
+                    <CA_TOKENSN>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:certSerialNumber)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:certSerialNumber"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </CA_TOKENSN>
+                    <CA_LDAP>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:certSubject)">
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:certSubject"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </CA_LDAP>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="resetExisted">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>903</pd:x>
+            <pd:y>584</pd:y>
+            <config>
+                <variableName>Existed</variableName>
+            </config>
+            <pd:inputBindings>
+                <Existed>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </Existed>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="IncLoopIndex1">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>779</pd:x>
+            <pd:y>681</pd:y>
+            <config>
+                <variableName>loopIndex1</variableName>
+            </config>
+            <pd:inputBindings>
+                <loopIndex1>
+                    <xsl:value-of select="$loopIndex1/loopIndex1+1"/>
+                </loopIndex1>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="Group">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>250</pd:x>
+            <pd:y>492</pd:y>
+            <pd:width>425</pd:width>
+            <pd:height>353</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>repeat</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:indexSlot>index2</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:repeatCondition>$loopIndex2/loopIndex2&gt;=count($QueryListAOM/resultSet/Record) or $Existed/Existed="true"</pd:repeatCondition>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>IncIndex2</pd:to>
+                <pd:xpathDescription>existed</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:username = $QueryListAOM/resultSet/Record[$index2]/USERNAME</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>IncIndex2-1</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>updateExisted</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>updateNotExisted</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>IncIndex2-1</pd:from>
+                <pd:to>updateNotExisted</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>IncIndex2</pd:from>
+                <pd:to>insertListUpdateUser</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>insertListUpdateUser</pd:from>
+                <pd:to>updateExisted</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="IncIndex2">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>330</pd:x>
+                <pd:y>596</pd:y>
+                <config>
+                    <variableName>loopIndex2</variableName>
+                </config>
+                <pd:inputBindings>
+                    <loopIndex2>
+                        <xsl:value-of select="$loopIndex2/loopIndex2+1"/>
+                    </loopIndex2>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="IncIndex2-1">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>358</pd:x>
+                <pd:y>759</pd:y>
+                <config>
+                    <variableName>loopIndex2</variableName>
+                </config>
+                <pd:inputBindings>
+                    <loopIndex2>
+                        <xsl:value-of select="$loopIndex2/loopIndex2+1"/>
+                    </loopIndex2>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="updateNotExisted">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>562</pd:x>
+                <pd:y>757</pd:y>
+                <config>
+                    <variableName>Existed</variableName>
+                </config>
+                <pd:inputBindings>
+                    <Existed>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </Existed>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="updateExisted">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>585</pd:x>
+                <pd:y>597</pd:y>
+                <config>
+                    <variableName>Existed</variableName>
+                </config>
+                <pd:inputBindings>
+                    <Existed>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </Existed>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="insertListUpdateUser">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>460</pd:x>
+                <pd:y>594</pd:y>
+                <config>
+                    <variableName>ListUpdatedUser</variableName>
+                </config>
+                <pd:inputBindings>
+                    <pfx2:LDAPUser>
+                        <xsl:copy-of select="$ListUpdatedUser/pfx2:LDAPUser/pfx2:User"/>
+                        <pfx2:User>
+                            <pfx2:username>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:username"/>
+                            </pfx2:username>
+                            <pfx2:displayname>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:displayname"/>
+                            </pfx2:displayname>
+                            <pfx2:cn>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:cn"/>
+                            </pfx2:cn>
+                            <pfx2:description>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:description"/>
+                            </pfx2:description>
+                            <pfx2:title>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:title"/>
+                            </pfx2:title>
+                            <pfx2:userAccountControl>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:userAccountControl"/>
+                            </pfx2:userAccountControl>
+                            <pfx2:certSubject>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:certSubject"/>
+                            </pfx2:certSubject>
+                            <pfx2:certSerialNumber>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:certSerialNumber"/>
+                            </pfx2:certSerialNumber>
+                            <xsl:if test="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:appRole">
+                                <pfx2:appRole>
+                                    <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:appRole"/>
+                                </pfx2:appRole>
+                            </xsl:if>
+                            <xsl:if test="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:type">
+                                <pfx2:type>
+                                    <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:type"/>
+                                </pfx2:type>
+                            </xsl:if>
+                            <pfx2:ErrorMessage>
+                                <xsl:value-of select="$ListUser/pfx2:LDAPUser/pfx2:User[$index1]/pfx2:ErrorMessage"/>
+                            </pfx2:ErrorMessage>
+                        </pfx2:User>
+                    </pfx2:LDAPUser>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="resetIndex2-1">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>194</pd:x>
+            <pd:y>897</pd:y>
+            <config>
+                <variableName>loopIndex2</variableName>
+            </config>
+            <pd:inputBindings>
+                <loopIndex2>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="0"/>
+                </loopIndex2>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Null">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>766</pd:x>
+            <pd:y>890</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="UpdateListUser">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>674</pd:x>
+        <pd:y>330</pd:y>
+        <config>
+            <timeout>%%AOM/Timeout%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>true</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AOMDB.sharedjdbc</jdbcSharedConfig>
+            <statement>UPDATE OMO.AD_USERS_CRL SET DISPLAY_NAME = ?, STATUS = ?,MODIFIED_BY=?,MODIFIED_DATE=?,DESCRIPTION=?,POSITION=?,USERTYPE=?,TYPE=?,CA_TOKENSN=?,CA_LDAP=? WHERE USERNAME = ?</statement>
+            <batchUpdate>true</batchUpdate>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>DISPLAY_NAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>STATUS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MODIFIED_BY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MODIFIED_DATE</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>DESCRIPTION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>POSITION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>USERTYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CA_TOKENSN</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CA_LDAP</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>USERNAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <xsl:for-each select="$ListUpdatedUser/pfx2:LDAPUser/pfx2:User">
+                    <Record>
+                        <DISPLAY_NAME>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx2:displayname)">
+                                    <xsl:value-of select="pfx2:displayname"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </DISPLAY_NAME>
+                        <STATUS>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx2:userAccountControl)">
+                                    <xsl:value-of select="pfx2:userAccountControl"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </STATUS>
+                        <MODIFIED_BY>
+                            <xsl:value-of select="&quot;ESB&quot;"/>
+                        </MODIFIED_BY>
+                        <MODIFIED_DATE>
+                            <xsl:value-of select="current-date()"/>
+                        </MODIFIED_DATE>
+                        <DESCRIPTION>
+                            <xsl:value-of select="pfx2:description"/>
+                        </DESCRIPTION>
+                        <POSITION>
+                            <xsl:choose>
+                                <xsl:when test="exists(substring(pfx2:title, 0, 20))">
+                                    <xsl:value-of select="substring(pfx2:title, 0, 20)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </POSITION>
+                        <USERTYPE>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx2:appRole)">
+                                    <xsl:value-of select="pfx2:appRole"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </USERTYPE>
+                        <TYPE>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx2:type)">
+                                    <xsl:value-of select="pfx2:type"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </TYPE>
+                        <CA_TOKENSN>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx2:certSerialNumber)">
+                                    <xsl:value-of select="pfx2:certSerialNumber"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </CA_TOKENSN>
+                        <CA_LDAP>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx2:certSubject)">
+                                    <xsl:value-of select="pfx2:certSubject"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </CA_LDAP>
+                        <USERNAME>
+                            <xsl:value-of select="pfx2:username"/>
+                        </USERNAME>
+                    </Record>
+                </xsl:for-each>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseADIntUser">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>360</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term>
+                <xsd:element name="UserADInformation">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="User" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="username" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="displayname" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="cn" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="title" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="userAccountControl" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="certSubject" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="certSerialNumber" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="citadCode" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="appRole" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="Error" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="translate($GetNewADUser/ns1:JavaMethodActivityOutput/MethodReturnValue,'&amp;','-')"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="insertListADUser">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>497</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <variableName>ListUser</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:LDAPUser>
+                <xsl:for-each select="$ParseADIntUser/UserADInformation/User">
+                    <pfx2:User>
+                        <xsl:if test="username">
+                            <pfx2:username>
+                                <xsl:value-of select="username"/>
+                            </pfx2:username>
+                        </xsl:if>
+                        <xsl:if test="displayname">
+                            <pfx2:displayname>
+                                <xsl:value-of select="displayname"/>
+                            </pfx2:displayname>
+                        </xsl:if>
+                        <xsl:if test="cn">
+                            <pfx2:cn>
+                                <xsl:value-of select="cn"/>
+                            </pfx2:cn>
+                        </xsl:if>
+                        <xsl:if test="description">
+                            <pfx2:description>
+                                <xsl:value-of select="description"/>
+                            </pfx2:description>
+                        </xsl:if>
+                        <xsl:if test="title">
+                            <pfx2:title>
+                                <xsl:value-of select="title"/>
+                            </pfx2:title>
+                        </xsl:if>
+                        <xsl:if test="userAccountControl">
+                            <pfx2:userAccountControl>
+                                <xsl:value-of select="userAccountControl"/>
+                            </pfx2:userAccountControl>
+                        </xsl:if>
+                        <xsl:if test="certSubject">
+                            <pfx2:certSubject>
+                                <xsl:value-of select="certSubject"/>
+                            </pfx2:certSubject>
+                        </xsl:if>
+                        <xsl:if test="certSerialNumber">
+                            <pfx2:certSerialNumber>
+                                <xsl:value-of select="certSerialNumber"/>
+                            </pfx2:certSerialNumber>
+                        </xsl:if>
+                        <xsl:if test="appRole">
+                            <pfx2:appRole>
+                                <xsl:value-of select="appRole"/>
+                            </pfx2:appRole>
+                        </xsl:if>
+                        <pfx2:type>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </pfx2:type>
+                    </pfx2:User>
+                </xsl:for-each>
+            </pfx2:LDAPUser>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetNewADUser">
+        <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+        <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+        <pd:x>204</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <ConstructDeclaredClass>false</ConstructDeclaredClass>
+            <CacheConstructedClass>false</CacheConstructedClass>
+            <InvokeCleanupMethod>false</InvokeCleanupMethod>
+            <JavaGlobalInstance>/SharedResource/Library/LDAPGlobalInstance.serviceagent</JavaGlobalInstance>
+            <MethodInfo>
+                <classPath>/SharedResource/Library/LDAPLibrary.aliaslib</classPath>
+                <className>LDAPSync.LDAPMain</className>
+                <methodName>GetNewADUser</methodName>
+                <methodReturn>java.lang.String</methodReturn>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>int</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+            </MethodInfo>
+        </config>
+        <pd:inputBindings>
+            <ns:JavaMethodActivityInput>
+                <MethodParameters>
+                    <Parameter1>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/IntADDomain"/>
+                    </Parameter1>
+                    <Parameter2>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/IntADUsername"/>
+                    </Parameter2>
+                    <Parameter3>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/IntADPassword"/>
+                    </Parameter3>
+                    <Parameter4>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/IntADSearchTerm"/>
+                    </Parameter4>
+                    <Parameter5>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/IntADCNBase"/>
+                    </Parameter5>
+                    <Parameter6>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/Interval"/>
+                    </Parameter6>
+                    <Parameter7>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/Type"/>
+                    </Parameter7>
+                </MethodParameters>
+            </ns:JavaMethodActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseADExtUser">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>824</pd:x>
+        <pd:y>91</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term>
+                <xsd:element name="UserADInformation">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="User" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="username" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="displayname" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="cn" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="title" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="userAccountControl" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="certSubject" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="certSerialNumber" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="citadCode" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="appRole" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="Error" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="translate($GetNewExtADUser/ns1:JavaMethodActivityOutput/MethodReturnValue,'&amp;','-')"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetNewExtADUser">
+        <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+        <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+        <pd:x>662</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <ConstructDeclaredClass>false</ConstructDeclaredClass>
+            <CacheConstructedClass>false</CacheConstructedClass>
+            <InvokeCleanupMethod>false</InvokeCleanupMethod>
+            <JavaGlobalInstance>/SharedResource/Library/LDAPGlobalInstance.serviceagent</JavaGlobalInstance>
+            <MethodInfo>
+                <classPath>/SharedResource/Library/LDAPLibrary.aliaslib</classPath>
+                <className>LDAPSync.LDAPMain</className>
+                <methodName>GetNewADUser</methodName>
+                <methodReturn>java.lang.String</methodReturn>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>int</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+            </MethodInfo>
+        </config>
+        <pd:inputBindings>
+            <ns:JavaMethodActivityInput>
+                <MethodParameters>
+                    <Parameter1>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/ADDomain"/>
+                    </Parameter1>
+                    <Parameter2>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/ADUsername"/>
+                    </Parameter2>
+                    <Parameter3>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/ADPassword"/>
+                    </Parameter3>
+                    <Parameter4>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/ADSearchTerm"/>
+                    </Parameter4>
+                    <Parameter5>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/ADCNBase"/>
+                    </Parameter5>
+                    <Parameter6>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/Interval"/>
+                    </Parameter6>
+                    <Parameter7>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/LDAP/Type"/>
+                    </Parameter7>
+                </MethodParameters>
+            </ns:JavaMethodActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="insertListADExtUser">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>486</pd:x>
+        <pd:y>183</pd:y>
+        <config>
+            <variableName>ListUser</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:LDAPUser>
+                <xsl:copy-of select="$ListUser/pfx2:LDAPUser/pfx2:User"/>
+                <xsl:for-each select="$ParseADExtUser/UserADInformation/User">
+                    <pfx2:User>
+                        <xsl:if test="username">
+                            <pfx2:username>
+                                <xsl:value-of select="username"/>
+                            </pfx2:username>
+                        </xsl:if>
+                        <xsl:if test="displayname">
+                            <pfx2:displayname>
+                                <xsl:value-of select="displayname"/>
+                            </pfx2:displayname>
+                        </xsl:if>
+                        <xsl:if test="cn">
+                            <pfx2:cn>
+                                <xsl:value-of select="cn"/>
+                            </pfx2:cn>
+                        </xsl:if>
+                        <xsl:if test="description">
+                            <pfx2:description>
+                                <xsl:value-of select="description"/>
+                            </pfx2:description>
+                        </xsl:if>
+                        <xsl:if test="title">
+                            <pfx2:title>
+                                <xsl:value-of select="title"/>
+                            </pfx2:title>
+                        </xsl:if>
+                        <xsl:if test="userAccountControl">
+                            <pfx2:userAccountControl>
+                                <xsl:value-of select="userAccountControl"/>
+                            </pfx2:userAccountControl>
+                        </xsl:if>
+                        <xsl:if test="certSubject">
+                            <pfx2:certSubject>
+                                <xsl:value-of select="certSubject"/>
+                            </pfx2:certSubject>
+                        </xsl:if>
+                        <xsl:if test="certSerialNumber">
+                            <pfx2:certSerialNumber>
+                                <xsl:value-of select="certSerialNumber"/>
+                            </pfx2:certSerialNumber>
+                        </xsl:if>
+                        <xsl:if test="appRole">
+                            <pfx2:appRole>
+                                <xsl:value-of select="appRole"/>
+                            </pfx2:appRole>
+                        </xsl:if>
+                        <pfx2:type>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </pfx2:type>
+                    </pfx2:User>
+                </xsl:for-each>
+            </pfx2:LDAPUser>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>QueryListAOM</pd:from>
+        <pd:to>initLoopIndex1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>UpdateListUser</pd:to>
+        <pd:xpathDescription>hasRecord4Update</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($ListUpdatedUser/pfx2:LDAPUser/pfx2:User)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateListUser</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetNewADUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseADIntUser</pd:from>
+        <pd:to>insertListADUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>insertListADUser</pd:from>
+        <pd:to>GetNewExtADUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetNewADUser</pd:from>
+        <pd:to>ParseADIntUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetNewExtADUser</pd:from>
+        <pd:to>ParseADExtUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseADExtUser</pd:from>
+        <pd:to>insertListADExtUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>insertListADExtUser</pd:from>
+        <pd:to>QueryListAOM</pd:to>
+        <pd:xpathDescription>HasNewUser</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($ListUser/pfx2:LDAPUser/pfx2:User)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>initLoopIndex1</pd:from>
+        <pd:to>Group (1)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>insertListADExtUser</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

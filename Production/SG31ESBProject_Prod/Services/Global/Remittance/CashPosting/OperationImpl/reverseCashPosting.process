@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/common/envelope/soaenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" location="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.wsdl"/>
+    <pd:name>Services/Global/Remittance/CashPosting/OperationImpl/reverseCashPosting.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:reverseCashPostingReq"/>
+    <pd:startX>151</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:reverseCashPostingRes>
+            <Res>
+                <xsl:copy-of select="$responseVar/wsdlPfx:reverseCashPostingRes"/>
+            </Res>
+        </wsdlPfx:reverseCashPostingRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:reverseCashPostingRes"/>
+    <pd:endX>605</pd:endX>
+    <pd:endY>57</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <responseVar ref="wsdlPfx:reverseCashPostingRes"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1438576935720</pd:targetNamespace>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>473</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <variableName>responseVar</variableName>
+        </config>
+        <pd:inputBindings>
+            <wsdlPfx:reverseCashPostingRes>
+                <xsl:copy-of select="$RequestResponse/root/ns3:ServiceEnverlop/ns2:AppHdr"/>
+                <xsl:copy-of select="$RequestResponse/root/ns3:ServiceEnverlop/ns2:ResponseStatus"/>
+            </wsdlPfx:reverseCashPostingRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>316</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:SOAEnvelope>
+                    <ns1:SOAServiceHeader>
+                        <ns1:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:reverseCashPostingReq/Req/wsdlPfx:reverseCashPostingReq/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:reverseCashPostingReq/Req/wsdlPfx:reverseCashPostingReq/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:reverseCashPostingReq/Req/wsdlPfx:reverseCashPostingReq/ns2:AppHdr/node()"/>
+                        </ns1:AppHdr>
+                        <ns1:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns1:ProcessName>
+                    </ns1:SOAServiceHeader>
+                    <ns1:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:reverseCashPostingReq/Req/wsdlPfx:reverseCashPostingReq/wsdlPfx:ReverseInfo"/>
+                    </ns1:ServiceBody>
+                </ns1:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

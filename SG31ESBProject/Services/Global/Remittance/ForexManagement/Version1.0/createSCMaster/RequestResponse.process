@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx15="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx13="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx12="http://xmlns.example.com/1438330850951" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://temenos.com/SBV.CSD.WS" xmlns:ns22="sbv/global/datatype/datatype/version1.0" xmlns:pfx19="http://temenos.com/FTIBPSHV" xmlns:pfx18="http://temenos.com/Citad.Debit.IN" xmlns:pfx17="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx5="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:pfx3="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="www.tibco.com/plugin/Sleep" xmlns:pfx6="http://xmlns.example.com/1433466938916" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns12="sbv/common/exceptionhandling/exception/1.0" xmlns:ns5="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:pfx22="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx23="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" xmlns:pfx20="http://www.sbv.gov.vn/global/remittance/cbpfundxfer/version1.0" xmlns:pfx21="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd" xmlns:pfx24="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:pfx25="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/SecuritiesPosting/SecuritiesPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/cbpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/ForexManagement/Securities.xsd"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT"/>
+    <wsdl:import namespace="http://xmlns.example.com/1438330850951" location="/SharedResource/Schema/Global/Local/AccountMapping/AccountMapping1.0.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.T24Service.WS.wsdl"/>
+    <wsdl:import namespace="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" location="/SharedResource/Schema/Global/Remittance/ForexManagement/ForexManagement.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL.TT01/SBV.INTE.T24.PORTAL.TT01.wsdl"/>
+    <pd:name>Services/Global/Remittance/ForexManagement/Version1.0/createSCMaster/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>260</pd:startX>
+    <pd:startY>286</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To"/>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$ResponseResult/root/SourceAppID"/>
+                    </ns3:MsgId>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId">
+                        <ns3:MsgPreId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgPreId"/>
+                        </ns3:MsgPreId>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ"/>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/root/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorCode>
+                        <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                    </ns3:ErrorCode>
+                    <xsl:if test="$ResponseResult/root/ErrorMessage">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/root/ErrorMessage"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                    <ns3:ErrorInfo/>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx21:TransactionId>
+                        <xsl:value-of select="$ResponseResult/root/TransId"/>
+                    </pfx21:TransactionId>
+                    <xsl:copy-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo"/>
+                    <xsl:copy-of select="$CallT24PortalCreateSCMaster/outputMessage"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>757</pd:endX>
+    <pd:endY>270</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="TransId" type="xsd:string"/>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="SourceAppID" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <SecuritiesSubRequest ref="pfx21:createSecuritiesSubRequest"/>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/createscmaster/createscmaster/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="MapSecuritiesMaster">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>261</pd:x>
+        <pd:y>156</pd:y>
+        <config>
+            <element ref="pfx21:SCMasterInfo"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx21:SCMasterInfo"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx21:SCMasterInfo"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24PortalCreateSCMaster">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>397</pd:x>
+        <pd:y>154</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx25:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>SCCreateSecurityMaster</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortalTT01%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx25:SCCreateSecurityMaster>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <OfsFunction>
+                        <activityName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </activityName>
+                        <assignReason>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </assignReason>
+                        <dueDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </dueDate>
+                        <extProcess>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcess>
+                        <extProcessID>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcessID>
+                        <gtsControl>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </gtsControl>
+                        <messageId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </messageId>
+                        <noOfAuth>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </noOfAuth>
+                        <owner>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </owner>
+                        <replace>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </replace>
+                        <startDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </startDate>
+                        <user>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </user>
+                    </OfsFunction>
+                    <SECURITYMASTERPORTBDType>
+                        <gCOMPANYNAME>
+                            <xsl:attribute name="g">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <CompanyName>
+                                <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:CompanyName"/>
+                            </CompanyName>
+                        </gCOMPANYNAME>
+                        <gLLDESCRIPT>
+                            <xsl:attribute name="g">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <mLLDESCRIPT>
+                                <xsl:attribute name="m">
+                                    <xsl:value-of select="1"/>
+                                </xsl:attribute>
+                                <sgLLDESCRIPT>
+                                    <xsl:attribute name="sg">
+                                        <xsl:value-of select="1"/>
+                                    </xsl:attribute>
+                                    <Descript>
+                                        <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:Descript"/>
+                                    </Descript>
+                                </sgLLDESCRIPT>
+                            </mLLDESCRIPT>
+                        </gLLDESCRIPT>
+                        <gSHORTNAME>
+                            <xsl:attribute name="g">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <ShortName>
+                                <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:ShortName"/>
+                            </ShortName>
+                        </gSHORTNAME>
+                        <Mnemonic>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:Mnemonic"/>
+                        </Mnemonic>
+                        <CompDomicile>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:CompDomicile"/>
+                        </CompDomicile>
+                        <Currency>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:Currency"/>
+                        </Currency>
+                        <SubAssetType>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:SubAssetType"/>
+                        </SubAssetType>
+                        <PriceUpdateCode>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:PriceUpdateCode"/>
+                        </PriceUpdateCode>
+                        <Industry>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:Industry"/>
+                        </Industry>
+                        <StockExchange>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:StockExchange"/>
+                        </StockExchange>
+                        <CouponTaxCode>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:CouponTaxCode"/>
+                        </CouponTaxCode>
+                        <MaturityDate>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:MaturityDate"/>
+                        </MaturityDate>
+                        <NoOfPayments>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:NoOfPayments"/>
+                        </NoOfPayments>
+                        <IntPaymentDate>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:IntPaymentDate"/>
+                        </IntPaymentDate>
+                        <AccrualStartDate>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:AccrualStartDate"/>
+                        </AccrualStartDate>
+                        <ISINCODE>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:ISINCODE"/>
+                        </ISINCODE>
+                        <CUSIPNO>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:CUSIPNO"/>
+                        </CUSIPNO>
+                        <LastDayofMonth>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:LastDayofMonth"/>
+                        </LastDayofMonth>
+                        <PTCK>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:PTCK"/>
+                        </PTCK>
+                        <InterestRate>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:InterestRate"/>
+                        </InterestRate>
+                        <CSDReference>
+                            <xsl:value-of select="$MapSecuritiesMaster/pfx21:SCMasterInfo/pfx21:CSDReference"/>
+                        </CSDReference>
+                    </SECURITYMASTERPORTBDType>
+                </pfx25:SCCreateSecurityMaster>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>403</pd:x>
+        <pd:y>478</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CreateSCMasterSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <TransId>
+                    <xsl:value-of select="if ($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/successIndicator=&quot;Success&quot;) then&#xA;$CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/transactionId&#xA;else&#xA;''"/>
+                </TransId>
+                <Status>
+                    <xsl:value-of select="if ($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/successIndicator=&quot;Success&quot;) then '0'&#xA;else '1'"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messageId ,$CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messages[1])"/>
+                </ErrorMessage>
+                <SourceAppID>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </SourceAppID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CreateSCMasterError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>525</pd:x>
+        <pd:y>268</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <TransId>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransId>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. LOI GOI WEBSERVICES&quot;)"/>
+                </ErrorMessage>
+                <SourceAppID>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </SourceAppID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>478</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <TransId>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransId>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Loi Catch Exception: &quot;, $_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg)"/>
+                </ErrorMessage>
+                <SourceAppID>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </SourceAppID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CreateSCMasterTimeOut">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>377</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <TransId>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransId>
+                <Status>
+                    <xsl:value-of select="&quot;3&quot;"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. T24 Services Timeout&quot;)"/>
+                </ErrorMessage>
+                <SourceAppID>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </SourceAppID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CreateSCMasterExist">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>156</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <TransId>
+                    <xsl:value-of select="if(contains($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messages[1],'MNEMONIC:1:1=FIELD ALREADY STORED')) then&#xA;$CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/transactionId&#xA;else&#xA;&quot;&quot;"/>
+                </TransId>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+                <xsl:if test="not(($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messages[1]/@xsi:nil=(&quot;true&quot;)) or ($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messages[1]/@xsi:nil=(&quot;1&quot;)))">
+                    <ErrorMessage>
+                        <xsl:value-of select="$CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </xsl:if>
+                <SourceAppID>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </SourceAppID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CallT24PortalCreateSCMaster</pd:from>
+        <pd:to>CreateSCMasterSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateSCMasterSuccess</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24PortalCreateSCMaster</pd:from>
+        <pd:to>CreateSCMasterError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateSCMasterError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapSecuritiesMaster</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateSCMasterError</pd:from>
+        <pd:to>CreateSCMasterTimeOut</pd:to>
+        <pd:xpathDescription>Timeout</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateSCMasterExist</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateSCMasterTimeOut</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapSecuritiesMaster</pd:from>
+        <pd:to>CallT24PortalCreateSCMaster</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24PortalCreateSCMaster</pd:from>
+        <pd:to>CreateSCMasterExist</pd:to>
+        <pd:xpathDescription>Exists</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/successIndicator='T24Error' 
+and contains($CallT24PortalCreateSCMaster/outputMessage/pfx25:SCCreateSecurityMasterResponse/Status/messages[1],'L.ORG.CONTACT:1:1=ALT KEY ALREADY ASSIGNED TO')</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

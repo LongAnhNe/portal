@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:cmd-dt="sbv/global/datatype/datatype/version1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="sbv/global/datatype/datatype/version1.0" schemaLocation="../../DataType/DataType1.0.xsd"/>
+	<xs:element name="createFundReq" type="createFundReqType"/>
+	<xs:element name="createFundRes" type="createFundResType"/>
+	<xs:complexType name="createFundReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FundXferInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createFundResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FundXferInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FundXferReqType">
+		<xs:sequence>
+			<xs:element name="SystemType" type="xs:string"/>
+			<xs:element name="SourceAppId" type="xs:string"/>
+			<xs:element name="CreditInfo" type="cmd-dt:FTAcctIdType" minOccurs="0"/>
+			<xs:element name="DebitInfo" type="cmd-dt:FTAcctIdType" minOccurs="0"/>
+			<xs:element name="CreditDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProcessDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="NettingAmt" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FundXferResType">
+		<xs:sequence>
+			<xs:element name="TransId" type="xs:string"/>
+			<xs:element name="PostingTime" type="xs:string"/>
+			<xs:element name="SystemType" type="xs:string"/>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FundXferInfoReq" type="FundXferReqType"/>
+	<xs:element name="FundXferInfoRes" type="FundXferResType"/>
+</xs:schema>

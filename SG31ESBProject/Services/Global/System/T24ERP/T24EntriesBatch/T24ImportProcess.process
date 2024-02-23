@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/NotifyBackendAlert.xsd" xmlns:ns3="com/tibco/pe/commands" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/file">
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/T24ImportProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="FileName" type="xsd:string"/>
+                    <xsd:element name="NumberRecords" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>94</pd:startX>
+    <pd:startY>172</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>673</pd:endX>
+    <pd:endY>258</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1447686612439</pd:targetNamespace>
+    <pd:activity name="CallT24EntriesBatchFile">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>322</pd:x>
+        <pd:y>169</pd:y>
+        <config>
+            <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatchRecursive.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <FileName>
+                    <xsl:value-of select="$Start/root/FileName"/>
+                </FileName>
+                <NumberRecords>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/BatchCount"/>
+                </NumberRecords>
+                <State>
+                    <xsl:value-of select="'Online'"/>
+                </State>
+                <DestSystem>
+                    <xsl:value-of select="'T24Report'"/>
+                </DestSystem>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetProccessing">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>194</pd:x>
+        <pd:y>279</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+        </config>
+        <pd:inputBindings>
+            <pfx:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat(tib:substring-before-last($Start/root/FileName, '.'), '_ImportT24Result.txt')"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="&quot;[PROCESSING]&quot;"/>
+                </textContent>
+            </pfx:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetFinish">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>550</pd:x>
+        <pd:y>154</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+        </config>
+        <pd:inputBindings>
+            <pfx:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat(tib:substring-before-last($Start/root/FileName, '.'), '_ImportT24Result.txt')"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$MapResponse/Response"/>
+                </textContent>
+            </pfx:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapResponse">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>450</pd:x>
+        <pd:y>272</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Response" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Response>
+                <xsl:value-of select="concat(&quot;[FINISH]-Total Record Received: &quot;,$CallT24EntriesBatchFile/Output/TotalRecordsReceived, &quot; - Total Record Processed: &quot;,$CallT24EntriesBatchFile/Output/TotalRecordsProcessed)"/>
+            </Response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CallT24EntriesBatchFile</pd:from>
+        <pd:to>MapResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetProccessing</pd:from>
+        <pd:to>CallT24EntriesBatchFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetFinish</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapResponse</pd:from>
+        <pd:to>SetFinish</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SetProccessing</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

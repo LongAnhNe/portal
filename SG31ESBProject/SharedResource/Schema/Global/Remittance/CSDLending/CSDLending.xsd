@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/CSDLending/CSDLending.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/CSDLending/CSDLending.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="createCSDLendingReq" type="createCSDLendingReqType"/>
+	<xs:element name="createCSDLendingRes" type="createCSDLendingResType"/>
+	<xs:complexType name="createCSDLendingReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CSDLendingInfo"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createCSDLendingResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element name="CSDTransactionRef" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CSDLendingInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="InterfaceID" type="xs:string" minOccurs="0"/>
+				<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+				<xs:element name="PortalReferenceId" type="xs:string" minOccurs="0"/>
+				<xs:element name="BussinessCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="TransactionCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+				<xs:element name="LoanAmount" type="xs:string" minOccurs="0"/>
+				<xs:element name="InterestRate" type="xs:string" minOccurs="0"/>
+				<xs:element name="OverDueRate" type="xs:string" minOccurs="0"/>
+				<xs:element name="GTCGOrderList" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GTCGCode" type="xs:string" minOccurs="0"/>
+							<xs:element name="GTCGAmount" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="GTCGReplaceList" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GTCGCode" type="xs:string" minOccurs="0"/>
+							<xs:element name="GTCGAmount" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+				<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="MaturityDate" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="createInquiryGTCGReq" type="createInquiryGTCGReqType"/>
+	<xs:element name="createInquiryGTCGRes" type="createInquiryGTCGResType"/>
+	<xs:complexType name="createInquiryGTCGReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="GTCGInput" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createInquiryGTCGResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="GTCGListInfo" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="GTCGListInfo" type="GTCGListInfoType"/>
+	<xs:element name="GTCGInput" type="GTCGInputType"/>
+	<xs:complexType name="GTCGListInfoType">
+		<xs:sequence>
+			<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element ref="GTCGInfo" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GTCGInfo" type="GTCGInfoType"/>
+	<xs:complexType name="GTCGInputType">
+		<xs:sequence>
+			<xs:element name="InterfaceID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCGCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GTCGInfoType">
+		<xs:sequence>
+			<xs:element name="GTCGCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCGQuantity" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCGNominal" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCGCurrency" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="createInquiryTotalGTCGReq" type="createInquiryTotalGTCGReqType"/>
+	<xs:element name="createInquiryTotalGTCGRes" type="createInquiryTotalGTCGResType"/>
+	<xs:complexType name="createInquiryTotalGTCGReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="TotalGTCGInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createInquiryTotalGTCGResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="TotalGTCGListInfo" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TotalGTCGInput" type="TotalGTCGInputType"/>
+	<xs:complexType name="TotalGTCGInputType">
+		<xs:sequence>
+			<xs:element name="InterfaceId" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TotalGTCGListInfoType">
+		<xs:sequence>
+			<xs:element ref="TotalGTCGInfo"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="TotalGTCGListInfo" type="TotalGTCGListInfoType"/>
+	<xs:element name="TotalGTCGInfo" type="TotalGTCGInfoType"/>
+	<xs:complexType name="TotalGTCGInfoType">
+		<xs:sequence>
+			<xs:element name="GTCG_SDLK" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCG_CCTC" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCG_HMNR" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCG_TTTT" type="xs:string" minOccurs="0"/>
+			<xs:element name="GTCG_CCVV" type="xs:string" minOccurs="0"/>
+			<xs:element name="HMCC_CCTC" type="xs:string" minOccurs="0"/>
+			<xs:element name="HMCC_HMNR" type="xs:string" minOccurs="0"/>
+			<xs:element name="HMCC_TTTT" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

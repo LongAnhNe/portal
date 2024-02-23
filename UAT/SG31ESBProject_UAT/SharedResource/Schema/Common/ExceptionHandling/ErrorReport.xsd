@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-err="sbv/common/exceptionhandling/errorreport/1.0"
+	 targetNamespace="sbv/common/exceptionhandling/errorreport/1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:complexType name="ErrorReportType">
+		<xs:sequence>
+			<xs:element name="StackTrace" type="xs:string" form="unqualified"/>
+			<xs:element name="Msg" type="xs:string" form="unqualified"/>
+			<xs:element name="FullClass" type="xs:string" form="unqualified"/>
+			<xs:element name="ObjectClass" type="xs:string" form="unqualified"/>
+			<xs:element name="ProcessStack" type="xs:string" form="unqualified"/>
+			<xs:element name="MsgCode" type="xs:string" form="unqualified" minOccurs="0"/>
+			<xs:element name="Data" type="cmd-err:anydata" form="unqualified" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProcessContext">
+		<xs:sequence>
+			<xs:element name="ProcessId" type="xs:long" form="unqualified"/>
+			<xs:element name="ProjectName" type="xs:string" form="unqualified"/>
+			<xs:element name="EngineName" type="xs:string" form="unqualified"/>
+			<xs:element name="RestartedFromCheckpoint" type="xs:boolean" form="unqualified"/>
+			<xs:element name="TrackingInfo" type="xs:string" form="unqualified" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CustomId" type="xs:string" form="unqualified" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="anydata">
+		<xs:sequence>
+			<xs:any namespace="##any" processContents="lax"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CorrelationValue" type="xs:string"/>
+	<xs:element name="ErrorReport" type="cmd-err:ErrorReportType"/>
+	<xs:element name="ProcessContext" type="cmd-err:ProcessContext"/>
+</xs:schema>

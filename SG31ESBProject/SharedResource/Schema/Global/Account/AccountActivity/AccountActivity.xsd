@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 xmlns="schema://www.sbv.gov.vn/schema/global/account/AccountService/AccountActivity.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/account/AccountService/AccountActivity.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../../System/ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="getAccountActivityRequest"/>
+				<xs:element ref="getAccountActivityResponse"/>
+				<xs:element ref="ESBServiceState"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getAccountActivityRequest" type="getAccountActivityRequestType"/>
+	<xs:complexType name="getAccountActivityRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="getAccountActivityRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="getAccountActivityRequestBody" type="getAccountActivityRequestBodyType"/>
+	<xs:complexType name="getAccountActivityRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="FromDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ToDate" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getAccountActivityResponse" type="getAccountActivityResponseType"/>
+	<xs:complexType name="getAccountActivityResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="getAccountActivityResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="getAccountActivityResponseBody" type="getAccountActivityResponseBodyType"/>
+	<xs:complexType name="getAccountActivityResponseBodyType">
+		<xs:sequence>
+			<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			<xs:element ref="getAccountActivityResponseBodyList" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getAccountActivityResponseBodyList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SoTaiKhoan" type="xs:string" minOccurs="0"/>
+				<xs:element name="TenTaiKhoan" type="xs:string" minOccurs="0"/>
+				<xs:element name="Ngay" type="xs:string" minOccurs="0"/>
+				<xs:element name="SoDuDauNgay" type="xs:string" minOccurs="0"/>
+				<xs:element name="PhatSinhNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="PhatSinhCo" type="xs:string" minOccurs="0"/>
+				<xs:element name="SoDuCuoiNgay" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

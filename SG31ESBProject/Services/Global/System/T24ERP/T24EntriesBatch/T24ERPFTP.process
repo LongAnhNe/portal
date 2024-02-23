@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/T24ERPFTP.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>53</pd:startX>
+    <pd:startY>183</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1077</pd:endX>
+    <pd:endY>179</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <InputProcess>
+            <xsd:element name="Input">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="StartRecord" type="xsd:int"/>
+                        <xsd:element name="NumberOfRecords" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InputProcess>
+        <ResponseError>
+            <xsd:element name="ErrorMsg" type="xsd:string"/>
+        </ResponseError>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1445919176431</pd:targetNamespace>
+    <pd:activity name="FTP Get Online">
+        <pd:type>com.tibco.plugin.ftp.FTPGetActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPGetActivityUI</pd:resourceType>
+        <pd:x>299</pd:x>
+        <pd:y>453</pd:y>
+        <config>
+            <Timeout>120000</Timeout>
+            <isBinary>false</isBinary>
+            <Overwrite>true</Overwrite>
+            <useProcessData>false</useProcessData>
+            <SharedUserData>/SharedResource/Connection/ftp/SBVFTP.sharedftp</SharedUserData>
+        </config>
+        <pd:inputBindings>
+            <FTPGetInputDataFile>
+                <RemoteFileName>
+                    <xsl:value-of select="$MapInput/InputParameter/OnlineFileName"/>
+                </RemoteFileName>
+                <LocalFileName>
+                    <xsl:value-of select="$MapInput/InputParameter/OnlineLocalFileName"/>
+                </LocalFileName>
+                <Host>
+                    <xsl:value-of select="'10.1.25.12'"/>
+                </Host>
+                <Port>
+                    <xsl:value-of select="'21'"/>
+                </Port>
+                <UserName>
+                    <xsl:value-of select="'sbv\ftpuser'"/>
+                </UserName>
+                <Password>
+                    <xsl:value-of select="'ftp@123'"/>
+                </Password>
+            </FTPGetInputDataFile>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FTP-Get-COB">
+        <pd:type>com.tibco.plugin.ftp.FTPGetActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPGetActivityUI</pd:resourceType>
+        <pd:x>882</pd:x>
+        <pd:y>447</pd:y>
+        <config>
+            <Timeout>120000</Timeout>
+            <isBinary>false</isBinary>
+            <Overwrite>true</Overwrite>
+            <useProcessData>false</useProcessData>
+            <SharedUserData>/SharedResource/Connection/ftp/SBVFTP.sharedftp</SharedUserData>
+        </config>
+        <pd:inputBindings>
+            <FTPGetInputDataFile>
+                <RemoteFileName>
+                    <xsl:value-of select="$MapInput/InputParameter/CobFileName"/>
+                </RemoteFileName>
+                <LocalFileName>
+                    <xsl:value-of select="$MapInput/InputParameter/CobLocalFileName"/>
+                </LocalFileName>
+                <Host>
+                    <xsl:value-of select="'10.1.25.12'"/>
+                </Host>
+                <Port>
+                    <xsl:value-of select="'21'"/>
+                </Port>
+                <UserName>
+                    <xsl:value-of select="'sbv\ftpuser'"/>
+                </UserName>
+                <Password>
+                    <xsl:value-of select="'ftp@123'"/>
+                </Password>
+            </FTPGetInputDataFile>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="FTP Change Default Directory">
+        <pd:type>com.tibco.plugin.ftp.FTPChangeDefaultDirActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPChangeDefaultDirActivityUI</pd:resourceType>
+        <pd:x>299</pd:x>
+        <pd:y>190</pd:y>
+        <config>
+            <SharedUserData>/SharedResource/Connection/ftp/SBVFTP.sharedftp</SharedUserData>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Host>
+                    <xsl:value-of select="'10.1.25.12'"/>
+                </Host>
+                <Port>
+                    <xsl:value-of select="21"/>
+                </Port>
+                <UserName>
+                    <xsl:value-of select="'sbv\ftpuser'"/>
+                </UserName>
+                <Password>
+                    <xsl:value-of select="'ftp@123'"/>
+                </Password>
+                <NewDefaultDir>
+                    <xsl:value-of select="$MapInput/InputParameter/DirName"/>
+                </NewDefaultDir>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapInput">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>169</pd:x>
+        <pd:y>185</pd:y>
+        <config>
+            <element>
+                <xsd:element name="InputParameter">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="DirName" type="xsd:string"/>
+                            <xsd:element name="OnlineFileName" type="xsd:string"/>
+                            <xsd:element name="CobFileName" type="xsd:string"/>
+                            <xsd:element name="OnlineLocalFileName" type="xsd:string"/>
+                            <xsd:element name="CobLocalFileName" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <InputParameter>
+                <DirName>
+                    <xsl:value-of select="concat('T24-ERP/',tib:format-date('yyyyMMdd', current-date()))"/>
+                </DirName>
+                <OnlineFileName>
+                    <xsl:value-of select="concat(tib:format-date('yyyyMMdd', current-date()),'Online.txt')"/>
+                </OnlineFileName>
+                <CobFileName>
+                    <xsl:value-of select="concat(tib:format-date('yyyyMMdd', current-date()),'Cob.txt')"/>
+                </CobFileName>
+                <OnlineLocalFileName>
+                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/T24WS/T24EntriesLocalFileDir,tib:format-date('yyyyMMdd', current-date()),'Online.txt')"/>
+                </OnlineLocalFileName>
+                <CobLocalFileName>
+                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/T24WS/T24EntriesLocalFileDir,tib:format-date('yyyyMMdd', current-date()),'Cob.txt')"/>
+                </CobLocalFileName>
+            </InputParameter>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>632</pd:x>
+        <pd:y>178</pd:y>
+        <config>
+            <variableName>ResponseError</variableName>
+        </config>
+        <pd:inputBindings>
+            <ErrorMsg>
+                <xsl:value-of select="tib:concat-sequence($_error/ns1:ErrorReport/Data)"/>
+            </ErrorMsg>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24BatchOnline">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>524</pd:x>
+        <pd:y>450</pd:y>
+        <config>
+            <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatchRecursive.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <FileName>
+                    <xsl:value-of select="$MapInput/InputParameter/OnlineLocalFileName"/>
+                </FileName>
+                <NumberRecords>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/BatchCount"/>
+                </NumberRecords>
+                <State>
+                    <xsl:value-of select="&quot;Online&quot;"/>
+                </State>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24BatchCOB">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>878</pd:x>
+        <pd:y>317</pd:y>
+        <config>
+            <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatchRecursive.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <FileName>
+                    <xsl:value-of select="$MapInput/InputParameter/CobLocalFileName"/>
+                </FileName>
+                <NumberRecords>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/BatchCount"/>
+                </NumberRecords>
+                <State>
+                    <xsl:value-of select="&quot;COB&quot;"/>
+                </State>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RemoveLocalOnlineFile">
+        <pd:type>com.tibco.plugin.file.FileRemoveActivity</pd:type>
+        <pd:resourceType>ae.activities.FileRemoveActivity</pd:resourceType>
+        <pd:x>651</pd:x>
+        <pd:y>348</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns2:RemoveActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="$MapInput/InputParameter/OnlineLocalFileName"/>
+                </fileName>
+            </ns2:RemoveActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RemoveLocalCOBFile">
+        <pd:type>com.tibco.plugin.file.FileRemoveActivity</pd:type>
+        <pd:resourceType>ae.activities.FileRemoveActivity</pd:resourceType>
+        <pd:x>1084</pd:x>
+        <pd:y>309</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns2:RemoveActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="$MapInput/InputParameter/CobLocalFileName"/>
+                </fileName>
+            </ns2:RemoveActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP-Get-COB</pd:from>
+        <pd:to>CallT24BatchCOB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP Change Default Directory</pd:from>
+        <pd:to>FTP Get Online</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapInput</pd:from>
+        <pd:to>FTP Change Default Directory</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP Get Online</pd:from>
+        <pd:to>AssignError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP-Get-COB</pd:from>
+        <pd:to>AssignError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP Change Default Directory</pd:from>
+        <pd:to>AssignError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTP Get Online</pd:from>
+        <pd:to>CallT24BatchOnline</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24BatchOnline</pd:from>
+        <pd:to>RemoveLocalOnlineFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24BatchCOB</pd:from>
+        <pd:to>RemoveLocalCOBFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RemoveLocalCOBFile</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24BatchOnline</pd:from>
+        <pd:to>FTP-Get-COB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RemoveLocalOnlineFile</pd:from>
+        <pd:to>AssignError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RemoveLocalCOBFile</pd:from>
+        <pd:to>AssignError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

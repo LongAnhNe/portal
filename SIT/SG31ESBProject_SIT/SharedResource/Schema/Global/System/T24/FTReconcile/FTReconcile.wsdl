@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.10-b140319.1121 svn-revision#7b34660d6bc70e587e8ec81a17e4d76af68816a6. -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:tns="http://services.fis.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" name="FTServicesService" targetNamespace="http://services.fis.com/">
+    <types>
+        <xsd:schema>
+            <xsd:import namespace="http://services.fis.com/" schemaLocation="FTReconcile.xsd"/>
+        </xsd:schema>
+    </types>
+    <message name="getHVs">
+        <part element="tns:getHVs" name="parameters"/>
+    </message>
+    <message name="getHVsResponse">
+        <part element="tns:getHVsResponse" name="parameters"/>
+    </message>
+    <message name="getNettings">
+        <part element="tns:getNettings" name="parameters"/>
+    </message>
+    <message name="getNettingsResponse">
+        <part element="tns:getNettingsResponse" name="parameters"/>
+    </message>
+    <portType name="FTServices">
+        <operation name="getHVs">
+            <input message="tns:getHVs" wsam:Action="http://services.fis.com/FTServices/getHVsRequest"/>
+            <output message="tns:getHVsResponse" wsam:Action="http://services.fis.com/FTServices/getHVsResponse"/>
+        </operation>
+        <operation name="getNettings">
+            <input message="tns:getNettings" wsam:Action="http://services.fis.com/FTServices/getNettingsRequest"/>
+            <output message="tns:getNettingsResponse" wsam:Action="http://services.fis.com/FTServices/getNettingsResponse"/>
+        </operation>
+    </portType>
+    <binding name="FTServicesPortBinding" type="tns:FTServices">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getHVs">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="getNettings">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="FTServicesService">
+        <port binding="tns:FTServicesPortBinding" name="FTServicesPort">
+            <soap:address location="http://10.1.26.9:7101/t24report/FTServicesPort"/>
+        </port>
+    </service>
+</definitions>

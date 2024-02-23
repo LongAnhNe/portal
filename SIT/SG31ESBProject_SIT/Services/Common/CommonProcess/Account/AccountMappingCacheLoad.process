@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/Account/AccountMapping/SBV.CSD.GOLD.AUCTION.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://temenos.com/T24.ACCOUNT.STATE" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns0="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:pfx5="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx2="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx7="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:pfx6="http://tempuri.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/Account/AccountMapping/SBV.CSD.GOLD.AUCTION.wsdl" schemaLocation="/SharedResource/Schema/Global/Account/AccountMapping/SBV.CSD.GOLD.AUCTION.wsdl"/>
+    <xsd:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" schemaLocation="/SharedResource/Schema/Global/Account/AccountMapping/services1.xsd"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/Account/AccountMapping/SBV.CSD.GOLD.AUCTION.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <pd:name>Services/Common/CommonProcess/Account/AccountMappingCacheLoad.process</pd:name>
+    <pd:startName>onStartup</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="onStartup">
+        <pd:type>com.tibco.pe.core.OnStartupEventSource</pd:type>
+        <pd:resourceType>ae.activities.onStartup</pd:resourceType>
+        <pd:x>34</pd:x>
+        <pd:y>294</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1215</pd:endX>
+    <pd:endY>276</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ChangerRecord>
+            <xsd:element name="resultSet">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Record" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="ID" type="xsd:string"/>
+                                    <xsd:element name="BANKCODE" type="xsd:string"/>
+                                    <xsd:element name="T24ACCOUNT" type="xsd:string"/>
+                                    <xsd:element name="TIMEUPDATE" type="xsd:string"/>
+                                    <xsd:element name="SYSTEM" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ChangerRecord>
+        <RecordMapping>
+            <xsd:element name="resultSet">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Record" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="ID" type="xsd:string"/>
+                                    <xsd:element name="BANKCODE" type="xsd:string"/>
+                                    <xsd:element name="T24ACCOUNT" type="xsd:string"/>
+                                    <xsd:element name="TIMEUPDATE" type="xsd:string"/>
+                                    <xsd:element name="SYSTEM" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </RecordMapping>
+        <Record-process-values>
+            <xsd:element name="t24account" type="xsd:string"/>
+        </Record-process-values>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1436327554710</pd:targetNamespace>
+    <pd:activity name="AccountMappingQuery">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>93</pd:x>
+        <pd:y>181</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT * FROM ESB.ACCOUNTMAPPING</statement>
+            <Prepared_Param_DataType/>
+            <wizardData>#Mon Aug 03 17:17:45 ICT 2015&#xD;
+useSchemaInFQN=true&#xD;
+columncount=0&#xD;
+manualSQLText=SELECT * FROM ESB.ACCOUNTMAPPING&#xD;
+joincount=0&#xD;
+tablecount=0&#xD;
+</wizardData>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BANKCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>T24ACCOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TIMEUPDATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SYSTEM</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>224</pd:x>
+        <pd:y>2</pd:y>
+        <pd:width>766</pd:width>
+        <pd:height>551</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$RecordMapping/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>Record</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SOAPRequestReply IBPS</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Record/Record/SYSTEM="IBPS"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SOAPRequestReply CSD</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Record/Record/SYSTEM="CSD"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LoadDataInCache-2</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LoadDataInCache</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LoadDataInCache-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC-Call-Procedure-Delete</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC Call Procedure</pd:from>
+            <pd:to>LoadDataInCache-2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply IBPS</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply CSD</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>ChangerRecord</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Record-process-values/t24account=$Record/Record/T24ACCOUNT</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>JDBC-Call-Procedure-Delete</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Record-process-values/t24account=""</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply CSD</pd:from>
+            <pd:to>LoadDataInCache-1</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPRequestReply IBPS</pd:from>
+            <pd:to>LoadDataInCache-1</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ChangerRecord</pd:from>
+            <pd:to>LoadDataInCache</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>ChangerRecord-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Record-process-values/t24account!="" and $Record-process-values/t24account!=$Record/Record/T24ACCOUNT</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ChangerRecord-1</pd:from>
+            <pd:to>JDBC Call Procedure</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC Call Procedure</pd:from>
+            <pd:to>Sleep</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC-Call-Procedure-Delete</pd:from>
+            <pd:to>Sleep</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="LoadDataInCache">
+            <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+            <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+            <pd:x>622</pd:x>
+            <pd:y>67</pd:y>
+            <config>
+                <ConstructDeclaredClass>false</ConstructDeclaredClass>
+                <CacheConstructedClass>false</CacheConstructedClass>
+                <InvokeCleanupMethod>false</InvokeCleanupMethod>
+                <JavaGlobalInstance>/SharedResource/Library/Instance Cache Manager.serviceagent</JavaGlobalInstance>
+                <MethodInfo>
+                    <classPath>/SharedResource/Library/AliasLibrary.aliaslib</classPath>
+                    <className>Cacheable.CacheManagerTestProgram</className>
+                    <methodName>put</methodName>
+                    <methodReturn>void</methodReturn>
+                    <methodParameter>java.lang.String</methodParameter>
+                    <methodParameter>java.lang.String</methodParameter>
+                </MethodInfo>
+            </config>
+            <pd:inputBindings>
+                <ns0:JavaMethodActivityInput>
+                    <MethodParameters>
+                        <Parameter1>
+                            <xsl:value-of select="$Record/Record/BANKCODE"/>
+                        </Parameter1>
+                        <Parameter2>
+                            <xsl:value-of select="$Record-process-values/t24account"/>
+                        </Parameter2>
+                    </MethodParameters>
+                </ns0:JavaMethodActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply CSD">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>323</pd:x>
+            <pd:y>343</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx2:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>AOMQueryAccount</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSReconcile%%</endpointURL>
+                <authScheme>NONE</authScheme>
+                <useProxy>false</useProxy>
+                <requireBasicAuth>false</requireBasicAuth>
+                <basicHttpAuthIdentity/>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx2:AOMQueryAccount>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="&quot;VN0010001&quot;"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PassSIT"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24UserSIT"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <ENQQUERYACCTCSDType>
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;ACCT.CITAD&quot;"/>
+                                </columnName>
+                                <xsl:if test="tib:tokenize($Record/Record/BANKCODE, &quot;.&quot;)[2]">
+                                    <criteriaValue>
+                                        <xsl:value-of select="tib:tokenize($Record/Record/BANKCODE, &quot;.&quot;)[2]"/>
+                                    </criteriaValue>
+                                </xsl:if>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CATEGORY&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="tib:tokenize($Record/Record/BANKCODE, &quot;.&quot;)[1]"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CURRENCY&quot;"/>
+                                </columnName>
+                                <xsl:if test="tib:tokenize($Record/Record/BANKCODE, &quot;.&quot;)[3]">
+                                    <criteriaValue>
+                                        <xsl:value-of select="tib:tokenize($Record/Record/BANKCODE, &quot;.&quot;)[3]"/>
+                                    </criteriaValue>
+                                </xsl:if>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </ENQQUERYACCTCSDType>
+                    </pfx2:AOMQueryAccount>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LoadDataInCache-1">
+            <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+            <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+            <pd:x>538</pd:x>
+            <pd:y>469</pd:y>
+            <config>
+                <ConstructDeclaredClass>false</ConstructDeclaredClass>
+                <CacheConstructedClass>false</CacheConstructedClass>
+                <InvokeCleanupMethod>false</InvokeCleanupMethod>
+                <JavaGlobalInstance>/SharedResource/Library/Instance Cache Manager.serviceagent</JavaGlobalInstance>
+                <MethodInfo>
+                    <classPath>/SharedResource/Library/AliasLibrary.aliaslib</classPath>
+                    <className>Cacheable.CacheManagerTestProgram</className>
+                    <methodName>put</methodName>
+                    <methodReturn>void</methodReturn>
+                    <methodParameter>java.lang.String</methodParameter>
+                    <methodParameter>java.lang.String</methodParameter>
+                </MethodInfo>
+            </config>
+            <pd:inputBindings>
+                <ns0:JavaMethodActivityInput>
+                    <MethodParameters>
+                        <Parameter1>
+                            <xsl:value-of select="$Record/Record/BANKCODE"/>
+                        </Parameter1>
+                        <Parameter2>
+                            <xsl:value-of select="$Record/Record/T24ACCOUNT"/>
+                        </Parameter2>
+                    </MethodParameters>
+                </ns0:JavaMethodActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LoadDataInCache-2">
+            <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+            <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+            <pd:x>882</pd:x>
+            <pd:y>75</pd:y>
+            <config>
+                <ConstructDeclaredClass>false</ConstructDeclaredClass>
+                <CacheConstructedClass>false</CacheConstructedClass>
+                <InvokeCleanupMethod>false</InvokeCleanupMethod>
+                <JavaGlobalInstance>/SharedResource/Library/Instance Cache Manager.serviceagent</JavaGlobalInstance>
+                <MethodInfo>
+                    <classPath>/SharedResource/Library/AliasLibrary.aliaslib</classPath>
+                    <className>Cacheable.CacheManagerTestProgram</className>
+                    <methodName>put</methodName>
+                    <methodReturn>void</methodReturn>
+                    <methodParameter>java.lang.String</methodParameter>
+                    <methodParameter>java.lang.String</methodParameter>
+                </MethodInfo>
+            </config>
+            <pd:inputBindings>
+                <ns0:JavaMethodActivityInput>
+                    <MethodParameters>
+                        <Parameter1>
+                            <xsl:value-of select="$Record/Record/BANKCODE"/>
+                        </Parameter1>
+                        <Parameter2>
+                            <xsl:value-of select="$Record-process-values/t24account"/>
+                        </Parameter2>
+                    </MethodParameters>
+                </ns0:JavaMethodActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="JDBC-Call-Procedure-Delete">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>640</pd:x>
+            <pd:y>318</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <ProcedureName>UPDATE_T24ACCOUNT</ProcedureName>
+                <parameterTypes>
+                    <parameter>
+                        <colName>T24ACCOUNTVAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>TIMEUPDATEVAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>BANKCODEVAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>VAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <T24ACCOUNTVAL>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </T24ACCOUNTVAL>
+                        <TIMEUPDATEVAL>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </TIMEUPDATEVAL>
+                        <BANKCODEVAL>
+                            <xsl:choose>
+                                <xsl:when test="exists($Record/Record/BANKCODE)">
+                                    <xsl:value-of select="$Record/Record/BANKCODE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </BANKCODEVAL>
+                        <VAL>
+                            <xsl:value-of select="&quot;delete&quot;"/>
+                        </VAL>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="JDBC Call Procedure">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>684</pd:x>
+            <pd:y>189</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <ProcedureName>UPDATE_T24ACCOUNT</ProcedureName>
+                <parameterTypes>
+                    <parameter>
+                        <colName>T24ACCOUNTVAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>TIMEUPDATEVAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>BANKCODEVAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>VAL</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <T24ACCOUNTVAL>
+                            <xsl:value-of select="$Record-process-values/t24account"/>
+                        </T24ACCOUNTVAL>
+                        <TIMEUPDATEVAL>
+                            <xsl:value-of select="string(current-dateTime())"/>
+                        </TIMEUPDATEVAL>
+                        <BANKCODEVAL>
+                            <xsl:choose>
+                                <xsl:when test="exists($Record/Record/BANKCODE)">
+                                    <xsl:value-of select="$Record/Record/BANKCODE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </BANKCODEVAL>
+                        <VAL>
+                            <xsl:value-of select="&quot;update&quot;"/>
+                        </VAL>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPRequestReply IBPS">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>322</pd:x>
+            <pd:y>175</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx4:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>IBPSQueryAccount</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSIBPSProd%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx4:IBPSQueryAccount>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="&quot;VN0010001&quot;"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PassSIT"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24UserSIT"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <ENQIBPSQUERYACCOUNTType>
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CITAD.CODE.LIST&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Record/Record/BANKCODE"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </ENQIBPSQUERYACCOUNTType>
+                    </pfx4:IBPSQueryAccount>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>449</pd:x>
+            <pd:y>252</pd:y>
+            <config>
+                <variableName>Record-process-values</variableName>
+            </config>
+            <pd:inputBindings>
+                <t24account>
+                    <xsl:value-of select="if($Record/Record/SYSTEM=&quot;CSD&quot;) then&#xA;  $SOAPRequestReply-CSD/outputMessage/pfx2:AOMQueryAccountResponse/ENQQUERYACCTCSDType[1]/gENQQUERYACCTCSDDetailType/mENQQUERYACCTCSDDetailType[1]/AccountID&#xA;else &#xA;    $SOAPRequestReply-IBPS/outputMessage/pfx4:IBPSQueryAccountResponse/ENQIBPSQUERYACCOUNTType[1]/gENQIBPSQUERYACCOUNTDetailType/mENQIBPSQUERYACCOUNTDetailType[1]/AccountID"/>
+                </t24account>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ChangerRecord">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>453</pd:x>
+            <pd:y>64</pd:y>
+            <config>
+                <variableName>ChangerRecord</variableName>
+            </config>
+            <pd:inputBindings>
+                <resultSet>
+                    <xsl:copy-of select="$ChangerRecord/resultSet/Record" copy-namespaces="yes"/>
+                    <Record>
+                        <ID>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/ID"/>
+                        </ID>
+                        <BANKCODE>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/BANKCODE"/>
+                        </BANKCODE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/T24ACCOUNT"/>
+                        </T24ACCOUNT>
+                        <TIMEUPDATE>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/TIMEUPDATE"/>
+                        </TIMEUPDATE>
+                        <SYSTEM>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/SYSTEM"/>
+                        </SYSTEM>
+                    </Record>
+                </resultSet>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ChangerRecord-1">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>571</pd:x>
+            <pd:y>180</pd:y>
+            <config>
+                <variableName>ChangerRecord</variableName>
+            </config>
+            <pd:inputBindings>
+                <resultSet>
+                    <xsl:copy-of select="$ChangerRecord/resultSet/Record" copy-namespaces="yes"/>
+                    <Record>
+                        <ID>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/ID"/>
+                        </ID>
+                        <BANKCODE>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/BANKCODE"/>
+                        </BANKCODE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="$Record-process-values/t24account"/>
+                        </T24ACCOUNT>
+                        <TIMEUPDATE>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </TIMEUPDATE>
+                        <SYSTEM>
+                            <xsl:value-of select="$RecordMapping/resultSet/Record[$i]/SYSTEM"/>
+                        </SYSTEM>
+                    </Record>
+                </resultSet>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Sleep">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>803</pd:x>
+            <pd:y>232</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns4:SleepInputSchema xmlns:ns4="www.tibco.com/plugin/Sleep">
+                    <IntervalInMillisec>
+                        <xsl:value-of select="1"/>
+                    </IntervalInMillisec>
+                </ns4:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>92</pd:x>
+        <pd:y>349</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns3:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="&quot;RecordFile.txt&quot;"/>
+                </fileName>
+            </ns3:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Record">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>166</pd:x>
+        <pd:y>256</pd:y>
+        <config>
+            <variableName>RecordMapping</variableName>
+        </config>
+        <pd:inputBindings>
+            <resultSet>
+                <xsl:for-each select="$AccountMappingQuery/resultSet/Record">
+                    <Record>
+                        <ID>
+                            <xsl:value-of select="ID"/>
+                        </ID>
+                        <BANKCODE>
+                            <xsl:value-of select="BANKCODE"/>
+                        </BANKCODE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="T24ACCOUNT"/>
+                        </T24ACCOUNT>
+                        <TIMEUPDATE>
+                            <xsl:value-of select="TIMEUPDATE"/>
+                        </TIMEUPDATE>
+                        <SYSTEM>
+                            <xsl:value-of select="SYSTEM"/>
+                        </SYSTEM>
+                    </Record>
+                </xsl:for-each>
+            </resultSet>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>98</pd:x>
+        <pd:y>471</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="resultSet">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Record" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="ID" type="xsd:string"/>
+                                        <xsd:element name="BANKCODE" type="xsd:string"/>
+                                        <xsd:element name="T24ACCOUNT" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="TIMEUPDATE" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="SYSTEM" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Read-File/ns2:ReadActivityOutputTextClass/fileContent/textContent"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RecordFile">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>171</pd:x>
+        <pd:y>331</pd:y>
+        <config>
+            <variableName>RecordMapping</variableName>
+        </config>
+        <pd:inputBindings>
+            <resultSet>
+                <xsl:for-each select="$Parse-XML/resultSet/Record">
+                    <Record>
+                        <ID>
+                            <xsl:value-of select="ID"/>
+                        </ID>
+                        <BANKCODE>
+                            <xsl:value-of select="BANKCODE"/>
+                        </BANKCODE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="T24ACCOUNT"/>
+                        </T24ACCOUNT>
+                        <TIMEUPDATE>
+                            <xsl:value-of select="TIMEUPDATE"/>
+                        </TIMEUPDATE>
+                        <SYSTEM>
+                            <xsl:value-of select="SYSTEM"/>
+                        </SYSTEM>
+                    </Record>
+                </xsl:for-each>
+            </resultSet>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Update File">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>1099</pd:x>
+        <pd:y>276</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+        </config>
+        <pd:inputBindings>
+            <ns2:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="&quot;RecordFile.txt&quot;"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="tib:render-xml($ChangerRecord/resultSet)"/>
+                </textContent>
+            </ns2:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>onStartup</pd:from>
+        <pd:to>AccountMappingQuery</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AccountMappingQuery</pd:from>
+        <pd:to>Record</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AccountMappingQuery</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Record</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>RecordFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RecordFile</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Update File</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Update File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

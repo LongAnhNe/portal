@@ -1,0 +1,1450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/BTTVIn/version1.0/BTTVInUpdateModel.xsd" xmlns:ns="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx14="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTUpdateModel.xsd" xmlns:pfx13="http://temenos.com/FTSBVCLR" xmlns:pfx12="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/BTTVIn/version1.0/TTBTInModel.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx10="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" xmlns:pfx5="http://xmlns.example.com/1438330850951" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/sharedresource/CitadIn/ESBCitadInModel" xmlns:pfx3="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:pfx2="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:pfx9="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:pfx8="sbv/sharedresource/CitadIn/CitadInESBModel" xmlns:pfx7="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:pfx6="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns6="www.tibco.com/plugin/Sleep" xmlns:ns13="sbv/common/exceptionhandling/exception/1.0" xmlns:pfx="sbv/common/envelope/commonheader/1.0" xmlns:ns7="http://www.tibco.com/pe/CheckpointSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns3="http://temenos.com/FTSBVCITAD" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://temenos.com/FTSBVCITAD"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" schemaLocation="/SharedResource/Schema/Global/T24Citad/CitadIn/CitadToESB.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadOut/FTSBVCITAD.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/ESBCitadInModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/ESBCitadInModel.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/CitadInESBModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/CitadInESBModel.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="http://temenos.com/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadIn/T24WebServicesImplService_CitadIn.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/BTTVIn/version1.0/TTBTInModel.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24TTBTDT/BTTVIn/TTBTInModel.xsd"/>
+    <xsd:import namespace="http://temenos.com/FTSBVCLR" schemaLocation="/SharedResource/Schema/Global/System/T24/TTBTDT/BTTVIn/FTSBVCLR.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTUpdateModel.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24TTBTDT/BTCTUpdateModel.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/BTTVIn/version1.0/BTTVInUpdateModel.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24TTBTDT/BTTVIn/BTTVInUpdateModel.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1438330850951" location="/SharedResource/Schema/Global/Local/AccountMapping/AccountMapping1.0.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/FTSBVCITAD" location="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadIn/T24WebServicesImplService_CitadIn.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/TTBTDT/SBV.FT.TTBT.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/FTSBVCLR" location="/SharedResource/Schema/Global/System/T24/TTBTDT/BTTVIn/T24WebServicesImpl_FTSBVCLR.wsdl"/>
+    <pd:name>Services/Global/System/T24TTBTDT/BTTVIn/OperationImpl/BTTVIn.process</pd:name>
+    <pd:description>// 2015.14.09 : init, Sẽ dùng</pd:description>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>63</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <StartTime>1439431200000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%ServiceGlobalVar/BTTVIn/Timeinterval_ms%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1033</pd:endX>
+    <pd:endY>236</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <inBeneficiaryList>
+            <xsd:element name="inBeneficiaryList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="inBeneficiary" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </inBeneficiaryList>
+        <ReceivingBankList>
+            <xsd:element name="InReceivingBankList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="InReceivingBank" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ReceivingBankList>
+        <orderingCustomerList>
+            <xsd:element name="orderingCustomerList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="orderingCustomer" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </orderingCustomerList>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1436581729763</pd:targetNamespace>
+    <pd:activity name="QueryTTBTDatabase">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>64</pd:x>
+        <pd:y>231</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/BTTVIn/QueryTimeOut_sec%%</timeout>
+            <commit>false</commit>
+            <maxRows>%%ServiceGlobalVar/BTTVIn/MaxRowsDB%%</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/BTTVDB.sharedjdbc</jdbcSharedConfig>
+            <statement>select * from BTDT_DIENDI b inner join MA_CHINHANH_T24 m 
+on b.BANK_SORT_CODE = m.MA_DONVI
+and ROWNUM &lt; ?
+where 1=1 
+and b.STATUS = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>Rownum</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>STATUS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>TRANSACTION_TYPE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SOGIAODICH</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DEBIT_ACCOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CREDIT_ACCOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CURRENCY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>VALUE_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DRorCR</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SENDING_BANK_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BANK_SORT_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ORDERING_CUSTOMER</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ORDERING_CUSTOMER1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>IN_SEND_BANK</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>IN_BENEFICIARY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>IN_BENEFICIARY_ACCOUNT_NO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>IN_RECEIVING_BANK</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>PAYMNET_DETAILS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>STATUS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>-5</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERR_MSG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MA_DONVI_T24</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MA_DONVI</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TENDONVI</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MNEMONIC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <Rownum>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/QueryRowNum"/>
+                </Rownum>
+                <STATUS>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/BTTVDB_Status_New"/>
+                </STATUS>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop Handling Record">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:description>Convert/Format Each Record</pd:description>
+        <pd:x>140</pd:x>
+        <pd:y>4</pd:y>
+        <pd:width>787</pd:width>
+        <pd:height>384</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$QueryTTBTDatabase/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>BTTVRecord</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map ESB Model</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor-Data Invalid</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SettleTTBT</pd:from>
+            <pd:to>Render-XML</pd:to>
+            <pd:xpathDescription>Has connection</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map ESB Model</pd:from>
+            <pd:to>Checkpoint</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint</pd:from>
+            <pd:to>LogStart</pd:to>
+            <pd:xpathDescription>Success</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint</pd:from>
+            <pd:to>Assign Multi OrderingCustomer</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogStart</pd:from>
+            <pd:to>Assign Multi OrderingCustomer</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to T24 Model</pd:from>
+            <pd:to>SettleTTBT</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Render-XML</pd:from>
+            <pd:to>EMS Update Queue Sender</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>EMS Update Queue Sender</pd:from>
+            <pd:to>LogEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map ESB Model</pd:from>
+            <pd:to>LogEnd-Data Invalid</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd-Data Invalid</pd:from>
+            <pd:to>errorProcessor-Data Invalid</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign Multi OrderingCustomer</pd:from>
+            <pd:to>Assign Multi inBeneficary</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign Multi inBeneficary</pd:from>
+            <pd:to>Assign ReceivingBank</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign ReceivingBank</pd:from>
+            <pd:to>Map to T24 Model</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map ESB Model">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>210</pd:x>
+            <pd:y>82</pd:y>
+            <config>
+                <element ref="pfx12:BTTV_In_Model"/>
+            </config>
+            <pd:inputBindings>
+                <pfx12:BTTV_In_Model>
+                    <pfx12:Addition_Data>
+                        <pfx12:currency_timestamp>
+                            <xsl:value-of select="tib:timestamp()"/>
+                        </pfx12:currency_timestamp>
+                        <pfx12:UNIQUE_ID>
+                            <xsl:value-of select="$BTTVRecord/Record/ID"/>
+                        </pfx12:UNIQUE_ID>
+                        <xsl:if test="$BTTVRecord/Record/STATUS">
+                            <pfx12:STATUS>
+                                <xsl:value-of select="$BTTVRecord/Record/STATUS"/>
+                            </pfx12:STATUS>
+                        </xsl:if>
+                    </pfx12:Addition_Data>
+                    <pfx12:BTTV_DATA>
+                        <xsl:if test="$BTTVRecord/Record/TRANSACTION_TYPE">
+                            <pfx12:TRANSACTION_TYPE>
+                                <xsl:value-of select="$BTTVRecord/Record/TRANSACTION_TYPE"/>
+                            </pfx12:TRANSACTION_TYPE>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/DEBIT_ACCOUNT">
+                            <pfx12:DEBIT_ACCOUNT>
+                                <xsl:value-of select="$BTTVRecord/Record/DEBIT_ACCOUNT"/>
+                            </pfx12:DEBIT_ACCOUNT>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/CREDIT_ACCOUNT">
+                            <pfx12:CREDIT_ACCOUNT>
+                                <xsl:value-of select="$BTTVRecord/Record/CREDIT_ACCOUNT"/>
+                            </pfx12:CREDIT_ACCOUNT>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/CURRENCY">
+                            <pfx12:CURRENCY>
+                                <xsl:value-of select="$BTTVRecord/Record/CURRENCY"/>
+                            </pfx12:CURRENCY>
+                        </xsl:if>
+                        <pfx12:AMOUNT>
+                            <xsl:value-of select="$BTTVRecord/Record/AMOUNT"/>
+                        </pfx12:AMOUNT>
+                        <pfx12:VALUE_DATE>
+                            <xsl:value-of select="$BTTVRecord/Record/VALUE_DATE"/>
+                        </pfx12:VALUE_DATE>
+                        <xsl:if test="$BTTVRecord/Record/SENDING_BANK_CODE">
+                            <pfx12:SENDING_BANK_CODE>
+                                <xsl:value-of select="$BTTVRecord/Record/SENDING_BANK_CODE"/>
+                            </pfx12:SENDING_BANK_CODE>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/BANK_SORT_CODE">
+                            <pfx12:BANK_SORT_CODE>
+                                <xsl:value-of select="$BTTVRecord/Record/BANK_SORT_CODE"/>
+                            </pfx12:BANK_SORT_CODE>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/ORDERING_CUSTOMER">
+                            <pfx12:ORDERING_CUSTOMER>
+                                <xsl:value-of select="$BTTVRecord/Record/ORDERING_CUSTOMER"/>
+                            </pfx12:ORDERING_CUSTOMER>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/IN_SEND_BANK">
+                            <pfx12:IN_SEND_BANK>
+                                <xsl:value-of select="$BTTVRecord/Record/IN_SEND_BANK"/>
+                            </pfx12:IN_SEND_BANK>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/IN_BENEFICIARY_ACCOUNT_NO">
+                            <pfx12:IN_BENEFICIARY_ACCOUNT_NO>
+                                <xsl:value-of select="$BTTVRecord/Record/IN_BENEFICIARY_ACCOUNT_NO"/>
+                            </pfx12:IN_BENEFICIARY_ACCOUNT_NO>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/IN_BENEFICIARY">
+                            <pfx12:IN_BENEFICIARY>
+                                <xsl:value-of select="$BTTVRecord/Record/IN_BENEFICIARY"/>
+                            </pfx12:IN_BENEFICIARY>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/IN_RECEIVING_BANK">
+                            <pfx12:IN_RECEIVING_BANK>
+                                <xsl:value-of select="$BTTVRecord/Record/IN_RECEIVING_BANK"/>
+                            </pfx12:IN_RECEIVING_BANK>
+                        </xsl:if>
+                        <xsl:if test="$BTTVRecord/Record/PAYMNET_DETAILS">
+                            <pfx12:PAYMNET_DETAILS>
+                                <xsl:value-of select="$BTTVRecord/Record/PAYMNET_DETAILS"/>
+                            </pfx12:PAYMNET_DETAILS>
+                        </xsl:if>
+                        <pfx12:COMPANY.CODE>
+                            <xsl:value-of select="$BTTVRecord/Record/MA_DONVI_T24"/>
+                        </pfx12:COMPANY.CODE>
+                        <pfx12:DR_CR>
+                            <xsl:value-of select="if ($BTTVRecord/Record/DRorCR='100') &#xA;then $_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/T24WS_ClearingType_DR &#xA;else $_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/T24WS_ClearingType_CR"/>
+                        </pfx12:DR_CR>
+                    </pfx12:BTTV_DATA>
+                </pfx12:BTTV_In_Model>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="EMS Update Queue Sender">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>763</pd:x>
+            <pd:y>223</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>BTTVUpdateQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns0:ActivityInput>
+                    <Body>
+                        <xsl:value-of select="$Render-XML/xmlString"/>
+                    </Body>
+                </ns0:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SettleTTBT">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>661</pd:x>
+            <pd:y>330</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/BTTVIn/T24WS_TimeOut_ms%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>MilliSeconds</timeoutType>
+                <service>pfx13:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>FTClearingInwardRemittance</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24BTTVIn%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <xsl:copy-of select="$Map-to-T24-Model/pfx13:FTClearingInwardRemittance"/>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogStart">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>258</pd:x>
+            <pd:y>340</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat(&quot;T24TTBTDT&quot;,': Start ',&quot;T24TTBTDT&quot;)"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;07&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;TTBTDT&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                                </pfx:MsgId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;7&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                            </ns:SOAMsgId>
+                            <ns:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24TTBTDT&quot;"/>
+                            </ns:ServiceName>
+                            <ns:OperationName>
+                                <xsl:value-of select="&quot;BTTVIn&quot;"/>
+                            </ns:OperationName>
+                            <ns:ProcessName>
+                                <xsl:value-of select="$_processContext/ns1:ProcessContext/ProjectName"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <xsl:copy-of select="$Map-ESB-Model/pfx12:BTTV_In_Model"/>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;Start&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp()  - $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:currency_timestamp"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Checkpoint">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>211</pd:x>
+            <pd:y>213</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns7:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                    </duplicateKey>
+                </ns7:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map to T24 Model">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>555</pd:x>
+            <pd:y>329</pd:y>
+            <config>
+                <element ref="pfx13:FTClearingInwardRemittance"/>
+            </config>
+            <pd:inputBindings>
+                <pfx13:FTClearingInwardRemittance>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:COMPANY.CODE"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/T24Authentication/T24Pass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/T24Authentication/T24User"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <OfsFunction>
+                        <activityName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </activityName>
+                        <assignReason>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </assignReason>
+                        <dueDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </dueDate>
+                        <extProcess>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcess>
+                        <extProcessID>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcessID>
+                        <gtsControl>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </gtsControl>
+                        <messageId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </messageId>
+                        <noOfAuth>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </noOfAuth>
+                        <owner>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </owner>
+                        <replace>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </replace>
+                        <startDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </startDate>
+                        <user>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </user>
+                    </OfsFunction>
+                    <FUNDSTRANSFERSBVCLRINType>
+                        <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:CURRENCY">
+                            <DebitCurrency>
+                                <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:CURRENCY"/>
+                            </DebitCurrency>
+                        </xsl:if>
+                        <Amount>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:AMOUNT"/>
+                        </Amount>
+                        <ValueDate>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:VALUE_DATE"/>
+                        </ValueDate>
+                        <gORDERINGCUST>
+                            <xsl:for-each select="$orderingCustomerList/orderingCustomerList/orderingCustomer">
+                                <OrderingCustomer>
+                                    <xsl:value-of select="current()"/>
+                                </OrderingCustomer>
+                            </xsl:for-each>
+                        </gORDERINGCUST>
+                        <InBeneficiaryAccountNo>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY_ACCOUNT_NO"/>
+                        </InBeneficiaryAccountNo>
+                        <gINBENCUSTOMER>
+                            <xsl:for-each select="$inBeneficiaryList/inBeneficiaryList/inBeneficiary">
+                                <InBeneficiary>
+                                    <xsl:value-of select="current()"/>
+                                </InBeneficiary>
+                            </xsl:for-each>
+                        </gINBENCUSTOMER>
+                        <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:BANK_SORT_CODE">
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:BANK_SORT_CODE"/>
+                            </ReceivingBank>
+                        </xsl:if>
+                        <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID">
+                            <IBPSTransReference>
+                                <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                            </IBPSTransReference>
+                        </xsl:if>
+                        <InReceivingBank>
+                            <xsl:value-of select="if (contains($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK, '*' ))&#xA;then &quot;&quot;&#xA;else $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK"/>
+                        </InReceivingBank>
+                        <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:SENDING_BANK_CODE">
+                            <SendingBank>
+                                <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:SENDING_BANK_CODE"/>
+                            </SendingBank>
+                        </xsl:if>
+                        <InSendingBank>
+                            <xsl:value-of select="if ($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_SEND_BANK = '*' ) &#xA;then $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:BANK_SORT_CODE &#xA;else $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_SEND_BANK"/>
+                        </InSendingBank>
+                        <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:PAYMNET_DETAILS">
+                            <PaymentDetails>
+                                <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:PAYMNET_DETAILS"/>
+                            </PaymentDetails>
+                        </xsl:if>
+                        <ClearingType>
+                            <xsl:value-of select="if ($BTTVRecord/Record/DRorCR = '100' ) &#xA;then $_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/T24WS_ClearingType_CR&#xA;else $_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/T24WS_ClearingType_DR"/>
+                        </ClearingType>
+                    </FUNDSTRANSFERSBVCLRINType>
+                </pfx13:FTClearingInwardRemittance>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Render-XML">
+            <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+            <pd:x>659</pd:x>
+            <pd:y>214</pd:y>
+            <config>
+                <renderAsText>text</renderAsText>
+                <validateInput>false</validateInput>
+                <textEncoding>UTF-8</textEncoding>
+                <term ref="pfx15:BTTVUpdate"/>
+            </config>
+            <pd:inputBindings>
+                <pfx15:BTTVUpdate>
+                    <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID">
+                        <pfx15:BTTV_ID>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                        </pfx15:BTTV_ID>
+                    </xsl:if>
+                    <xsl:if test="$SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/transactionId">
+                        <pfx15:T24Response_ID>
+                            <xsl:value-of select="$SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/transactionId"/>
+                        </pfx15:T24Response_ID>
+                    </xsl:if>
+                    <xsl:if test="$SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/successIndicator">
+                        <pfx15:successIndicator>
+                            <xsl:value-of select="$SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/successIndicator"/>
+                        </pfx15:successIndicator>
+                    </xsl:if>
+                    <xsl:if test="not(($SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/messages[1]/@xsi:nil=(&quot;true&quot;)) or ($SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/messages[1]/@xsi:nil=(&quot;1&quot;)))">
+                        <pfx15:messages>
+                            <xsl:value-of select="$SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse/Status/messages[1]"/>
+                        </pfx15:messages>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID">
+                        <pfx15:Unique_ID>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                        </pfx15:Unique_ID>
+                    </xsl:if>
+                </pfx15:BTTVUpdate>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogEnd">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>855</pd:x>
+            <pd:y>215</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;T24TTBT&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat( 'T24TTBT' ,'End', 'T24TTBT' )"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;08&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;TTBT&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                                </pfx:MsgId>
+                                <pfx:MsgSrcId>
+                                    <xsl:value-of select="$EMS-Update-Queue-Sender/ns0:aEmptyOutputClass/ns0:MessageID"/>
+                                </pfx:MsgSrcId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                            </ns:SOAMsgId>
+                            <ns:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24TTBTDT/BTTVIn&quot;"/>
+                            </ns:ServiceName>
+                            <ns:OperationName>
+                                <xsl:value-of select="&quot;BTTVIn&quot;"/>
+                            </ns:OperationName>
+                            <ns:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <ns2:ServiceEnverlop>
+                                <pfx:AppHdr>
+                                    <pfx:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </pfx:CharSet>
+                                    <pfx:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </pfx:ServVersion>
+                                    <pfx:From>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;08&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;TTBT&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:From>
+                                    <pfx:To>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;24&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:To>
+                                    <pfx:MsgId>
+                                        <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                                    </pfx:MsgId>
+                                    <pfx:MsgSrcId>
+                                        <xsl:value-of select="$EMS-Update-Queue-Sender/ns0:aEmptyOutputClass/ns0:MessageID"/>
+                                    </pfx:MsgSrcId>
+                                    <pfx:BizServ>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;6&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:BizServ>
+                                    <pfx:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </pfx:CreatedDate>
+                                </pfx:AppHdr>
+                                <pfx:ResponseStatus>
+                                    <pfx:Status>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/TTBTStates/Success_Status"/>
+                                    </pfx:Status>
+                                    <pfx:ErrorCode>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/TTBTStates/Success_ErrorCode"/>
+                                    </pfx:ErrorCode>
+                                    <pfx:ErrorMessage>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/TTBTStates/Success_ErrorMessage"/>
+                                    </pfx:ErrorMessage>
+                                    <pfx:ErrorInfo>
+                                        <pfx:ErrorCode>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                        </pfx:ErrorCode>
+                                        <pfx:ErrorMessage>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                                        </pfx:ErrorMessage>
+                                    </pfx:ErrorInfo>
+                                </pfx:ResponseStatus>
+                                <ServiceBody>
+                                    <xsl:copy-of select="$Map-to-T24-Model/pfx13:FTClearingInwardRemittance"/>
+                                    <xsl:copy-of select="$SettleTTBT/outputMessage/pfx13:FTClearingInwardRemittanceResponse"/>
+                                    <xsl:copy-of select="$EMS-Update-Queue-Sender/ns0:aEmptyOutputClass"/>
+                                </ServiceBody>
+                            </ns2:ServiceEnverlop>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;End&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp() - $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:currency_timestamp"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogEnd-Data Invalid">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>454</pd:x>
+            <pd:y>92</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;T24TTBT&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat( 'T24TTBT' ,': End ', 'T24TTBT' )"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="$BTTVRecord/Record/ID"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;08&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;TTBT&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="$BTTVRecord/Record/ID"/>
+                                </pfx:MsgId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                            </ns:SOAMsgId>
+                            <ns:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24TTBTDT/BTTVIn&quot;"/>
+                            </ns:ServiceName>
+                            <ns:OperationName>
+                                <xsl:value-of select="&quot;BTTVIn&quot;"/>
+                            </ns:OperationName>
+                            <ns:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <ns2:ServiceEnverlop>
+                                <pfx:AppHdr>
+                                    <pfx:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </pfx:CharSet>
+                                    <pfx:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </pfx:ServVersion>
+                                    <pfx:From>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;08&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;TTBT&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:From>
+                                    <pfx:To>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;24&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:To>
+                                    <pfx:MsgId>
+                                        <xsl:value-of select="$BTTVRecord/Record/ID"/>
+                                    </pfx:MsgId>
+                                    <pfx:BizServ>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;6&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:BizServ>
+                                    <pfx:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </pfx:CreatedDate>
+                                </pfx:AppHdr>
+                                <pfx:ResponseStatus>
+                                    <pfx:Status>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/TTBTStates/DataInvalid_Status"/>
+                                    </pfx:Status>
+                                    <pfx:ErrorCode>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/TTBTStates/DataInvalid_ErrorCode"/>
+                                    </pfx:ErrorCode>
+                                    <pfx:ErrorMessage>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/TTBTStates/DataInvalid_ErrorMessage"/>
+                                    </pfx:ErrorMessage>
+                                    <pfx:ErrorInfo>
+                                        <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                                            <pfx:Id>
+                                                <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                            </pfx:Id>
+                                        </xsl:if>
+                                        <pfx:ErrorCode>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                        </pfx:ErrorCode>
+                                        <pfx:ErrorMessage>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                                        </pfx:ErrorMessage>
+                                    </pfx:ErrorInfo>
+                                </pfx:ResponseStatus>
+                                <ServiceBody>
+                                    <xsl:copy-of select="$BTTVRecord/Record"/>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                                </ServiceBody>
+                            </ns2:ServiceEnverlop>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;End&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp()"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="errorProcessor-Data Invalid">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>688</pd:x>
+            <pd:y>95</pd:y>
+            <config>
+                <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ProcessName>
+                        <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                    </ProcessName>
+                    <GeneratedId>
+                        <xsl:value-of select="$BTTVRecord/Record/ID"/>
+                    </GeneratedId>
+                    <ns13:ExceptionBody>
+                        <ns13:Hostname>
+                            <xsl:value-of select="BW:getHostName()"/>
+                        </ns13:Hostname>
+                        <ns13:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/ErrorRole"/>
+                        </ns13:Category>
+                        <ns13:Type>
+                            <xsl:value-of select="&quot;MAP ERROR&quot;"/>
+                        </ns13:Type>
+                        <ns13:Level>
+                            <xsl:value-of select="&quot;level&quot;"/>
+                        </ns13:Level>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                            <ns13:ErrorReport>
+                                <StackTrace>
+                                    <xsl:value-of select="StackTrace"/>
+                                </StackTrace>
+                                <Msg>
+                                    <xsl:value-of select="Msg"/>
+                                </Msg>
+                                <FullClass>
+                                    <xsl:value-of select="FullClass"/>
+                                </FullClass>
+                                <ObjectClass>
+                                    <xsl:value-of select="Class"/>
+                                </ObjectClass>
+                                <ProcessStack>
+                                    <xsl:value-of select="ProcessStack"/>
+                                </ProcessStack>
+                                <xsl:if test="MsgCode">
+                                    <MsgCode>
+                                        <xsl:value-of select="MsgCode"/>
+                                    </MsgCode>
+                                </xsl:if>
+                                <xsl:copy-of select="Data"/>
+                            </ns13:ErrorReport>
+                        </xsl:for-each>
+                    </ns13:ExceptionBody>
+                    <ServiceInput>
+                        <pfx:AppHdr>
+                            <pfx:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx:CharSet>
+                            <pfx:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx:ServVersion>
+                            <pfx:From>
+                                <pfx:Id>
+                                    <xsl:value-of select="&quot;08&quot;"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="&quot;TTBTDT&quot;"/>
+                                </pfx:Name>
+                            </pfx:From>
+                            <pfx:To>
+                                <pfx:Id>
+                                    <xsl:value-of select="&quot;24&quot;"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </pfx:Name>
+                            </pfx:To>
+                            <pfx:MsgId>
+                                <xsl:value-of select="$BTTVRecord/Record/ID"/>
+                            </pfx:MsgId>
+                            <pfx:BizServ>
+                                <pfx:Id>
+                                    <xsl:value-of select="&quot;6&quot;"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                                </pfx:Name>
+                            </pfx:BizServ>
+                            <pfx:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx:CreatedDate>
+                        </pfx:AppHdr>
+                        <ServiceBody/>
+                    </ServiceInput>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign Multi OrderingCustomer">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>325</pd:x>
+            <pd:y>223</pd:y>
+            <config>
+                <variableName>orderingCustomerList</variableName>
+            </config>
+            <pd:inputBindings>
+                <orderingCustomerList>
+                    <orderingCustomer>
+                        <xsl:value-of select="if (string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER) &lt; 35 ) &#xA;then $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER&#xA;else substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER, 1 , 35 )"/>
+                    </orderingCustomer>
+                    <xsl:if test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER) > 35">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER, 36 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER) > 70">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER, 71 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER) > 105">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:ORDERING_CUSTOMER, 106 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                </orderingCustomerList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign Multi inBeneficary">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>428</pd:x>
+            <pd:y>223</pd:y>
+            <config>
+                <variableName>inBeneficiaryList</variableName>
+            </config>
+            <pd:inputBindings>
+                <inBeneficiaryList>
+                    <inBeneficiary>
+                        <xsl:value-of select="if (string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY) &lt; 35 ) &#xA;then $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY&#xA;else substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY, 1 , 35 )"/>
+                    </inBeneficiary>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY) > 35">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY, 36 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY) > 70">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY, 71 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY) > 105">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_BENEFICIARY, 106 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                </inBeneficiaryList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign ReceivingBank">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>431</pd:x>
+            <pd:y>335</pd:y>
+            <config>
+                <variableName>ReceivingBankList</variableName>
+            </config>
+            <pd:inputBindings>
+                <InReceivingBankList>
+                    <InReceivingBank>
+                        <xsl:value-of select="if (string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK) &lt; 35 ) &#xA;then $Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK&#xA;else substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK, 1 , 35 )"/>
+                    </InReceivingBank>
+                    <xsl:if test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK) > 35">
+                        <InReceivingBank>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK, 36 , 35 )"/>
+                        </InReceivingBank>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK) > 70">
+                        <InReceivingBank>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK, 71 , 35 )"/>
+                        </InReceivingBank>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK) > 105">
+                        <InReceivingBank>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:BTTV_DATA/pfx12:IN_RECEIVING_BANK, 106 , 35 )"/>
+                        </InReceivingBank>
+                    </xsl:if>
+                </InReceivingBankList>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1032</pd:x>
+        <pd:y>562</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>1032</pd:x>
+        <pd:y>445</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns6:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/BTTVIn/SleepTime_Exception_ms"/>
+                </IntervalInMillisec>
+            </ns6:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorProcessor-Citad">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1033</pd:x>
+        <pd:y>338</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                </GeneratedId>
+                <ns13:ExceptionBody>
+                    <ns13:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns13:Hostname>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns13:Category>
+                    <ns13:Type>
+                        <xsl:value-of select="&quot;TECHINICAL&quot;"/>
+                    </ns13:Type>
+                    <ns13:Level>
+                        <xsl:value-of select="&quot;NORMAL&quot;"/>
+                    </ns13:Level>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                        <ns13:ErrorReport>
+                            <StackTrace>
+                                <xsl:value-of select="StackTrace"/>
+                            </StackTrace>
+                            <Msg>
+                                <xsl:value-of select="Msg"/>
+                            </Msg>
+                            <FullClass>
+                                <xsl:value-of select="FullClass"/>
+                            </FullClass>
+                            <ObjectClass>
+                                <xsl:value-of select="Class"/>
+                            </ObjectClass>
+                            <ProcessStack>
+                                <xsl:value-of select="ProcessStack"/>
+                            </ProcessStack>
+                            <xsl:if test="MsgCode">
+                                <MsgCode>
+                                    <xsl:value-of select="MsgCode"/>
+                                </MsgCode>
+                            </xsl:if>
+                            <xsl:copy-of select="Data"/>
+                        </ns13:ErrorReport>
+                    </xsl:for-each>
+                </ns13:ExceptionBody>
+                <ServiceInput>
+                    <pfx:AppHdr>
+                        <pfx:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </pfx:CharSet>
+                        <pfx:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </pfx:ServVersion>
+                        <pfx:From>
+                            <pfx:Id>
+                                <xsl:value-of select="&quot;08&quot;"/>
+                            </pfx:Id>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;TTBTDT&quot;"/>
+                            </pfx:Name>
+                        </pfx:From>
+                        <pfx:To>
+                            <pfx:Id>
+                                <xsl:value-of select="&quot;24&quot;"/>
+                            </pfx:Id>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;T24&quot;"/>
+                            </pfx:Name>
+                        </pfx:To>
+                        <pfx:MsgId>
+                            <xsl:value-of select="$Map-ESB-Model/pfx12:BTTV_In_Model/pfx12:Addition_Data/pfx12:UNIQUE_ID"/>
+                        </pfx:MsgId>
+                        <pfx:BizServ>
+                            <pfx:Id>
+                                <xsl:value-of select="&quot;05&quot;"/>
+                            </pfx:Id>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;T24TTBTDT&quot;"/>
+                            </pfx:Name>
+                        </pfx:BizServ>
+                        <pfx:CreatedDate>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </pfx:CreatedDate>
+                    </pfx:AppHdr>
+                    <ServiceBody/>
+                </ServiceInput>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>QueryTTBTDatabase</pd:from>
+        <pd:to>Loop Handling Record</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop Handling Record</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>errorProcessor-Citad</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>QueryTTBTDatabase</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor-Citad</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

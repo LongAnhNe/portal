@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.sbv.gov.vn/global/portaldashboard/cashreserveratio/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns3="sbv/common/envelope/soaenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1465530979601" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://www.sbv.gov.vn/global/portaldashboard/cashreserveratio/version1.0" schemaLocation="/SharedResource/Schema/Global/PortalDashBoard/CashReserveRatio.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1465530979601" location="/SharedResource/Schema/Global/PortalDashBoard/PortalDashBoard.wsdl"/>
+    <pd:name>Services/Global/System/PortalDashBoard/OperationImpl/cashReserveRatio.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:CashReserveRatioInput"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns4:ServiceEnverlop/ServiceBody/*" element="ns1:gCashReserveRatio" cardinality=""/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:CashReserveRatioOutput>
+            <cashReserveRatioRes>
+                <ns1:cashReserveRatioRes>
+                    <xsl:copy-of select="$RequestResponse/root/ns4:ServiceEnverlop/ns:AppHdr"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns4:ServiceEnverlop/ns:ResponseStatus"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns4:ServiceEnverlop/ServiceBody/ns1:gCashReserveRatio"/>
+                </ns1:cashReserveRatioRes>
+            </cashReserveRatioRes>
+        </wsdlPfx:CashReserveRatioOutput>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:CashReserveRatioOutput"/>
+    <pd:endX>449</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1465799319390</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>299</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:SOAEnvelope>
+                    <ns3:SOAServiceHeader>
+                        <ns3:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:CashReserveRatioInput/cashReserveRatioReq/ns1:cashReserveRatioReq/ns:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:CashReserveRatioInput/cashReserveRatioReq/ns1:cashReserveRatioReq/ns:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:CashReserveRatioInput/cashReserveRatioReq/ns1:cashReserveRatioReq/ns:AppHdr/node()"/>
+                        </ns3:AppHdr>
+                        <ns3:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </ns3:ProcessName>
+                    </ns3:SOAServiceHeader>
+                    <ns3:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:CashReserveRatioInput/cashReserveRatioReq/ns1:cashReserveRatioReq/ns1:ReqBody"/>
+                    </ns3:ServiceBody>
+                </ns3:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

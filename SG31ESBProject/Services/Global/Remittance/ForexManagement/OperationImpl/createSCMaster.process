@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0">
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/ForexManagement/Securities.xsd"/>
+    <wsdl:import namespace="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" location="/SharedResource/Schema/Global/Remittance/ForexManagement/ForexManagement.wsdl"/>
+    <pd:name>Services/Global/Remittance/ForexManagement/OperationImpl/createSCMaster.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createSCMasterRequest"/>
+    <pd:startX>116</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$CallRequestResponse/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns2:TransactionId"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:createSCMasterResponse>
+            <Res>
+                <ns2:createSCMasterRes>
+                    <ns1:AppHdr>
+                        <xsl:if test="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:CharSet">
+                            <ns1:CharSet>
+                                <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:CharSet"/>
+                            </ns1:CharSet>
+                        </xsl:if>
+                        <ns1:ServVersion>
+                            <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:ServVersion"/>
+                        </ns1:ServVersion>
+                        <xsl:copy-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:From"/>
+                        <xsl:copy-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:To"/>
+                        <ns1:MsgId>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ns1:MsgId>
+                        <ns1:MsgSrcId>
+                            <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:MsgId"/>
+                        </ns1:MsgSrcId>
+                        <xsl:copy-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:BizServ"/>
+                        <ns1:CreatedDate>
+                            <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:CreatedDate"/>
+                        </ns1:CreatedDate>
+                        <xsl:if test="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:Signature">
+                            <ns1:Signature>
+                                <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:AppHdr/ns1:Signature"/>
+                            </ns1:Signature>
+                        </xsl:if>
+                    </ns1:AppHdr>
+                    <ns1:ResponseStatus>
+                        <ns1:Status>
+                            <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:ResponseStatus/ns1:Status"/>
+                        </ns1:Status>
+                        <xsl:if test="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:ResponseStatus/ns1:ErrorCode">
+                            <ns1:ErrorCode>
+                                <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:ResponseStatus/ns1:ErrorCode"/>
+                            </ns1:ErrorCode>
+                        </xsl:if>
+                        <xsl:if test="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:ResponseStatus/ns1:ErrorMessage">
+                            <ns1:ErrorMessage>
+                                <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:ResponseStatus/ns1:ErrorMessage"/>
+                            </ns1:ErrorMessage>
+                        </xsl:if>
+                        <xsl:copy-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ns1:ResponseStatus/ns1:ErrorInfo"/>
+                    </ns1:ResponseStatus>
+                    <ns2:TransactionId>
+                        <xsl:value-of select="$CallRequestResponse/root/ns3:ServiceEnverlop/ServiceBody/ns2:TransactionId[1]"/>
+                    </ns2:TransactionId>
+                </ns2:createSCMasterRes>
+            </Res>
+        </wsdlPfx:createSCMasterResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createSCMasterResponse"/>
+    <pd:endX>489</pd:endX>
+    <pd:endY>63</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1456387182822</pd:targetNamespace>
+    <pd:activity name="CallRequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>295</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createSCMasterRequest/Req/ns2:createSCMasterReq/ns1:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createSCMasterRequest/Req/ns2:createSCMasterReq/ns1:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createSCMasterRequest/Req/ns2:createSCMasterReq/ns1:AppHdr/node()"/>
+                        </ns12:AppHdr>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createSCMasterRequest/Req/ns2:createSCMasterReq/ns2:SCMasterInfo"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallRequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallRequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

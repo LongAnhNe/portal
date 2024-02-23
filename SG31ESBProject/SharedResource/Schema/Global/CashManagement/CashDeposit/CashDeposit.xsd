@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="sbv/global/cashmanagement/cashdeposit/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="sbv/global/cashmanagement/cashdeposit/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="cashDepositInput">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+				<xs:element name="BankCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="Content" type="xs:string" minOccurs="0"/>
+				<xs:element name="AmountByNumber" type="xs:string" minOccurs="0"/>
+				<xs:element name="AmountByWord" type="xs:string" minOccurs="0"/>
+				<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+				<xs:element name="Status" type="xs:string" minOccurs="0"/>
+				<xs:element name="AccountNumber" type="xs:string" minOccurs="0"/>
+				<xs:element name="Depositor" type="xs:string" minOccurs="0"/>
+				<xs:element name="DepositorAddress" type="xs:string" minOccurs="0"/>
+				<xs:element name="StructureMoney" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ListRowMoney" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="LineID" type="xs:string" minOccurs="0"/>
+										<xs:element name="MoneyCode" type="xs:string" minOccurs="0"/>
+										<xs:element name="Batch" type="xs:string" minOccurs="0"/>
+										<xs:element name="Bunch" type="xs:string" minOccurs="0"/>
+										<xs:element name="Piece" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="cashDepositReq" type="cashDepositReqType"/>
+	<xs:element name="cashDepositRes" type="cashDepositResType"/>
+	<xs:complexType name="cashDepositReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="cashDepositInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="cashDepositResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element name="TransactionRef" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

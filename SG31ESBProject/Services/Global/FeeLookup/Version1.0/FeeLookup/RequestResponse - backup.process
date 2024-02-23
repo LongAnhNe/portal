@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:ns5="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns6="http://xmlns.tibco.com/bw/activity/xml/render/bytesEnvelope/2003/05" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:ns1="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCINetCreditLimit.xsd" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/FeeLookup/Resultsets.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/FeeLookup.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCICollaterizedAssets.xsd" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx7="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/FeeLookup/Resultsset.xsd" xmlns:pfx6="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/FeeLookup/Schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/FeeLookup/Resultsets.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/FeeLookup.xsd" schemaLocation="/SharedResource/Schema/Global/FeeLookup/FeeLookup.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/FeeLookup/Resultsset.xsd" schemaLocation="/SharedResource/Schema/Global/FeeLookup/Resultsset.xsd"/>
+    <pd:name>Services/Global/FeeLookup/Version1.0/FeeLookup/RequestResponse - backup.process</pd:name>
+    <pd:description>Author: tuedn</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:startType>
+    <pd:startX>96</pd:startX>
+    <pd:startY>442</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx4:FeeLookupRequestBody"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns:AppHdr"/>
+                <ns:ResponseStatus>
+                    <ns:Status>
+                        <xsl:value-of select="if ($ESBServiceState/pfx4:ESBServiceState/ns2:Status = 0 ) &#xA;then 0&#xA;else 1"/>
+                    </ns:Status>
+                    <xsl:if test="$ESBServiceState/pfx4:ESBServiceState/ns2:Status">
+                        <ns:ErrorCode>
+                            <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Status"/>
+                        </ns:ErrorCode>
+                    </xsl:if>
+                    <xsl:if test="$ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage">
+                        <ns:ErrorMessage>
+                            <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage"/>
+                        </ns:ErrorMessage>
+                    </xsl:if>
+                </ns:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$FeeLookupResponseBody/pfx4:FeeLookupResponseBody"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody"/>
+                    <xsl:copy-of select="$ESBServiceState/pfx4:ESBServiceState"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>896</pd:endX>
+    <pd:endY>441</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx4:ESBServiceState"/>
+        <FeeLookupResponseBody ref="pfx4:FeeLookupResponseBody"/>
+        <InsertPKGParam ref="pfx4:InsertPKGParam"/>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/FeeLookup/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="0.Init ServiceState">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>214</pd:x>
+        <pd:y>447</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx4:FeeLookupRequestBody"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx4:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="0"/>
+                </ns2:Status>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:SourceAppID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns2:CurrentDateTime>
+            </pfx4:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call FEE_09">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>494</pd:x>
+        <pd:y>440</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24Report.sharedjdbc</jdbcSharedConfig>
+            <schema>T24R</schema>
+            <catalog>PKG_PORTAL</catalog>
+            <ProcedureName>FEE_09</ProcedureName>
+            <useSchema>true</useSchema>
+            <oraObjects/>
+            <oraTables/>
+            <ConfigurationError>output schema is null</ConfigurationError>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_BRANCH</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_TYPE</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_DATE</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>RETURN_VALUE</colName>
+                    <colType>3</colType>
+                    <dataType>-10</dataType>
+                    <typeName>REF CURSOR</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_BRANCH>
+                        <xsl:choose>
+                            <xsl:when test="exists($InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_BRANCH)">
+                                <xsl:value-of select="$InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_BRANCH"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_BRANCH>
+                    <P_TYPE>
+                        <xsl:choose>
+                            <xsl:when test="exists($InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_TYPE)">
+                                <xsl:value-of select="$InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_TYPE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_TYPE>
+                    <P_DATE>
+                        <xsl:choose>
+                            <xsl:when test="exists($InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_DATE)">
+                                <xsl:value-of select="$InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_DATE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_DATE>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call PKG_PORTAL">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>494</pd:x>
+        <pd:y>294</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24Report.sharedjdbc</jdbcSharedConfig>
+            <schema>T24R</schema>
+            <catalog>PKG_PORTAL</catalog>
+            <ProcedureName>PHI_PORTAL</ProcedureName>
+            <useSchema>true</useSchema>
+            <oraObjects/>
+            <oraTables/>
+            <ConfigurationError>output schema is null</ConfigurationError>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_MANH</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_TYPE</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_DATE</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>RETURN_VALUE</colName>
+                    <colType>3</colType>
+                    <dataType>-10</dataType>
+                    <typeName>REF CURSOR</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_MANH>
+                        <xsl:choose>
+                            <xsl:when test="exists($InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_BANKCODE)">
+                                <xsl:value-of select="$InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_BANKCODE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_MANH>
+                    <P_TYPE>
+                        <xsl:choose>
+                            <xsl:when test="exists($InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_TYPE)">
+                                <xsl:value-of select="$InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_TYPE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_TYPE>
+                    <P_DATE>
+                        <xsl:choose>
+                            <xsl:when test="exists($InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_DATE)">
+                                <xsl:value-of select="$InsertPKGParam/pfx4:InsertPKGParam/pfx4:P_DATE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_DATE>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetFeeLookupResponseBody">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>770</pd:x>
+        <pd:y>442</pd:y>
+        <config>
+            <variableName>FeeLookupResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:FeeLookupResponseBody>
+                <pfx4:PKGStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx4:ESBServiceState/ns2:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx4:PKGStatus>
+                <xsl:if test="$ESBServiceState/pfx4:ESBServiceState/ns2:Status">
+                    <pfx4:ResponseCode>
+                        <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Status"/>
+                    </pfx4:ResponseCode>
+                </xsl:if>
+                <xsl:if test="$ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage">
+                    <pfx4:ErrorMessage>
+                        <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage"/>
+                    </pfx4:ErrorMessage>
+                </xsl:if>
+                <xsl:for-each select="$Parse-XML/Resultsets">
+                    <pfx4:Resultsets>
+                        <xsl:for-each select="ResultSet1">
+                            <pfx4:ResultSet1>
+                                <xsl:for-each select="Record1">
+                                    <pfx4:Record1>
+                                        <pfx4:MANGANHANG>
+                                            <xsl:value-of select="MANGANHANG"/>
+                                        </pfx4:MANGANHANG>
+                                        <pfx4:TENTCTD>
+                                            <xsl:value-of select="TENTCTD"/>
+                                        </pfx4:TENTCTD>
+                                        <pfx4:TONGSOTIENGD>
+                                            <xsl:value-of select="TONGSOTIENGD"/>
+                                        </pfx4:TONGSOTIENGD>
+                                        <pfx4:TONGTIENPHI>
+                                            <xsl:value-of select="TONGTIENPHI"/>
+                                        </pfx4:TONGTIENPHI>
+                                        <pfx4:P_DATE>
+                                            <xsl:value-of select="P_DATE"/>
+                                        </pfx4:P_DATE>
+                                        <pfx4:CHINHANH>
+                                            <xsl:value-of select="CHINHANH"/>
+                                        </pfx4:CHINHANH>
+                                        <pfx4:SOMON>
+                                            <xsl:value-of select="SOMON"/>
+                                        </pfx4:SOMON>
+                                    </pfx4:Record1>
+                                </xsl:for-each>
+                            </pfx4:ResultSet1>
+                        </xsl:for-each>
+                    </pfx4:Resultsets>
+                </xsl:for-each>
+            </pfx4:FeeLookupResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>896</pd:x>
+        <pd:y>181</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="99.CatchException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>895</pd:x>
+        <pd:y>269</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="99"/>
+                </ns2:Status>
+                <ns2:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Has Exception in service : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns2:ErrorMessage>
+                <ns2:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Has Exception in service : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns2:NotifyMsg>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Unique_ID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:timestamps"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:CurrentDateTime"/>
+                </ns2:CurrentDateTime>
+            </pfx4:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetFeeLookupResponseBody-Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>895</pd:x>
+        <pd:y>357</pd:y>
+        <config>
+            <variableName>FeeLookupResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:FeeLookupResponseBody>
+                <pfx4:PKGStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx4:ESBServiceState = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx4:PKGStatus>
+                <xsl:if test="$ESBServiceState/pfx4:ESBServiceState/ns2:Status">
+                    <pfx4:ResponseCode>
+                        <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Status"/>
+                    </pfx4:ResponseCode>
+                </xsl:if>
+                <pfx4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Unexpected Error . &quot; , $ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage)"/>
+                </pfx4:ErrorMessage>
+            </pfx4:FeeLookupResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="02.SetFeeLookupResponseBody-PKG Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>896</pd:x>
+        <pd:y>636</pd:y>
+        <config>
+            <variableName>FeeLookupResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:FeeLookupResponseBody>
+                <pfx4:PKGStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx4:ESBServiceState = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx4:PKGStatus>
+                <pfx4:ResponseCode>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Status"/>
+                </pfx4:ResponseCode>
+                <xsl:if test="$ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage">
+                    <pfx4:ErrorMessage>
+                        <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:ErrorMessage"/>
+                    </pfx4:ErrorMessage>
+                </xsl:if>
+            </pfx4:FeeLookupResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SendToESBErrorQueue">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>650</pd:x>
+        <pd:y>638</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBErrorQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties/>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <JMSCorrelationID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns:AppHdr/ns:MsgId"/>
+                </JMSCorrelationID>
+                <JMSProperties>
+                    <ns12:JMSXGroupID>
+                        <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Unique_ID"/>
+                    </ns12:JMSXGroupID>
+                </JMSProperties>
+                <Body>
+                    <xsl:value-of select="string(tib:render-xml($Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]))"/>
+                </Body>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="02. Insert DB Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>492</pd:x>
+        <pd:y>643</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="2"/>
+                </ns2:Status>
+                <ns2:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Call BI PKG has error : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns2:ErrorMessage>
+                <ns2:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Call BI PKG has error : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns2:NotifyMsg>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Unique_ID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:timestamps"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:CurrentDateTime"/>
+                </ns2:CurrentDateTime>
+            </pfx4:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetPKGParam">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>341</pd:x>
+        <pd:y>439</pd:y>
+        <config>
+            <variableName>InsertPKGParam</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:InsertPKGParam>
+                <pfx4:P_BRANCH>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:BankCode"/>
+                </pfx4:P_BRANCH>
+                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:FeeType">
+                    <pfx4:P_TYPE>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:FeeType"/>
+                    </pfx4:P_TYPE>
+                </xsl:if>
+                <pfx4:P_DATE>
+                    <xsl:value-of select="concat($Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:Year, $Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:Month)"/>
+                </pfx4:P_DATE>
+                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:BankCode">
+                    <pfx4:P_BANKCODE>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:BankCode"/>
+                    </pfx4:P_BANKCODE>
+                </xsl:if>
+            </pfx4:InsertPKGParam>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>646</pd:x>
+        <pd:y>440</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term ref="pfx7:Resultsets"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="if(exists($Call-FEE_09/resultSet/UnresolvedResultsets))&#xA;then $Call-FEE_09/resultSet/UnresolvedResultsets&#xA;else if(exists($Call-PKG_PORTAL/resultSet/UnresolvedResultsets))&#xA;then $Call-PKG_PORTAL/resultSet/UnresolvedResultsets&#xA;else  &quot;&quot;"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="3. Parse XML Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>648</pd:x>
+        <pd:y>543</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="3"/>
+                </ns2:Status>
+                <ns2:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Parse Data from BI pkg has error : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns2:ErrorMessage>
+                <ns2:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Parse Data from BI pkg has error : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns2:NotifyMsg>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:Unique_ID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:timestamps"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx4:ESBServiceState/ns2:CurrentDateTime"/>
+                </ns2:CurrentDateTime>
+            </pfx4:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>0.Init ServiceState</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0.Init ServiceState</pd:from>
+        <pd:to>SetPKGParam</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetFeeLookupResponseBody</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>99.CatchException</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>99.CatchException</pd:from>
+        <pd:to>SetFeeLookupResponseBody-Exception</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetFeeLookupResponseBody-Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call FEE_09</pd:from>
+        <pd:to>02. Insert DB Error</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>02.SetFeeLookupResponseBody-PKG Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendToESBErrorQueue</pd:from>
+        <pd:to>02.SetFeeLookupResponseBody-PKG Error</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>02. Insert DB Error</pd:from>
+        <pd:to>SendToESBErrorQueue</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetPKGParam</pd:from>
+        <pd:to>Call FEE_09</pd:to>
+        <pd:xpathDescription>is Type 9</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:FeeType ="9"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>SetFeeLookupResponseBody</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call FEE_09</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>3. Parse XML Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>3. Parse XML Error</pd:from>
+        <pd:to>SendToESBErrorQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call PKG_PORTAL</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetPKGParam</pd:from>
+        <pd:to>Call PKG_PORTAL</pd:to>
+        <pd:xpathDescription>is Type 1-8</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:FeeLookupRequestBody[1]/pfx4:FeeType !="9"</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

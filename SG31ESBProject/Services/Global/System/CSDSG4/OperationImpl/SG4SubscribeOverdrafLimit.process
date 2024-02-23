@@ -1,0 +1,1079 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="schema://www.sbv.gov.vn/schema/global/esb/T24Citad/CitadOut/CitadOut.xsd" xmlns:pfx15="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/ServiceResponse.xsd" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx14="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/Schema.xsd" xmlns:ns22="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx5="http://schemas.tibco.com/bw/plugins/jdbc/5.0/jdbcExceptions" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/common/envelope/commonheader/1.0" xmlns:pfx3="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/SyncOverdraftLimitFromCSD.xsd" xmlns:pfx2="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:pfx6="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/SG4SubscribeOverdrafLimit.xsd" xmlns:ns16="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="http://www.tibco.com/pe/CheckpointSchema" xmlns:ns15="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/Schema.xsd" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns5="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:ns13="sbv/common/exceptionhandling/exception/1.0" xmlns:pfx="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/envelope/soaenvelope/1.0" xmlns:ns0="www.tibco.com/plugin/Sleep" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/SG4SubscribeOverdrafLimit.xsd" schemaLocation="/SharedResource/Schema/Global/System/CSDSG4/SG4SubscribeOverdrafLimit.xsd"/>
+    <pd:name>Services/Global/System/CSDSG4/OperationImpl/SG4SubscribeOverdrafLimit.process</pd:name>
+    <pd:startName>CSDOverdraftLimitQueue</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="CSDOverdraftLimitQueue">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>256</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>CSDOverdraftQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1462</pd:endX>
+    <pd:endY>319</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx6:ESBServiceState"/>
+        <AppHdr ref="pfx4:AppHdr"/>
+        <InsertSG4DBModel ref="pfx6:InsertSG4DBModel"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1435739549601</pd:targetNamespace>
+    <pd:activity name="Parse OverdraftLimit">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>257</pd:x>
+        <pd:y>324</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx2:CSDLimitInfo" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch All">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>982</pd:x>
+        <pd:y>754</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1248</pd:x>
+        <pd:y>318</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="&quot;CSDSG4&quot;"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat( 'CSDSG4' ,': End ', 'CSDSG4' )"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <ns3:SOAEnvelope>
+                    <ns3:SOAServiceHeader>
+                        <ns3:AppHdr>
+                            <xsl:copy-of select="$AppHdr/pfx4:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$AppHdr/pfx4:AppHdr/@*"/>
+                            <xsl:copy-of select="$AppHdr/pfx4:AppHdr/node()"/>
+                        </ns3:AppHdr>
+                        <ns3:SOAMsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                        </ns3:SOAMsgId>
+                        <ns3:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/CSDSG4/CitadOut&quot;"/>
+                        </ns3:ServiceName>
+                        <ns3:OperationName>
+                            <xsl:value-of select="&quot;SyncOverdraftLimitFromCSD&quot;"/>
+                        </ns3:OperationName>
+                        <ns3:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns3:ProcessName>
+                    </ns3:SOAServiceHeader>
+                    <ns3:ServiceBody>
+                        <ns22:ServiceEnverlop>
+                            <xsl:copy-of select="$AppHdr/pfx4:AppHdr"/>
+                            <pfx4:ResponseStatus>
+                                <pfx4:Status>
+                                    <xsl:value-of select="if ($ESBServiceState/pfx6:ESBServiceState/ns5:Status = 0)&#xA;then 0&#xA;else 1"/>
+                                </pfx4:Status>
+                                <pfx4:ErrorCode>
+                                    <xsl:value-of select="$ESBServiceState/pfx6:ESBServiceState/ns5:Status"/>
+                                </pfx4:ErrorCode>
+                                <pfx4:ErrorMessage>
+                                    <xsl:value-of select="substring($ESBServiceState/pfx6:ESBServiceState/ns5:ErrorMessage, 1 , 200 )"/>
+                                </pfx4:ErrorMessage>
+                                <pfx4:ErrorInfo/>
+                            </pfx4:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$InsertSG4DBModel/pfx6:InsertSG4DBModel"/>
+                                <xsl:copy-of select="$Insert-SG4-DB/jdbcUpdateActivityOutput"/>
+                                <xsl:copy-of select="$ESBServiceState/pfx6:ESBServiceState"/>
+                            </ServiceBody>
+                        </ns22:ServiceEnverlop>
+                    </ns3:ServiceBody>
+                </ns3:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ESBServiceState/pfx6:ESBServiceState/ns5:timestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm-to-delete-CBSQueue-2">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:description>Confirm to delete Message in CBS Queue</pd:description>
+        <pd:x>1114</pd:x>
+        <pd:y>320</pd:y>
+        <config>
+            <ConfirmEvent>CSDOverdraftLimitQueue</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ESBErrorQueue">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>1122</pd:x>
+        <pd:y>752</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBErrorQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:if test="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </JMSCorrelationID>
+                </xsl:if>
+                <JMSProperties>
+                    <xsl:if test="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId">
+                        <ns:JMSXGroupID>
+                            <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId"/>
+                        </ns:JMSXGroupID>
+                    </xsl:if>
+                </JMSProperties>
+                <Body>
+                    <xsl:value-of select="string($Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1])"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm ErrorMsg">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+        <pd:x>1254</pd:x>
+        <pd:y>752</pd:y>
+        <config>
+            <ConfirmEvent>CSDOverdraftLimitQueue</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1368</pd:x>
+        <pd:y>753</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </GeneratedId>
+                <ns13:ExceptionBody>
+                    <ns13:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns13:Hostname>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns13:Category>
+                    <ns13:Type>
+                        <xsl:value-of select="&quot;TYPE&quot;"/>
+                    </ns13:Type>
+                    <ns13:Level>
+                        <xsl:value-of select="&quot;LEVEL&quot;"/>
+                    </ns13:Level>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                        <ns13:ErrorReport>
+                            <StackTrace>
+                                <xsl:value-of select="StackTrace"/>
+                            </StackTrace>
+                            <Msg>
+                                <xsl:value-of select="Msg"/>
+                            </Msg>
+                            <FullClass>
+                                <xsl:value-of select="FullClass"/>
+                            </FullClass>
+                            <ObjectClass>
+                                <xsl:value-of select="Class"/>
+                            </ObjectClass>
+                            <ProcessStack>
+                                <xsl:value-of select="ProcessStack"/>
+                            </ProcessStack>
+                            <xsl:if test="MsgCode">
+                                <MsgCode>
+                                    <xsl:value-of select="MsgCode"/>
+                                </MsgCode>
+                            </xsl:if>
+                            <xsl:copy-of select="Data"/>
+                        </ns13:ErrorReport>
+                    </xsl:for-each>
+                </ns13:ExceptionBody>
+                <ServiceInput>
+                    <xsl:copy-of select="$AppHdr/pfx4:AppHdr"/>
+                    <ServiceBody/>
+                </ServiceInput>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GotoEnd-Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1393</pd:x>
+        <pd:y>664</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GotoEnd">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1369</pd:x>
+        <pd:y>211</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="0. Init ServiceState">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>490</pd:x>
+        <pd:y>331</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:ESBServiceState>
+                <ns5:Status>
+                    <xsl:value-of select="0"/>
+                </ns5:Status>
+                <ns5:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns5:ErrorExist>
+                <ns5:Unique_ID>
+                    <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </ns5:Unique_ID>
+                <ns5:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns5:timestamps>
+                <ns5:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns5:CurrentDateTime>
+            </pfx6:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Set DB Model">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>594</pd:x>
+        <pd:y>323</pd:y>
+        <config>
+            <variableName>InsertSG4DBModel</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:InsertSG4DBModel>
+                <xsl:if test="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <pfx6:queueID>
+                        <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </pfx6:queueID>
+                </xsl:if>
+                <xsl:if test="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId">
+                    <pfx6:interfaceid>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId"/>
+                    </pfx6:interfaceid>
+                </xsl:if>
+                <xsl:if test="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:BusinessCode">
+                    <pfx6:businesscode>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:BusinessCode"/>
+                    </pfx6:businesscode>
+                </xsl:if>
+                <xsl:if test="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:BankCode">
+                    <pfx6:bankcode>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:BankCode"/>
+                    </pfx6:bankcode>
+                </xsl:if>
+                <pfx6:amount>
+                    <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:Amount"/>
+                </pfx6:amount>
+                <xsl:if test="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:Currency">
+                    <pfx6:currency>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:Currency"/>
+                    </pfx6:currency>
+                </xsl:if>
+                <pfx6:receiveddate>
+                    <xsl:value-of select="$ESBServiceState/pfx6:ESBServiceState/ns5:CurrentDateTime"/>
+                </pfx6:receiveddate>
+                <xsl:if test="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:TransactionType">
+                    <pfx6:transtype>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:LineInfo/pfx2:TransactionType"/>
+                    </pfx6:transtype>
+                </xsl:if>
+            </pfx6:InsertSG4DBModel>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert SG4 DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>689</pd:x>
+        <pd:y>323</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CSDToSG4/SG4DBGWTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/SG4DBGW.sharedjdbc</jdbcSharedConfig>
+            <statement>Insert into openning_overdraft_limit(queueID, interfaceid, businesscode,bankcode,amount,currency,receiveddate,transtype) 
+values (?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>queueID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>interfaceid</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>businesscode</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>bankcode</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>amount</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>currency</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>receiveddate</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>transtype</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <queueID>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:queueID, 1, 40))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:queueID, 1, 40)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </queueID>
+                <interfaceid>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:interfaceid, 1, 12))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:interfaceid, 1, 12)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </interfaceid>
+                <businesscode>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:businesscode, 1, 10))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:businesscode, 1, 10)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </businesscode>
+                <bankcode>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:bankcode, 1, 8))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:bankcode, 1, 8)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </bankcode>
+                <amount>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:amount, 1, 20))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:amount, 1, 20)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </amount>
+                <currency>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:currency, 1, 12))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:currency, 1, 12)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </currency>
+                <receiveddate>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:receiveddate, 1, 20))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:receiveddate, 1, 20)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </receiveddate>
+                <transtype>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:transtype, 1, 10))">
+                            <xsl:value-of select="substring($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:transtype, 1, 10)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </transtype>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert AppExceptions">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>1118</pd:x>
+        <pd:y>414</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CSDToSG4/InsertApp_Timeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>insert into appexceptions values(?,?,?,?,sysdate)</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>id</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>service_name</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>error_code</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>error_msg</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <id>
+                    <xsl:choose>
+                        <xsl:when test="exists($InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:queueID)">
+                            <xsl:value-of select="$InsertSG4DBModel/pfx6:InsertSG4DBModel/pfx6:queueID"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </id>
+                <service_name>
+                    <xsl:choose>
+                        <xsl:when test="exists(&quot;CitadOut&quot;)">
+                            <xsl:value-of select="&quot;CitadOut&quot;"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </service_name>
+                <error_code>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error/ns1:ErrorReport/MsgCode)">
+                            <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </error_code>
+                <error_msg>
+                    <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                </error_msg>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sleep-Insert-2">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>1252</pd:x>
+        <pd:y>408</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns0:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CSDToSG4/Sleep_time_ms"/>
+                </IntervalInMillisec>
+            </ns0:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check RetryTime">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>1118</pd:x>
+        <pd:y>507</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Increase RetryTime">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>1257</pd:x>
+        <pd:y>537</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+            <showResult>true</showResult>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SG4-OVERDRAFT-LIMIT-RETRY-TIME>
+                    <xsl:value-of select="$Check-RetryTime/root/SG4-OVERDRAFT-LIMIT-RETRY-TIME + 1"/>
+                </SG4-OVERDRAFT-LIMIT-RETRY-TIME>
+                <SG4-OVERDRAFT-LENDING-RETRY-TIME>
+                    <xsl:value-of select="0"/>
+                </SG4-OVERDRAFT-LENDING-RETRY-TIME>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Reset RetryTime">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>1257</pd:x>
+        <pd:y>471</pd:y>
+        <config>
+            <showResult>true</showResult>
+            <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SG4-OVERDRAFT-LIMIT-RETRY-TIME>
+                    <xsl:value-of select="0"/>
+                </SG4-OVERDRAFT-LIMIT-RETRY-TIME>
+                <SG4-OVERDRAFT-LENDING-RETRY-TIME>
+                    <xsl:value-of select="0"/>
+                </SG4-OVERDRAFT-LENDING-RETRY-TIME>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Throw Max Retry Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>1366</pd:x>
+        <pd:y>480</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns16:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;Has Retry Max Time : 05 Roll&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;ESB 999&quot;"/>
+                </messageCode>
+            </ns16:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Can Not Insert">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>692</pd:x>
+        <pd:y>553</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Logic Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>847</pd:x>
+        <pd:y>583</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Technical Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>847</pd:x>
+        <pd:y>457</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Unexpected Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>847</pd:x>
+        <pd:y>671</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="OverdraftLimitQueue">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>974</pd:x>
+        <pd:y>627</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>OverdraftLimitQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <JMSCorrelationID>
+                    <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </JMSCorrelationID>
+                <JMSProperties>
+                    <ns:JMSXGroupID>
+                        <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId"/>
+                    </ns:JMSXGroupID>
+                </JMSProperties>
+                <Body>
+                    <xsl:value-of select="string($Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1])"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="isNotExistDB">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>972</pd:x>
+        <pd:y>459</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns14:input>
+                <duplicateKey>
+                    <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </duplicateKey>
+            </ns14:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm-to-delete-CBSQueue-2-1">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:description>Confirm to delete Message in CBS Queue</pd:description>
+        <pd:x>1116</pd:x>
+        <pd:y>626</pd:y>
+        <config>
+            <ConfirmEvent>CSDOverdraftLimitQueue</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep-TechError">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>1363</pd:x>
+        <pd:y>534</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns0:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CSDToSG4/SleepTime_TechError_ms"/>
+                </IntervalInMillisec>
+            </ns0:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init AppHdr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>379</pd:x>
+        <pd:y>321</pd:y>
+        <config>
+            <variableName>AppHdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:AppHdr>
+                <pfx4:CharSet>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </pfx4:CharSet>
+                <pfx4:ServVersion>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </pfx4:ServVersion>
+                <pfx4:From>
+                    <pfx4:Id>
+                        <xsl:value-of select="&quot;05&quot;"/>
+                    </pfx4:Id>
+                    <pfx4:Name>
+                        <xsl:value-of select="&quot;CSD&quot;"/>
+                    </pfx4:Name>
+                </pfx4:From>
+                <pfx4:To>
+                    <pfx4:Id>
+                        <xsl:value-of select="&quot;04&quot;"/>
+                    </pfx4:Id>
+                    <pfx4:Name>
+                        <xsl:value-of select="&quot;SG4&quot;"/>
+                    </pfx4:Name>
+                </pfx4:To>
+                <pfx4:MsgId>
+                    <xsl:value-of select="$CSDOverdraftLimitQueue/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                </pfx4:MsgId>
+                <pfx4:MsgSrcId>
+                    <xsl:value-of select="$Parse-OverdraftLimit/root/pfx2:CSDLimitInfo[1]/pfx2:InterfaceId"/>
+                </pfx4:MsgSrcId>
+                <pfx4:BizServ>
+                    <pfx4:Id>
+                        <xsl:value-of select="&quot;5&quot;"/>
+                    </pfx4:Id>
+                    <pfx4:Name>
+                        <xsl:value-of select="&quot;CSDOverdraftLimitQueue&quot;"/>
+                    </pfx4:Name>
+                </pfx4:BizServ>
+                <pfx4:CreatedDate>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx4:CreatedDate>
+            </pfx4:AppHdr>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Parse OverdraftLimit</pd:from>
+        <pd:to>Init AppHdr</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-to-delete-CBSQueue-2</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>Write LogEnd</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>GotoEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GotoEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription> </pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set DB Model</pd:from>
+        <pd:to>Insert SG4 DB</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert SG4 DB</pd:from>
+        <pd:to>Confirm-to-delete-CBSQueue-2</pd:to>
+        <pd:xpathDescription>Insert Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0. Init ServiceState</pd:from>
+        <pd:to>Set DB Model</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert SG4 DB</pd:from>
+        <pd:to>Can Not Insert</pd:to>
+        <pd:xpathDescription>Error, Can not Insert</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Can Not Insert</pd:from>
+        <pd:to>Logic Error</pd:to>
+        <pd:xpathDescription>LogicError</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns1:ErrorReport/MsgCode = $_error_Insert-SG4-DB/ActivityErrors/pfx5:JDBCSQLException/msgCode</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Can Not Insert</pd:from>
+        <pd:to>Technical Error</pd:to>
+        <pd:xpathDescription>TechError</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns1:ErrorReport/MsgCode = $_error_Insert-SG4-DB/ActivityErrors/pfx5:JDBCDriverLoadingException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-SG4-DB/ActivityErrors/pfx5:JDBCConnectionNotFoundException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-SG4-DB/ActivityErrors/pfx5:InvalidTimeZoneException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-SG4-DB/ActivityErrors/pfx5:JDBCSQLException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-SG4-DB/ActivityErrors/pfx5:LoginTimedOutException/msgCode</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Can Not Insert</pd:from>
+        <pd:to>Unexpected Error</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Technical Error</pd:from>
+        <pd:to>isNotExistDB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert AppExceptions</pd:from>
+        <pd:to>Sleep-Insert-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check RetryTime</pd:from>
+        <pd:to>Reset RetryTime</pd:to>
+        <pd:xpathDescription>over Max time</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Check-RetryTime/root/SG4-OVERDRAFT-LIMIT-RETRY-TIME &gt;= 5</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check RetryTime</pd:from>
+        <pd:to>Increase RetryTime</pd:to>
+        <pd:xpathDescription>less than Max time</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Check-RetryTime/root/SG4-OVERDRAFT-LIMIT-RETRY-TIME &lt; 5</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reset RetryTime</pd:from>
+        <pd:to>Throw Max Retry Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Logic Error</pd:from>
+        <pd:to>OverdraftLimitQueue</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OverdraftLimitQueue</pd:from>
+        <pd:to>Confirm-to-delete-CBSQueue-2-1</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>isNotExistDB</pd:from>
+        <pd:to>Insert AppExceptions</pd:to>
+        <pd:xpathDescription>Not Exist (Success)</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>isNotExistDB</pd:from>
+        <pd:to>Check RetryTime</pd:to>
+        <pd:xpathDescription>Existed (Error)</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Unexpected Error</pd:from>
+        <pd:to>OverdraftLimitQueue</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep-Insert-2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm-to-delete-CBSQueue-2-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Increase RetryTime</pd:from>
+        <pd:to>Sleep-TechError</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GotoEnd-Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>GotoEnd</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>GotoEnd-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm ErrorMsg</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ESBErrorQueue</pd:from>
+        <pd:to>Confirm ErrorMsg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch All</pd:from>
+        <pd:to>ESBErrorQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep-TechError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init AppHdr</pd:from>
+        <pd:to>0. Init ServiceState</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CSDOverdraftLimitQueue</pd:from>
+        <pd:to>Parse OverdraftLimit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

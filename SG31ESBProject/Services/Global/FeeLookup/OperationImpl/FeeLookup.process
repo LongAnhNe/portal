@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/soaenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/FeeLookup.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://wsdl.www.sbv.gov.vn/schema/global/feelookup.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/FeeLookup.xsd" schemaLocation="/SharedResource/Schema/Global/FeeLookup/FeeLookup.xsd"/>
+    <wsdl:import namespace="http://wsdl.www.sbv.gov.vn/schema/global/feelookup.wsdl" location="/SharedResource/Schema/Global/FeeLookup/FeeLookup.wsdl"/>
+    <pd:name>Services/Global/FeeLookup/OperationImpl/FeeLookup.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:FeeLookupRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$UpdateFeeLookup/root/ns4:ServiceEnverlop/ServiceBody/*" element="ns3:FeeLookupResponseBody"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:FeeLookupResponse>
+            <response>
+                <ns3:FeeLookupResponse>
+                    <xsl:copy-of select="$UpdateFeeLookup/root/ns4:ServiceEnverlop/ns2:AppHdr"/>
+                    <xsl:copy-of select="$UpdateFeeLookup/root/ns4:ServiceEnverlop/ns2:ResponseStatus"/>
+                    <xsl:copy-of select="$UpdateFeeLookup/root/ns4:ServiceEnverlop/ServiceBody/ns3:FeeLookupResponseBody"/>
+                </ns3:FeeLookupResponse>
+            </response>
+        </wsdlPfx:FeeLookupResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:FeeLookupResponse"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1465879408086</pd:targetNamespace>
+    <pd:activity name="UpdateFeeLookup">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>293</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:SOAEnvelope>
+                    <ns1:SOAServiceHeader>
+                        <ns1:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:FeeLookupRequest/request/ns3:FeeLookupRequest/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:FeeLookupRequest/request/ns3:FeeLookupRequest/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:FeeLookupRequest/request/ns3:FeeLookupRequest/ns2:AppHdr/node()"/>
+                        </ns1:AppHdr>
+                        <ns1:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns1:ProcessName>
+                    </ns1:SOAServiceHeader>
+                    <ns1:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:FeeLookupRequest/request/ns3:FeeLookupRequest/ns3:FeeLookupRequestBody"/>
+                    </ns1:ServiceBody>
+                </ns1:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>UpdateFeeLookup</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateFeeLookup</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

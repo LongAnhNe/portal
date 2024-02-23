@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="sbv/common/logging/enginelog/1.0">
+    <xsd:import namespace="sbv/common/logging/enginelog/1.0" schemaLocation="/SharedResource/Schema/Common/Logging/EngineLog.xsd"/>
+    <pd:name>Util/Logging/writeToEngineLog.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:EngineLog"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>82</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>548</pd:endX>
+    <pd:endY>79</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/util/logging/writetoenginelog/1.0</pd:targetNamespace>
+    <pd:activity name="Category">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>212</pd:x>
+        <pd:y>81</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Debug Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>331</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <role>Debug</role>
+            <suppressHeader>true</suppressHeader>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat($Msg-Pref/root/MsgPref,$Start/pfx:EngineLog/pfx:Message)"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>326</pd:x>
+        <pd:y>152</pd:y>
+        <config>
+            <role>Error</role>
+            <suppressHeader>true</suppressHeader>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat($Msg-Pref/root/MsgPref,$Start/pfx:EngineLog/pfx:Message)"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Info Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>323</pd:x>
+        <pd:y>231</pd:y>
+        <config>
+            <role>Info</role>
+            <suppressHeader>true</suppressHeader>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat($Msg-Pref/root/MsgPref,$Start/pfx:EngineLog/pfx:Message)"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Warn Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>326</pd:x>
+        <pd:y>318</pd:y>
+        <config>
+            <role>Warn</role>
+            <suppressHeader>true</suppressHeader>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat($Msg-Pref/root/MsgPref,$Start/pfx:EngineLog/pfx:Message)"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sync">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>464</pd:x>
+        <pd:y>80</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Msg Pref">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>116</pd:x>
+        <pd:y>81</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="MsgPref" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <MsgPref>
+                    <xsl:value-of select="if (boolean($Start/pfx:EngineLog/pfx:TrackingId)) then &#xA;&#x9;(concat('Job-', $_processContext/ns:ProcessContext/ProcessId, ' - Service ', $Start/pfx:EngineLog/pfx:ServiceName, ' - TrackingId ', $Start/pfx:EngineLog/pfx:TrackingId, ' - ' )) &#xA;else &#xA;&#x9;(concat('Job-', $_processContext/ns:ProcessContext/ProcessId, ' - Service ', $Start/pfx:EngineLog/pfx:ServiceName, ' - '))"/>
+                </MsgPref>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Msg Pref</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Category</pd:from>
+        <pd:to>Debug Log</pd:to>
+        <pd:xpathDescription>Debug</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:EngineLog/pfx:Category=$_globalVariables/pfx3:GlobalVariables/LogCategory/DebugRole</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Category</pd:from>
+        <pd:to>Error Log</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:EngineLog/pfx:Category=$_globalVariables/pfx3:GlobalVariables/LogCategory/ErrorRole</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Category</pd:from>
+        <pd:to>Info Log</pd:to>
+        <pd:xpathDescription>Info</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:EngineLog/pfx:Category=$_globalVariables/pfx3:GlobalVariables/LogCategory/InfoRole</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Category</pd:from>
+        <pd:to>Warn Log</pd:to>
+        <pd:xpathDescription>Warn</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:EngineLog/pfx:Category=$_globalVariables/pfx3:GlobalVariables/LogCategory/WarnRole</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Warn Log</pd:from>
+        <pd:to>Sync</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Info Log</pd:from>
+        <pd:to>Sync</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Log</pd:from>
+        <pd:to>Sync</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Debug Log</pd:from>
+        <pd:to>Sync</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Msg Pref</pd:from>
+        <pd:to>Category</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sync</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

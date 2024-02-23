@@ -1,0 +1,1899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="sbv/common/envelope/soaenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/CheckpointSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns22="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns12="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/SyncReuterDealingData.xsd" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:pfx="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://temenos.com/SBV.INTE.T24.REUTER.WS" xmlns:pfx3="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:pfx2="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/ReuterToT24.xsd" xmlns:pfx7="schema://www.sbv.gov.vn/schema/global/account/AccountService/AccountQuery.xsd" xmlns:pfx6="http://temenos.com/SBV.INTE.T24.REUTER.BB.WS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/ReuterToT24.xsd" schemaLocation="/SharedResource/Schema/Global/System/ReuterDealing/T24Reuter/ReuterToT24.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.REUTER.BB.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/Reuter/SBV.INTE.T24.REUTER.WS.xsd"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.REUTER.BB.WS" location="/SharedResource/Schema/Global/System/T24/Reuter/SBV.INTE.T24.REUTER.WS.wsdl"/>
+    <pd:name>Services/Global/System/ReuterDealing/OperationImpl/SendToT24.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="DataInput">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ReuterRecord"/>
+                    <xsd:element name="ServiceManage">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx2:ESBServiceState" minOccurs="0"/>
+                                <xsd:element ref="pfx:AppHdr" minOccurs="0"/>
+                                <xsd:element ref="pfx2:UpdateDBModel" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>437</pd:startX>
+    <pd:startY>570</pd:startY>
+    <pd:returnBindings>
+        <SendDataOutput>
+            <xsl:copy-of select="$Start/DataInput/pfx2:ReuterRecord"/>
+            <ServiceManage>
+                <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/@*"/>
+                <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/node()"/>
+            </ServiceManage>
+        </SendDataOutput>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="SendDataOutput">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ReuterRecord"/>
+                    <xsd:element name="ServiceManage">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx2:ESBServiceState" minOccurs="0"/>
+                                <xsd:element ref="pfx:AppHdr" minOccurs="0"/>
+                                <xsd:element ref="pfx2:UpdateDBModel" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1708</pd:endX>
+    <pd:endY>776</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <MMdealInput ref="pfx6:MMdealInput"/>
+        <SpotForwardModel ref="pfx6:FXSpotForwardDealInput"/>
+        <SwapModel ref="pfx6:FXSwapDealInput"/>
+        <ServiceManage ref="pfx2:ServiceManage"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1469001975276</pd:targetNamespace>
+    <pd:activity name="Core WS">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>895</pd:x>
+        <pd:y>391</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/ReuterToT24/T24WS_Timeout_sec%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx6:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>FXSpotForwardDealInput</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSReuter%%</endpointURL>
+            <authScheme>NONE</authScheme>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$SpotForwardModel/pfx6:FXSpotForwardDealInput"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="NavigateOnly">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1297</pd:x>
+        <pd:y>779</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="0.Update SM - Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1113</pd:x>
+        <pd:y>305</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="0"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="0"/>
+                    </pfx2:status>
+                    <xsl:if test="$Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/transactionId">
+                        <pfx2:err_msg>
+                            <xsl:value-of select="$Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/transactionId"/>
+                        </pfx2:err_msg>
+                    </xsl:if>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="2.Update SM - Other Res">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1113</pd:x>
+        <pd:y>372</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="2"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/successIndicator, &quot;Msg : &quot;  , $Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/messages[1] )"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/successIndicator, &quot;Msg : &quot;  , $Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/messages[1] )"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="2"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/successIndicator, &quot;Msg : &quot;  , $Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/messages[1] )"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="3.Update SM - Timeout">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1114</pd:x>
+        <pd:y>433</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="3"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="3"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="4.Update SM - Other Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1114</pd:x>
+        <pd:y>499</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="4"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="4"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot;[ProcessErr]-Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Update GW">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>1457</pd:x>
+        <pd:y>774</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/ReuterToT24/JDBCTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>UPDATE Reuter_Gw r
+SET r.status = ?,
+err_msg = ?
+WHERE r.id = ?</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>status</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>err_msg</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>id</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <status>
+                    <xsl:choose>
+                        <xsl:when test="exists($ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel/pfx2:status)">
+                            <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel/pfx2:status"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </status>
+                <err_msg>
+                    <xsl:choose>
+                        <xsl:when test="exists($ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel/pfx2:err_msg)">
+                            <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel/pfx2:err_msg"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </err_msg>
+                <id>
+                    <xsl:choose>
+                        <xsl:when test="exists($ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel/pfx2:id)">
+                            <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel/pfx2:id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </id>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="T24Response">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1004</pd:x>
+        <pd:y>335</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="WSError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1005</pd:x>
+        <pd:y>453</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Init SM">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>540</pd:x>
+        <pd:y>569</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/@*"/>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/node()"/>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="End, No Write Logs">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1459</pd:x>
+        <pd:y>610</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1561</pd:x>
+        <pd:y>775</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="&quot;SendToT24&quot;"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat( 'SendToT24' ,': End ', 'SendToT24' )"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="concat( generate-id($_processContext/ns2:ProcessContext/ProcessId),   tib:timestamp() )"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <ns14:SOAEnvelope>
+                    <ns14:SOAServiceHeader>
+                        <ns14:AppHdr>
+                            <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/pfx:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/pfx:AppHdr/@*"/>
+                            <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/pfx:AppHdr/node()"/>
+                        </ns14:AppHdr>
+                        <ns14:SOAMsgId>
+                            <xsl:value-of select="concat( generate-id($_processContext/ns2:ProcessContext/ProcessId),   tib:timestamp() )"/>
+                        </ns14:SOAMsgId>
+                        <ns14:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/ReuterDealing/SendToT24&quot;"/>
+                        </ns14:ServiceName>
+                        <ns14:OperationName>
+                            <xsl:value-of select="&quot;SendToT24&quot;"/>
+                        </ns14:OperationName>
+                        <ns14:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </ns14:ProcessName>
+                    </ns14:SOAServiceHeader>
+                    <ns14:ServiceBody>
+                        <ns22:ServiceEnverlop>
+                            <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/pfx:AppHdr"/>
+                            <pfx:ResponseStatus>
+                                <pfx:Status>
+                                    <xsl:value-of select="if ($ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Status = 0)&#xA;then 0&#xA;else 1"/>
+                                </pfx:Status>
+                                <pfx:ErrorCode>
+                                    <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Status"/>
+                                </pfx:ErrorCode>
+                                <pfx:ErrorMessage>
+                                    <xsl:value-of select="substring($ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:ErrorMessage, 1 , 200 )"/>
+                                </pfx:ErrorMessage>
+                                <pfx:ErrorInfo/>
+                            </pfx:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage"/>
+                                <xsl:copy-of select="$Core-WS/outputMessage"/>
+                                <xsl:copy-of select="$Update-GW/jdbcUpdateActivityOutput/noOfUpdates"/>
+                            </ServiceBody>
+                        </ns22:ServiceEnverlop>
+                    </ns14:ServiceBody>
+                </ns14:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Navigate End">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1632</pd:x>
+        <pd:y>705</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="go to End">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1456</pd:x>
+        <pd:y>670</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch Unexpected Exception">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1459</pd:x>
+        <pd:y>536</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="99. Has Unexpected Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1594</pd:x>
+        <pd:y>539</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="99"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;Has Unexpected Exception &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;Has Unexpected Exception &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                    <xsl:if test="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx2:InputDate">
+                        <pfx2:InputDate>
+                            <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx2:InputDate"/>
+                        </pfx2:InputDate>
+                    </xsl:if>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/pfx:AppHdr"/>
+                <xsl:copy-of select="$ServiceManage/pfx2:ServiceManage/pfx2:UpdateDBModel"/>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Navigation only">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>641</pd:x>
+        <pd:y>571</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Map Forward Model">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>779</pd:x>
+        <pd:y>463</pd:y>
+        <config>
+            <variableName>SpotForwardModel</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:FXSpotForwardDealInput>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="&quot;VN0010001&quot;"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterPass"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterUser"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                    <assignReason>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </assignReason>
+                    <dueDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </dueDate>
+                    <extProcess>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcess>
+                    <extProcessID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcessID>
+                    <gtsControl>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </gtsControl>
+                    <messageId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </messageId>
+                    <noOfAuth>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </noOfAuth>
+                    <owner>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </owner>
+                    <replace>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </replace>
+                    <startDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </startDate>
+                    <user>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </user>
+                </OfsFunction>
+                <FOREXSBVREUTERSPFWINPType>
+                    <DealType>
+                        <xsl:value-of select="&quot;FW&quot;"/>
+                    </DealType>
+                    <CurrencyBought>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency2"/>
+                    </CurrencyBought>
+                    <BuyAmount>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1&#xA;else &quot;&quot;"/>
+                    </BuyAmount>
+                    <ValueDateBuy>
+                        <xsl:value-of select="&quot;20161115&quot;"/>
+                    </ValueDateBuy>
+                    <CurrencySold>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency2&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1"/>
+                    </CurrencySold>
+                    <SellAmount>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '2') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1&#xA;else &quot;&quot;"/>
+                    </SellAmount>
+                    <ValueDateSell>
+                        <xsl:value-of select="&quot;20161115&quot;"/>
+                    </ValueDateSell>
+                    <ForwardRate>
+                        <xsl:value-of select="if(contains($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1, &quot;.&quot;) )&#xA;then concat(substring-before($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1, &quot;.&quot; ),&quot;.&quot;, substring(substring-after($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1, &quot;.&quot; ), 1 , 6))&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1"/>
+                    </ForwardRate>
+                    <DealDate>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </DealDate>
+                    <ReuterReference>
+                        <xsl:value-of select="normalize-space(concat(&quot;REU&quot;, $Start/DataInput/pfx2:ReuterRecord/pfx2:Id))"/>
+                    </ReuterReference>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Bank1DealingCode">
+                        <ReuterBBCode>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Bank1DealingCode"/>
+                        </ReuterBBCode>
+                    </xsl:if>
+                    <gL.REU.PAY.NAME>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,1, 35)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,36, 71)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,72, 107)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,108, 143)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                    </gL.REU.PAY.NAME>
+                    <gL.REU.REC.NAME>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '2') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 1, 35)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '2') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 36, 71)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '2') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 72, 107)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '2') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 108, 143)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                    </gL.REU.REC.NAME>
+                </FOREXSBVREUTERSPFWINPType>
+            </pfx6:FXSpotForwardDealInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Spot Model">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>778</pd:x>
+        <pd:y>328</pd:y>
+        <config>
+            <variableName>SpotForwardModel</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:FXSpotForwardDealInput>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="&quot;VN0010001&quot;"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterPass"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterUser"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                    <assignReason>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </assignReason>
+                    <dueDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </dueDate>
+                    <extProcess>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcess>
+                    <extProcessID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcessID>
+                    <gtsControl>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </gtsControl>
+                    <messageId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </messageId>
+                    <noOfAuth>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </noOfAuth>
+                    <owner>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </owner>
+                    <replace>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </replace>
+                    <startDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </startDate>
+                    <user>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </user>
+                </OfsFunction>
+                <FOREXSBVREUTERSPFWINPType>
+                    <DealType>
+                        <xsl:value-of select="&quot;SP&quot;"/>
+                    </DealType>
+                    <CurrencyBought>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency2"/>
+                    </CurrencyBought>
+                    <BuyAmount>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1&#xA;else &quot;&quot;"/>
+                    </BuyAmount>
+                    <ValueDateBuy>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </ValueDateBuy>
+                    <CurrencySold>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency2&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1"/>
+                    </CurrencySold>
+                    <SellAmount>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '2') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1&#xA;else &quot;&quot;"/>
+                    </SellAmount>
+                    <ValueDateSell>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </ValueDateSell>
+                    <SpotRate>
+                        <xsl:value-of select="if(contains($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1, &quot;.&quot;) )&#xA;then concat(substring-before($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1, &quot;.&quot; ),&quot;.&quot;, substring(substring-after($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1, &quot;.&quot; ), 1 , 6))&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod1"/>
+                    </SpotRate>
+                    <ReuterReference>
+                        <xsl:value-of select="normalize-space(concat(&quot;REU&quot;, $Start/DataInput/pfx2:ReuterRecord/pfx2:Id))"/>
+                    </ReuterReference>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Bank1DealingCode">
+                        <ReuterBBCode>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Bank1DealingCode"/>
+                        </ReuterBBCode>
+                    </xsl:if>
+                    <gL.REU.PAY.NAME>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,1, 35)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,36, 71)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,72, 107)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '1') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,108, 143)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                    </gL.REU.PAY.NAME>
+                </FOREXSBVREUTERSPFWINPType>
+            </pfx6:FXSpotForwardDealInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Swap Model">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>779</pd:x>
+        <pd:y>653</pd:y>
+        <config>
+            <variableName>SwapModel</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:FXSwapDealInput>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="&quot;VN0010001&quot;"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterPass"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterUser"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                    <assignReason>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </assignReason>
+                    <dueDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </dueDate>
+                    <extProcess>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcess>
+                    <extProcessID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcessID>
+                    <gtsControl>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </gtsControl>
+                    <messageId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </messageId>
+                    <noOfAuth>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </noOfAuth>
+                    <owner>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </owner>
+                    <replace>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </replace>
+                    <startDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </startDate>
+                    <user>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </user>
+                </OfsFunction>
+                <SBVFXREUTERSBVREUTERSWINPType>
+                    <DealDate>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </DealDate>
+                    <DealType>
+                        <xsl:value-of select="&quot;SW&quot;"/>
+                    </DealType>
+                    <ReuterBBCode>
+                        <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Bank1DealingCode"/>
+                    </ReuterBBCode>
+                    <CurrencyBought>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency2"/>
+                    </CurrencyBought>
+                    <BuyAmount>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1&#xA;else &quot;&quot;"/>
+                    </BuyAmount>
+                    <ValueDateBuy>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </ValueDateBuy>
+                    <CurrencySold>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency2&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1"/>
+                    </CurrencySold>
+                    <SellAmount>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '4') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1&#xA;else &quot;&quot;"/>
+                    </SellAmount>
+                    <ValueDateSell>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </ValueDateSell>
+                    <ForwardRate>
+                        <xsl:value-of select="if(contains($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod2, &quot;.&quot;) )&#xA;then concat(substring-before($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod2, &quot;.&quot; ),&quot;.&quot;, substring(substring-after($Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod2, &quot;.&quot; ), 1 , 6))&#xA;else $Start/DataInput/pfx2:ReuterRecord/pfx2:ExchangeRatePeriod2"/>
+                    </ForwardRate>
+                    <gREURECNAME>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '4') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 1, 35)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '4') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 36, 71)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '4') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 72, 107)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                        <SettlementAcforBuy1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '4') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2, 108, 143)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforBuy1>
+                    </gREURECNAME>
+                    <gREUPAYNAME>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,1, 35)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,36, 71)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,72, 107)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                        <SettlementAcforSell1>
+                            <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '3') &#xA;then substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1,108, 143)&#xA;else &quot;&quot;"/>
+                        </SettlementAcforSell1>
+                    </gREUPAYNAME>
+                    <SwapInformation>
+                        <xsl:value-of select="if ($Start/DataInput/pfx2:ReuterRecord/pfx2:DealType = '4') &#xA;then $Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C2&#xA;else &quot;&quot;"/>
+                    </SwapInformation>
+                </SBVFXREUTERSBVREUTERSWINPType>
+            </pfx6:FXSwapDealInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Core-WS-Swap">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>887</pd:x>
+        <pd:y>654</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/ReuterToT24/T24WS_Timeout_sec%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx6:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>FXSwapDealInput</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSReuter%%</endpointURL>
+            <authScheme>NONE</authScheme>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$SwapModel/pfx6:FXSwapDealInput"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="T24Response-Swap">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>994</pd:x>
+        <pd:y>597</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="WSError-Swap">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>995</pd:x>
+        <pd:y>715</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="0. Update-SM-Success-Swap">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1112</pd:x>
+        <pd:y>563</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="0"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="0"/>
+                    </pfx2:status>
+                    <xsl:if test="$Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/transactionId">
+                        <pfx2:err_msg>
+                            <xsl:value-of select="$Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/transactionId"/>
+                        </pfx2:err_msg>
+                    </xsl:if>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="2. Update-SM-Other-Res-Swap">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1113</pd:x>
+        <pd:y>623</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="2"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/transactionId, &quot;Msg : &quot;  , $Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/messages[1] )"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/transactionId, &quot;Msg : &quot;  , $Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/messages[1] )"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="2"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/transactionId, &quot;Msg : &quot;  , $Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/messages[1] )"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="3.Update-SM-Timeout-Swap">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1113</pd:x>
+        <pd:y>688</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="3"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="3"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="4.Update-SM-Other-Error-Swap">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1115</pd:x>
+        <pd:y>747</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="4"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="4"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot;[ProcessErr]-Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map MM Model">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>778</pd:x>
+        <pd:y>898</pd:y>
+        <config>
+            <variableName>MMdealInput</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:MMdealInput>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="&quot;VN0010001&quot;"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterPass"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ReuterUser"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                    <assignReason>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </assignReason>
+                    <dueDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </dueDate>
+                    <extProcess>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcess>
+                    <extProcessID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcessID>
+                    <gtsControl>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </gtsControl>
+                    <messageId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </messageId>
+                    <noOfAuth>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </noOfAuth>
+                    <owner>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </owner>
+                    <replace>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </replace>
+                    <startDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </startDate>
+                    <user>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </user>
+                </OfsFunction>
+                <MMMONEYMARKETSBVREUTERPLACEType>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1">
+                        <Currency>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Currency1"/>
+                        </Currency>
+                    </xsl:if>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1">
+                        <Principal>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:DealVolumeCurrency1"/>
+                        </Principal>
+                    </xsl:if>
+                    <DealDate>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </DealDate>
+                    <ValueDate>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ServiceGlobalVar/Reuter/ReuterToT24/TEST_T24Date"/>
+                    </ValueDate>
+                    <MaturityDate>
+                        <xsl:value-of select="&quot;20161115&quot;"/>
+                    </MaturityDate>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:DepositRate">
+                        <InterestRate>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:DepositRate"/>
+                        </InterestRate>
+                    </xsl:if>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <ReuterID>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </ReuterID>
+                    </xsl:if>
+                    <gL.REU.REC.NAME>
+                        <CreditAccount>
+                            <xsl:value-of select="substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1, 1 , 35)"/>
+                        </CreditAccount>
+                        <CreditAccount>
+                            <xsl:value-of select="substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1, 36 , 71)"/>
+                        </CreditAccount>
+                        <CreditAccount>
+                            <xsl:value-of select="substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1, 72 , 107)"/>
+                        </CreditAccount>
+                        <CreditAccount>
+                            <xsl:value-of select="substring($Start/DataInput/pfx2:ReuterRecord/pfx2:PaymentInstructionP1C1, 108 , 143)"/>
+                        </CreditAccount>
+                    </gL.REU.REC.NAME>
+                </MMMONEYMARKETSBVREUTERPLACEType>
+            </pfx6:MMdealInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Core-WS-MM">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>887</pd:x>
+        <pd:y>901</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/ReuterToT24/T24WS_Timeout_sec%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx6:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>MMdealInput</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSReuter%%</endpointURL>
+            <authScheme>NONE</authScheme>
+            <useProxy>false</useProxy>
+            <requireBasicAuth>false</requireBasicAuth>
+            <basicHttpAuthIdentity/>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$MMdealInput/pfx6:MMdealInput"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="T24Response-MM">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>997</pd:x>
+        <pd:y>843</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="WSError-MM">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>996</pd:x>
+        <pd:y>966</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="0.-Update-SM-Success-MM">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1113</pd:x>
+        <pd:y>808</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="0"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="0"/>
+                    </pfx2:status>
+                    <xsl:if test="$Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/transactionId">
+                        <pfx2:err_msg>
+                            <xsl:value-of select="$Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/transactionId"/>
+                        </pfx2:err_msg>
+                    </xsl:if>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="2.Update-SM-Other-Res-MM">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1112</pd:x>
+        <pd:y>876</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="2"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/transactionId, &quot;---Msg : &quot;  , $Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/messages[1] )"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/transactionId, &quot;---Msg : &quot;  , $Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/messages[1] )"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="2"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/transactionId, &quot;---Msg : &quot;  , $Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/messages[1] )"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="3.Update-SM-Timeout-MM">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1112</pd:x>
+        <pd:y>934</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="3"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="3"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns2:ErrorReport/Msg )"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="4.Update-SM-Other-Error-MM">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1114</pd:x>
+        <pd:y>997</pd:y>
+        <config>
+            <variableName>ServiceManage</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ServiceManage>
+                <pfx2:ESBServiceState>
+                    <pfx3:Status>
+                        <xsl:value-of select="4"/>
+                    </pfx3:Status>
+                    <pfx3:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:ErrorMessage>
+                    <pfx3:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx3:NotifyMsg>
+                    <pfx3:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx3:ErrorExist>
+                    <pfx3:Unique_ID>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:Unique_ID"/>
+                    </pfx3:Unique_ID>
+                    <pfx3:timestamps>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:timestamps"/>
+                    </pfx3:timestamps>
+                    <pfx3:CurrentDateTime>
+                        <xsl:value-of select="$ServiceManage/pfx2:ServiceManage/pfx2:ESBServiceState/pfx3:CurrentDateTime"/>
+                    </pfx3:CurrentDateTime>
+                </pfx2:ESBServiceState>
+                <xsl:copy-of select="$Start/DataInput/ServiceManage/pfx:AppHdr"/>
+                <pfx2:UpdateDBModel>
+                    <pfx2:status>
+                        <xsl:value-of select="4"/>
+                    </pfx2:status>
+                    <pfx2:err_msg>
+                        <xsl:value-of select="concat(&quot;[ProcessErr]-Other  T24 WS Error : &quot;  , $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx2:err_msg>
+                    <xsl:if test="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id">
+                        <pfx2:id>
+                            <xsl:value-of select="$Start/DataInput/pfx2:ReuterRecord/pfx2:Id"/>
+                        </pfx2:id>
+                    </xsl:if>
+                </pfx2:UpdateDBModel>
+            </pfx2:ServiceManage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>NavigateOnly</pd:from>
+        <pd:to>Update GW</pd:to>
+        <pd:xpathDescription>Otherwise, has update</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0.Update SM - Success</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2.Update SM - Other Res</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>3.Update SM - Timeout</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>4.Update SM - Other Error</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Init SM</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Update GW</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Core WS</pd:from>
+        <pd:to>T24Response</pd:to>
+        <pd:xpathDescription>Has Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Response</pd:from>
+        <pd:to>0.Update SM - Success</pd:to>
+        <pd:xpathDescription>0.Success</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/successIndicator = 'Success'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Response</pd:from>
+        <pd:to>2.Update SM - Other Res</pd:to>
+        <pd:xpathDescription>2.OtherRes</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Core WS</pd:from>
+        <pd:to>WSError</pd:to>
+        <pd:xpathDescription>Error, No Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError</pd:from>
+        <pd:to>3.Update SM - Timeout</pd:to>
+        <pd:xpathDescription>3.Timeout</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns2:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError</pd:from>
+        <pd:to>4.Update SM - Other Error</pd:to>
+        <pd:xpathDescription>4.OtherErr</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init SM</pd:from>
+        <pd:to>Navigation only</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NavigateOnly</pd:from>
+        <pd:to>End, No Write Logs</pd:to>
+        <pd:xpathDescription>No Update, ERR_MSG Exist in DB</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>substring($Start/DataInput/pfx2:ReuterRecord/pfx2:Err_Msg,1, 12) =  "[ProcessErr]"
+and $Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/successIndicator !="Success"
+and not(contains($Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/messages[1] , "ALREADY EXIST"  ))
+and not(contains($Core-WS/outputMessage/pfx6:FXSpotForwardDealInputResponse/Status/messages[1] , "ALREADY ASSIGNED"  ))</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>End, No Write Logs</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>Navigate End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigate End</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Update GW</pd:from>
+        <pd:to>go to End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>go to End</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch Unexpected Exception</pd:from>
+        <pd:to>99. Has Unexpected Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-26215</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>99. Has Unexpected Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-26215</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigation only</pd:from>
+        <pd:to>Map Forward Model</pd:to>
+        <pd:xpathDescription>is Forward</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/DataInput/pfx2:ReuterRecord/pfx2:PureDealType = '4'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigation only</pd:from>
+        <pd:to>Map Spot Model</pd:to>
+        <pd:xpathDescription>is Spot</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/DataInput/pfx2:ReuterRecord/pfx2:PureDealType = '2'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Forward Model</pd:from>
+        <pd:to>Core WS</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Spot Model</pd:from>
+        <pd:to>Core WS</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigation only</pd:from>
+        <pd:to>Map Swap Model</pd:to>
+        <pd:xpathDescription>is Swap</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/DataInput/pfx2:ReuterRecord/pfx2:PureDealType = '8'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Swap Model</pd:from>
+        <pd:to>Core-WS-Swap</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Core-WS-Swap</pd:from>
+        <pd:to>T24Response-Swap</pd:to>
+        <pd:xpathDescription>Has Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Core-WS-Swap</pd:from>
+        <pd:to>WSError-Swap</pd:to>
+        <pd:xpathDescription>Error, No Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Response-Swap</pd:from>
+        <pd:to>0. Update-SM-Success-Swap</pd:to>
+        <pd:xpathDescription>0. Success</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Core-WS-Swap/outputMessage/pfx6:FXSwapDealInputResponse/Status/successIndicator = 'Success'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Response-Swap</pd:from>
+        <pd:to>2. Update-SM-Other-Res-Swap</pd:to>
+        <pd:xpathDescription>2.OtherRes</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError-Swap</pd:from>
+        <pd:to>3.Update-SM-Timeout-Swap</pd:to>
+        <pd:xpathDescription>3.Timeout</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns2:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError-Swap</pd:from>
+        <pd:to>4.Update-SM-Other-Error-Swap</pd:to>
+        <pd:xpathDescription>4.OtherErr</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0. Update-SM-Success-Swap</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2. Update-SM-Other-Res-Swap</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>3.Update-SM-Timeout-Swap</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>4.Update-SM-Other-Error-Swap</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map MM Model</pd:from>
+        <pd:to>Core-WS-MM</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Core-WS-MM</pd:from>
+        <pd:to>T24Response-MM</pd:to>
+        <pd:xpathDescription>Has Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Core-WS-MM</pd:from>
+        <pd:to>WSError-MM</pd:to>
+        <pd:xpathDescription>Error, No Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Response-MM</pd:from>
+        <pd:to>0.-Update-SM-Success-MM</pd:to>
+        <pd:xpathDescription>0.Success</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Core-WS-MM/outputMessage/pfx6:MMdealInputResponse/Status/successIndicator = 'Success'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Response-MM</pd:from>
+        <pd:to>2.Update-SM-Other-Res-MM</pd:to>
+        <pd:xpathDescription>2.OtherRes</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError-MM</pd:from>
+        <pd:to>3.Update-SM-Timeout-MM</pd:to>
+        <pd:xpathDescription>3. Timeout</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns2:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError-MM</pd:from>
+        <pd:to>4.Update-SM-Other-Error-MM</pd:to>
+        <pd:xpathDescription>4.OtherErr</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Navigation only</pd:from>
+        <pd:to>Map MM Model</pd:to>
+        <pd:xpathDescription>is MM</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/DataInput/pfx2:ReuterRecord/pfx2:PureDealType = '16'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0.-Update-SM-Success-MM</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2.Update-SM-Other-Res-MM</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>3.Update-SM-Timeout-MM</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>4.Update-SM-Other-Error-MM</pd:from>
+        <pd:to>NavigateOnly</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

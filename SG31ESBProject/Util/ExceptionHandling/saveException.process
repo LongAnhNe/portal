@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/soaenvelope/1.0" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns5="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="sbv/common/exceptionhandling/exception/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/exceptionhandling/exception/1.0" schemaLocation="/SharedResource/Schema/Common/ExceptionHandling/Exception.xsd"/>
+    <pd:name>Util/ExceptionHandling/saveException.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>ExceptionQueueReceiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ExceptionQueueReceiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>151</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>23</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Logging/excqueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>793</pd:endX>
+    <pd:endY>138</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/process/global/saveException/1.0</pd:targetNamespace>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>595</pd:x>
+        <pd:y>137</pd:y>
+        <config>
+            <ConfirmEvent>ExceptionQueueReceiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="saveException">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>390</pd:x>
+        <pd:y>134</pd:y>
+        <config>
+            <timeout>%%AMXSOADB/Timeout%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>insert  /*+ append */ into SOAEXCEPTIONS(SOAMSGID,EXCEPTIONID,CREATEMSG,SERVICENAME,OPERATIONNAME,SERVICEVERSION,HOSTNAME,LOGCATEGORY,STACKTRACE,MSG,FULLCLASS,CLASS,PROCESSSTACK,MSGCODE,DATA) values (?,SEQ_EXCEPTIONID.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>SOAMESSAGEID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CREATEMSG</parameterName>
+                    <dataType>TIMESTAMP</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SERVICENAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>OPERATIONNAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SERVICEVERSION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>HOSTNAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>LOGCATEGORY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>STACKTRACE</parameterName>
+                    <dataType>CLOB</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MSG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FULLCLASS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CLASS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>POCESSSTACK</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MSGCODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>DATA</parameterName>
+                    <dataType>CLOB</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <SOAMESSAGEID>
+                    <xsl:value-of select="$Parse-XML/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:SOAMsgId"/>
+                </SOAMESSAGEID>
+                <CREATEMSG>
+                    <xsl:value-of select="$Parse-XML/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:AppHdr/ns3:CreatedDate"/>
+                </CREATEMSG>
+                <SERVICENAME>
+                    <xsl:value-of select="$Parse-XML/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:ServiceName"/>
+                </SERVICENAME>
+                <OPERATIONNAME>
+                    <xsl:value-of select="$Parse-XML/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:OperationName"/>
+                </OPERATIONNAME>
+                <SERVICEVERSION>
+                    <xsl:value-of select="$Parse-XML/pfx:Exception/ns:SOAEnvelope/ns:SOAServiceHeader/ns:AppHdr/ns3:ServVersion"/>
+                </SERVICEVERSION>
+                <HOSTNAME>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:Hostname)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:Hostname"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </HOSTNAME>
+                <LOGCATEGORY>
+                    <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:Category"/>
+                </LOGCATEGORY>
+                <STACKTRACE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/StackTrace)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/StackTrace"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </STACKTRACE>
+                <MSG>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/Msg)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/Msg"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </MSG>
+                <FULLCLASS>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/FullClass)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/FullClass"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </FULLCLASS>
+                <CLASS>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/ObjectClass)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/ObjectClass"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CLASS>
+                <POCESSSTACK>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/ProcessStack)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/ProcessStack"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </POCESSSTACK>
+                <MSGCODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/MsgCode)">
+                            <xsl:value-of select="$Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/MsgCode"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </MSGCODE>
+                <DATA>
+                    <xsl:value-of select="tib:render-xml($Parse-XML/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/Data, true(), false())"/>
+                </DATA>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>270</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:Exception"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$ExceptionQueueReceiver/ns1:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteExceptionFile">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>564</pd:x>
+        <pd:y>319</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+            <createMissingDirectories>true</createMissingDirectories>
+        </config>
+        <pd:inputBindings>
+            <ns5:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/Logging/excfile"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;Transaction Time: &quot;, current-dateTime() ,&quot;&#xD;&#xA;SOAEnvelope: &#xD;&#xA;&quot;, $ExceptionQueueReceiver/ns1:ActivityOutput/Body,  &quot;&#xD;&#xA;Error Report:&#xD;&#xA;&quot;, $_error/ns6:ErrorReport/StackTrace)"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns5:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionQueueReceiver</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>saveException</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>saveException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>WriteExceptionFile</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ExceptionQueueReceiver</pd:from>
+        <pd:to>WriteExceptionFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>saveException</pd:from>
+        <pd:to>WriteExceptionFile</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteExceptionFile</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

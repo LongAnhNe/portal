@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx14="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/IBPSFTReconcile.xsd" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:pfx13="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx12="http://temenos.com/SBV.CSD.WS" xmlns:pfx11="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://services.fis.com/" xmlns:pfx="http://xmlns.example.com/1433466938916" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://temenos.com/QUERY.FTRECONCILE" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.sbv.org.vn/service/global/utilities/cbsinfo/version1.0" xmlns:pfx3="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx2="http://xmlns.example.com/1437711515790" xmlns:pfx9="http://www.sbv.gov.vn/global/System/T24/FTReconcile/version1.0" xmlns:pfx8="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx7="http://temenos.com/T24.SYSTEM.STATUS" xmlns:pfx6="www.tibco.com/plugin/Sleep">
+    <xsd:import namespace="http://www.sbv.gov.vn/global/System/T24/FTReconcile/version1.0"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/IBPSFTReconcile.xsd" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSFTReconcile.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/utilities/cbsinfo/version1.0" location="/Services/Global/Utilities/CBSInfo/OperationImpl/CBSInfo.serviceagent"/>
+    <wsdl:import namespace="http://temenos.com/T24.SYSTEM.STATUS" location="/SharedResource/Schema/Global/System/T24/SystemState/T24SystemState.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" location="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1437711515790"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.FTRECONCILE"/>
+    <wsdl:import namespace="http://services.fis.com/" location="/SharedResource/Schema/Global/System/T24/FTReconcile/FTIBPSReconcile.wsdl"/>
+    <pd:name>Services/Global/System/IBPST24/FTReconcile/Version1.0/FTReconcile/RequestResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>51</pd:startX>
+    <pd:startY>244</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx3:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx3:ServiceEnverlop/ns:AppHdr"/>
+                <xsl:copy-of select="$Start/root/pfx3:ServiceEnverlop/ns:ResponseStatus"/>
+                <ServiceBody>
+                    <xsl:copy-of select="$strResponse/strResponse"/>
+                </ServiceBody>
+            </pfx3:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>943</pd:endX>
+    <pd:endY>214</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <strResponse>
+            <xsd:element name="strResponse" type="xsd:string"/>
+        </strResponse>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/Global/System/IBPST24/FTReconcile/RequestResponse/version1.0</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>247</pd:x>
+        <pd:y>60</pd:y>
+        <pd:width>541</pd:width>
+        <pd:height>370</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallWSReconcileFTHV</pd:to>
+            <pd:xpathDescription>HV</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$MapInput/strInput="IBPSHV"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallWSReconcileNetting</pd:to>
+            <pd:xpathDescription>Netting</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$MapInput/strInput="IBPSLV"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignResponseHV</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignResponseNetting</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallWSReconcileNetting</pd:from>
+            <pd:to>MapNettingResult</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallWSReconcileFTHV</pd:from>
+            <pd:to>MapFTHVResult</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapNettingResult</pd:from>
+            <pd:to>AssignResponseNetting</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapFTHVResult</pd:from>
+            <pd:to>AssignResponseHV</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallWSReconcileNetting">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>400</pd:x>
+            <pd:y>136</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx10:FTServicesService</service>
+                <servicePort>FTServicesPort</servicePort>
+                <operation>getNettings</operation>
+                <soapAction/>
+                <endpointURL>http://10.1.26.9:7101/mapping/FTServicesPort</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <xsl:for-each select="$MapInput/strInput">
+                        <pfx10:getNettings/>
+                    </xsl:for-each>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CallWSReconcileFTHV">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>402</pd:x>
+            <pd:y>269</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx10:FTServicesService</service>
+                <servicePort>FTServicesPort</servicePort>
+                <operation/>
+                <soapAction/>
+                <endpointURL>http://10.1.26.9:7101/mapping/FTServicesPort</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <xsl:for-each select="$MapInput/strInput">
+                        <pfx10:getHVs/>
+                    </xsl:for-each>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignResponseNetting">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>671</pd:x>
+            <pd:y>174</pd:y>
+            <config>
+                <variableName>strResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <strResponse>
+                    <xsl:value-of select="tib:concat-sequence($MapNettingResult/pfx14:NettingReconcileList/pfx14:NettingReconcileType)"/>
+                </strResponse>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignResponseHV">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>700</pd:x>
+            <pd:y>315</pd:y>
+            <config>
+                <variableName>strResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <strResponse>
+                    <xsl:value-of select="tib:concat-sequence($MapFTHVResult/pfx14:FTHVReconcileList/pfx14:FTHVReconcileType)"/>
+                </strResponse>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="MapNettingResult">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>536</pd:x>
+            <pd:y>156</pd:y>
+            <config>
+                <element ref="pfx14:NettingReconcileList"/>
+            </config>
+            <pd:inputBindings>
+                <pfx14:NettingReconcileList>
+                    <xsl:for-each select="$CallWSReconcileNetting/outputMessage/pfx10:getNettingsResponse/return">
+                        <pfx14:NettingReconcileType>
+                            <xsl:if test="tr_date">
+                                <pfx14:TransactionDate>
+                                    <xsl:value-of select="tr_date"/>
+                                </pfx14:TransactionDate>
+                            </xsl:if>
+                            <xsl:if test="ac_id">
+                                <pfx14:AccountNo>
+                                    <xsl:value-of select="ac_id"/>
+                                </pfx14:AccountNo>
+                            </xsl:if>
+                            <pfx14:NettingCount>
+                                <xsl:value-of select="tib:pad(net_cnt,2,' ')"/>
+                            </pfx14:NettingCount>
+                            <xsl:if test="cr_dr">
+                                <pfx14:DR_CR>
+                                    <xsl:value-of select="cr_dr"/>
+                                </pfx14:DR_CR>
+                            </xsl:if>
+                            <pfx14:Amount>
+                                <xsl:value-of select="tib:pad(tr_amt,18,' ')"/>
+                            </pfx14:Amount>
+                            <pfx14:Flag>
+                                <xsl:value-of select="'N'"/>
+                            </pfx14:Flag>
+                        </pfx14:NettingReconcileType>
+                    </xsl:for-each>
+                </pfx14:NettingReconcileList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="MapFTHVResult">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>552</pd:x>
+            <pd:y>315</pd:y>
+            <config>
+                <element ref="pfx14:FTHVReconcileList"/>
+            </config>
+            <pd:inputBindings>
+                <pfx14:FTHVReconcileList>
+                    <xsl:for-each select="$CallWSReconcileFTHV/outputMessage/pfx10:getHVsResponse/return">
+                        <pfx14:FTHVReconcileType>
+                            <xsl:if test="tr_date">
+                                <pfx14:TransactionDate>
+                                    <xsl:value-of select="tr_date"/>
+                                </pfx14:TransactionDate>
+                            </xsl:if>
+                            <xsl:if test="ac_id">
+                                <pfx14:AccountNo>
+                                    <xsl:value-of select="ac_id"/>
+                                </pfx14:AccountNo>
+                            </xsl:if>
+                            <pfx14:CR_Count>
+                                <xsl:value-of select="tib:pad(cr_cnt,10,' ')"/>
+                            </pfx14:CR_Count>
+                            <pfx14:CR_Amount>
+                                <xsl:value-of select="tib:pad(cr_amt,18,' ')"/>
+                            </pfx14:CR_Amount>
+                            <pfx14:DR_Count>
+                                <xsl:value-of select="tib:pad(dr_cnt,10,' ')"/>
+                            </pfx14:DR_Count>
+                            <pfx14:DR_Amount>
+                                <xsl:value-of select="tib:pad(dr_amt,18,' ')"/>
+                            </pfx14:DR_Amount>
+                            <pfx14:Flag>
+                                <xsl:value-of select="'N'"/>
+                            </pfx14:Flag>
+                        </pfx14:FTHVReconcileType>
+                    </xsl:for-each>
+                </pfx14:FTHVReconcileList>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="MapInput">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>170</pd:x>
+        <pd:y>227</pd:y>
+        <config>
+            <element>
+                <xsd:element name="strInput" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/pfx3:ServiceEnverlop/ServiceBody/*" type="xsd:string"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <strInput>
+                <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ServiceBody/*[1]"/>
+            </strInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapInput</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

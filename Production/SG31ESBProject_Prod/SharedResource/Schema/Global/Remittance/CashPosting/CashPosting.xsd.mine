@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="createPostingReq" type="createPostingReqType"/>
+	<xs:element name="createPostingRes" type="createPostingResType"/>
+	<xs:complexType name="createPostingReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CashPosting"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createPostingResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="TransactionRef"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CashPostingType">
+		<xs:sequence>
+			<xs:element name="InterfaceId" type="xs:string"/>
+			<xs:element name="LineInfo" type="LineInfoType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LineInfoType">
+		<xs:sequence>
+			<xs:element name="BusinessCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="DealNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransType" type="xs:string" minOccurs="0"/>
+			<xs:element name="PostingType" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			<xs:element name="DealDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="PostingDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="FENo" type="xs:string" minOccurs="0"/>
+			<xs:element name="Reverse" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CashPosting" type="CashPostingType"/>
+	<xs:element name="reverseCashPostingReq">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+					<xs:sequence>
+						<xs:element ref="ReverseInfo"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="reverseCashPostingRes">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ReverseInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="interfaceId" type="xs:string"/>
+				<xs:element name="transactionRef" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="RevertCashPostingType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:element name="TransactionRef" type="xs:string"/>
+</xs:schema>

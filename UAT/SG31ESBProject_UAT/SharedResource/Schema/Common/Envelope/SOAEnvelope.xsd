@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-soa="sbv/common/envelope/soaenvelope/1.0"
+	 xmlns:cmd-header="sbv/common/envelope/commonheader/1.0"
+	 targetNamespace="sbv/common/envelope/soaenvelope/1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="CommonHeader.xsd"/>
+	<xs:complexType name="SOAEnvelopType">
+		<xs:sequence>
+			<xs:element ref="cmd-soa:SOAServiceHeader"/>
+			<xs:element name="ServiceBody" type="cmd-soa:ServiceBodyType"/>
+			<xs:element name="Other" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##any" processContents="lax"/>
+	</xs:complexType>
+	<xs:element name="SOAEnvelope" type="cmd-soa:SOAEnvelopType"/>
+	<xs:element name="SOAServiceHeader" type="cmd-soa:SOAServiceHeaderType"/>
+	<xs:complexType name="SOAServiceHeaderType">
+		<xs:sequence>
+			<xs:element name="AppHdr" type="cmd-header:AppHdrType"/>
+			<xs:element name="SOAMsgId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ServiceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="OperationName" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProcessName" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceBodyType">
+		<xs:sequence>
+			<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##any" processContents="lax"/>
+	</xs:complexType>
+</xs:schema>

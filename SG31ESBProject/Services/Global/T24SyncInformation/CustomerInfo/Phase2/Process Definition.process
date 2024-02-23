@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/T24SyncInformation/CustomerInfo/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/T24SyncInformation/CustomerInfo/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/T24SyncInformation/CustomerInfo/CustomerSchema.xsd"/>
+    <pd:name>Services/Global/T24SyncInformation/CustomerInfo/Phase2/Process Definition.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>104</pd:startX>
+    <pd:startY>80</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>643</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AnElement ref="pfx:CustomerDetail"/>
+        <TestList ref="pfx:CustomerDetailList"/>
+        <TestList2 ref="pfx:CustomerDetailList"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1491878913242</pd:targetNamespace>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <variableName>TestList2</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:CustomerDetailList>
+                <xsl:for-each select="$TestList/pfx:CustomerDetailList/pfx:CustomerDetail">
+                    <xsl:if test="pfx:TrangThai1=&quot;TrangThai01&quot;">
+                        <pfx:CustomerDetail>
+                            <xsl:if test="pfx:Ma">
+                                <pfx:Ma>
+                                    <xsl:value-of select="pfx:Ma"/>
+                                </pfx:Ma>
+                            </xsl:if>
+                            <xsl:if test="pfx:Ten">
+                                <pfx:Ten>
+                                    <xsl:value-of select="pfx:Ten"/>
+                                </pfx:Ten>
+                            </xsl:if>
+                            <xsl:if test="pfx:SoDienThoai">
+                                <pfx:SoDienThoai>
+                                    <xsl:value-of select="pfx:SoDienThoai"/>
+                                </pfx:SoDienThoai>
+                            </xsl:if>
+                            <xsl:if test="pfx:TrangThai1">
+                                <pfx:TrangThai1>
+                                    <xsl:value-of select="pfx:TrangThai1"/>
+                                </pfx:TrangThai1>
+                            </xsl:if>
+                            <xsl:if test="pfx:TrangThai2">
+                                <pfx:TrangThai2>
+                                    <xsl:value-of select="pfx:TrangThai2"/>
+                                </pfx:TrangThai2>
+                            </xsl:if>
+                        </pfx:CustomerDetail>
+                    </xsl:if>
+                </xsl:for-each>
+            </pfx:CustomerDetailList>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-2">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>104</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <variableName>TestList</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:CustomerDetailList>
+                <pfx:CustomerDetail>
+                    <pfx:Ma>
+                        <xsl:value-of select="&quot;01&quot;"/>
+                    </pfx:Ma>
+                    <pfx:Ten>
+                        <xsl:value-of select="&quot;Ten01&quot;"/>
+                    </pfx:Ten>
+                    <pfx:TrangThai1>
+                        <xsl:value-of select="&quot;TrangThai01&quot;"/>
+                    </pfx:TrangThai1>
+                </pfx:CustomerDetail>
+                <pfx:CustomerDetail>
+                    <pfx:Ma>
+                        <xsl:value-of select="&quot;02&quot;"/>
+                    </pfx:Ma>
+                    <pfx:Ten>
+                        <xsl:value-of select="&quot;Ten02&quot;"/>
+                    </pfx:Ten>
+                    <pfx:TrangThai1>
+                        <xsl:value-of select="&quot;TrangThai01&quot;"/>
+                    </pfx:TrangThai1>
+                </pfx:CustomerDetail>
+                <pfx:CustomerDetail>
+                    <pfx:Ma>
+                        <xsl:value-of select="&quot;03&quot;"/>
+                    </pfx:Ma>
+                    <pfx:Ten>
+                        <xsl:value-of select="&quot;Ten03&quot;"/>
+                    </pfx:Ten>
+                    <pfx:TrangThai1>
+                        <xsl:value-of select="&quot;TrangThai02&quot;"/>
+                    </pfx:TrangThai1>
+                </pfx:CustomerDetail>
+            </pfx:CustomerDetailList>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Assign-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-2</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

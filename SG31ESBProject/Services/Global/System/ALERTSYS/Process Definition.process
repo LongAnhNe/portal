@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.vnpay.vn/VASContent" xmlns:pfx="http://xmlns.tibco.com/body">
+    <wsdl:import namespace="http://www.vnpay.vn/VASContent" location="/Services/Global/System/ALERTSYS/SMSGateway.wsdl"/>
+    <pd:name>Services/Global/System/ALERTSYS/Process Definition.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="content" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>63</pd:startX>
+    <pd:startY>171</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>752</pd:endX>
+    <pd:endY>171</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1443517583474</pd:targetNamespace>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>171</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>smtp.gmail.com:587</host>
+            <useSsl>true</useSsl>
+            <authenticate>true</authenticate>
+            <username>anhnt386@gmail.com</username>
+            <password>tuananh86</password>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns:mailActivityInput>
+                <from>
+                    <xsl:value-of select="'anhnt386@gmail.com'"/>
+                </from>
+                <to>
+                    <xsl:value-of select="'anhnt4@fpt.com.vn'"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="'SBV TEST ALERT'"/>
+                </subject>
+                <pfx:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="$Start/root/content"/>
+                    </bodyText>
+                </pfx:bodyElement>
+            </ns:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>469</pd:x>
+        <pd:y>171</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx2:MTSend</service>
+            <servicePort>MTSend</servicePort>
+            <operation>SendMT</operation>
+            <soapAction>http://www.vnpay.vn/VASContent/SendMT</soapAction>
+            <endpointURL>http://210.245.12.219:1500/SMSBRN/MTSend.asmx</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:SendMT>
+                    <pfx2:Destination>
+                        <xsl:value-of select="'84935525811'"/>
+                    </pfx2:Destination>
+                    <pfx2:SendFrom>
+                        <xsl:value-of select="'SBV SG3.1'"/>
+                    </pfx2:SendFrom>
+                    <pfx2:KeywordName>
+                        <xsl:value-of select="'SG3.1'"/>
+                    </pfx2:KeywordName>
+                    <pfx2:OutContent>
+                        <xsl:value-of select="'Chevrolet Cruze'"/>
+                    </pfx2:OutContent>
+                    <pfx2:ChargingFlag>
+                        <xsl:value-of select="0"/>
+                    </pfx2:ChargingFlag>
+                    <pfx2:MOSeqNo>
+                        <xsl:value-of select="0"/>
+                    </pfx2:MOSeqNo>
+                    <pfx2:TotalMessage>
+                        <xsl:value-of select="1"/>
+                    </pfx2:TotalMessage>
+                    <pfx2:ContentType>
+                        <xsl:value-of select="0"/>
+                    </pfx2:ContentType>
+                </pfx2:SendMT>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

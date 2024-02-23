@@ -1,0 +1,1901 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns16="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/NotifyBackendAlert.xsd" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="sbv/common/exceptionhandling/exception/1.0" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns15="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/Schema.xsd" xmlns:ns22="sbv/common/envelope/commonheader/1.0" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:ns6="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:pfx="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns4="www.tibco.com/plugin/Sleep" xmlns:ns3="http://www.temenos.com/T24/event/Common/EventCommon" xmlns:ns0="http://www.tibco.com/pe/CheckpointSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBServiceResponse.xsd" xmlns:pfx3="http://schemas.tibco.com/bw/plugins/jdbc/5.0/jdbcExceptions" xmlns:pfx2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ServiceResponse.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/ExchangeRatePublish/ExchangeRatePublish-ExchangeRateFlow.xsd"/>
+    <pd:name>Services/Global/T24SyncInformation/ExchangeRatePublish/Backup/Version 2.0/ERPExchangeRateSubscribe-dev.process</pd:name>
+    <pd:startName>EMS Topic Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="EMS Topic Subscriber">
+        <pd:type>com.tibco.plugin.jms.JMSTopicEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicEventSource</pd:resourceType>
+        <pd:x>163</pd:x>
+        <pd:y>408</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBExchangeRateTopic</destination>
+                <durable>true</durable>
+                <subscriptionName>ERPExchangeRateSubscribe</subscriptionName>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1185</pd:endX>
+    <pd:endY>410</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceResponse>
+            <xsd:element name="SR">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx4:ESBServiceResponse" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceResponse>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1436004432453</pd:targetNamespace>
+    <pd:group name="Group-CitadOut">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>443</pd:x>
+        <pd:y>582</pd:y>
+        <pd:width>855</pd:width>
+        <pd:height>470</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>false</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Can Not Insert</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-TechError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>GotoEnd</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm-to-delete-CBSQueue-2-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GotoEnd-Error</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-Insert-2</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Can Not Insert</pd:from>
+            <pd:to>Logic Error</pd:to>
+            <pd:xpathDescription>LogicError</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCSQLException/msgCode</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Can Not Insert</pd:from>
+            <pd:to>Technical Error</pd:to>
+            <pd:xpathDescription>TechError</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCDriverLoadingException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCConnectionNotFoundException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:InvalidTimeZoneException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCTimedOutException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:LoginTimedOutException/msgCode</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Can Not Insert</pd:from>
+            <pd:to>Unexpected Error</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Technical Error</pd:from>
+            <pd:to>isNotExistDB</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Insert AppExceptions</pd:from>
+            <pd:to>Sleep-Insert-2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Check RetryTime</pd:from>
+            <pd:to>Reset RetryTime</pd:to>
+            <pd:xpathDescription>over Max time</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Check-RetryTime/root/PORTAL-FTCITAD-RETRY-TIME &gt;= 5</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Check RetryTime</pd:from>
+            <pd:to>Increase RetryTime</pd:to>
+            <pd:xpathDescription>less than Max time</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Check-RetryTime/root/PORTAL-FTCITAD-RETRY-TIME &lt; 5</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Reset RetryTime</pd:from>
+            <pd:to>Throw Max Retry Exception</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Logic Error</pd:from>
+            <pd:to>CITADOutDBQueue</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CITADOutDBQueue</pd:from>
+            <pd:to>Confirm-to-delete-CBSQueue-2-1</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>isNotExistDB</pd:from>
+            <pd:to>Insert AppExceptions</pd:to>
+            <pd:xpathDescription>Not Exist (Success)</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>isNotExistDB</pd:from>
+            <pd:to>Check RetryTime</pd:to>
+            <pd:xpathDescription>Existed (Error)</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Unexpected Error</pd:from>
+            <pd:to>CITADOutDBQueue</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Increase RetryTime</pd:from>
+            <pd:to>Sleep-TechError</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor</pd:from>
+            <pd:to>GotoEnd-Error</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm ErrorMsg</pd:from>
+            <pd:to>errorProcessor</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ESBErrorQueue</pd:from>
+            <pd:to>Confirm ErrorMsg</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Catch All</pd:from>
+            <pd:to>ESBErrorQueue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Catch All">
+            <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+            <pd:resourceType>ae.activities.catch</pd:resourceType>
+            <pd:x>797</pd:x>
+            <pd:y>985</pd:y>
+            <pd:handler>true</pd:handler>
+            <config>
+                <catchAll>true</catchAll>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="ESBErrorQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>937</pd:x>
+            <pd:y>983</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>CitadOutExceptionQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <xsl:if test="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                        <JMSCorrelationID>
+                            <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                        </JMSCorrelationID>
+                    </xsl:if>
+                    <JMSProperties>
+                        <xsl:if test="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO">
+                            <ns:JMSXGroupID>
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </ns:JMSXGroupID>
+                        </xsl:if>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/application"/>
+                        </application>
+                        <xsl:if test="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName">
+                            <queueName>
+                                <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName"/>
+                            </queueName>
+                        </xsl:if>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm ErrorMsg">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+            <pd:x>1069</pd:x>
+            <pd:y>983</pd:y>
+            <config>
+                <ConfirmEvent>CitadOut Subscribe</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="errorProcessor">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>1183</pd:x>
+            <pd:y>984</pd:y>
+            <config>
+                <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ProcessName>
+                        <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                    </ProcessName>
+                    <GeneratedId>
+                        <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                    </GeneratedId>
+                    <ns13:ExceptionBody>
+                        <ns13:Hostname>
+                            <xsl:value-of select="BW:getHostName()"/>
+                        </ns13:Hostname>
+                        <ns13:Category>
+                            <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/ErrorRole"/>
+                        </ns13:Category>
+                        <ns13:Type>
+                            <xsl:value-of select="&quot;TYPE&quot;"/>
+                        </ns13:Type>
+                        <ns13:Level>
+                            <xsl:value-of select="&quot;LEVEL&quot;"/>
+                        </ns13:Level>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                            <ns13:ErrorReport>
+                                <StackTrace>
+                                    <xsl:value-of select="StackTrace"/>
+                                </StackTrace>
+                                <Msg>
+                                    <xsl:value-of select="Msg"/>
+                                </Msg>
+                                <FullClass>
+                                    <xsl:value-of select="FullClass"/>
+                                </FullClass>
+                                <ObjectClass>
+                                    <xsl:value-of select="Class"/>
+                                </ObjectClass>
+                                <ProcessStack>
+                                    <xsl:value-of select="ProcessStack"/>
+                                </ProcessStack>
+                                <xsl:if test="MsgCode">
+                                    <MsgCode>
+                                        <xsl:value-of select="MsgCode"/>
+                                    </MsgCode>
+                                </xsl:if>
+                                <xsl:copy-of select="Data"/>
+                            </ns13:ErrorReport>
+                        </xsl:for-each>
+                    </ns13:ExceptionBody>
+                    <ServiceInput>
+                        <pfx4:AppHdr>
+                            <pfx4:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx4:CharSet>
+                            <pfx4:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx4:ServVersion>
+                            <pfx4:From>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;99&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:From>
+                            <pfx4:To>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;06&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;Citad&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:To>
+                            <pfx4:MsgId>
+                                <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </pfx4:MsgId>
+                            <pfx4:MsgSrcId>
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </pfx4:MsgSrcId>
+                            <pfx4:BizServ>
+                                <pfx4:Id>
+                                    <xsl:value-of select="&quot;5&quot;"/>
+                                </pfx4:Id>
+                                <pfx4:Name>
+                                    <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                </pfx4:Name>
+                            </pfx4:BizServ>
+                            <pfx4:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx4:CreatedDate>
+                        </pfx4:AppHdr>
+                        <ServiceBody/>
+                    </ServiceInput>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GotoEnd-Error">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1208</pd:x>
+            <pd:y>895</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Insert AppExceptions">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>933</pd:x>
+            <pd:y>645</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/CitadOut/JDBC_Time_Out%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>insert into appexceptions values(?,?,?,?,sysdate)</statement>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>id</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>service_name</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>error_code</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>error_msg</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <id>
+                        <xsl:choose>
+                            <xsl:when test="exists($CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO)">
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </id>
+                    <service_name>
+                        <xsl:choose>
+                            <xsl:when test="exists(&quot;CitadOut&quot;)">
+                                <xsl:value-of select="&quot;CitadOut&quot;"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </service_name>
+                    <error_code>
+                        <xsl:choose>
+                            <xsl:when test="exists($_error/ns1:ErrorReport/MsgCode)">
+                                <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </error_code>
+                    <error_msg>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                    </error_msg>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Sleep-Insert-2">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>1067</pd:x>
+            <pd:y>639</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns0:SleepInputSchema>
+                    <IntervalInMillisec>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CitadOut/SleepTime_TechError_ms"/>
+                    </IntervalInMillisec>
+                </ns0:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Check RetryTime">
+            <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+            <pd:x>933</pd:x>
+            <pd:y>738</pd:y>
+            <config>
+                <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Increase RetryTime">
+            <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+            <pd:x>1073</pd:x>
+            <pd:y>768</pd:y>
+            <config>
+                <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+                <showResult>true</showResult>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <PORTAL-FTCITAD-RETRY-TIME>
+                        <xsl:value-of select="$Check-RetryTime/root/PORTAL-FTCITAD-RETRY-TIME + 1"/>
+                    </PORTAL-FTCITAD-RETRY-TIME>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Reset RetryTime">
+            <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+            <pd:x>1072</pd:x>
+            <pd:y>702</pd:y>
+            <config>
+                <showResult>true</showResult>
+                <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <PORTAL-FTCITAD-RETRY-TIME>
+                        <xsl:value-of select="0"/>
+                    </PORTAL-FTCITAD-RETRY-TIME>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Throw Max Retry Exception">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>1181</pd:x>
+            <pd:y>711</pd:y>
+            <config>
+                <faultName/>
+            </config>
+            <pd:inputBindings>
+                <ns16:ActivityInput>
+                    <message>
+                        <xsl:value-of select="&quot;Has Retry Max Time : 05 Roll&quot;"/>
+                    </message>
+                    <messageCode>
+                        <xsl:value-of select="&quot;ESB 999&quot;"/>
+                    </messageCode>
+                </ns16:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Can Not Insert">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>507</pd:x>
+            <pd:y>784</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Logic Error">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>662</pd:x>
+            <pd:y>814</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Technical Error">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>663</pd:x>
+            <pd:y>690</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Unexpected Error">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>662</pd:x>
+            <pd:y>902</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="CITADOutDBQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>789</pd:x>
+            <pd:y>858</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>CITADOutDBQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <xsl:if test="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                        <JMSCorrelationID>
+                            <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                        </JMSCorrelationID>
+                    </xsl:if>
+                    <JMSProperties>
+                        <xsl:if test="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO">
+                            <ns:JMSXGroupID>
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </ns:JMSXGroupID>
+                        </xsl:if>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/application"/>
+                        </application>
+                        <xsl:if test="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName">
+                            <queueName>
+                                <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName"/>
+                            </queueName>
+                        </xsl:if>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="isNotExistDB">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>787</pd:x>
+            <pd:y>690</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns14:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </ns14:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm-to-delete-CBSQueue-2-1">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete Message in CBS Queue</pd:description>
+            <pd:x>931</pd:x>
+            <pd:y>857</pd:y>
+            <config>
+                <ConfirmEvent>CitadOut Subscribe</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Sleep-TechError">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>1178</pd:x>
+            <pd:y>765</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns0:SleepInputSchema>
+                    <IntervalInMillisec>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CitadOut/SleepTime_TechError_ms"/>
+                    </IntervalInMillisec>
+                </ns0:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>843</pd:x>
+        <pd:y>405</pd:y>
+        <config>
+            <ConfirmEvent>EMS Topic Subscriber</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>978</pd:x>
+        <pd:y>407</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="&quot;ExchangeRate&quot;"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat( 'ExchangeRate' ,': End ', 'ExchangeRate' )"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <ns22:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns22:CharSet>
+                            <ns22:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns22:ServVersion>
+                            <ns22:From>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;99&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ESB&quot;"/>
+                                </ns22:Name>
+                            </ns22:From>
+                            <ns22:To>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;05&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;CSD&quot;"/>
+                                </ns22:Name>
+                            </ns22:To>
+                            <ns22:MsgId>
+                                <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </ns22:MsgId>
+                            <xsl:if test="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                                <ns22:MsgPreId>
+                                    <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                                </ns22:MsgPreId>
+                            </xsl:if>
+                            <xsl:if test="$Parse-XML/pfx:ExchangeRateFlow/pfx:id">
+                                <ns22:MsgSrcId>
+                                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                                </ns22:MsgSrcId>
+                            </xsl:if>
+                            <ns22:BizServ>
+                                <ns22:Id>
+                                    <xsl:value-of select="&quot;5&quot;"/>
+                                </ns22:Id>
+                                <ns22:Name>
+                                    <xsl:value-of select="&quot;ExchangeRate&quot;"/>
+                                </ns22:Name>
+                            </ns22:BizServ>
+                            <ns22:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns22:CreatedDate>
+                        </ns12:AppHdr>
+                        <ns12:SOAMsgId>
+                            <xsl:value-of select="concat( generate-id($_processContext/ns2:ProcessContext),  tib:timestamp() )"/>
+                        </ns12:SOAMsgId>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/CSDT24/ExchangeRatePublish&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:OperationName>
+                            <xsl:value-of select="&quot;ERPExchangeRateSubscribe&quot;"/>
+                        </ns12:OperationName>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <ns6:ServiceEnverlop>
+                            <ns22:AppHdr>
+                                <ns22:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns22:CharSet>
+                                <ns22:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns22:ServVersion>
+                                <ns22:From>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;99&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;ESB&quot;"/>
+                                    </ns22:Name>
+                                </ns22:From>
+                                <ns22:To>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;05&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;CSD&quot;"/>
+                                    </ns22:Name>
+                                </ns22:To>
+                                <ns22:MsgId>
+                                    <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                                </ns22:MsgId>
+                                <xsl:if test="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                                    <ns22:MsgPreId>
+                                        <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                                    </ns22:MsgPreId>
+                                </xsl:if>
+                                <xsl:if test="$Parse-XML/pfx:ExchangeRateFlow/pfx:id">
+                                    <ns22:MsgSrcId>
+                                        <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                                    </ns22:MsgSrcId>
+                                </xsl:if>
+                                <ns22:BizServ>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;ExchangeRate&quot;"/>
+                                    </ns22:Name>
+                                </ns22:BizServ>
+                                <ns22:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns22:CreatedDate>
+                            </ns22:AppHdr>
+                            <ns22:ResponseStatus>
+                                <ns22:Status>
+                                    <xsl:value-of select="if (($ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:Status = 0) or ($ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:Status = 99) )&#xA;then 0&#xA;else 1"/>
+                                </ns22:Status>
+                                <ns22:ErrorCode>
+                                    <xsl:value-of select="$ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:Status"/>
+                                </ns22:ErrorCode>
+                                <xsl:if test="$ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:ErrorMessage">
+                                    <ns22:ErrorMessage>
+                                        <xsl:value-of select="$ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:ErrorMessage"/>
+                                    </ns22:ErrorMessage>
+                                </xsl:if>
+                            </ns22:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                                <xsl:copy-of select="$Parse-XML/pfx:ExchangeRateFlow"/>
+                                <xsl:copy-of select="$Insert-ERP-DB/jdbcUpdateActivityOutput"/>
+                                <xsl:copy-of select="$Call-Proc/resultSet"/>
+                                <xsl:copy-of select="$ServiceResponse/SR/pfx4:ESBServiceResponse"/>
+                            </ServiceBody>
+                        </ns6:ServiceEnverlop>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:timestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert ERP DB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>489</pd:x>
+        <pd:y>402</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/ExchangeRatePublish/JDBC_Timeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <statement>Insert into EPR_T24_GL_DRATES(FROM_CURRENCY,TO_CURRENCY,FROM_CONVERSION_DATE,TO_CONVERSION_DATE,USER_CONVERSION_TYPE,CONVERSION_RATE,MODE_FLAG,STATUS)
+values(?,?,?,?,?,?,?,?)
+</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>FROM_CURRENCY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TO_CURRENCY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FROM_CONVERSION_DATE</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TO_CONVERSION_DATE</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>USER_CONVERSION_TYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CONVERSION_RATE</parameterName>
+                    <dataType>NUMERIC</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MODE_FLAG</parameterName>
+                    <dataType>CHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>STATUS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <FROM_CURRENCY>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:ExchangeRateFlow/pfx:id)">
+                            <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </FROM_CURRENCY>
+                <TO_CURRENCY>
+                    <xsl:value-of select="&quot;VND&quot;"/>
+                </TO_CURRENCY>
+                <FROM_CONVERSION_DATE>
+                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:eventCommon/ns3:today"/>
+                </FROM_CONVERSION_DATE>
+                <TO_CONVERSION_DATE>
+                    <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:eventCommon/ns3:today"/>
+                </TO_CONVERSION_DATE>
+                <USER_CONVERSION_TYPE>
+                    <xsl:value-of select="&quot;midRevalRate&quot;"/>
+                </USER_CONVERSION_TYPE>
+                <CONVERSION_RATE>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-XML/pfx:ExchangeRateFlow/pfx:currencyMarketGroup[1]/pfx:midRevalRate)">
+                            <xsl:value-of select="$Parse-XML/pfx:ExchangeRateFlow/pfx:currencyMarketGroup[1]/pfx:midRevalRate"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CONVERSION_RATE>
+                <MODE_FLAG>
+                    <xsl:value-of select="1"/>
+                </MODE_FLAG>
+                <STATUS>
+                    <xsl:value-of select="&quot;ACTIVE&quot;"/>
+                </STATUS>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>391</pd:x>
+        <pd:y>401</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx:ExchangeRateFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SR-Parse-Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>392</pd:x>
+        <pd:y>242</pd:y>
+        <config>
+            <variableName>ServiceResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <SR>
+                <pfx4:ESBServiceResponse>
+                    <pfx4:Status>
+                        <xsl:value-of select="1"/>
+                    </pfx4:Status>
+                    <pfx4:ErrorMessage>
+                        <xsl:value-of select="concat( &quot;Pare XML Error. Msg : &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx4:ErrorMessage>
+                    <pfx4:NotifyMsg>
+                        <xsl:value-of select="concat( &quot;Pare XML Error. Msg : &quot;, $_error/ns2:ErrorReport/Msg)"/>
+                    </pfx4:NotifyMsg>
+                    <pfx4:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </pfx4:ErrorExist>
+                    <pfx4:Unique_ID>
+                        <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </pfx4:Unique_ID>
+                    <pfx4:timestamps>
+                        <xsl:value-of select="$ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:timestamps"/>
+                    </pfx4:timestamps>
+                    <pfx4:CurrentDateTime>
+                        <xsl:value-of select="$ServiceResponse/SR/pfx4:ESBServiceResponse/pfx4:CurrentDateTime"/>
+                    </pfx4:CurrentDateTime>
+                </pfx4:ESBServiceResponse>
+            </SR>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GotoEnd">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1080</pd:x>
+        <pd:y>238</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ERP Error Topic">
+        <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
+        <pd:x>594</pd:x>
+        <pd:y>242</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ERPExRateErrorTopic</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:if test="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID">
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSCorrelationID"/>
+                    </JMSCorrelationID>
+                </xsl:if>
+                <xsl:copy-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/OtherProperties"/>
+                <Body>
+                    <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Proc">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>599</pd:x>
+        <pd:y>402</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <catalog>ERP_T24_GL_DRATES_PKG</catalog>
+            <ProcedureName>DAILY_RATES_PRC</ProcedureName>
+            <oraObjects/>
+            <oraTables/>
+            <parameterTypes>
+                <parameter>
+                    <colName>RESCODE</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>ERRMSG</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SR-SetTimestamps">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>284</pd:x>
+        <pd:y>400</pd:y>
+        <config>
+            <variableName>ServiceResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <SR>
+                <pfx4:ESBServiceResponse>
+                    <pfx4:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </pfx4:ErrorExist>
+                    <pfx4:Unique_ID>
+                        <xsl:value-of select="$EMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </pfx4:Unique_ID>
+                    <pfx4:timestamps>
+                        <xsl:value-of select="tib:timestamp()"/>
+                    </pfx4:timestamps>
+                    <pfx4:CurrentDateTime>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx4:CurrentDateTime>
+                </pfx4:ESBServiceResponse>
+            </SR>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group-CitadOut (1)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>546</pd:x>
+        <pd:y>492</pd:y>
+        <pd:width>855</pd:width>
+        <pd:height>470</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>false</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Can-Not-Insert-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GotoEnd-Error-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor-2</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>GotoEnd</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-TechError-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-Insert-2-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm-to-delete-CBSQueue-2-1-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Can-Not-Insert-1</pd:from>
+            <pd:to>Logic-Error-1</pd:to>
+            <pd:xpathDescription>LogicError</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCSQLException/msgCode</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Can-Not-Insert-1</pd:from>
+            <pd:to>Technical-Error-1</pd:to>
+            <pd:xpathDescription>TechError</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCDriverLoadingException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCConnectionNotFoundException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:InvalidTimeZoneException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:JDBCTimedOutException/msgCode
+or $_error/ns1:ErrorReport/MsgCode = $_error_Insert-Citad-DB/ActivityErrors/pfx10:LoginTimedOutException/msgCode</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Can-Not-Insert-1</pd:from>
+            <pd:to>Unexpected-Error-1</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Technical-Error-1</pd:from>
+            <pd:to>isNotExistDB-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Insert-AppExceptions-1</pd:from>
+            <pd:to>Sleep-Insert-2-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Check-RetryTime-1</pd:from>
+            <pd:to>Reset-RetryTime-1</pd:to>
+            <pd:xpathDescription>over Max time</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Check-RetryTime/root/PORTAL-FTCITAD-RETRY-TIME &gt;= 5</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Check-RetryTime-1</pd:from>
+            <pd:to>Increase-RetryTime-1</pd:to>
+            <pd:xpathDescription>less than Max time</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Check-RetryTime/root/PORTAL-FTCITAD-RETRY-TIME &lt; 5</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Reset-RetryTime-1</pd:from>
+            <pd:to>Throw-Max-Retry-Exception-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Logic-Error-1</pd:from>
+            <pd:to>CITADOutDBQueue-1</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CITADOutDBQueue-1</pd:from>
+            <pd:to>Confirm-to-delete-CBSQueue-2-1-1</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>isNotExistDB-1</pd:from>
+            <pd:to>Insert-AppExceptions-1</pd:to>
+            <pd:xpathDescription>Not Exist (Success)</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>isNotExistDB-1</pd:from>
+            <pd:to>Check-RetryTime-1</pd:to>
+            <pd:xpathDescription>Existed (Error)</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Unexpected-Error-1</pd:from>
+            <pd:to>CITADOutDBQueue-1</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Increase-RetryTime-1</pd:from>
+            <pd:to>Sleep-TechError-1</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor-2</pd:from>
+            <pd:to>GotoEnd-Error-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm-ErrorMsg-1</pd:from>
+            <pd:to>errorProcessor-2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ESBErrorQueue-1</pd:from>
+            <pd:to>Confirm-ErrorMsg-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Catch-All-1</pd:from>
+            <pd:to>ESBErrorQueue-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Catch-All-1">
+            <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+            <pd:resourceType>ae.activities.catch</pd:resourceType>
+            <pd:x>896</pd:x>
+            <pd:y>895</pd:y>
+            <pd:handler>true</pd:handler>
+            <config>
+                <catchAll>true</catchAll>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="ESBErrorQueue-1">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>1036</pd:x>
+            <pd:y>893</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>CitadOutExceptionQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms">
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                        <JMSCorrelationID>
+                            <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                        </JMSCorrelationID>
+                    </xsl:if>
+                    <JMSProperties>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO">
+                            <ns1:JMSXGroupID>
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </ns1:JMSXGroupID>
+                        </xsl:if>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/application"/>
+                        </application>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName">
+                            <queueName>
+                                <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName"/>
+                            </queueName>
+                        </xsl:if>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadOut-Subscribe/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm-ErrorMsg-1">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete CBS Queue Receiver</pd:description>
+            <pd:x>1168</pd:x>
+            <pd:y>893</pd:y>
+            <config>
+                <ConfirmEvent>CitadOut Subscribe</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="errorProcessor-2">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>1282</pd:x>
+            <pd:y>894</pd:y>
+            <config>
+                <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ProcessName>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                    </ProcessName>
+                    <GeneratedId>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                    </GeneratedId>
+                    <ns1:ExceptionBody xmlns:ns1="sbv/common/logging/enginelog/1.0">
+                        <ns1:Hostname>
+                            <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="BW:getHostName()"/>
+                        </ns1:Hostname>
+                        <ns1:Category>
+                            <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_globalVariables/ns2:GlobalVariables/LogCategory/ErrorRole"/>
+                        </ns1:Category>
+                        <ns1:Type>
+                            <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;TYPE&quot;"/>
+                        </ns1:Type>
+                        <ns1:Level>
+                            <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;LEVEL&quot;"/>
+                        </ns1:Level>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                            <ns1:ErrorReport>
+                                <StackTrace>
+                                    <xsl:value-of select="StackTrace"/>
+                                </StackTrace>
+                                <Msg>
+                                    <xsl:value-of select="Msg"/>
+                                </Msg>
+                                <FullClass>
+                                    <xsl:value-of select="FullClass"/>
+                                </FullClass>
+                                <ObjectClass>
+                                    <xsl:value-of select="Class"/>
+                                </ObjectClass>
+                                <ProcessStack>
+                                    <xsl:value-of select="ProcessStack"/>
+                                </ProcessStack>
+                                <xsl:if test="MsgCode">
+                                    <MsgCode>
+                                        <xsl:value-of select="MsgCode"/>
+                                    </MsgCode>
+                                </xsl:if>
+                                <xsl:copy-of select="Data"/>
+                            </ns1:ErrorReport>
+                        </xsl:for-each>
+                    </ns1:ExceptionBody>
+                    <ServiceInput>
+                        <ns1:AppHdr xmlns:ns1="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBServiceResponse.xsd">
+                            <ns1:CharSet>
+                                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;UTF-8&quot;"/>
+                            </ns1:CharSet>
+                            <ns1:ServVersion>
+                                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;1.0&quot;"/>
+                            </ns1:ServVersion>
+                            <ns1:From>
+                                <ns1:Id>
+                                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;99&quot;"/>
+                                </ns1:Id>
+                                <ns1:Name>
+                                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;ESB&quot;"/>
+                                </ns1:Name>
+                            </ns1:From>
+                            <ns1:To>
+                                <ns1:Id>
+                                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;06&quot;"/>
+                                </ns1:Id>
+                                <ns1:Name>
+                                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;Citad&quot;"/>
+                                </ns1:Name>
+                            </ns1:To>
+                            <ns1:MsgId>
+                                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                            </ns1:MsgId>
+                            <ns1:MsgSrcId>
+                                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </ns1:MsgSrcId>
+                            <ns1:BizServ>
+                                <ns1:Id>
+                                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;5&quot;"/>
+                                </ns1:Id>
+                                <ns1:Name>
+                                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;T24CITAD&quot;"/>
+                                </ns1:Name>
+                            </ns1:BizServ>
+                            <ns1:CreatedDate>
+                                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="current-dateTime()"/>
+                            </ns1:CreatedDate>
+                        </ns1:AppHdr>
+                        <ServiceBody/>
+                    </ServiceInput>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GotoEnd-Error-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1307</pd:x>
+            <pd:y>805</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Insert-AppExceptions-1">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>1032</pd:x>
+            <pd:y>555</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/CitadOut/JDBC_Time_Out%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>insert into appexceptions values(?,?,?,?,sysdate)</statement>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>id</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>service_name</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>error_code</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>error_msg</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <id>
+                        <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                            <xsl:when test="exists($CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO)">
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </id>
+                    <service_name>
+                        <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                            <xsl:when test="exists(&quot;CitadOut&quot;)">
+                                <xsl:value-of select="&quot;CitadOut&quot;"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </service_name>
+                    <error_code>
+                        <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                            <xsl:when test="exists($_error/ns1:ErrorReport/MsgCode)">
+                                <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </error_code>
+                    <error_msg>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport/Msg"/>
+                    </error_msg>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Sleep-Insert-2-1">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>1166</pd:x>
+            <pd:y>549</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns1:SleepInputSchema xmlns:ns1="http://www.tibco.com/pe/CheckpointSchema">
+                    <IntervalInMillisec>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CitadOut/SleepTime_TechError_ms"/>
+                    </IntervalInMillisec>
+                </ns1:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Check-RetryTime-1">
+            <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+            <pd:x>1032</pd:x>
+            <pd:y>648</pd:y>
+            <config>
+                <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Increase-RetryTime-1">
+            <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+            <pd:x>1172</pd:x>
+            <pd:y>678</pd:y>
+            <config>
+                <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+                <showResult>true</showResult>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <PORTAL-FTCITAD-RETRY-TIME>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Check-RetryTime/root/PORTAL-FTCITAD-RETRY-TIME + 1"/>
+                    </PORTAL-FTCITAD-RETRY-TIME>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Reset-RetryTime-1">
+            <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+            <pd:x>1171</pd:x>
+            <pd:y>612</pd:y>
+            <config>
+                <showResult>true</showResult>
+                <variableConfig>/SharedResource/SharedVariables/Queue Retry Time.sharedvariable</variableConfig>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <PORTAL-FTCITAD-RETRY-TIME>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="0"/>
+                    </PORTAL-FTCITAD-RETRY-TIME>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Throw-Max-Retry-Exception-1">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>1280</pd:x>
+            <pd:y>621</pd:y>
+            <config>
+                <faultName/>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput xmlns:ns1="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/NotifyBackendAlert.xsd">
+                    <message>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;Has Retry Max Time : 05 Roll&quot;"/>
+                    </message>
+                    <messageCode>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="&quot;ESB 999&quot;"/>
+                    </messageCode>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Can-Not-Insert-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>606</pd:x>
+            <pd:y>662</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Logic-Error-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>761</pd:x>
+            <pd:y>724</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Technical-Error-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>762</pd:x>
+            <pd:y>600</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Unexpected-Error-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>761</pd:x>
+            <pd:y>812</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="CITADOutDBQueue-1">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>888</pd:x>
+            <pd:y>768</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>CITADOutDBQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns1:ActivityInput xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms">
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                        <JMSCorrelationID>
+                            <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                        </JMSCorrelationID>
+                    </xsl:if>
+                    <JMSProperties>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO">
+                            <ns1:JMSXGroupID>
+                                <xsl:value-of select="$CitadInsertModel/pfx16:CitadInsertModel/pfx16:RELATION_NO"/>
+                            </ns1:JMSXGroupID>
+                        </xsl:if>
+                    </JMSProperties>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/application"/>
+                        </application>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName">
+                            <queueName>
+                                <xsl:value-of select="$CitadOut-Subscribe/ns:ActivityOutput/OtherProperties/queueName"/>
+                            </queueName>
+                        </xsl:if>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadOut-Subscribe/ns:ActivityOutput/Body"/>
+                    </Body>
+                </ns1:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="isNotExistDB-1">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>886</pd:x>
+            <pd:y>600</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns1:input xmlns:ns1="sbv/common/exceptionhandling/exception/1.0">
+                    <duplicateKey>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CitadOut-Subscribe/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </ns1:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm-to-delete-CBSQueue-2-1-1">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:description>Confirm to delete Message in CBS Queue</pd:description>
+            <pd:x>1030</pd:x>
+            <pd:y>767</pd:y>
+            <config>
+                <ConfirmEvent>CitadOut Subscribe</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Sleep-TechError-1">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>1277</pd:x>
+            <pd:y>675</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns1:SleepInputSchema xmlns:ns1="http://www.tibco.com/pe/CheckpointSchema">
+                    <IntervalInMillisec>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/CitadOut/SleepTime_TechError_ms"/>
+                    </IntervalInMillisec>
+                </ns1:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>Write Log</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>EMS Topic Subscriber</pd:from>
+        <pd:to>SR-SetTimestamps</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert ERP DB</pd:from>
+        <pd:to>Call Proc</pd:to>
+        <pd:xpathDescription>Succes</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Insert ERP DB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>SR-Parse-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SR-Parse-Error</pd:from>
+        <pd:to>ERP Error Topic</pd:to>
+        <pd:xpathDescription>Send To</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>GotoEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GotoEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ERP Error Topic</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>delete msg</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Proc</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>Call Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($Call-Proc/resultSet/outputSet/RESCODE = '0' ) and ( $Call-Proc/resultSet/outputSet/ERRMSG = 'SUCCESS')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SR-SetTimestamps</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert ERP DB</pd:from>
+        <pd:to>Group-CitadOut</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Proc</pd:from>
+        <pd:to>Group-CitadOut (1)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group-CitadOut (1)</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group-CitadOut</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

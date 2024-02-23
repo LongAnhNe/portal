@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="schema://www.sbv.gov.vn/schema/global/System/Proposal/FXProposal.xsd" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1478161916782" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0">
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/System/Proposal/FXProposal.xsd" schemaLocation="/SharedResource/Schema/Global/System/Proposal/FXProposal.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1478161916782" location="/SharedResource/Schema/Global/System/Proposal/Proposal.wsdl"/>
+    <pd:name>Services/Global/System/Proposal/Backup/FXQuery.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:FXQueryRequest"/>
+    <pd:startX>142</pd:startX>
+    <pd:startY>134</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$CallFXQuery/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns2:FXQueryResponseBody"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:FXQueryResponse>
+            <res>
+                <ns2:FXQueryResponse>
+                    <xsl:copy-of select="$CallFXQuery/root/ns3:ServiceEnverlop/ns1:AppHdr"/>
+                    <xsl:copy-of select="$CallFXQuery/root/ns3:ServiceEnverlop/ns1:ResponseStatus"/>
+                    <xsl:copy-of select="$CallFXQuery/root/ns3:ServiceEnverlop/ServiceBody/ns2:FXQueryResponseBody"/>
+                </ns2:FXQueryResponse>
+            </res>
+        </wsdlPfx:FXQueryResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:FXQueryResponse"/>
+    <pd:endX>475</pd:endX>
+    <pd:endY>132</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1480499289394</pd:targetNamespace>
+    <pd:activity name="CallFXQuery">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>307</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:FXQueryRequest/req/ns2:FXQueryRequest/ns1:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:FXQueryRequest/req/ns2:FXQueryRequest/ns1:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:FXQueryRequest/req/ns2:FXQueryRequest/ns1:AppHdr/node()"/>
+                        </ns12:AppHdr>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="(BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId))"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:FXQueryRequest/req/ns2:FXQueryRequest/ns2:FXQueryRequestBody"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallFXQuery</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallFXQuery</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

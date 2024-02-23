@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../QueueSchema/Common-EventCommon.xsd"/>
+	<xsd:element name="T24COBEntries">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="entryIdGroup" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="noOfEntries" minOccurs="0"/>
+				<xsd:element ref="onlineOrCob" minOccurs="0"/>
+				<xsd:element ref="entryTime" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="entryIdGroup">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="entryId" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="consolEnt" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="consolKey" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="t24CoCode" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="prodModule" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="transCode" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="transDesc" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="drCrMarker" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="erpAcct" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="entryCcy" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="amtLcy" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="amtFcy" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="exchRate" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="valueDate" type="xsd:date" minOccurs="0"/>
+				<xsd:element name="txnDate" type="xsd:date" minOccurs="0"/>
+				<xsd:element name="txnInputter" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="txnAuthoriser" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="customerId" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="customerName" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="contractId" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ldTermMth" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="intRate" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="dueDate" type="xsd:date" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:attribute name="index" type="xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="noOfEntries" type="xsd:string"/>
+	<xsd:element name="onlineOrCob" type="xsd:string"/>
+	<xsd:element name="entryTime" type="xsd:string"/>
+</xsd:schema>

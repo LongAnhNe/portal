@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24EntriesConverted.sharedparse" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24OnlineEntries.sharedparse">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24OnlineEntries.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24OnlineEntries.sharedparse"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24EntriesConverted.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/T24/T24EntriesBatch/T24EntriesConverted.sharedparse"/>
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/LogicProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="T24Entries">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:Rows"/>
+                    <xsd:element name="State" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>73</pd:startX>
+    <pd:startY>189</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:copy-of select="$T24EntriesConverted/Rows"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:Rows"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>992</pd:endX>
+    <pd:endY>191</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <T24EntriesConverted ref="pfx2:Rows"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1446446394100</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>198</pd:x>
+        <pd:y>35</pd:y>
+        <pd:width>646</pd:width>
+        <pd:height>288</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/T24Entries/Rows/T24Entries</pd:over>
+            <pd:iterationElementSlot>T24Entry</pd:iterationElementSlot>
+            <pd:indexSlot>idx</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ReadSignOnNameList</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>FileFilter</pd:to>
+            <pd:xpathDescription>FilterCondition</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>($T24Entry/T24Entries/PROD.MODULE='SC' and $T24Entry/T24Entries/TRANS.CODE='130')  or ($T24Entry/T24Entries/PROD.MODULE='SC' and $T24Entry/T24Entries/TRANS.CODE='131') or ($T24Entry/T24Entries/PROD.MODULE='SC' and $T24Entry/T24Entries/TRANS.CODE='647') or ($T24Entry/T24Entries/PROD.MODULE='SC' and $T24Entry/T24Entries/TRANS.CODE='648') or ($T24Entry/T24Entries/PROD.MODULE='SC' and $T24Entry/T24Entries/TRANS.CODE='ACA') or ($T24Entry/T24Entries/PROD.MODULE='SC' and $T24Entry/T24Entries/TRANS.CODE='ACC' ) or ($T24Entry/T24Entries/PROD.MODULE='SCPL' and $T24Entry/T24Entries/TRANS.CODE='631')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>FileFilter</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ConvertT24Entries</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReadSignOnNameList</pd:from>
+            <pd:to>ConvertT24Entries</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ConvertT24Entries">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>574</pd:x>
+            <pd:y>120</pd:y>
+            <config>
+                <variableName>T24EntriesConverted</variableName>
+            </config>
+            <pd:inputBindings>
+                <Rows>
+                    <xsl:copy-of select="$T24EntriesConverted/Rows/T24Entries"/>
+                    <T24Entries>
+                        <ENTRY.ID>
+                            <xsl:value-of select="$T24Entry/T24Entries/ENTRY.ID"/>
+                        </ENTRY.ID>
+                        <xsl:if test="$T24Entry/T24Entries/CONSOL.ENT">
+                            <CONSOL.ENT>
+                                <xsl:value-of select="$T24Entry/T24Entries/CONSOL.ENT"/>
+                            </CONSOL.ENT>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/CONSOL.KEY">
+                            <CONSOL.KEY>
+                                <xsl:value-of select="$T24Entry/T24Entries/CONSOL.KEY"/>
+                            </CONSOL.KEY>
+                        </xsl:if>
+                        <T24.CO.CODE>
+                            <xsl:value-of select="$T24Entry/T24Entries/T24.CO.CODE"/>
+                        </T24.CO.CODE>
+                        <PROD.MODULE>
+                            <xsl:value-of select="$T24Entry/T24Entries/PROD.MODULE"/>
+                        </PROD.MODULE>
+                        <xsl:if test="$T24Entry/T24Entries/TRANS.CODE">
+                            <TRANS.CODE>
+                                <xsl:value-of select="$T24Entry/T24Entries/TRANS.CODE"/>
+                            </TRANS.CODE>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/TRANS.DESC">
+                            <TRANS.DESC>
+                                <xsl:value-of select="$T24Entry/T24Entries/TRANS.DESC"/>
+                            </TRANS.DESC>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/T24.ACCT">
+                            <T24.ACCT>
+                                <xsl:value-of select="$T24Entry/T24Entries/T24.ACCT"/>
+                            </T24.ACCT>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/DR.CR.MARKER">
+                            <DR.CR.MARKER>
+                                <xsl:value-of select="$T24Entry/T24Entries/DR.CR.MARKER"/>
+                            </DR.CR.MARKER>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/ERP.ACCT">
+                            <ERP.ACCT>
+                                <xsl:value-of select="$T24Entry/T24Entries/ERP.ACCT"/>
+                            </ERP.ACCT>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/ENTRY.CCY">
+                            <ENTRY.CCY>
+                                <xsl:value-of select="$T24Entry/T24Entries/ENTRY.CCY"/>
+                            </ENTRY.CCY>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/AMT.LCY">
+                            <AMT.LCY>
+                                <xsl:value-of select="$T24Entry/T24Entries/AMT.LCY"/>
+                            </AMT.LCY>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/AMT.FCY">
+                            <AMT.FCY>
+                                <xsl:value-of select="$T24Entry/T24Entries/AMT.FCY"/>
+                            </AMT.FCY>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/EXCH.RATE">
+                            <EXCH.RATE>
+                                <xsl:value-of select="$T24Entry/T24Entries/EXCH.RATE"/>
+                            </EXCH.RATE>
+                        </xsl:if>
+                        <VALUE.DATE>
+                            <xsl:value-of select="$T24Entry/T24Entries/VALUE.DATE"/>
+                        </VALUE.DATE>
+                        <xsl:if test="$T24Entry/T24Entries/TXN.DATE">
+                            <TXN.DATE>
+                                <xsl:value-of select="$T24Entry/T24Entries/TXN.DATE"/>
+                            </TXN.DATE>
+                        </xsl:if>
+                        <TXN.INPUTTER>
+                            <xsl:value-of select="if  (exists($ReadSignOnNameList/SignOnNameList/Pair/SignOnName[ID=$T24Entry/T24Entries/TXN.INPUTTER])) then &#xA; $ReadSignOnNameList/SignOnNameList/Pair/SignOnName[ID=$T24Entry/T24Entries/TXN.INPUTTER]/Name&#xA;else $T24Entry/T24Entries/TXN.INPUTTER"/>
+                        </TXN.INPUTTER>
+                        <xsl:if test="$T24Entry/T24Entries/TXN.AUTHORISER">
+                            <TXN.AUTHORISER>
+                                <xsl:value-of select="$T24Entry/T24Entries/TXN.AUTHORISER"/>
+                            </TXN.AUTHORISER>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/CUSTOMER.ID">
+                            <CUSTOMER.ID>
+                                <xsl:value-of select="$T24Entry/T24Entries/CUSTOMER.ID"/>
+                            </CUSTOMER.ID>
+                        </xsl:if>
+                        <xsl:if test="$T24Entry/T24Entries/CUSTOMER.NAME">
+                            <CUSTOMER.NAME>
+                                <xsl:value-of select="$T24Entry/T24Entries/CUSTOMER.NAME"/>
+                            </CUSTOMER.NAME>
+                        </xsl:if>
+                        <CONTRACT.ID>
+                            <xsl:value-of select="tib:trim($T24Entry/T24Entries/CONTRACT.ID)"/>
+                        </CONTRACT.ID>
+                        <CURRENCY_ORIGIN>
+                            <xsl:value-of select="if(tib:left($T24Entry/T24Entries/ERP.ACCT, 3)='424'  and string-length(tib:trim($T24Entry/T24Entries/T24.ACCT)) =16 and tib:trim($T24Entry/T24Entries/ENTRY.CCY) !='VND'  )&#xA;then              $T24Entry/T24Entries/ENTRY.CCY &#xA;else if(tib:left($T24Entry/T24Entries/ERP.ACCT, 3)='424'  and string-length(tib:trim($T24Entry/T24Entries/T24.ACCT)) =16 and tib:trim($T24Entry/T24Entries/ENTRY.CCY) ='VND'  and substring($T24Entry/T24Entries/T24.ACCT,4,5 )='14014') &#xA;then     substring($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/CurrencyCodeList, tib:index-of($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/CurrencyCodeList,substring($T24Entry/T24Entries/T24.ACCT,9,4))-3,3)&#xA;else if(tib:left($T24Entry/T24Entries/ERP.ACCT, 3)='424'  and string-length(tib:trim($T24Entry/T24Entries/T24.ACCT)) =16 and tib:trim($T24Entry/T24Entries/ENTRY.CCY) ='VND' and substring($T24Entry/T24Entries/T24.ACCT,4,5 )!='14014') &#xA;then     'VND'&#xA;else if(tib:left($T24Entry/T24Entries/ERP.ACCT, 3)='424'  and string-length(tib:trim($T24Entry/T24Entries/T24.ACCT)) =19  and   tib:left(tib:trim($T24Entry/T24Entries/T24.ACCT), 3)='VND' )&#xA;then substring($T24Entry/T24Entries/T24.ACCT,tib:index-of($T24Entry/T24Entries/T24.ACCT, '14016')-3,3) &#xA;else if (tib:left($T24Entry/T24Entries/ERP.ACCT, 3)='424'  and string-length(tib:trim($T24Entry/T24Entries/T24.ACCT)) =19  and   tib:left(tib:trim($T24Entry/T24Entries/T24.ACCT), 3)!='VND' )&#xA;then   tib:left(tib:trim($T24Entry/T24Entries/T24.ACCT), 3)&#xA;else &quot;&quot;"/>
+                        </CURRENCY_ORIGIN>
+                        <REVERSE>
+                            <xsl:value-of select="if(contains($T24Entry/T24Entries/CONTRACT.ID,'-R')) then&#xA;'Y'&#xA;else 'N'"/>
+                        </REVERSE>
+                        <T24ACCOUNT>
+                            <xsl:value-of select="$T24Entry/T24Entries/T24.ACCT"/>
+                        </T24ACCOUNT>
+                        <DESCRIPTION>
+                            <xsl:value-of select="$T24Entry/T24Entries/DESCRIPTION"/>
+                        </DESCRIPTION>
+                        <DEALER_DESK>
+                            <xsl:value-of select="$T24Entry/T24Entries/DEALER.DESK"/>
+                        </DEALER_DESK>
+                        <xsl:if test="$T24Entry/T24Entries/TIME">
+                            <TIME>
+                                <xsl:value-of select="$T24Entry/T24Entries/TIME"/>
+                            </TIME>
+                        </xsl:if>
+                    </T24Entries>
+                </Rows>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="FileFilter">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>413</pd:x>
+            <pd:y>251</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <append>true</append>
+            </config>
+            <pd:inputBindings>
+                <ns2:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/T24WS/T24EntriesLocalFileDir,tib:format-date('yyyyMMdd', current-date()),$Start/T24Entries/State,'_deleted.txt')"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="concat($T24Entry/T24Entries/ENTRY.ID,'|',$T24Entry/T24Entries/CONSOL.ENT,'|',$T24Entry/T24Entries/CONSOL.KEY,'|',$T24Entry/T24Entries/T24.CO.CODE,'|',$T24Entry/T24Entries/PROD.MODULE,'|',$T24Entry/T24Entries/TRANS.CODE,'|',$T24Entry/T24Entries/TRANS.DESC,'|',$T24Entry/T24Entries/T24.ACCT,'|',$T24Entry/T24Entries/DR.CR.MARKER,'|',$T24Entry/T24Entries/ERP.ACCT,'|',$T24Entry/T24Entries/ENTRY.CCY,'|',$T24Entry/T24Entries/AMT.LCY,'|',$T24Entry/T24Entries/AMT.FCY,'|',$T24Entry/T24Entries/EXCH.RATE,'|',$T24Entry/T24Entries/VALUE.DATE,'|',$T24Entry/T24Entries/TXN.DATE,'|',$T24Entry/T24Entries/TXN.INPUTTER,'|',$T24Entry/T24Entries/TXN.AUTHORISER,'|',$T24Entry/T24Entries/CUSTOMER.ID,'|',$T24Entry/T24Entries/CUSTOMER.NAME,'|',$T24Entry/T24Entries/CONTRACT.ID,'&#xA;')"/>
+                    </textContent>
+                </ns2:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ReadSignOnNameList">
+            <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+            <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+            <pd:x>387</pd:x>
+            <pd:y>124</pd:y>
+            <config>
+                <variableConfig>/SharedResource/SharedVariables/SignOnNameList.sharedvariable</variableConfig>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,1496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx15="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx14="http://www.temenos.com/T24/event/OverdraftLending/OverdraftLendingFlow" xmlns:pfx13="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" xmlns:pfx12="http://xmlns.example.com/1436496664792" xmlns:pfx11="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx10="http://www.temenos.com/T24/event/CreateCurrency/CreateCurrencyFlow" xmlns:pfx19="http://www.tibco.com/pe/CheckpointSchema" xmlns:pfx18="http://tempuri.org/" xmlns:pfx17="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns16="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns14="sbv/common/exceptionhandling/exception/1.0" xmlns:ns15="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetLendingFrT24" xmlns:ns12="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:pfx="http://temenos.com/HOLIDAY" xmlns:ns10="sbv/common/envelope/soaenvelope/1.0" xmlns:ns11="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx4="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx3="http://www.temenos.com/T24/event/Holiday/HolidayFlow" xmlns:pfx2="http://www.tibco.com/schemas/15. Utils Projects/SharedResource/Schema/Global/System/CSD/CSDCalendarSubscribe/CSDCalendar.xsd" xmlns:pfx9="http://CurrencyPublic/T24PostToCsdService_GetCurrency" xmlns:pfx8="http://CurrencyPublic/T24PostToCsdService" xmlns:pfx7="http://CurrencyPublic/CSD_GetCurrency_Service" xmlns:pfx6="http://xmlns.example.com/1433466938916" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24" xmlns:ns5="www.tibco.com/plugin/Sleep" xmlns:ns6="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns7="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24" xmlns:ns8="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCustomerFrT24" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx28="http://temenos.com/T24.ACCOUNT.STATE" xmlns:ns4="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:ns3="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:pfx22="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx23="http://www.temenos.com/T24/event/EarlyMatureLoan/EarlyMatureLoanFlow" xmlns:pfx20="http://www.temenos.com/T24/event/CollaterisedLending/CollaterisedLendingFlow" xmlns:pfx21="http://www.temenos.com/T24/event/OvernightLending/OvernightLendingFlow" xmlns:pfx26="http://www.temenos.com/T24/event/PaymentDue/PaymentDueFlow" xmlns:pfx27="sbv/sharedresource/CitadIn/ESBCitadInModel" xmlns:pfx24="http://www.temenos.com/T24/event/AmendLoan/AmendLoanFlow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx25="http://www.temenos.com/T24/event/AutoMatureLoan/AutoMatureLoanFlow">
+    <xsd:import namespace="http://www.temenos.com/T24/event/CreateCurrency/CreateCurrencyFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/CurrencyPublic/CreateCurrency.xsd"/>
+    <xsd:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/CustomerInfo/T24Schema/CustomerInfomationFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/Holiday/HolidayFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CalendarPublic/T24HolidaySchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/15. Utils Projects/SharedResource/Schema/Global/System/CSD/CSDCalendarSubscribe/CSDCalendar.xsd" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CalendarPublic/CSDCalendar.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/ExchangeRatePublish/ExchangeRatePublish-ExchangeRateFlow.xsd"/>
+    <xsd:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService" schemaLocation="/SharedResource/Schema/Global/System/CSD/CsdService/T24PostToCsdService.wsdl"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/OverdraftLending/OverdraftLendingFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/OverdraftLendingService/OverdraftLending-OverdraftLendingFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CollaterisedLending/CollaterisedLendingFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/CollaterisedLendingService/CollaterisedLending-CollaterisedLendingFlow.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/OvernightLending/OvernightLendingFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/OvernightLendingService/OvernightLending-OvernightLendingFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/AmendLoan/AmendLoanFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/AmendLoanService/AmendLoan-AmendLoanFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/AutoMatureLoan/AutoMatureLoanFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/AutoMatureLoan/AutoMatureLoan-AutoMatureLoanFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/PaymentDue/PaymentDueFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/PaymentDueLoanService/PaymentDue-PaymentDueFlow.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/EarlyMatureLoan/EarlyMatureLoanFlow" schemaLocation="/SharedResource/Schema/Global/System/CSD/EarlyMatureLoanService/EarlyMatureLoan-EarlyMatureLoanFlow.xsd"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService"/>
+    <wsdl:import namespace="http://CurrencyPublic/T24PostToCsdService_GetCurrency"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService" location="/SharedResource/Schema/Global/System/CSD/CsdService/T24PostToCsdService.wsdl"/>
+    <pd:name>Services/Global/System/CSDT24/OverdraftLending/OperationImpl/CSDOverdraftLendingScan.process</pd:name>
+    <pd:startName>JMS Topic Subscriber</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Topic Subscriber">
+        <pd:type>com.tibco.plugin.jms.JMSTopicEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSTopicEventSource</pd:resourceType>
+        <pd:x>68</pd:x>
+        <pd:y>52</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBLendingTopic</destination>
+                <durable>true</durable>
+                <subscriptionName>CSDOverdraftLendingScan</subscriptionName>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1184</pd:endX>
+    <pd:endY>305</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <OriginalAmount>
+            <xsd:element name="OriginalAmount" type="xsd:double"/>
+        </OriginalAmount>
+        <OverdueAmount>
+            <xsd:element name="OverdueAmount" type="xsd:double"/>
+        </OverdueAmount>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="DateTimeFormat" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1436004432453</pd:targetNamespace>
+    <pd:activity name="ParseOverdraft">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>323</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx14:OverdraftLendingFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>178</pd:x>
+        <pd:y>1168</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>973</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="&quot;OverdraftLending&quot;"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat( 'CSDOverdraftLending' ,': End ', 'CSDOverdraftLending' )"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns12:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <ns10:SOAEnvelope>
+                    <ns10:SOAServiceHeader>
+                        <ns10:AppHdr>
+                            <ns11:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns11:CharSet>
+                            <ns11:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns11:ServVersion>
+                            <ns11:From>
+                                <ns11:Id>
+                                    <xsl:value-of select="&quot;1002&quot;"/>
+                                </ns11:Id>
+                                <ns11:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns11:Name>
+                            </ns11:From>
+                            <ns11:To>
+                                <ns11:Id>
+                                    <xsl:value-of select="&quot;1001&quot;"/>
+                                </ns11:Id>
+                                <ns11:Name>
+                                    <xsl:value-of select="&quot;CSD&quot;"/>
+                                </ns11:Name>
+                            </ns11:To>
+                            <ns11:MsgId>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </ns11:MsgId>
+                            <ns11:BizServ>
+                                <ns11:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns11:Id>
+                                <ns11:Name>
+                                    <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                                </ns11:Name>
+                            </ns11:BizServ>
+                            <ns11:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns11:CreatedDate>
+                        </ns10:AppHdr>
+                        <ns10:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </ns10:SOAMsgId>
+                        <ns10:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </ns10:ServiceName>
+                        <ns10:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </ns10:OperationName>
+                        <ns10:ProcessName>
+                            <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                        </ns10:ProcessName>
+                    </ns10:SOAServiceHeader>
+                    <ns10:ServiceBody>
+                        <ns16:ServiceEnverlop>
+                            <ns11:AppHdr>
+                                <ns11:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns11:CharSet>
+                                <ns11:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns11:ServVersion>
+                                <ns11:From>
+                                    <ns11:Id>
+                                        <xsl:value-of select="&quot;1002&quot;"/>
+                                    </ns11:Id>
+                                    <ns11:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </ns11:Name>
+                                </ns11:From>
+                                <ns11:To>
+                                    <ns11:Id>
+                                        <xsl:value-of select="&quot;1001&quot;"/>
+                                    </ns11:Id>
+                                    <ns11:Name>
+                                        <xsl:value-of select="&quot;CSD&quot;"/>
+                                    </ns11:Name>
+                                </ns11:To>
+                                <ns11:MsgId>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns11:MsgId>
+                                <ns11:BizServ>
+                                    <ns11:Id>
+                                        <xsl:value-of select="&quot;1&quot;"/>
+                                    </ns11:Id>
+                                    <ns11:Name>
+                                        <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                                    </ns11:Name>
+                                </ns11:BizServ>
+                                <ns11:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns11:CreatedDate>
+                            </ns11:AppHdr>
+                            <xsl:for-each select="$PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus">
+                                <ns11:ResponseStatus>
+                                    <ns11:Status>
+                                        <xsl:value-of select="ns4:Status"/>
+                                    </ns11:Status>
+                                    <xsl:for-each select="ns4:Errors/ns4:ErrorInfo">
+                                        <ns11:ErrorInfo>
+                                            <xsl:if test="ns4:ErrorCode">
+                                                <ns11:ErrorCode>
+                                                    <xsl:value-of select="ns4:ErrorCode"/>
+                                                </ns11:ErrorCode>
+                                            </xsl:if>
+                                            <xsl:if test="ns4:ErrorMessage">
+                                                <ns11:ErrorMessage>
+                                                    <xsl:value-of select="ns4:ErrorMessage"/>
+                                                </ns11:ErrorMessage>
+                                            </xsl:if>
+                                        </ns11:ErrorInfo>
+                                    </xsl:for-each>
+                                </ns11:ResponseStatus>
+                            </xsl:for-each>
+                            <ServiceBody>
+                                <xsl:copy-of select="$PostLendingToCSD/outputMessage"/>
+                            </ServiceBody>
+                        </ns16:ServiceEnverlop>
+                    </ns10:ServiceBody>
+                </ns10:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sleep-Process-1">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>944</pd:x>
+        <pd:y>388</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns5:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="20000"/>
+                </IntervalInMillisec>
+            </ns5:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapOverdraft">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>477</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <element ref="pfx14:OverdraftLendingFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParseOverdraft/pfx14:OverdraftLendingFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PostLendingToCSD">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>679</pd:x>
+        <pd:y>300</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx4:T24PostToCsdService</service>
+            <servicePort>BasicHttpBinding_IT24PostToCsdService</servicePort>
+            <operation>GetLendingFrT24</operation>
+            <soapAction>http://fis.vn/iMaximusGateway/T24PostToCsdService/IT24PostToCsdService/GetLendingFrT24</soapAction>
+            <endpointURL>%%CsdWS/CSDT24Service%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx4:GetLendingFrT24>
+                    <pfx4:request>
+                        <ns15:Header>
+                            <ns4:MsgReqId>
+                                <xsl:choose>
+                                    <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_', $MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending)&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;concat($ServiceVariables/root/DateTimeFormat,'_' ,$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id)&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending)&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id)&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id)&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id)&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id)&#xA;else&#xA;$ServiceVariables/root/DateTimeFormat)">
+                                        <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_', $MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending)&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;concat($ServiceVariables/root/DateTimeFormat,'_' ,$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id)&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending)&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id)&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id)&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id)&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;concat($ServiceVariables/root/DateTimeFormat, '_',$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id)&#xA;else&#xA;$ServiceVariables/root/DateTimeFormat"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </ns4:MsgReqId>
+                        </ns15:Header>
+                        <ns15:Request>
+                            <ns15:GetLendingFrT24RequestType>
+                                <ns15:Amount>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:amountList/pfx14:amount[1]&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:amount1List/pfx21:amount1[1]&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:amountList/pfx20:amount[1]&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:amountList/pfx23:amount[1]&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:amountList/pfx24:amount[1]&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:amountList/pfx25:amount[1]&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$OriginalAmount/OriginalAmount&#xA;else&#xA;0)">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:amountList/pfx14:amount[1]&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:amount1List/pfx21:amount1[1]&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:amountList/pfx20:amount[1]&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:amountList/pfx23:amount[1]&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:amountList/pfx24:amount[1]&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:amountList/pfx25:amount[1]&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$OriginalAmount/OriginalAmount&#xA;else&#xA;0"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:Amount>
+                                <ns15:BankCode>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:customerId&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:customerId&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:customerId&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:customerId&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:customerId&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:customerId&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:customerId&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:customerId&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:customerId&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:customerId&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:customerId&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:customerId&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:BankCode>
+                                <ns15:BusinessCode>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:category&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:category&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then &#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:category&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then &#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:category&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then &#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:category&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then &#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:category&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:category&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:category&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then &#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:category&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then &#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:category&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then &#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:category&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then &#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:category&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:BusinessCode>
+                                <ns15:CurrencyCode>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:currency&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:currency&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:currency&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:currency&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:currency&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:currency&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:currency&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:currency&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:currency&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:currency&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:currency&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:currency&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:CurrencyCode>
+                                <ns15:DueDate>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:finMatDate&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:finMatDate&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:finMatDate&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:finMatDate&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:finMatDate&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:finMatDate&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:finMatDate&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:finMatDate&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:finMatDate&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:finMatDate&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:finMatDate&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:finMatDate&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:DueDate>
+                                <ns15:FineAmount>
+                                    <xsl:value-of select="if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$OverdueAmount/OverdueAmount&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$ParseEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:penatyAmt&#xA;else&#xA;''"/>
+                                </ns15:FineAmount>
+                                <ns15:IntRate>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapCollaterised/pfx20:CollaterisedLendingFlow) then &#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:interestRateList/pfx20:interestRate[1]&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:interestRateList/pfx21:interestRate[1]&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then &#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:interestRateList/pfx24:interestRate[1]&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then &#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:interestRateList/pfx25:interestRate[1]&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapCollaterised/pfx20:CollaterisedLendingFlow) then &#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:interestRateList/pfx20:interestRate[1]&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:interestRateList/pfx21:interestRate[1]&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then &#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:interestRateList/pfx24:interestRate[1]&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then &#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:interestRateList/pfx25:interestRate[1]&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:IntRate>
+                                <ns15:LdDate>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:valueDate&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:valueDate&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:valueDate&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:valueDate&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:valueDate&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:valueDate&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:valueDate&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:valueDate&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:valueDate&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:valueDate&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:valueDate&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:valueDate&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:LdDate>
+                                <ns15:LoanNo>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:LoanNo>
+                                <ns15:LoanOrgNo>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:LoanOrgNo>
+                                <ns15:Status>
+                                    <xsl:choose>
+                                        <xsl:when test="exists(if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:recordStatus&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:recordStatus&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:recordStatus&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:recordStatus&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:recordStatus&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:recordStatus&#xA;else&#xA;'')">
+                                            <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:recordStatus&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:recordStatus&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:recordStatus&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:recordStatus&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:recordStatus&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:recordStatus&#xA;else&#xA;''"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </ns15:Status>
+                                <ns15:StatusLiquidate>
+                                    <xsl:value-of select="if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then &#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:status&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then &#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:status&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:status&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:status&#xA;else&#xA;''"/>
+                                </ns15:StatusLiquidate>
+                                <ns15:StatusOverdue>
+                                    <xsl:value-of select="if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:overDueStatus&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:overdueStatus&#xA;else&#xA;''"/>
+                                </ns15:StatusOverdue>
+                            </ns15:GetLendingFrT24RequestType>
+                        </ns15:Request>
+                    </pfx4:request>
+                </pfx4:GetLendingFrT24>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogStart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>70</pd:x>
+        <pd:y>457</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="&quot;OverdraftLending&quot;"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat(&quot;CSDOverdraftLending&quot;,': Start ',&quot;CSDOverdraftLending&quot;)"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns12:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <ns10:SOAEnvelope>
+                    <ns10:SOAServiceHeader>
+                        <ns10:AppHdr>
+                            <ns11:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns11:CharSet>
+                            <ns11:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns11:ServVersion>
+                            <ns11:From>
+                                <ns11:Id>
+                                    <xsl:value-of select="&quot;1002&quot;"/>
+                                </ns11:Id>
+                                <ns11:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns11:Name>
+                            </ns11:From>
+                            <ns11:To>
+                                <ns11:Id>
+                                    <xsl:value-of select="&quot;1001&quot;"/>
+                                </ns11:Id>
+                                <ns11:Name>
+                                    <xsl:value-of select="&quot;CSD&quot;"/>
+                                </ns11:Name>
+                            </ns11:To>
+                            <ns11:MsgId>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </ns11:MsgId>
+                            <ns11:BizServ>
+                                <ns11:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </ns11:Id>
+                                <ns11:Name>
+                                    <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                                </ns11:Name>
+                            </ns11:BizServ>
+                            <ns11:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns11:CreatedDate>
+                        </ns10:AppHdr>
+                        <ns10:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </ns10:SOAMsgId>
+                        <ns10:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </ns10:ServiceName>
+                        <ns10:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </ns10:OperationName>
+                        <ns10:ProcessName>
+                            <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                        </ns10:ProcessName>
+                    </ns10:SOAServiceHeader>
+                    <ns10:ServiceBody>
+                        <xsl:copy-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+                    </ns10:ServiceBody>
+                </ns10:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>799</pd:x>
+        <pd:y>92</pd:y>
+        <config>
+            <ConfirmEvent>T24 Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>363</pd:x>
+        <pd:y>1172</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Error Handle">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>479</pd:x>
+        <pd:y>967</pd:y>
+        <pd:width>523</pd:width>
+        <pd:height>380</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Sleep-1</pd:to>
+            <pd:xpathDescription>Connect Lost</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>($_error/pfx5:ErrorReport/MsgCode = "BW-JDBC-100014" or contains($_error/pfx5:ErrorReport/Msg, "SQLState = 6100" ))
+and contains($_error/pfx5:ErrorReport/ProcessStack, "JDBC Call Procedure")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>LendingErrorQueue</pd:to>
+            <pd:xpathDescription>Other Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Null</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Connection Notify Queue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LendingErrorQueue</pd:from>
+            <pd:to>Confirm-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Sleep-1</pd:from>
+            <pd:to>Checkpoint-2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint-2</pd:from>
+            <pd:to>Connection Notify Queue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint-2</pd:from>
+            <pd:to>Null</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="LendingErrorQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>600</pd:x>
+            <pd:y>1060</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>queue.overdraftlending.error</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <Body>
+                        <xsl:value-of select="concat(&quot;Message Error: &quot;, $JMS-Topic-Subscriber/ns:ActivityOutput/Body)"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm-1">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:x>809</pd:x>
+            <pd:y>1058</pd:y>
+            <config>
+                <ConfirmEvent>T24 Queue Receiver</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Sleep-1">
+            <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+            <pd:resourceType>ae.activities.sleep</pd:resourceType>
+            <pd:x>590</pd:x>
+            <pd:y>1230</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns5:SleepInputSchema>
+                    <IntervalInMillisec>
+                        <xsl:value-of select="100000"/>
+                    </IntervalInMillisec>
+                </ns5:SleepInputSchema>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Connection Notify Queue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>822</pd:x>
+            <pd:y>1177</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>ESBConnectionNotifyQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <Body>
+                        <xsl:value-of select="concat( 'Connection Lost: ', $_error/pfx5:ErrorReport/Msg, $_error/pfx5:ErrorReport/MsgCode,  BW:getCurrentProcessName($_processContext/pfx5:ProcessContext/ProcessId))"/>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Checkpoint-2">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>700</pd:x>
+            <pd:y>1229</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <pfx19:input>
+                    <xsl:if test="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                        <duplicateKey>
+                            <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                        </duplicateKey>
+                    </xsl:if>
+                </pfx19:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Null">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>827</pd:x>
+            <pd:y>1282</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Insert AppExceptions">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>779</pd:x>
+        <pd:y>545</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ESBDB.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into appexceptions values(?,?,?,?,sysdate)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>INTERFACE_ID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SERVICES_NAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERROR_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERROR_DESCRIPTION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <INTERFACE_ID>
+                    <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id&#xA;else&#xA;''"/>
+                </INTERFACE_ID>
+                <SERVICES_NAME>
+                    <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                </SERVICES_NAME>
+                <ERROR_CODE>
+                    <xsl:value-of select="if($_error/pfx5:ErrorReport/MsgCode !=&quot;&quot;) then&#xA;$_error/pfx5:ErrorReport/MsgCode&#xA;else &#xA;if($PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus/ns4:Errors/ns4:ErrorInfo[1]/ns4:ErrorMessage !=&quot;&quot;)&#xA;then&#xA;$PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus/ns4:Errors/ns4:ErrorInfo[1]/ns4:ErrorCode&#xA;else&#xA;&quot;&quot;"/>
+                </ERROR_CODE>
+                <ERROR_DESCRIPTION>
+                    <xsl:value-of select="if($_error/pfx5:ErrorReport/MsgCode !=&quot;&quot;) then&#xA;concat($_error/pfx5:ErrorReport/MsgCode, &quot;&quot;, $_error/pfx5:ErrorReport/Msg)&#xA;else &#xA;if($PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus/ns4:Errors/ns4:ErrorInfo/ns4:ErrorMessage !=&quot;&quot;)&#xA;then&#xA;concat($PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus/ns4:Errors/ns4:ErrorInfo[1]/ns4:ErrorCode, &quot;-&quot;, $PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus/ns4:Errors/ns4:ErrorInfo[1]/ns4:ErrorMessage)&#xA;else&#xA;&quot;&quot;"/>
+                </ERROR_DESCRIPTION>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>810</pd:x>
+        <pd:y>383</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <pfx19:input>
+                <duplicateKey>
+                    <xsl:value-of select="if($MapOverdraft/pfx14:OverdraftLendingFlow) then&#xA;$MapOverdraft/pfx14:OverdraftLendingFlow/pfx14:idLending&#xA;else if($MapOvernight/pfx21:OvernightLendingFlow) then &#xA;$MapOvernight/pfx21:OvernightLendingFlow/pfx21:id&#xA;else if($MapCollaterised/pfx20:CollaterisedLendingFlow) then&#xA;$MapCollaterised/pfx20:CollaterisedLendingFlow/pfx20:idLending&#xA;else if($MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow) then&#xA;$MapEarlyMatureLoan/pfx23:EarlyMatureLoanFlow/pfx23:id&#xA;else if($MapAmendLoan/pfx24:AmendLoanFlow) then&#xA;$MapAmendLoan/pfx24:AmendLoanFlow/pfx24:id&#xA;else if($MapAutoMatureLoan/pfx25:AutoMatureLoanFlow) then&#xA;$MapAutoMatureLoan/pfx25:AutoMatureLoanFlow/pfx25:id&#xA;else if($MapPaymentDue/pfx26:PaymentDueFlow) then&#xA;$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:id&#xA;else&#xA;&quot;&quot;"/>
+                </duplicateKey>
+            </pfx19:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PostLendingToCSDError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>849</pd:x>
+        <pd:y>232</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ParseCollaterised">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>337</pd:x>
+        <pd:y>311</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx20:CollaterisedLendingFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapCollaterised">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>470</pd:x>
+        <pd:y>307</pd:y>
+        <config>
+            <element ref="pfx20:CollaterisedLendingFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParseCollaterised/pfx20:CollaterisedLendingFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetGeneralInformation">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>68</pd:x>
+        <pd:y>181</pd:y>
+        <config>
+            <variableName>ServiceVariables</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </startTime>
+                <ServiceName>
+                    <xsl:value-of select="&quot;Global/System/CSDT24/OverdraftLending&quot;"/>
+                </ServiceName>
+                <OperationName>
+                    <xsl:value-of select="&quot;CSDOverdraftLendingScan&quot;"/>
+                </OperationName>
+                <DateTimeFormat>
+                    <xsl:value-of select="tib:format-dateTime('yyyyMMddHHmmss', current-dateTime())"/>
+                </DateTimeFormat>
+                <SOAMsgId>
+                    <xsl:value-of select="concat(generate-id($_processContext/pfx5:ProcessContext), tib:timestamp())"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Checkpoint-1">
+        <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+        <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+        <pd:x>71</pd:x>
+        <pd:y>309</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <pfx19:input>
+                <xsl:if test="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID">
+                    <duplicateKey>
+                        <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/JMSHeaders/ns:JMSMessageID"/>
+                    </duplicateKey>
+                </xsl:if>
+            </pfx19:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="NullForChoice">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>215</pd:x>
+        <pd:y>395</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ParseOvernight">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>193</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx21:OvernightLendingFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapOvernight">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>473</pd:x>
+        <pd:y>191</pd:y>
+        <config>
+            <element ref="pfx21:OvernightLendingFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParseOvernight/pfx21:OvernightLendingFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseEarlyMatureLoan">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>337</pd:x>
+        <pd:y>420</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx23:EarlyMatureLoanFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapEarlyMatureLoan">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>476</pd:x>
+        <pd:y>421</pd:y>
+        <config>
+            <element ref="pfx23:EarlyMatureLoanFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParseEarlyMatureLoan/pfx23:EarlyMatureLoanFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseAmendLoan">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>345</pd:x>
+        <pd:y>548</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx24:AmendLoanFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapAmendLoan">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>474</pd:x>
+        <pd:y>548</pd:y>
+        <config>
+            <element ref="pfx24:AmendLoanFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParseAmendLoan/pfx24:AmendLoanFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseAutoMatureLoan">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>345</pd:x>
+        <pd:y>673</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx25:AutoMatureLoanFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapAutoMatureLoan">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>472</pd:x>
+        <pd:y>674</pd:y>
+        <config>
+            <element ref="pfx25:AutoMatureLoanFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParseAutoMatureLoan/pfx25:AutoMatureLoanFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParsePaymentDue">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>204</pd:x>
+        <pd:y>706</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx26:PaymentDueFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Topic-Subscriber/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapPaymentDue">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>200</pd:x>
+        <pd:y>830</pd:y>
+        <config>
+            <element ref="pfx26:PaymentDueFlow"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$ParsePaymentDue/pfx26:PaymentDueFlow"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>524</pd:x>
+        <pd:y>662</pd:y>
+        <pd:width>230</pd:width>
+        <pd:height>298</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$MapPaymentDue/pfx26:PaymentDueFlow/pfx26:totOvrdueTypeGroup</pd:over>
+            <pd:iterationElementSlot>OvrdueTypeGroup</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Null-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetAmountOriginal</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$OvrdueTypeGroup/pfx26:totOvrdueTypeGroup/pfx26:totOvrdueType = 'PR'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetAmountOverdue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$OvrdueTypeGroup/pfx26:totOvrdueTypeGroup/pfx26:totOvrdueType = 'IN' or
+$OvrdueTypeGroup/pfx26:totOvrdueTypeGroup/pfx26:totOvrdueType = 'PS' or
+$OvrdueTypeGroup/pfx26:totOvrdueTypeGroup/pfx26:totOvrdueType = 'PE'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Null-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetAmountOriginal</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetAmountOverdue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GetAmountOriginal">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>639</pd:x>
+            <pd:y>737</pd:y>
+            <config>
+                <variableName>OriginalAmount</variableName>
+            </config>
+            <pd:inputBindings>
+                <OriginalAmount>
+                    <xsl:value-of select="$OvrdueTypeGroup/pfx26:totOvrdueTypeGroup/pfx26:totOdTypeAmt"/>
+                </OriginalAmount>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetAmountOverdue">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>635</pd:x>
+            <pd:y>884</pd:y>
+            <config>
+                <variableName>OverdueAmount</variableName>
+            </config>
+            <pd:inputBindings>
+                <OverdueAmount>
+                    <xsl:value-of select="$OverdueAmount/OverdueAmount + $OvrdueTypeGroup/pfx26:totOvrdueTypeGroup/pfx26:totOdTypeAmt"/>
+                </OverdueAmount>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Null-1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>639</pd:x>
+            <pd:y>816</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="SetOriginalAmt">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>201</pd:x>
+        <pd:y>937</pd:y>
+        <config>
+            <variableName>OriginalAmount</variableName>
+        </config>
+        <pd:inputBindings>
+            <OriginalAmount>
+                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="0"/>
+            </OriginalAmount>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetOverdueAmt">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>380</pd:x>
+        <pd:y>938</pd:y>
+        <config>
+            <variableName>OverdueAmount</variableName>
+        </config>
+        <pd:inputBindings>
+            <OverdueAmount>
+                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="0"/>
+            </OverdueAmount>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InsertAppExceptionError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>925</pd:x>
+        <pd:y>537</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapOverdraft</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PostLendingToCSD</pd:from>
+        <pd:to>PostLendingToCSDError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep-Process-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseOverdraft</pd:from>
+        <pd:to>MapOverdraft</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PostLendingToCSD</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$PostLendingToCSD/outputMessage/pfx4:GetLendingFrT24Response/pfx4:GetLendingFrT24Result/ns15:ResponseStatus/ns4:Status = "0"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart</pd:from>
+        <pd:to>NullForChoice</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>Error Handle</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Handle</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>Insert AppExceptions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint</pd:from>
+        <pd:to>Sleep-Process-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert AppExceptions</pd:from>
+        <pd:to>Sleep-Process-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PostLendingToCSDError</pd:from>
+        <pd:to>Checkpoint</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PostLendingToCSD</pd:from>
+        <pd:to>Checkpoint</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseCollaterised</pd:from>
+        <pd:to>MapCollaterised</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapCollaterised</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetGeneralInformation</pd:from>
+        <pd:to>Checkpoint-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint-1</pd:from>
+        <pd:to>LogStart</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Checkpoint-1</pd:from>
+        <pd:to>NullForChoice</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParseCollaterised</pd:to>
+        <pd:xpathDescription>CollaterisedLendingFlow</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'CollaterisedLendingFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParseOvernight</pd:to>
+        <pd:xpathDescription>OvernightLendingFlow</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'OvernightLendingFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseOvernight</pd:from>
+        <pd:to>MapOvernight</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapOvernight</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParseOverdraft</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParseEarlyMatureLoan</pd:to>
+        <pd:xpathDescription>EarlyMatureLoanFlow</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'EarlyMatureLoanFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseEarlyMatureLoan</pd:from>
+        <pd:to>MapEarlyMatureLoan</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapEarlyMatureLoan</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParseAmendLoan</pd:to>
+        <pd:xpathDescription>AmendLoanFlow</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'AmendLoanFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseAmendLoan</pd:from>
+        <pd:to>MapAmendLoan</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapAmendLoan</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParseAutoMatureLoan</pd:to>
+        <pd:xpathDescription>AutoMatureLoan</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'AutoMatureLoanFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseAutoMatureLoan</pd:from>
+        <pd:to>MapAutoMatureLoan</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapAutoMatureLoan</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NullForChoice</pd:from>
+        <pd:to>ParsePaymentDue</pd:to>
+        <pd:xpathDescription>PaymentDueFlow</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($JMS-Topic-Subscriber/ns:ActivityOutput/Body, 'PaymentDueFlow')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParsePaymentDue</pd:from>
+        <pd:to>MapPaymentDue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapPaymentDue</pd:from>
+        <pd:to>SetOriginalAmt</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>PostLendingToCSD</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetOriginalAmt</pd:from>
+        <pd:to>SetOverdueAmt</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetOverdueAmt</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert AppExceptions</pd:from>
+        <pd:to>InsertAppExceptionError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsertAppExceptionError</pd:from>
+        <pd:to>Sleep-Process-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Topic Subscriber</pd:from>
+        <pd:to>SetGeneralInformation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

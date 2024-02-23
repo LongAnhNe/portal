@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fis.vn/iMaximusGateway/ErpPostToCsdService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:ns2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:ns4="http://www.sbv.gov.vn/global/report/dailybalance/version1.0" xmlns:ns3="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0" xmlns:pfx4="http://tempuri.org/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx2="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx9="http://xmlns.example.com/1448421894901" xmlns:pfx8="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp" xmlns:pfx7="http://xmlns.example.com/1433466938916" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="sbv/common/envelope/serviceenvelope/1.0">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/ERPAccountInfo/ERPAccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountMapping/AccountMapping.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" location="/Services/Global/Account/ERPAccountInfo/OperationImpl/ERPAccountInfo.serviceagent"/>
+    <wsdl:import namespace="http://tempuri.org/" location="/SharedResource/Schema/Global/System/CSD/ErpPostToCsd/ErpPostToCsd.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1448421894901" location="/SharedResource/Schema/Global/Report/DailyBalance/DailyBalance.wsdl"/>
+    <pd:name>Services/Global/Report/DailyBalance/Version1.0/GenarateFileReport/RequestResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx9:Request"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>298</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <ns3:AccountMappingRes>
+                <xsl:for-each select="$Call-Process/root/AccountNoResult">
+                    <ns3:AccountNoResult>
+                        <xsl:value-of select="."/>
+                    </ns3:AccountNoResult>
+                </xsl:for-each>
+            </ns3:AccountMappingRes>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>2059</pd:endX>
+    <pd:endY>334</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <FileData>
+            <xsd:element name="Data">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="FileName" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="FileContent" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="MaDVTemp" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="NumberRow" type="xsd:int" minOccurs="0"/>
+                        <xsd:element name="ExportNo" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </FileData>
+        <ListDataState>
+            <xsd:element name="ListDataState">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="RowState" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="TXN_DATE" type="xsd:string"/>
+                                    <xsd:element name="DONVI_SBV" type="xsd:string"/>
+                                    <xsd:element name="FILENAME" type="xsd:string"/>
+                                    <xsd:element name="EXPORT_NO" type="xsd:string"/>
+                                    <xsd:element name="TOTAL_ROWS" type="xsd:int"/>
+                                    <xsd:element name="STATUS" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ListDataState>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437462684809</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1555</pd:x>
+        <pd:y>598</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="JDBC_Query_MaDV">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>298</pd:y>
+        <config>
+            <timeout>20</timeout>
+            <commit>false</commit>
+            <maxRows>1000</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>SELECT  DISTINCT (DON_VI_SBV) from fpt_gl_candoingay WHERE NGAY_DU_LIEU = ? order by DON_VI_SBV desc</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>Ngay_du_lieu</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>DON_VI_SBV</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <Ngay_du_lieu>
+                    <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',$Start/pfx9:Request/Request/ns4:Request/ns4:Date)))"/>
+                </Ngay_du_lieu>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop_DV">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>426</pd:x>
+        <pd:y>66</pd:y>
+        <pd:width>1253</pd:width>
+        <pd:height>438</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$JDBC_Query_MaDV/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>ListMaDV</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>JDBC_Query_Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>FTP Put</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ListDataStateError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Write File</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC_Query_Data</pd:from>
+            <pd:to>Contructor</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CompletedDataFile</pd:from>
+            <pd:to>Write File</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Write File</pd:from>
+            <pd:to>ListDataState</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Contructor</pd:from>
+            <pd:to>LoopData</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LoopData</pd:from>
+            <pd:to>CompletedDataFile</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ListDataState</pd:from>
+            <pd:to>FTP Put</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>FTP Put</pd:from>
+            <pd:to>ListDataStateError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC_Query_Data</pd:from>
+            <pd:to>LoopData</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="JDBC_Query_Data">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>556</pd:x>
+            <pd:y>331</pd:y>
+            <config>
+                <timeout>30</timeout>
+                <commit>false</commit>
+                <maxRows>1000</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                <statement>SELECT NULL DON_VI,NULL DON_VI_SBV,'0' SO_TAI_KHOAN,NULL TEN_TAI_KHOAN,NULL NGAY_DU_LIEU,NULL DU_DAU_NO,NULL DU_DAU_CO,NULL PHAT_SINH_NO,NULL PHAT_SINH_CO,NULL DU_CUOI_NO,NULL DU_CUOI_CO,NULL PS_NAM_NO,NULL PS_NAM_CO,max(EXPORT_NO) AS EXPORT_NO FROM FPT_GL_CANDOINGAY_STATE WHERE DONVI_SBV =?  AND TRX_DATE =?
+  UNION ALL
+SELECT T1.DON_VI, T1.DON_VI_SBV, T1.SO_TAI_KHOAN, T1.TEN_TAI_KHOAN, T1.NGAY_DU_LIEU, T1.DU_DAU_NO, T1.DU_DAU_CO, T1.PHAT_SINH_NO, T1.PHAT_SINH_CO, T1.DU_CUOI_NO, T1.DU_CUOI_CO, T1.PS_NAM_NO, T1.PS_NAM_CO, '0'  AS EXPORT_NO FROM FPT_GL_CANDOINGAY  T1 WHERE T1.DON_VI_SBV =?
+ORDER BY SO_TAI_KHOAN ASC
+ 
+</statement>
+                <wizardData/>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>donvi_sbv</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>trx_date</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>don_vi_sbv</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <oraObjects/>
+                <oraTables/>
+                <QueryOutputCachedSchemaColumns>DON_VI</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>DON_VI_SBV</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>SO_TAI_KHOAN</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>TEN_TAI_KHOAN</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>NGAY_DU_LIEU</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>DU_DAU_NO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>DU_DAU_CO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>PHAT_SINH_NO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>PHAT_SINH_CO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>DU_CUOI_NO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>DU_CUOI_CO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>PS_NAM_NO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>PS_NAM_CO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>EXPORT_NO</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput>
+                    <donvi_sbv>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListMaDV/Record/DON_VI_SBV)">
+                                <xsl:value-of select="$ListMaDV/Record/DON_VI_SBV"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </donvi_sbv>
+                    <trx_date>
+                        <xsl:value-of select="$Start/pfx9:Request/Request/ns4:Request/ns4:Date"/>
+                    </trx_date>
+                    <don_vi_sbv>
+                        <xsl:choose>
+                            <xsl:when test="exists($ListMaDV/Record/DON_VI_SBV)">
+                                <xsl:value-of select="$ListMaDV/Record/DON_VI_SBV"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </don_vi_sbv>
+                </jdbcQueryActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Contructor">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>686</pd:x>
+            <pd:y>264</pd:y>
+            <config>
+                <variableName>FileData</variableName>
+            </config>
+            <pd:inputBindings>
+                <Data>
+                    <FileContent>
+                        <xsl:value-of select="concat(&#xA;&quot;BG#&quot;,&#xA;tib:right($Start/pfx9:Request/Request/ns4:Request/ns4:Date,2),&#xA;substring($JDBC_Query_Data/resultSet/Record[2]/NGAY_DU_LIEU,6,2),&#xA;tib:get-year-from-dateTime($JDBC_Query_Data/resultSet/Record[2]/NGAY_DU_LIEU),&#xA;&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[2]/DON_VI_SBV,&#xA;&quot;#&quot;,&#xA; &quot;&#xA;&quot; &#xA;)"/>
+                    </FileContent>
+                    <xsl:if test="$ListMaDV/Record/DON_VI_SBV">
+                        <MaDVTemp>
+                            <xsl:value-of select="$ListMaDV/Record/DON_VI_SBV"/>
+                        </MaDVTemp>
+                    </xsl:if>
+                    <NumberRow>
+                        <xsl:value-of select="0"/>
+                    </NumberRow>
+                    <ExportNo>
+                        <xsl:value-of select="if(exists($JDBC_Query_Data/resultSet/Record[1]/EXPORT_NO)) &#xA;then &#xA;&#x9;string($JDBC_Query_Data/resultSet/Record[1]/EXPORT_NO+1)&#xA;else &quot;1&quot;"/>
+                    </ExportNo>
+                </Data>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CompletedDataFile">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1138</pd:x>
+            <pd:y>332</pd:y>
+            <config>
+                <variableName>FileData</variableName>
+            </config>
+            <pd:inputBindings>
+                <Data>
+                    <FileName>
+                        <xsl:value-of select="concat(&quot;Z&quot;,&#xA;translate(substring( $JDBC_Query_Data/resultSet/Record[2]/NGAY_DU_LIEU,3,8), &quot;-&quot;, &quot;&quot;),&#xA;&quot;2.A&quot;,&#xA;$FileData/Data/MaDVTemp&#xA;)"/>
+                    </FileName>
+                    <FileContent>
+                        <xsl:value-of select="concat($FileData/Data/FileContent,&#xA;&quot;EN#&quot;,&#xA;substring($FileData/Data/FileContent,4,8),&#xA;&quot;#&quot;,&#xA;$FileData/Data/NumberRow,&#xA;&quot;#&quot;&#xA;)"/>
+                    </FileContent>
+                    <xsl:if test="$FileData/Data/MaDVTemp">
+                        <MaDVTemp>
+                            <xsl:value-of select="$FileData/Data/MaDVTemp"/>
+                        </MaDVTemp>
+                    </xsl:if>
+                    <xsl:if test="$FileData/Data/NumberRow">
+                        <NumberRow>
+                            <xsl:value-of select="$FileData/Data/NumberRow"/>
+                        </NumberRow>
+                    </xsl:if>
+                    <ExportNo>
+                        <xsl:value-of select="$FileData/Data/ExportNo"/>
+                    </ExportNo>
+                </Data>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Write File">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>1257</pd:x>
+            <pd:y>335</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+            </config>
+            <pd:inputBindings>
+                <ns0:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="string(concat(&quot;&quot;,$FileData/Data/FileName,&#xA;if($FileData/Data/ExportNo&lt;10)&#xA;then &quot;05&quot;&#xA;else $FileData/Data/ExportNo&#xA;))"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="$FileData/Data/FileContent"/>
+                    </textContent>
+                </ns0:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="LoopData">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>779</pd:x>
+            <pd:y>214</pd:y>
+            <pd:width>285</pd:width>
+            <pd:height>225</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$JDBC_Query_Data/resultSet/Record</pd:over>
+                <pd:iterationElementSlot>data</pd:iterationElementSlot>
+                <pd:indexSlot>i</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>FileContent_Linedetail</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>Null</pd:to>
+                <pd:xpathDescription>ExceptRow1</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>$i=1</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Null</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>FileContent_Linedetail</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="FileContent_Linedetail">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>906</pd:x>
+                <pd:y>276</pd:y>
+                <config>
+                    <variableName>FileData</variableName>
+                </config>
+                <pd:inputBindings>
+                    <Data>
+                        <xsl:if test="$FileData/Data/FileName">
+                            <FileName>
+                                <xsl:value-of select="$FileData/Data/FileName"/>
+                            </FileName>
+                        </xsl:if>
+                        <FileContent>
+                            <xsl:value-of select="concat($FileData/Data/FileContent,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/SO_TAI_KHOAN,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/DU_DAU_NO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/DU_DAU_CO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/PHAT_SINH_NO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/PHAT_SINH_CO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/DU_CUOI_NO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/DU_CUOI_CO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/PS_NAM_NO,&quot;#&quot;,&#xA;$JDBC_Query_Data/resultSet/Record[$i]/PS_NAM_CO,&quot;#&quot;,&#xA;&quot;&#xA;&quot;)"/>
+                        </FileContent>
+                        <xsl:if test="$FileData/Data/MaDVTemp">
+                            <MaDVTemp>
+                                <xsl:value-of select="$FileData/Data/MaDVTemp"/>
+                            </MaDVTemp>
+                        </xsl:if>
+                        <NumberRow>
+                            <xsl:value-of select="($FileData/Data/NumberRow+1)"/>
+                        </NumberRow>
+                        <xsl:if test="$FileData/Data/ExportNo">
+                            <ExportNo>
+                                <xsl:value-of select="$FileData/Data/ExportNo"/>
+                            </ExportNo>
+                        </xsl:if>
+                    </Data>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="Null">
+                <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+                <pd:resourceType>ae.activities.null</pd:resourceType>
+                <pd:x>906</pd:x>
+                <pd:y>376</pd:y>
+                <config/>
+                <pd:inputBindings/>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="ListDataState">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1256</pd:x>
+            <pd:y>215</pd:y>
+            <config>
+                <variableName>ListDataState</variableName>
+            </config>
+            <pd:inputBindings>
+                <ListDataState>
+                    <xsl:copy-of select="$ListDataState/ListDataState/RowState"/>
+                    <RowState>
+                        <TXN_DATE>
+                            <xsl:value-of select="$Start/pfx9:Request/Request/ns4:Request/ns4:Date"/>
+                        </TXN_DATE>
+                        <DONVI_SBV>
+                            <xsl:value-of select="$ListMaDV/Record/DON_VI_SBV"/>
+                        </DONVI_SBV>
+                        <FILENAME>
+                            <xsl:value-of select="string(concat(&quot;&quot;,$FileData/Data/FileName,&#xA;if($FileData/Data/ExportNo&lt;10)&#xA;then concat(&quot;0&quot;,$FileData/Data/ExportNo)&#xA;else $FileData/Data/ExportNo&#xA;))"/>
+                        </FILENAME>
+                        <EXPORT_NO>
+                            <xsl:value-of select="$FileData/Data/ExportNo"/>
+                        </EXPORT_NO>
+                        <TOTAL_ROWS>
+                            <xsl:value-of select="$FileData/Data/NumberRow"/>
+                        </TOTAL_ROWS>
+                        <STATUS>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </STATUS>
+                    </RowState>
+                </ListDataState>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ListDataStateError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1337</pd:x>
+            <pd:y>270</pd:y>
+            <config>
+                <variableName>ListDataState</variableName>
+            </config>
+            <pd:inputBindings>
+                <ListDataState>
+                    <xsl:copy-of select="$ListDataState/ListDataState/RowState"/>
+                    <RowState>
+                        <TXN_DATE>
+                            <xsl:value-of select="$Start/pfx9:Request/Request/ns4:Request/ns4:Date"/>
+                        </TXN_DATE>
+                        <DONVI_SBV>
+                            <xsl:value-of select="$ListMaDV/Record/DON_VI_SBV"/>
+                        </DONVI_SBV>
+                        <FILENAME>
+                            <xsl:value-of select="string(concat(&quot;&quot;,$FileData/Data/FileName,&#xA;if($FileData/Data/ExportNo&lt;10)&#xA;then concat(&quot;0&quot;,$FileData/Data/ExportNo)&#xA;else $FileData/Data/ExportNo&#xA;))"/>
+                        </FILENAME>
+                        <EXPORT_NO>
+                            <xsl:value-of select="$FileData/Data/ExportNo"/>
+                        </EXPORT_NO>
+                        <TOTAL_ROWS>
+                            <xsl:value-of select="$FileData/Data/NumberRow"/>
+                        </TOTAL_ROWS>
+                        <STATUS>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </STATUS>
+                    </RowState>
+                </ListDataState>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="FTP Put">
+            <pd:type>com.tibco.plugin.ftp.FTPPutActivity</pd:type>
+            <pd:resourceType>ae.activities.FTPPutActivityUI</pd:resourceType>
+            <pd:x>1333</pd:x>
+            <pd:y>141</pd:y>
+            <config>
+                <Timeout>120000</Timeout>
+                <FireWall>false</FireWall>
+                <isBinary>false</isBinary>
+                <Append>false</Append>
+                <useProcessData>false</useProcessData>
+                <Overwrite>true</Overwrite>
+                <SharedUserData>/SharedResource/Connection/FTP/SBVFTP.sharedftp</SharedUserData>
+            </config>
+            <pd:inputBindings>
+                <FTPPutInputDataFile>
+                    <RemoteFileName>
+                        <xsl:value-of select="concat($_globalVariables/ns5:GlobalVariables/FTP/PathFileRemote,$Write-File/ns0:WriteActivityOutputClass/fileInfo/fileName)"/>
+                    </RemoteFileName>
+                    <LocalFileName>
+                        <xsl:value-of select="$Write-File/ns0:WriteActivityOutputClass/fileInfo/fullName"/>
+                    </LocalFileName>
+                </FTPPutInputDataFile>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="JDBC_Update_State">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>1849</pd:x>
+        <pd:y>221</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <statement>Insert into fpt_gl_candoingay_state  (TRX_DATE,DONVI_SBV,FILENAME,EXPORT_NO,TOTAL_ROWS,STATUS) values(?,?,?,?,?,?)</statement>
+            <batchUpdate>true</batchUpdate>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>trx_date</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>donvi_sbv</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>filename</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>export_no</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>total_rows</parameterName>
+                    <dataType>NUMERIC</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>status</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <xsl:for-each select="$ListDataState/ListDataState/RowState">
+                    <Record>
+                        <trx_date>
+                            <xsl:value-of select="TXN_DATE"/>
+                        </trx_date>
+                        <donvi_sbv>
+                            <xsl:value-of select="DONVI_SBV"/>
+                        </donvi_sbv>
+                        <filename>
+                            <xsl:value-of select="FILENAME"/>
+                        </filename>
+                        <export_no>
+                            <xsl:value-of select="EXPORT_NO"/>
+                        </export_no>
+                        <total_rows>
+                            <xsl:value-of select="TOTAL_ROWS"/>
+                        </total_rows>
+                        <status>
+                            <xsl:value-of select="STATUS"/>
+                        </status>
+                    </Record>
+                </xsl:for-each>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="TurnOffFlag">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>1901</pd:x>
+        <pd:y>333</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/FlagProcessDailyBalacne.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <flag>
+                    <xsl:value-of select="0"/>
+                </flag>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>279</pd:x>
+        <pd:y>533</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC_Query_MaDV</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC_Query_MaDV</pd:from>
+        <pd:to>Loop_DV</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop_DV</pd:from>
+        <pd:to>JDBC_Update_State</pd:to>
+        <pd:xpathDescription>HasData</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($ListDataState/ListDataState/RowState)!=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC_Update_State</pd:from>
+        <pd:to>TurnOffFlag</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop_DV</pd:from>
+        <pd:to>TurnOffFlag</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TurnOffFlag</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC_Query_MaDV</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

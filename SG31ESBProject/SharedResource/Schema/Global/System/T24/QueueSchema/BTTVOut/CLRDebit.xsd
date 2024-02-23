@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/CLRDebit/CLRDebitFlow"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/CLRDebit/CLRDebitFlow"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../Common-EventCommon.xsd"/>
+	<xsd:element name="CLRDebitFlow">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="transactionType" minOccurs="0"/>
+				<xsd:element ref="debitAcctNo" minOccurs="0"/>
+				<xsd:element ref="creditAcctNo" minOccurs="0"/>
+				<xsd:element ref="debitAmount1" minOccurs="0"/>
+				<xsd:element ref="debitCurrency" minOccurs="0"/>
+				<xsd:element ref="debitValueDate" minOccurs="0"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="lBtType1" minOccurs="0"/>
+				<xsd:element ref="lOCiCode1" minOccurs="0"/>
+				<xsd:element ref="lRCiCode" minOccurs="0"/>
+				<xsd:element ref="ordCustAcct" minOccurs="0"/>
+				<xsd:element ref="ordCustName1List" minOccurs="0"/>
+				<xsd:element ref="orderingCustList" minOccurs="0"/>
+				<xsd:element ref="ordCustAcName" minOccurs="0"/>
+				<xsd:element ref="oIndirectCode" minOccurs="0"/>
+				<xsd:element ref="lBenList" minOccurs="0"/>
+				<xsd:element ref="lBenCustAddList" minOccurs="0"/>
+				<xsd:element ref="lBenAcct" minOccurs="0"/>
+				<xsd:element ref="rIndirectCode" minOccurs="0"/>
+				<xsd:element ref="payDetail" minOccurs="0"/>
+				<xsd:element ref="lOrdCustAddList" minOccurs="0"/>
+				<xsd:element ref="lIbpsRef" minOccurs="0"/>
+				<xsd:element ref="queueName" minOccurs="0"/>
+				<xsd:element ref="lStbt" minOccurs="0"/>
+				<xsd:element ref="oIndirectName" minOccurs="0"/>
+				<xsd:element ref="rIndirectName" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="transactionType" type="xsd:string"/>
+	<xsd:element name="debitAcctNo" type="xsd:string"/>
+	<xsd:element name="creditAcctNo" type="xsd:string"/>
+	<xsd:element name="debitAmount1" type="xsd:decimal"/>
+	<xsd:element name="debitCurrency" type="xsd:string"/>
+	<xsd:element name="debitValueDate" type="xsd:date"/>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="lBtType1" type="xsd:string"/>
+	<xsd:element name="lOCiCode1" type="xsd:string"/>
+	<xsd:element name="lRCiCode" type="xsd:string"/>
+	<xsd:element name="ordCustAcct" type="xsd:string"/>
+	<xsd:element name="ordCustName1List">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ordCustName1" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="orderingCustList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="orderingCust" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ordCustAcName" type="xsd:string"/>
+	<xsd:element name="oIndirectCode" type="xsd:string"/>
+	<xsd:element name="lBenList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="lBen" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="lBenCustAddList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="lBenCustAdd" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="lBenAcct" type="xsd:string"/>
+	<xsd:element name="rIndirectCode" type="xsd:string"/>
+	<xsd:element name="payDetail" type="xsd:string"/>
+	<xsd:element name="lOrdCustAddList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="lOrdCustAdd" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="lIbpsRef" type="xsd:string"/>
+	<xsd:element name="queueName" type="xsd:string"/>
+	<xsd:element name="lStbt" type="xsd:string"/>
+	<xsd:element name="oIndirectName" type="xsd:string"/>
+	<xsd:element name="rIndirectName" type="xsd:string"/>
+</xsd:schema>

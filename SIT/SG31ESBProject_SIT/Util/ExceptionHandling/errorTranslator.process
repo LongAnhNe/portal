@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx5="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="sbv/common/exceptionhandling/errorreport/1.0" xmlns:pfx="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="sbv/common/exceptionhandling/errorreport/1.0" schemaLocation="/SharedResource/Schema/Common/ExceptionHandling/ErrorReport.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <pd:name>Util/ExceptionHandling/errorTranslator.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ErrorReport"/>
+                    <xsd:element name="SourceAppId" type="xsd:string"/>
+                    <xsd:element name="ErrorAppId" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>133</pd:startX>
+    <pd:startY>79</pd:startY>
+    <pd:returnBindings>
+        <pfx5:ResponseStatus>
+            <pfx5:Status>
+                <xsl:value-of select="&quot;1&quot;"/>
+            </pfx5:Status>
+            <pfx5:ErrorCode>
+                <xsl:value-of select="$GlobalError/ErrorMapping/GlobalErrorCode"/>
+            </pfx5:ErrorCode>
+            <pfx5:ErrorMessage>
+                <xsl:value-of select="$GlobalError/ErrorMapping/GlobalErrorDescription"/>
+            </pfx5:ErrorMessage>
+            <pfx5:ErrorInfo>
+                <xsl:if test="$GlobalError/ErrorMapping/ErrorInfo/Id">
+                    <pfx5:Id>
+                        <xsl:value-of select="$GlobalError/ErrorMapping/ErrorInfo/Id"/>
+                    </pfx5:Id>
+                </xsl:if>
+                <xsl:if test="$GlobalError/ErrorMapping/ErrorInfo/ErrCode">
+                    <pfx5:ErrorCode>
+                        <xsl:value-of select="$GlobalError/ErrorMapping/ErrorInfo/ErrCode"/>
+                    </pfx5:ErrorCode>
+                </xsl:if>
+                <xsl:if test="$GlobalError/ErrorMapping/ErrorInfo/ErrDesc">
+                    <pfx5:ErrorMessage>
+                        <xsl:value-of select="$GlobalError/ErrorMapping/ErrorInfo/ErrDesc"/>
+                    </pfx5:ErrorMessage>
+                </xsl:if>
+            </pfx5:ErrorInfo>
+        </pfx5:ResponseStatus>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:ResponseStatus"/>
+    <pd:endX>629</pd:endX>
+    <pd:endY>82</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <GlobalError>
+            <xsd:element name="ErrorMapping">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="GlobalErrorCode" type="xsd:string"/>
+                        <xsd:element name="GlobalErrorDescription" type="xsd:string"/>
+                        <xsd:element name="ErrorInfo" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="Id" type="xsd:string"/>
+                                    <xsd:element name="ErrCode" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="ErrDesc" type="xsd:string" minOccurs="0"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </GlobalError>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1375689360368</pd:targetNamespace>
+    <pd:activity name="Otherwise">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>385</pd:x>
+        <pd:y>68</pd:y>
+        <config>
+            <variableName>GlobalError</variableName>
+        </config>
+        <pd:inputBindings>
+            <ErrorMapping>
+                <GlobalErrorCode>
+                    <xsl:value-of select="&quot;400&quot;"/>
+                </GlobalErrorCode>
+                <GlobalErrorDescription>
+                    <xsl:value-of select="&quot;ESB Error&quot;"/>
+                </GlobalErrorDescription>
+                <ErrorInfo>
+                    <Id>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </Id>
+                    <xsl:if test="$Start/root/pfx2:ErrorReport/MsgCode">
+                        <ErrCode>
+                            <xsl:value-of select="$Start/root/pfx2:ErrorReport/MsgCode"/>
+                        </ErrCode>
+                    </xsl:if>
+                    <ErrDesc>
+                        <xsl:value-of select="$Start/root/pfx2:ErrorReport/StackTrace"/>
+                    </ErrDesc>
+                </ErrorInfo>
+            </ErrorMapping>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Version not supported">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>152</pd:y>
+        <config>
+            <variableName>GlobalError</variableName>
+        </config>
+        <pd:inputBindings>
+            <ErrorMapping>
+                <GlobalErrorCode>
+                    <xsl:value-of select="&quot;002&quot;"/>
+                </GlobalErrorCode>
+                <GlobalErrorDescription>
+                    <xsl:value-of select="&quot;Invalid input data&quot;"/>
+                </GlobalErrorDescription>
+                <ErrorInfo>
+                    <Id>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </Id>
+                    <xsl:if test="$Start/root/pfx2:ErrorReport/MsgCode">
+                        <ErrCode>
+                            <xsl:value-of select="$Start/root/pfx2:ErrorReport/MsgCode"/>
+                        </ErrCode>
+                    </xsl:if>
+                    <ErrDesc>
+                        <xsl:value-of select="&quot;This service version is not supported&quot;"/>
+                    </ErrDesc>
+                </ErrorInfo>
+            </ErrorMapping>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Otherwise</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Version not supported</pd:to>
+        <pd:xpathDescription>Version is not supported</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx2:ErrorReport/MsgCode = "BWENGINE-100017" and contains($Start/root/pfx2:ErrorReport/StackTrace, "TemplateProcess")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Version not supported</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Otherwise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

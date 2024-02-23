@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:tns="http://fis.vn/iMaximusGateway/ErpPostToCsdService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" name="ErpPostToCsdService" targetNamespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService">
+    <wsdl:types>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp">
+            <xs:complexType name="GetAcctStatusFrErpRequest">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetAcctStatusFrErpRequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetAcctStatusFrErpRequest" nillable="true" type="tns:GetAcctStatusFrErpRequest"/>
+            <xs:complexType name="ArrayOfGetAcctStatusFrErpRequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetAcctStatusFrErpRequestType" nillable="true" type="tns:GetAcctStatusFrErpRequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetAcctStatusFrErpRequestType" nillable="true" type="tns:ArrayOfGetAcctStatusFrErpRequestType"/>
+            <xs:complexType name="GetAcctStatusFrErpRequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="RefNoInterfaceAomCsd" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="RefNoInterfaceVendor" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetAcctStatusFrErpRequestType" nillable="true" type="tns:GetAcctStatusFrErpRequestType"/>
+            <xs:complexType name="GetAcctStatusFrErpResponse">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetAcctStatusFrErpResponse" nillable="true" type="tns:GetAcctStatusFrErpResponse"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices">
+            <xs:complexType name="RequestHeader">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="MsgReqId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="RequestHeader" nillable="true" type="tns:RequestHeader"/>
+            <xs:complexType name="ResponseHeader">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="MsgResId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ResponseHeader" nillable="true" type="tns:ResponseHeader"/>
+            <xs:complexType name="ResponseStatus">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Errors" nillable="true" type="tns:ArrayOfErrorInfo"/>
+                    <xs:element minOccurs="0" name="Status" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ResponseStatus" nillable="true" type="tns:ResponseStatus"/>
+            <xs:complexType name="ArrayOfErrorInfo">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="ErrorInfo" nillable="true" type="tns:ErrorInfo"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfErrorInfo" nillable="true" type="tns:ArrayOfErrorInfo"/>
+            <xs:complexType name="ErrorInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ErrorCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices"/>
+            <xs:complexType name="GetAccListFrErpRequest">
+                <xs:sequence>
+                    <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q1:RequestHeader"/>
+                    <xs:element minOccurs="0" name="Request" nillable="true" type="tns:ArrayOfGetAccListFrErpRequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetAccListFrErpRequest" nillable="true" type="tns:GetAccListFrErpRequest"/>
+            <xs:complexType name="ArrayOfGetAccListFrErpRequestType">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="GetAccListFrErpRequestType" nillable="true" type="tns:GetAccListFrErpRequestType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArrayOfGetAccListFrErpRequestType" nillable="true" type="tns:ArrayOfGetAccListFrErpRequestType"/>
+            <xs:complexType name="GetAccListFrErpRequestType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="AccountGroup" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="AccountNo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Level" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ParentAccount" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetAccListFrErpRequestType" nillable="true" type="tns:GetAccListFrErpRequestType"/>
+            <xs:complexType name="GetAccListFrErpResponse">
+                <xs:sequence>
+                    <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="Header" nillable="true" type="q2:ResponseHeader"/>
+                    <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" minOccurs="0" name="ResponseStatus" nillable="true" type="q3:ResponseStatus"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetAccListFrErpResponse" nillable="true" type="tns:GetAccListFrErpResponse"/>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
+            <xs:element name="anyType" nillable="true" type="xs:anyType"/>
+            <xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+            <xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+            <xs:element name="boolean" nillable="true" type="xs:boolean"/>
+            <xs:element name="byte" nillable="true" type="xs:byte"/>
+            <xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+            <xs:element name="decimal" nillable="true" type="xs:decimal"/>
+            <xs:element name="double" nillable="true" type="xs:double"/>
+            <xs:element name="float" nillable="true" type="xs:float"/>
+            <xs:element name="int" nillable="true" type="xs:int"/>
+            <xs:element name="long" nillable="true" type="xs:long"/>
+            <xs:element name="QName" nillable="true" type="xs:QName"/>
+            <xs:element name="short" nillable="true" type="xs:short"/>
+            <xs:element name="string" nillable="true" type="xs:string"/>
+            <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+            <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+            <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+            <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+            <xs:element name="char" nillable="true" type="tns:char"/>
+            <xs:simpleType name="char">
+                <xs:restriction base="xs:int"/>
+            </xs:simpleType>
+            <xs:element name="duration" nillable="true" type="tns:duration"/>
+            <xs:simpleType name="duration">
+                <xs:restriction base="xs:duration">
+                    <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+                    <xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+                    <xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="guid" nillable="true" type="tns:guid"/>
+            <xs:simpleType name="guid">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:attribute name="FactoryType" type="xs:QName"/>
+            <xs:attribute name="Id" type="xs:ID"/>
+            <xs:attribute name="Ref" type="xs:IDREF"/>
+        </xs:schema>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService">
+            <xs:import namespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp"/>
+            <xs:import namespace="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp"/>
+            <xs:element name="GetAccListFrErp">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q1="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp" minOccurs="0" name="request" nillable="true" type="q1:GetAccListFrErpRequest"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetAccListFrErpResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q2="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAccListFrErp" minOccurs="0" name="GetAccListFrErpResult" nillable="true" type="q2:GetAccListFrErpResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetAcctStatusFrErp">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q3="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" minOccurs="0" name="request" nillable="true" type="q3:GetAcctStatusFrErpRequest"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetAcctStatusFrErpResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element xmlns:q4="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" minOccurs="0" name="GetAcctStatusFrErpResult" nillable="true" type="q4:GetAcctStatusFrErpResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="IErpPostToCsdService_GetAccListFrErp_InputMessage">
+        <wsdl:part element="tns:GetAccListFrErp" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IErpPostToCsdService_GetAccListFrErp_OutputMessage">
+        <wsdl:part element="tns:GetAccListFrErpResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IErpPostToCsdService_GetAcctStatusFrErp_InputMessage">
+        <wsdl:part element="tns:GetAcctStatusFrErp" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="IErpPostToCsdService_GetAcctStatusFrErp_OutputMessage">
+        <wsdl:part element="tns:GetAcctStatusFrErpResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="IErpPostToCsdService">
+        <wsdl:operation name="GetAccListFrErp">
+            <wsdl:input message="tns:IErpPostToCsdService_GetAccListFrErp_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAccListFrErp"/>
+            <wsdl:output message="tns:IErpPostToCsdService_GetAccListFrErp_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAccListFrErpResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetAcctStatusFrErp">
+            <wsdl:input message="tns:IErpPostToCsdService_GetAcctStatusFrErp_InputMessage" wsam:Action="http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAcctStatusFrErp"/>
+            <wsdl:output message="tns:IErpPostToCsdService_GetAcctStatusFrErp_OutputMessage" wsam:Action="http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAcctStatusFrErpResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BasicHttpBinding_IErpPostToCsdService" type="tns:IErpPostToCsdService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="GetAccListFrErp">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAccListFrErp" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetAcctStatusFrErp">
+            <soap:operation soapAction="http://fis.vn/iMaximusGateway/ErpPostToCsdService/IErpPostToCsdService/GetAcctStatusFrErp" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ErpPostToCsdService">
+        <wsdl:port binding="tns:BasicHttpBinding_IErpPostToCsdService" name="BasicHttpBinding_IErpPostToCsdService">
+            <soap:address location="http://10.1.26.20:9680/ErpPostToCsdService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

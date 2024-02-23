@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" xmlns:tns="http://xmlns.example.com/1437649150739" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" name="Untitled" targetNamespace="http://xmlns.example.com/1437649150739">
+    <wsdl:import namespace="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" location="../../Remittance/GLPosting/GLPosting.xsd"/>
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:include schemaLocation="../../../../../SharedResource/Schema/Global/Remittance/GLPosting/GLPosting.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="createGLPosting">
+        <wsdl:port name="PortTypeEndpoint2" binding="tns:PortTypeEndpoint2Binding">
+            <soap:address location=""/>
+            <jms:connectionFactory>FTQueueConnectionFactory</jms:connectionFactory>
+            <jms:targetAddress destination="queue">GLPosting.1.0</jms:targetAddress>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="PortType">
+        <wsdl:operation name="GLPosting">
+            <wsdl:input message="tns:GLPostingReq"/>
+            <wsdl:output message="tns:GLPostingRes"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PortTypeEndpoint2Binding" type="tns:PortType">
+        <soap:binding style="document" transport="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS"/>
+        <jms:binding messageFormat="bytes"/>
+        <wsdl:operation name="GLPosting">
+            <soap:operation style="document" soapAction="/Services/Global/Remittance/GLPosting/OperationImpl/GLPosting-service2.serviceagent/PortTypeEndpoint2/GLPosting"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Req"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="Res"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="GLPostingReq">
+        <wsdl:part name="Req" element="ns:GLPostingReq"/>
+    </wsdl:message>
+    <wsdl:message name="GLPostingRes">
+        <wsdl:part name="Res" element="ns:GLPostingRes"/>
+    </wsdl:message>
+</wsdl:definitions>

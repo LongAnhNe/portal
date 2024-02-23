@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/sharedresource/CitadIn/CitadInESBModel" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="sbv/sharedresource/CitadIn/ESBCitadInModel" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://temenos.com/FTSBVCITAD" xmlns:pfx3="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx6="http://xmlns.example.com/1438330850951">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" schemaLocation="/SharedResource/Schema/Global/T24Citad/CitadIn/CitadToESB.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/ESBCitadInModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/ESBCitadInModel.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/CitadInESBModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/CitadInESBModel.xsd"/>
+    <xsd:import namespace="http://temenos.com/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadIn/T24WebServicesImplService_CitadIn.xsd"/>
+    <wsdl:import namespace="http://temenos.com/FTSBVCITAD" location="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadIn/T24WebServicesImplService_CitadIn.wsdl"/>
+    <pd:name>Services/Global/System/T24CITAD/CitadIn/Version1.0/CitadIn/RequestResponse.process</pd:name>
+    <pd:description>Author: tuedn</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:startType>
+    <pd:startX>112</pd:startX>
+    <pd:startY>93</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns1:AppHdr"/>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns1:ResponseStatus"/>
+                <ServiceBody>
+                    <xsl:copy-of select="$SOAPRequestReply/outputMessage/pfx4:FundsTransferSBVCITADInResponse"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>548</pd:endX>
+    <pd:endY>89</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>sbv/services/CitadIn/requestresponse/1.0</pd:targetNamespace>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>420</pd:x>
+        <pd:y>90</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx4:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>FTCitadInwardRemittance</operation>
+            <soapAction/>
+            <endpointURL>http://10.192.26.101:7001/FTSBVCITAD/services</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$Map-to-T24-Model/pfx4:FTCitadInwardRemittance"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map to T24 Model">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>263</pd:x>
+        <pd:y>92</pd:y>
+        <config>
+            <element ref="pfx4:FTCitadInwardRemittance"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns2:Citad_Out_Data"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx4:FTCitadInwardRemittance>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="&quot;VN0010001&quot;"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="&quot;123123&quot;"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="&quot;HANGNTT376&quot;"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                    <assignReason>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </assignReason>
+                    <dueDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </dueDate>
+                    <extProcess>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcess>
+                    <extProcessID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcessID>
+                    <gtsControl>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </gtsControl>
+                    <messageId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </messageId>
+                    <noOfAuth>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </noOfAuth>
+                    <owner>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </owner>
+                    <replace>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </replace>
+                    <startDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </startDate>
+                    <user>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </user>
+                </OfsFunction>
+                <FUNDSTRANSFERSBVCITADINType>
+                    <TransactionType>
+                        <xsl:value-of select="&quot;BI&quot;"/>
+                    </TransactionType>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:CURRENCY">
+                        <DebitCurrency>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:CURRENCY"/>
+                        </DebitCurrency>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:AMOUNT">
+                        <DebitAmount>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:AMOUNT"/>
+                        </DebitAmount>
+                    </xsl:if>
+                    <DebitValueDate>
+                        <xsl:value-of select="upper-case(tib:format-dateTime( 'dd MMM yyyy' , tib:parse-dateTime( 'yyyyMMdd', $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:TRX_DATE) ) )"/>
+                    </DebitValueDate>
+                    <DebitNarrative>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </DebitNarrative>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:CURRENCY">
+                        <CreditCurrency>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:CURRENCY"/>
+                        </CreditCurrency>
+                    </xsl:if>
+                    <CreditValueDate>
+                        <xsl:value-of select="upper-case(tib:format-dateTime( 'dd MMM yyyy' ,tib:parse-dateTime( 'yyyyMMdd', $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:TRX_DATE ) ) )"/>
+                    </CreditValueDate>
+                    <gORDERINGCUST>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:SD_NAME">
+                            <OrderingCustomer>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:SD_NAME"/>
+                            </OrderingCustomer>
+                        </xsl:if>
+                    </gORDERINGCUST>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:RV_ACCNT">
+                        <InBeneficiaryAccountNo>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:RV_ACCNT"/>
+                        </InBeneficiaryAccountNo>
+                    </xsl:if>
+                    <gINBENCUSTOMER>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:RV_NAME">
+                            <InBeneficiary>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:RV_NAME"/>
+                            </InBeneficiary>
+                        </xsl:if>
+                    </gINBENCUSTOMER>
+                    <gPAYMENTDETAILS>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:CONTENT">
+                            <PaymentDetails>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:CONTENT"/>
+                            </PaymentDetails>
+                        </xsl:if>
+                    </gPAYMENTDETAILS>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:O_INDIRECT_CODE">
+                        <BankSortCode>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:O_INDIRECT_CODE"/>
+                        </BankSortCode>
+                    </xsl:if>
+                    <IBPSTransReference>
+                        <xsl:value-of select="concat($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:O_CI_CODE , $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:TRX_DATE , $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:RELATION_NO , $Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:TYPE_FLAG )"/>
+                    </IBPSTransReference>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:TRX_TYPE">
+                        <CitadType>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:TRX_TYPE"/>
+                        </CitadType>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:R_INDIRECT_CODE">
+                        <InReceivingBank>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:R_INDIRECT_CODE"/>
+                        </InReceivingBank>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:O_CI_CODE">
+                        <SendingBankCode>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:O_CI_CODE"/>
+                        </SendingBankCode>
+                    </xsl:if>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:R_CI_CODE">
+                        <InSendingBank>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:Citad_Out_Data[1]/ns2:R_CI_CODE"/>
+                        </InSendingBank>
+                    </xsl:if>
+                </FUNDSTRANSFERSBVCITADINType>
+            </pfx4:FTCitadInwardRemittance>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>546</pd:x>
+        <pd:y>225</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map to T24 Model</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map to T24 Model</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

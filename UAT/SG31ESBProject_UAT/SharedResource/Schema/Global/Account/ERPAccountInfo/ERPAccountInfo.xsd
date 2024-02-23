@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/account/erpaccountInfo/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="getAccountInfoReq" type="getAccountInfoReqType"/>
+	<xs:element name="getAccountInfoRes" type="getAccountInfoResType"/>
+	<xs:complexType name="getAccountInfoReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ERPAccountInfo" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getAccountInfoResType">
+		<xs:sequence>
+			<xs:element name="Status" type="xs:string"/>
+			<xs:element name="ErrMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ERPAccountInfo" type="ERPAccountInfoType"/>
+	<xs:complexType name="ERPAccountInfoType">
+		<xs:sequence>
+			<xs:element name="AccountGroup" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountName" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountType" type="xs:string" minOccurs="0"/>
+			<xs:element name="Level" type="xs:string" minOccurs="0"/>
+			<xs:element name="ParentAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="Status" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

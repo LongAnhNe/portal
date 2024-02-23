@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/TotalInfoBidding/TotalInfoBidding.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Remittance/TotalInfoBidding/TotalInfoBidding.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="TotalInfoBiddingReq" type="TotalInfoBiddingReqType"/>
+	<xs:element name="TotalInfoBiddingRes" type="TotalInfoBiddingResType"/>
+	<xs:complexType name="TotalInfoBiddingReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="TotalInfoBiddingInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TotalInfoBiddingResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TotalInfoBiddingInput" type="TotalInfoBiddingInputType"/>
+	<xs:complexType name="TotalInfoBiddingInputType">
+		<xs:sequence>
+			<xs:element name="InterfaceId" type="xs:string" minOccurs="0"/>
+			<xs:element ref="TotalInfoBiddingInfo" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="TotalInfoBiddingInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="BusinessCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="BankCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="Session" type="xs:string" minOccurs="0"/>
+				<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+				<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

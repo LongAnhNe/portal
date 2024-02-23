@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService">
+    <pd:name>Services/Global/System/IBPST24/CheckAdapterClient.process</pd:name>
+    <pd:startName>onStartup</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="onStartup">
+        <pd:type>com.tibco.pe.core.OnStartupEventSource</pd:type>
+        <pd:resourceType>ae.activities.onStartup</pd:resourceType>
+        <pd:x>163</pd:x>
+        <pd:y>99</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>607</pd:endX>
+    <pd:endY>93</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1440137197755</pd:targetNamespace>
+    <pd:activity name="Invoke an Adapter Request-Response Service">
+        <pd:type>com.tibco.plugin.ae.AERPCRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.aepalette.aeOpClientReqActivity</pd:resourceType>
+        <pd:x>390</pd:x>
+        <pd:y>119</pd:y>
+        <config>
+            <ae.aepalette.sharedProperties.transportChoice>default</ae.aepalette.sharedProperties.transportChoice>
+            <ae.aepalette.sharedProperties.useRequestReply>false</ae.aepalette.sharedProperties.useRequestReply>
+            <ae.aepalette.sharedProperties.adapterService>/SharedResource/Connection/Adapter/TuxedoAdapterConfiguration.adtuxedo#adapterService.RequestResponseService</ae.aepalette.sharedProperties.adapterService>
+            <tpPluginEndpointName>RequestResponseServiceEndPoint</tpPluginEndpointName>
+            <ae.aepalette.sharedProperties.transportType>rvcm</ae.aepalette.sharedProperties.transportType>
+            <ae.aepalette.sharedProperties.rvSubject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseService</ae.aepalette.sharedProperties.rvSubject>
+            <ae.aepalette.sharedProperties.rvSessionService>%%RvService%%</ae.aepalette.sharedProperties.rvSessionService>
+            <ae.aepalette.sharedProperties.rvSessionNetwork>%%RvNetwork%%</ae.aepalette.sharedProperties.rvSessionNetwork>
+            <ae.aepalette.sharedProperties.rvSessionDaemon>%%RvDaemon%%</ae.aepalette.sharedProperties.rvSessionDaemon>
+            <ae.aepalette.sharedProperties.rvCmSessionDefaultTimeLimit>0</ae.aepalette.sharedProperties.rvCmSessionDefaultTimeLimit>
+            <ae.aepalette.sharedProperties.rvCmSessionSyncLedger>true</ae.aepalette.sharedProperties.rvCmSessionSyncLedger>
+            <ae.aepalette.sharedProperties.rvCmSessionLedgerFile>%%DirLedger%%/bw%%Domain%%.%%Deployment%%.%%AppName%%.%%InstanceId%%.ldg</ae.aepalette.sharedProperties.rvCmSessionLedgerFile>
+            <ae.aepalette.sharedProperties.rvCmSessionName>bw%%Domain%%.%%Deployment%%.%%AppName%%.%%InstanceId%%.CM</ae.aepalette.sharedProperties.rvCmSessionName>
+            <ae.aepalette.sharedProperties.rvCmSessionRelayAgent/>
+            <ae.aepalette.sharedProperties.rvCmSessionRequireOldMessages>true</ae.aepalette.sharedProperties.rvCmSessionRequireOldMessages>
+            <ae.aepalette.aeOpClientReqActivity.ops>operation</ae.aepalette.aeOpClientReqActivity.ops>
+            <ae.aepalette.sharedProperties.outputMeta>
+                <aeMeta>/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#rpcClass.RequestResponseServiceRPCClass</aeMeta>
+            </ae.aepalette.sharedProperties.outputMeta>
+        </config>
+        <pd:inputBindings>
+            <aeRequestInputType>
+                <ns:__caret_request_caret_RequestResponseServiceRPCClass_caret_operation>
+                    <input>
+                        <ROUTING__CODE__167773161>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ROUTING__CODE__167773161>
+                        <ERROR__CODE__167773162>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ERROR__CODE__167773162>
+                        <OPTION__167773163>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </OPTION__167773163>
+                        <DATA__167773164>
+                            <xsl:value-of select="&quot;Check Adapter Client from ESB&quot;"/>
+                        </DATA__167773164>
+                        <ServiceName>
+                            <xsl:value-of select="&quot;NS_NPA_0300003&quot;"/>
+                        </ServiceName>
+                    </input>
+                </ns:__caret_request_caret_RequestResponseServiceRPCClass_caret_operation>
+            </aeRequestInputType>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>onStartup</pd:from>
+        <pd:to>Invoke an Adapter Request-Response Service</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Invoke an Adapter Request-Response Service</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

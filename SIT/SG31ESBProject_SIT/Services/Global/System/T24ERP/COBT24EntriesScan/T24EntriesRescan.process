@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://xmlns.example.com/1437532900936" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" xmlns:pfx5="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="sbv/common/envelope/commonheader/1.0" xmlns:pfx2="http://www.temenos.com/T24/event/T242ERP/T24Entries" xmlns:pfx8="http://xmlns.example.com/1437649150739" xmlns:pfx7="sbv/services/glposting/requestresponse/version1.0" xmlns:pfx6="sbv/common/envelope/soaenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/T24-Entries.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1437532900936"/>
+    <wsdl:import namespace="sbv/services/glposting/requestresponse/version1.0"/>
+    <wsdl:import namespace="http://xmlns.example.com/1437649150739" location="/SharedResource/Schema/Global/Local/GLPosting_jms.wsdl"/>
+    <pd:name>Services/Global/System/T24ERP/COBT24EntriesScan/T24EntriesRescan.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>80</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>T24EntriesError</destination>
+                <selector>JMSXGroupID='T24Entries'</selector>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>609</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AppHdr ref="pfx3:AppHdr"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437531642946</pd:targetNamespace>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>184</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <variableName>AppHdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:AppHdr>
+                <pfx3:CharSet>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </pfx3:CharSet>
+                <pfx3:ServVersion>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </pfx3:ServVersion>
+                <pfx3:From>
+                    <pfx3:Id>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </pfx3:Id>
+                    <pfx3:Name>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </pfx3:Name>
+                </pfx3:From>
+                <pfx3:To>
+                    <pfx3:Id>
+                        <xsl:value-of select="&quot;2&quot;"/>
+                    </pfx3:Id>
+                    <pfx3:Name>
+                        <xsl:value-of select="&quot;ERP&quot;"/>
+                    </pfx3:Name>
+                </pfx3:To>
+                <pfx3:MsgId>
+                    <xsl:value-of select="&quot;123&quot;"/>
+                </pfx3:MsgId>
+                <pfx3:BizServ>
+                    <pfx3:Id>
+                        <xsl:value-of select="&quot;02&quot;"/>
+                    </pfx3:Id>
+                    <pfx3:Name>
+                        <xsl:value-of select="&quot;GLPosting&quot;"/>
+                    </pfx3:Name>
+                </pfx3:BizServ>
+                <pfx3:CreatedDate>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx3:CreatedDate>
+            </pfx3:AppHdr>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallProcERP">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>412</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <schema>APPS</schema>
+            <catalog>FSAH_CREATE_EVENTS_PKG_T24</catalog>
+            <ProcedureName>MAIN</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_INTERFACE_ID</colName>
+                    <colType>2</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_STATUS</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_MESSAGE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_INTERFACE_ID>
+                        <xsl:choose>
+                            <xsl:when test="exists($Parse-XML/pfx2:T24Entries/pfx2:entryIdGroup[1]/pfx2:contractId)">
+                                <xsl:value-of select="$Parse-XML/pfx2:T24Entries/pfx2:entryIdGroup[1]/pfx2:contractId"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_INTERFACE_ID>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>259</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx2:T24Entries"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS-Queue-Receiver/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallProcERP</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>CallProcERP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

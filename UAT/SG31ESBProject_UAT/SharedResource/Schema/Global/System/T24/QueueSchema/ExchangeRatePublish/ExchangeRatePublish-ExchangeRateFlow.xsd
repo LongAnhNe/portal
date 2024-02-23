@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../QueueSchema/Common-EventCommon.xsd"/>
+	<xsd:element name="ExchangeRateFlow">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="currencyMarketGroup" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="ccyNameList" minOccurs="0"/>
+				<xsd:element ref="dateTimeList" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="currencyMarketGroup">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="currencyMarket" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="midRevalRate" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="defaultSpread" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="buyRate" type="xsd:decimal" minOccurs="0"/>
+				<xsd:element name="sellRate" type="xsd:decimal" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:attribute name="index" type="xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="ccyNameList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ccyName" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="language" type="xsd:string"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="dateTimeList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="dateTime" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

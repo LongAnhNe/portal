@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx13="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:pfx12="sbv/service/global/utilities/cbsstatus/inquiry/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx10="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <pd:name>Services/Global/Account/AccountInfo/Version1.0/getAccountStatus/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>62</pd:startX>
+    <pd:startY>165</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="if ($CallT24AccountStatusWS/outputMessage/pfx11:IBPSQueryAccountResponse/Status/successIndicator=&quot;Success&quot;) then '0'&#xA;else&#xA;'1'"/>
+                    </ns3:Status>
+                    <ns3:ErrorInfo>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$CallT24AccountStatusWS/outputMessage/pfx11:IBPSQueryAccountResponse/Status/messages[1]"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:for-each select="$CallT24AccountStatusWS/outputMessage/pfx11:IBPSQueryAccountResponse/ENQIBPSQUERYACCOUNTType/gENQIBPSQUERYACCOUNTDetailType/mENQIBPSQUERYACCOUNTDetailType">
+                        <ns6:AccountStatus>
+                            <ns6:AccountNo>
+                                <xsl:value-of select="CitadCode"/>
+                            </ns6:AccountNo>
+                            <ns6:Status>
+                                <xsl:value-of select="StatusCode"/>
+                            </ns6:Status>
+                            <ns6:BalAmount>
+                                <xsl:value-of select="WorkingBanlance"/>
+                            </ns6:BalAmount>
+                            <ns6:OverLimit>
+                                <xsl:value-of select="OverDraftLimit"/>
+                            </ns6:OverLimit>
+                            <xsl:if test="OpenBalance">
+                                <ns6:OpenBalance>
+                                    <xsl:value-of select="OpenBalance"/>
+                                </ns6:OpenBalance>
+                            </xsl:if>
+                        </ns6:AccountStatus>
+                    </xsl:for-each>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>482</pd:endX>
+    <pd:endY>157</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/accountstatus/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="CallT24AccountStatusWS">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>260</pd:x>
+        <pd:y>160</pd:y>
+        <config>
+            <timeout>5</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx11:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>IBPSQueryAccount</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSIBPS%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx11:IBPSQueryAccount>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24Pass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24User"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <ENQIBPSQUERYACCOUNTType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;CITAD.CODE.LIST&quot;"/>
+                            </columnName>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns6:AccountNo[1]">
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns6:AccountNo[1]"/>
+                                </criteriaValue>
+                            </xsl:if>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </ENQIBPSQUERYACCOUNTType>
+                </pfx11:IBPSQueryAccount>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallT24AccountStatusWS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24AccountStatusWS</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

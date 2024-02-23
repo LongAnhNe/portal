@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.sbv.gov.vn/global/portaldashboard/cashreserveratio/version1.0" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://temenos.com/T24.ACCOUNT.STATE" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx3="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx2="http://xmlns.example.com/1465530979601" xmlns:pfx="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/PortalDashBoard/cashReverseRatio/SBV.INTE.T24.PORTAL.WS_xsd1.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/portaldashboard/cashreserveratio/version1.0" schemaLocation="/SharedResource/Schema/Global/PortalDashBoard/CashReserveRatio.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1465530979601" location="/SharedResource/Schema/Global/PortalDashBoard/PortalDashBoard.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/PortalDashBoard/cashReverseRatio/SBV.INTE.T24.PORTAL.WS.wsdl"/>
+    <pd:name>Services/Global/System/PortalDashBoard/Version1.0/cashReserveRatio/RequestResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>32</pd:startX>
+    <pd:startY>223</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx3:ServiceEnverlop>
+                <xsl:copy-of select="$ResponseValue/ns1:cashReserveRatioRes/ns2:AppHdr"/>
+                <xsl:copy-of select="$ResponseValue/ns1:cashReserveRatioRes/ns2:ResponseStatus"/>
+                <ServiceBody>
+                    <xsl:copy-of select="$ResponseValue/ns1:cashReserveRatioRes/ns1:gCashReserveRatio"/>
+                    <xsl:copy-of select="$T24Input/root/pfx:DBCrrTransaction"/>
+                    <xsl:copy-of select="$T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse"/>
+                    <xsl:copy-of select="$_error/ns3:ErrorReport"/>
+                </ServiceBody>
+            </pfx3:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>683</pd:endX>
+    <pd:endY>236</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseValue ref="ns1:cashReserveRatioRes"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1465529760814</pd:targetNamespace>
+    <pd:activity name="T24WSQueryCRR">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>229</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>DBCrrTransaction</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/PortalDashBoardCrr%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx3:ServiceEnverlop/ServiceBody/*" type="ns1:ReqBodyType" cardinality="?"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$T24Input/root/pfx:DBCrrTransaction"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>462</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <variableName>ResponseValue</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:cashReserveRatioRes>
+                <ns2:AppHdr>
+                    <ns2:CharSet>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:CharSet"/>
+                    </ns2:CharSet>
+                    <ns2:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:ServVersion"/>
+                    </ns2:ServVersion>
+                    <ns2:From>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:To/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:To/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:From>
+                    <ns2:To>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:From/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:From/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:To>
+                    <ns2:MsgId>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId"/>
+                    </ns2:MsgId>
+                    <ns2:MsgSrcId>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:MsgId"/>
+                    </ns2:MsgSrcId>
+                    <ns2:BizServ>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:BizServ>
+                    <ns2:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:CreatedDate"/>
+                    </ns2:CreatedDate>
+                </ns2:AppHdr>
+                <ns2:ResponseStatus>
+                    <ns2:Status>
+                        <xsl:value-of select="&quot;0&quot;"/>
+                    </ns2:Status>
+                    <ns2:ErrorMessage>
+                        <xsl:value-of select="if(exists($T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/Status/messages))&#xA;then concat($T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/Status/messages[2],&quot; - &quot;,$T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/Status/messages[3])&#xA;else &quot;&quot;"/>
+                    </ns2:ErrorMessage>
+                </ns2:ResponseStatus>
+                <ns1:gCashReserveRatio>
+                    <xsl:for-each select="$T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/PORTALDASHBOARDCRRType/gPORTALDASHBOARDCRRDetailType[1]/mPORTALDASHBOARDCRRDetailType">
+                        <ns1:mCashReserveRatio>
+                            <xsl:if test="TienGuiHuyDong">
+                                <ns1:DepositMobilization>
+                                    <xsl:value-of select="TienGuiHuyDong"/>
+                                </ns1:DepositMobilization>
+                            </xsl:if>
+                            <xsl:if test="SoTaiKhoanTinhDTBB">
+                                <ns1:CrrAccNum>
+                                    <xsl:value-of select="SoTaiKhoanTinhDTBB"/>
+                                </ns1:CrrAccNum>
+                            </xsl:if>
+                            <xsl:if test="SoDuPhaiDuTru">
+                                <ns1:ReserveBalances>
+                                    <xsl:value-of select="SoDuPhaiDuTru"/>
+                                </ns1:ReserveBalances>
+                            </xsl:if>
+                            <xsl:if test="SoDuBinhQuan">
+                                <ns1:AvgBalance>
+                                    <xsl:value-of select="SoDuBinhQuan"/>
+                                </ns1:AvgBalance>
+                            </xsl:if>
+                            <xsl:if test="TienTe">
+                                <ns1:Currency>
+                                    <xsl:value-of select="TienTe"/>
+                                </ns1:Currency>
+                            </xsl:if>
+                        </ns1:mCashReserveRatio>
+                    </xsl:for-each>
+                </ns1:gCashReserveRatio>
+            </ns1:cashReserveRatioRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="t24error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>460</pd:x>
+        <pd:y>312</pd:y>
+        <config>
+            <variableName>ResponseValue</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:cashReserveRatioRes>
+                <ns2:AppHdr>
+                    <ns2:CharSet>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:CharSet"/>
+                    </ns2:CharSet>
+                    <ns2:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:ServVersion"/>
+                    </ns2:ServVersion>
+                    <ns2:From>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:To/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:To/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:From>
+                    <ns2:To>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:From/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:From/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:To>
+                    <ns2:MsgId>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId"/>
+                    </ns2:MsgId>
+                    <ns2:MsgSrcId>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:MsgId"/>
+                    </ns2:MsgSrcId>
+                    <ns2:BizServ>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:BizServ>
+                    <ns2:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:CreatedDate"/>
+                    </ns2:CreatedDate>
+                </ns2:AppHdr>
+                <ns2:ResponseStatus>
+                    <ns2:Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns2:Status>
+                    <xsl:for-each select="$T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/Status/messages">
+                        <ns2:ErrorInfo/>
+                    </xsl:for-each>
+                </ns2:ResponseStatus>
+                <ns1:gCashReserveRatio/>
+            </ns1:cashReserveRatioRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>275</pd:x>
+        <pd:y>394</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <fault>localname=ActivityTimedOutException namespace=http://schemas.tibco.com/bw/pe/plugin/5.0/exceptions</fault>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="exceptions">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>466</pd:x>
+        <pd:y>399</pd:y>
+        <config>
+            <variableName>ResponseValue</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:cashReserveRatioRes>
+                <ns2:AppHdr>
+                    <ns2:CharSet>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:CharSet"/>
+                    </ns2:CharSet>
+                    <ns2:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:ServVersion"/>
+                    </ns2:ServVersion>
+                    <ns2:From>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:To/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:To/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:From>
+                    <ns2:To>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:From/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:From/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:To>
+                    <ns2:MsgId>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:MsgSrcId"/>
+                    </ns2:MsgId>
+                    <ns2:MsgSrcId>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:MsgId"/>
+                    </ns2:MsgSrcId>
+                    <ns2:BizServ>
+                        <ns2:Id>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ/ns2:Id"/>
+                        </ns2:Id>
+                        <ns2:Name>
+                            <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:BizServ/ns2:Name"/>
+                        </ns2:Name>
+                    </ns2:BizServ>
+                    <ns2:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ns2:AppHdr/ns2:CreatedDate"/>
+                    </ns2:CreatedDate>
+                </ns2:AppHdr>
+                <ns2:ResponseStatus>
+                    <ns2:Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns2:Status>
+                    <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                        <ns2:ErrorCode>
+                            <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                        </ns2:ErrorCode>
+                    </xsl:if>
+                    <ns2:ErrorMessage>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                    </ns2:ErrorMessage>
+                </ns2:ResponseStatus>
+                <ns1:gCashReserveRatio/>
+            </ns1:cashReserveRatioRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="T24Input">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>140</pd:x>
+        <pd:y>225</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:DBCrrTransaction"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx3:ServiceEnverlop/ServiceBody/*" type="ns1:ReqBodyType" cardinality=""/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <pfx:DBCrrTransaction>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24Authentication/T24PortalDashBoard_Pass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24Authentication/T24PortalDashBoard_User"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <PORTALDASHBOARDCRRType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;CUSID&quot;"/>
+                            </columnName>
+                            <criteriaValue>
+                                <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ServiceBody/*/ns1:CustomerID"/>
+                            </criteriaValue>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;CRR.MONTH&quot;"/>
+                            </columnName>
+                            <criteriaValue>
+                                <xsl:value-of select="$Start/root/pfx3:ServiceEnverlop/ServiceBody/*/ns1:Month"/>
+                            </criteriaValue>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </PORTALDASHBOARDCRRType>
+                </pfx:DBCrrTransaction>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>T24Input</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24WSQueryCRR</pd:from>
+        <pd:to>success</pd:to>
+        <pd:xpathDescription>t24success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/Status/successIndicator="Success"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24WSQueryCRR</pd:from>
+        <pd:to>t24error</pd:to>
+        <pd:xpathDescription>t24err</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$T24WSQueryCRR/outputMessage/pfx:DBCrrTransactionResponse/Status/successIndicator!="Success"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>t24error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>exceptions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>exceptions</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Input</pd:from>
+        <pd:to>T24WSQueryCRR</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Services/Global/System/IBPST24/FTReconcileConvert/Version1.0/FTReconcileConvert/CallIBPSReconcile.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="SystemType" type="xsd:string"/>
+                    <xsd:element name="TransactionDate" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>87</pd:startX>
+    <pd:startY>176</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1152</pd:endX>
+    <pd:endY>122</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ReconcileResult>
+            <xsd:element name="Result">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Records" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="TRANSACTIONDATE" type="xsd:string"/>
+                                    <xsd:element name="SYSTEMTYPE" type="xsd:string"/>
+                                    <xsd:element name="ACCOUNTNO" type="xsd:string"/>
+                                    <xsd:element name="CITAD_CODE" type="xsd:string"/>
+                                    <xsd:element name="CR_CNT" type="xsd:string"/>
+                                    <xsd:element name="CR_AMT" type="xsd:string"/>
+                                    <xsd:element name="DR_CNT" type="xsd:string"/>
+                                    <xsd:element name="DR_AMT" type="xsd:string"/>
+                                    <xsd:element name="NETTINGCOUNT" type="xsd:string"/>
+                                    <xsd:element name="DR_CR" type="xsd:string"/>
+                                    <xsd:element name="NETTINGAMOUNT" type="xsd:string"/>
+                                    <xsd:element name="FLAG" type="xsd:string"/>
+                                    <xsd:element name="TRANS_CNT" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ReconcileResult>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1447124924098</pd:targetNamespace>
+    <pd:activity name="UpdateReconcileStatus">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>949</pd:x>
+        <pd:y>120</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>update  IBPSRECONCILESTATE
+set STATUS=?
+where TransactionDate=? and SystemType=?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>Status</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TransactionDate</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SystemType</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <Status>
+                    <xsl:value-of select="'6000'"/>
+                </Status>
+                <TransactionDate>
+                    <xsl:value-of select="$Start/Input/TransactionDate"/>
+                </TransactionDate>
+                <SystemType>
+                    <xsl:value-of select="$Start/Input/SystemType"/>
+                </SystemType>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateReconcileResult">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>808</pd:x>
+        <pd:y>123</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>insert  into IBPSRECONCILE(TRANSACTIONDATE,SYSTEMTYPE,ACCOUNTNO,CITAD_CODE,CR_CNT,CR_AMT,DR_CNT,DR_AMT,NETTINGCOUNT,DR_CR,NETTINGAMOUNT,FLAG,TRANS_CNT) values (?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <batchUpdate>true</batchUpdate>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>TRANSACTIONDATE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SYSTEMTYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ACCOUNTNO</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CITAD_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CR_CNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CR_AMT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>DR_CNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>DR_AMT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>NETTINGCOUNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>DR_CR</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>NETTINGAMOUNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FLAG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TRANS_CNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <xsl:for-each select="$ReconcileResult/Result/Records">
+                    <Record>
+                        <TRANSACTIONDATE>
+                            <xsl:value-of select="TRANSACTIONDATE"/>
+                        </TRANSACTIONDATE>
+                        <SYSTEMTYPE>
+                            <xsl:value-of select="SYSTEMTYPE"/>
+                        </SYSTEMTYPE>
+                        <ACCOUNTNO>
+                            <xsl:value-of select="ACCOUNTNO"/>
+                        </ACCOUNTNO>
+                        <CITAD_CODE>
+                            <xsl:value-of select="CITAD_CODE"/>
+                        </CITAD_CODE>
+                        <CR_CNT>
+                            <xsl:value-of select="CR_CNT"/>
+                        </CR_CNT>
+                        <CR_AMT>
+                            <xsl:value-of select="CR_AMT"/>
+                        </CR_AMT>
+                        <DR_CNT>
+                            <xsl:value-of select="DR_CNT"/>
+                        </DR_CNT>
+                        <DR_AMT>
+                            <xsl:value-of select="DR_AMT"/>
+                        </DR_AMT>
+                        <NETTINGCOUNT>
+                            <xsl:value-of select="NETTINGCOUNT"/>
+                        </NETTINGCOUNT>
+                        <DR_CR>
+                            <xsl:value-of select="DR_CR"/>
+                        </DR_CR>
+                        <NETTINGAMOUNT>
+                            <xsl:value-of select="NETTINGAMOUNT"/>
+                        </NETTINGAMOUNT>
+                        <FLAG>
+                            <xsl:value-of select="FLAG"/>
+                        </FLAG>
+                        <TRANS_CNT>
+                            <xsl:value-of select="TRANS_CNT"/>
+                        </TRANS_CNT>
+                    </Record>
+                </xsl:for-each>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>957</pd:x>
+        <pd:y>263</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="UpdateReconcileStatus-1">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>1149</pd:x>
+        <pd:y>255</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>update  IBPSRECONCILESTATE
+set STATUS=?
+where TransactionDate=? and SystemType=?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>Status</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TransactionDate</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SystemType</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <Status>
+                    <xsl:value-of select="'6001'"/>
+                </Status>
+                <TransactionDate>
+                    <xsl:value-of select="$Start/Input/TransactionDate"/>
+                </TransactionDate>
+                <SystemType>
+                    <xsl:value-of select="$Start/Input/SystemType"/>
+                </SystemType>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>213</pd:x>
+        <pd:y>12</pd:y>
+        <pd:width>508</pd:width>
+        <pd:height>266</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallHVReconcileProc</pd:to>
+            <pd:xpathDescription>IBPSHV</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Start/Input/SystemType='IBPSHV'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallLVReconcileProc</pd:to>
+            <pd:xpathDescription>IBPSLV</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Start/Input/SystemType='IBPSLV'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetLVResult</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetHVResult</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallLVReconcileProc</pd:from>
+            <pd:to>ParseLVResult</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallHVReconcileProc</pd:from>
+            <pd:to>ParseHVResult</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseLVResult</pd:from>
+            <pd:to>SetLVResult</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseHVResult</pd:from>
+            <pd:to>SetHVResult</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallLVReconcileProc">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>336</pd:x>
+            <pd:y>77</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <schema>T24PROD</schema>
+                <ProcedureName>IBPSLVRECONCILE</ProcedureName>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24DB.sharedjdbc</jdbcSharedConfig>
+                <parameterTypes>
+                    <parameter>
+                        <colName>VALUEDATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <VALUEDATE>
+                            <xsl:value-of select="$Start/Input/TransactionDate"/>
+                        </VALUEDATE>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseLVResult">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>466</pd:x>
+            <pd:y>100</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>false</validateOutput>
+                <term>
+                    <xsd:element name="Resultsets">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="ResultSet1">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="Record1" minOccurs="0" maxOccurs="unbounded">
+                                                <xsd:complexType>
+                                                    <xsd:sequence>
+                                                        <xsd:element name="BC_CODE" type="xsd:string"/>
+                                                        <xsd:element name="FLAG" type="xsd:string"/>
+                                                        <xsd:element name="TRANS_AMT" type="xsd:string"/>
+                                                        <xsd:element name="ACCOUNT_NO" type="xsd:string"/>
+                                                        <xsd:element name="CR_DR" type="xsd:string"/>
+                                                        <xsd:element name="TRANS_CNT" type="xsd:string"/>
+                                                    </xsd:sequence>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </term>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="$CallLVReconcileProc/resultSet/UnresolvedResultsets"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CallHVReconcileProc">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>344</pd:x>
+            <pd:y>194</pd:y>
+            <config>
+                <timeout>0</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <schema>T24PROD</schema>
+                <ProcedureName>IBPSHVRECONCILE</ProcedureName>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24DB.sharedjdbc</jdbcSharedConfig>
+                <parameterTypes>
+                    <parameter>
+                        <colName>VALUEDATE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <VALUEDATE>
+                            <xsl:value-of select="$Start/Input/TransactionDate"/>
+                        </VALUEDATE>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseHVResult">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>478</pd:x>
+            <pd:y>202</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>false</validateOutput>
+                <term>
+                    <xsd:element name="Resultsets">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="ResultSet1">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="Record1" minOccurs="0" maxOccurs="unbounded">
+                                                <xsd:complexType>
+                                                    <xsd:sequence>
+                                                        <xsd:element name="BC_CODE" type="xsd:string"/>
+                                                        <xsd:element name="ACCOUNT_NO" type="xsd:string"/>
+                                                        <xsd:element name="DEBIT_CNT" type="xsd:string"/>
+                                                        <xsd:element name="DEBIT_AMT" type="xsd:string"/>
+                                                        <xsd:element name="CREDIT_CNT" type="xsd:string"/>
+                                                        <xsd:element name="CREDIT_AMT" type="xsd:string"/>
+                                                    </xsd:sequence>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </term>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="$CallHVReconcileProc/resultSet/UnresolvedResultsets"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetLVResult">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>595</pd:x>
+            <pd:y>101</pd:y>
+            <config>
+                <variableName>ReconcileResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <Result>
+                    <xsl:for-each select="$ParseLVResult/Resultsets/ResultSet1/Record1">
+                        <Records>
+                            <TRANSACTIONDATE>
+                                <xsl:value-of select="$Start/Input/TransactionDate"/>
+                            </TRANSACTIONDATE>
+                            <SYSTEMTYPE>
+                                <xsl:value-of select="$Start/Input/SystemType"/>
+                            </SYSTEMTYPE>
+                            <ACCOUNTNO>
+                                <xsl:value-of select="ACCOUNT_NO"/>
+                            </ACCOUNTNO>
+                            <CITAD_CODE>
+                                <xsl:value-of select="BC_CODE"/>
+                            </CITAD_CODE>
+                            <CR_CNT>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </CR_CNT>
+                            <CR_AMT>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </CR_AMT>
+                            <DR_CNT>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </DR_CNT>
+                            <DR_AMT>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </DR_AMT>
+                            <NETTINGCOUNT>
+                                <xsl:value-of select="tib:right(current()/FLAG, 2)"/>
+                            </NETTINGCOUNT>
+                            <DR_CR>
+                                <xsl:value-of select="CR_DR"/>
+                            </DR_CR>
+                            <NETTINGAMOUNT>
+                                <xsl:value-of select="TRANS_AMT"/>
+                            </NETTINGAMOUNT>
+                            <FLAG>
+                                <xsl:value-of select="tib:pad(tib:left(current()/FLAG, 1),1,' ')"/>
+                            </FLAG>
+                            <TRANS_CNT>
+                                <xsl:value-of select="TRANS_CNT"/>
+                            </TRANS_CNT>
+                        </Records>
+                    </xsl:for-each>
+                </Result>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetHVResult">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>615</pd:x>
+            <pd:y>190</pd:y>
+            <config>
+                <variableName>ReconcileResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <Result>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ParseHVResult/Resultsets/ResultSet1/Record1">
+                        <Records>
+                            <TRANSACTIONDATE>
+                                <xsl:value-of select="$Start/Input/TransactionDate"/>
+                            </TRANSACTIONDATE>
+                            <SYSTEMTYPE>
+                                <xsl:value-of select="$Start/Input/SystemType"/>
+                            </SYSTEMTYPE>
+                            <ACCOUNTNO>
+                                <xsl:value-of select="ACCOUNT_NO"/>
+                            </ACCOUNTNO>
+                            <CITAD_CODE>
+                                <xsl:value-of select="BC_CODE"/>
+                            </CITAD_CODE>
+                            <CR_CNT>
+                                <xsl:value-of select="DEBIT_CNT"/>
+                            </CR_CNT>
+                            <CR_AMT>
+                                <xsl:value-of select="DEBIT_AMT"/>
+                            </CR_AMT>
+                            <DR_CNT>
+                                <xsl:value-of select="CREDIT_CNT"/>
+                            </DR_CNT>
+                            <DR_AMT>
+                                <xsl:value-of select="CREDIT_AMT"/>
+                            </DR_AMT>
+                            <NETTINGCOUNT>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </NETTINGCOUNT>
+                            <DR_CR>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </DR_CR>
+                            <NETTINGAMOUNT>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </NETTINGAMOUNT>
+                            <FLAG>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </FLAG>
+                        </Records>
+                    </xsl:for-each>
+                </Result>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>UpdateReconcileStatus</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateReconcileResult</pd:from>
+        <pd:to>UpdateReconcileStatus</pd:to>
+        <pd:xpathDescription>updated</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>UpdateReconcileStatus-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateReconcileStatus-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>UpdateReconcileResult</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

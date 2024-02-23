@@ -1,0 +1,75 @@
+<?xml version='1.0'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:complexType name="Record">
+        <xs:sequence>
+            <xs:element name="CHECK_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CREATE_FILE_RESULT_FLAG" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="FILE_NAME_RESULT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="TRX_TYPE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="ERR_STATUS" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SD_TIME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RESPONSE_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SERIAL_NO" form="unqualified" type="xs:string"/>
+            <xs:element name="O_CI_CODE" form="unqualified" type="xs:string"/>
+            <xs:element name="R_CI_CODE" form="unqualified" type="xs:string"/>
+            <xs:element name="O_INDIRECT_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="R_INDIRECT_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="FEE_CI_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="TRX_DATE" form="unqualified" type="xs:string"/>
+            <xs:element name="BALANCE_TIME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CURRENCY" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="AMOUNT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SD_NAME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SD_ADDR" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SD_ACCNT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RV_NAME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RV_ADDR" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RV_ACCNT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CONTENT" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="OPERT1" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="OPERT2" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="FILE_NAME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RELATION_NO" form="unqualified" type="xs:string"/>
+            <xs:element name="SD_IDENTIFY" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RV_IDENTIFY" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="AUTHORIZED" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="FEE_FLAG" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="REFERENCE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="TAX_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="SD_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="RV_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="EX_E_SIGN" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="MSG_REASON" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="ORIG_ID" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CONFIRM_ID" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="APPR_ID" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CREATE_TIME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="APPR_TIME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="MAC" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="TYPE_FLAG" form="unqualified" type="xs:string"/>
+            <xs:element name="E_SIGN" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="OPTIONCODE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CONTENTFROMFILE" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="ERR_MSG" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="LINEPOSITION" form="unqualified" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="FILEPROCESSINGTIME" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="CONTENT_EX" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="T24_CODE" form="unqualified" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jdbcQueryActivityInput">
+        <xs:sequence>
+            <xs:element name="RowCount" form="unqualified" nillable="true" type="xs:int"/>
+            <xs:element name="ServerTimeZone" form="unqualified" type="xs:string" minOccurs="0"/>
+            <xs:element name="timeout" form="unqualified" type="xs:int" minOccurs="0"/>
+            <xs:element name="maxRows" form="unqualified" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jdbcQueryActivityOutput">
+        <xs:sequence>
+            <xs:element name="Record" form="unqualified" type="Record" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="jdbcQueryActivityInput" type="jdbcQueryActivityInput"/>
+    <xs:element name="resultSet" type="jdbcQueryActivityOutput"/>
+</xs:schema>

@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService" xmlns:pfx11="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataFormat.sharedparse" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/global/utilities/cbsstatus/inquiry/version1.0" xmlns:pfx3="sbv/global/datatype/datatype/version1.0" xmlns:pfx2="sbv/common/envelope/commonheader/1.0" xmlns:pfx9="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx8="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:pfx7="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:ns5="http://www.sbv.gov.vn/global/utilities/cbsinfo/version1.0" xmlns:ns13="sbv/common/exceptionhandling/exception/1.0" xmlns:ns6="http://www.sbv.gov.vn/global/remittance/ftbulk/version1.0" xmlns:pfx="http://xmlns.example.com/1433466938916" xmlns:ns7="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd2" xmlns:ns8="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/remittance/fundxfer/version1.0" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.xsd"/>
+    <xsd:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" schemaLocation="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV_XSD1.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/utilities/cbsinfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Utilities/CBSInfo/CBSInfo.xsd"/>
+    <xsd:import namespace="sbv/global/utilities/cbsstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataFormat.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataFormat.sharedparse"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/ftbulk/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FTBulk/FTBulk.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd2" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSMessage.xsd"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" location="/SharedResource/Schema/Global/Local/FTBulk/FTBulk.wsdl"/>
+    <pd:name>Services/Global/System/IBPST24/FTBulk.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns3:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>36</pd:startX>
+    <pd:startY>345</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <ns3:ServiceEnverlop>
+                <xsl:copy-of select="$CallT24NettingWS/outputMessage/ns6:createFTBulkRes/pfx2:AppHdr"/>
+                <xsl:copy-of select="$CallT24NettingWS/outputMessage/ns6:createFTBulkRes/pfx2:ResponseStatus"/>
+                <ServiceBody>
+                    <ns7:FML32MessageType>
+                        <xsl:if test="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Routing_Code">
+                            <ns7:Routing_Code>
+                                <xsl:value-of select="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Routing_Code"/>
+                            </ns7:Routing_Code>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Error_Code">
+                            <ns7:Error_Code>
+                                <xsl:value-of select="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Error_Code"/>
+                            </ns7:Error_Code>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Option">
+                            <ns7:Option>
+                                <xsl:value-of select="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Option"/>
+                            </ns7:Option>
+                        </xsl:if>
+                        <ns7:Data>
+                            <xsl:value-of select="$MapDataResponse/DataResponse"/>
+                        </ns7:Data>
+                    </ns7:FML32MessageType>
+                </ServiceBody>
+            </ns3:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns3:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1421</pd:endX>
+    <pd:endY>362</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <TransactionList ref="ns6:NettingInfoReq"/>
+        <DataInput>
+            <xsd:element name="strDataInput" type="xsd:string"/>
+        </DataInput>
+        <ServiceEnvelop ref="ns3:ServiceEnverlop"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1433912272176</pd:targetNamespace>
+    <pd:activity name="AssignDataInput">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>138</pd:x>
+        <pd:y>345</pd:y>
+        <config>
+            <variableName>DataInput</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns7:FML32MessageType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <strDataInput>
+                <xsl:value-of select="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType[1]/ns7:Data"/>
+            </strDataInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse Data">
+        <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+        <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+        <pd:x>245</pd:x>
+        <pd:y>348</pd:y>
+        <config>
+            <InputType>String</InputType>
+            <Encoding>ASCII</Encoding>
+            <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/FTBulkRequest.sharedparse</ParseSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <text>
+                    <xsl:value-of select="$DataInput/strDataInput"/>
+                </text>
+                <noOfRecords>
+                    <xsl:value-of select="1"/>
+                </noOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="GroupTransaction">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>236</pd:y>
+        <pd:width>571</pd:width>
+        <pd:height>210</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>indexList</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>string-length($DataInput/strDataInput) =0</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ParseTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReAssignInput</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseTransaction</pd:from>
+            <pd:to>AssignTransactionList</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignTransactionList</pd:from>
+            <pd:to>ReAssignInput</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ReAssignInput">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>873</pd:x>
+            <pd:y>350</pd:y>
+            <config>
+                <variableName>DataInput</variableName>
+            </config>
+            <pd:inputBindings>
+                <strDataInput>
+                    <xsl:value-of select="substring($DataInput/strDataInput,165,string-length($DataInput/strDataInput)-164)"/>
+                </strDataInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseTransaction">
+            <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+            <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+            <pd:x>572</pd:x>
+            <pd:y>350</pd:y>
+            <config>
+                <InputType>String</InputType>
+                <Encoding>ASCII</Encoding>
+                <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/IBPSNet_Trans.sharedparse</ParseSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <text>
+                        <xsl:value-of select="substring($DataInput/strDataInput, 0,165)"/>
+                    </text>
+                    <noOfRecords>
+                        <xsl:value-of select="1"/>
+                    </noOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignTransactionList">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>729</pd:x>
+            <pd:y>348</pd:y>
+            <config>
+                <variableName>TransactionList</variableName>
+            </config>
+            <pd:inputBindings>
+                <ns6:NettingInfoReq>
+                    <ns6:SystemType>
+                        <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/FTBulkRequest[1]/SystemType)"/>
+                    </ns6:SystemType>
+                    <ns6:NettingType>
+                        <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/FTBulkRequest[1]/NetFlag[1])"/>
+                    </ns6:NettingType>
+                    <ns6:NettingId>
+                        <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/FTBulkRequest[1]/NettingID)"/>
+                    </ns6:NettingId>
+                    <xsl:copy-of select="$TransactionList/ns6:NettingInfoReq/ns6:Transaction"/>
+                    <ns6:Transaction>
+                        <ns6:TransactionId>
+                            <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/SourceSystemID)"/>
+                        </ns6:TransactionId>
+                        <ns6:CreditInfo>
+                            <pfx3:AccountNo>
+                                <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/CreditAccount)"/>
+                            </pfx3:AccountNo>
+                            <pfx3:Currency>
+                                <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/CreditCurrency)"/>
+                            </pfx3:Currency>
+                            <pfx3:Amount>
+                                <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/CreditAmount)"/>
+                            </pfx3:Amount>
+                        </ns6:CreditInfo>
+                        <ns6:DebitInfo>
+                            <pfx3:AccountNo>
+                                <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/DebitAccount)"/>
+                            </pfx3:AccountNo>
+                            <pfx3:Currency>
+                                <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/DebitCurrency)"/>
+                            </pfx3:Currency>
+                            <pfx3:Amount>
+                                <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/DebitAmount)"/>
+                            </pfx3:Amount>
+                        </ns6:DebitInfo>
+                        <ns6:CreditDate>
+                            <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/CreditDate))))"/>
+                        </ns6:CreditDate>
+                        <ns6:DebitDate>
+                            <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/DebitDate))))"/>
+                        </ns6:DebitDate>
+                        <ns6:LVCount>
+                            <xsl:value-of select="tib:trim($ParseTransaction/Output/Rows/IBPSNet_Trans[1]/TransCount)"/>
+                        </ns6:LVCount>
+                    </ns6:Transaction>
+                </ns6:NettingInfoReq>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="AssignTransactionString">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>364</pd:x>
+        <pd:y>348</pd:y>
+        <config>
+            <variableName>DataInput</variableName>
+        </config>
+        <pd:inputBindings>
+            <strDataInput>
+                <xsl:value-of select="substring($DataInput/strDataInput, 37, string-length($DataInput/strDataInput)-36)"/>
+            </strDataInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24NettingWS">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>1127</pd:x>
+        <pd:y>373</pd:y>
+        <config>
+            <timeout>5</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx8:FTBulk</service>
+            <servicePort>PortTypeEndpoint0</servicePort>
+            <operation>createFTBulk</operation>
+            <soapAction>/Services/Global/Remittance/FTBulk/OperationImpl/FTBulk-service0.serviceagent/PortTypeEndpoint0/createFTBulk</soapAction>
+            <endpointURL>http://10.1.26.6:7001/SBV.FT.SETTLE.IBPS.PAYMENT.WS/services</endpointURL>
+            <authScheme>NONE</authScheme>
+            <sharedChannels>
+                <jmsChannel>
+                    <targetService/>
+                    <JMSPriority>4</JMSPriority>
+                    <JMSTimeToLive>0</JMSTimeToLive>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSMessageType>Bytes</JMSMessageType>
+                    <NamingURL>%%SOAJMS/ContextURL%%</NamingURL>
+                    <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+                    <NamingPrincipal>%%SOAJMS/UserName%%</NamingPrincipal>
+                    <NamingCredential>%%SOAJMS/Password%%</NamingCredential>
+                    <ConnectionFactory>FTQueueConnectionFactory</ConnectionFactory>
+                    <JMSTo>ftbulk1.0</JMSTo>
+                    <JMSUserName>%%SOAJMS/UserName%%</JMSUserName>
+                    <JMSPassword>%%SOAJMS/Password%%</JMSPassword>
+                    <SoapJmsW3cFlag>false</SoapJmsW3cFlag>
+                </jmsChannel>
+            </sharedChannels>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns6:createFTBulkReq>
+                    <xsl:copy-of select="$Start/root/ns3:ServiceEnverlop/pfx2:AppHdr"/>
+                    <xsl:copy-of select="$TransactionList/ns6:NettingInfoReq"/>
+                </ns6:createFTBulkReq>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapDataResponse">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>1281</pd:x>
+        <pd:y>373</pd:y>
+        <config>
+            <element>
+                <xsd:element name="DataResponse" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <DataResponse>
+                <xsl:value-of select="concat(tib:pad($CallT24NettingWS/outputMessage/ns6:createFTBulkRes/ns6:NettingInfoRes/ns6:SystemType,10,' '),tib:pad($CallT24NettingWS/outputMessage/ns6:createFTBulkRes/ns6:NettingInfoRes/ns6:NettingId,25,' '),tib:pad($CallT24NettingWS/outputMessage/ns6:createFTBulkRes/ns6:NettingInfoRes/ns6:NettingType,1,' '),tib:pad($CallT24NettingWS/outputMessage/ns6:createFTBulkRes/ns6:NettingInfoRes/ns6:Status,4, ' '),tib:pad($CallT24NettingWS/outputMessage/ns6:createFTBulkRes/ns6:NettingInfoRes/ns6:PostingTime,14,' '))"/>
+            </DataResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>894</pd:x>
+        <pd:y>564</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1091</pd:x>
+        <pd:y>558</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns7:FML32MessageType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="generate-id($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </GeneratedId>
+                <ns13:ExceptionBody>
+                    <ns13:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns13:Hostname>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns8:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns13:Category>
+                    <ns13:Type>
+                        <xsl:value-of select="&quot;TECHINICAL&quot;"/>
+                    </ns13:Type>
+                    <ns13:Level>
+                        <xsl:value-of select="&quot;HIGH&quot;"/>
+                    </ns13:Level>
+                    <ns13:ErrorReport>
+                        <StackTrace>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                        </StackTrace>
+                        <Msg>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                        </Msg>
+                        <FullClass>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/FullClass"/>
+                        </FullClass>
+                        <ObjectClass>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/Class"/>
+                        </ObjectClass>
+                        <ProcessStack>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/ProcessStack"/>
+                        </ProcessStack>
+                        <MsgCode>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                        </MsgCode>
+                        <xsl:copy-of select="$_error/ns1:ErrorReport/Data"/>
+                    </ns13:ErrorReport>
+                </ns13:ExceptionBody>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="contains($_error/ns1:ErrorReport/StackTrace, concat(BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId),&quot;/Start]&quot;))"/>
+                    <xsl:otherwise>
+                        <ServiceInput>
+                            <xsl:copy-of select="$Start/root/ns3:ServiceEnverlop/pfx2:AppHdr"/>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Start/root/ns3:ServiceEnverlop/ServiceBody/ns7:FML32MessageType"/>
+                            </ServiceBody>
+                        </ServiceInput>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapDataResponseError">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>1271</pd:x>
+        <pd:y>506</pd:y>
+        <config>
+            <element>
+                <xsd:element name="DataResponse" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <DataResponse>
+                <xsl:value-of select="concat(tib:pad('',10,' '),tib:pad('',25,' '),tib:pad('',1,' '),&quot;6003&quot;,tib:pad('',14,' '))"/>
+            </DataResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>AssignDataInput</pd:from>
+        <pd:to>Parse Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Data</pd:from>
+        <pd:to>AssignTransactionString</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignTransactionString</pd:from>
+        <pd:to>GroupTransaction</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AssignDataInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GroupTransaction</pd:from>
+        <pd:to>CallT24NettingWS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24NettingWS</pd:from>
+        <pd:to>MapDataResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapDataResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>MapDataResponseError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapDataResponseError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

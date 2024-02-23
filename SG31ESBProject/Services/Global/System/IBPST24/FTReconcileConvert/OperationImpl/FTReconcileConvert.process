@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd2" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="sbv/common/envelope/soaenvelope/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx="sbv/common/envelope/commonheader/1.0">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd2" schemaLocation="/SharedResource/Schema/Global/System/IBPS/IBPSMessage.xsd"/>
+    <pd:name>Services/Global/System/IBPST24/FTReconcileConvert/OperationImpl/FTReconcileConvert.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>125</pd:startX>
+    <pd:startY>158</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$RequestResponse/root/pfx2:ServiceEnverlop/pfx:AppHdr"/>
+                <xsl:copy-of select="$RequestResponse/root/pfx2:ServiceEnverlop/pfx:ResponseStatus"/>
+                <xsl:copy-of select="$RequestResponse/root/pfx2:ServiceEnverlop/ServiceBody"/>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>683</pd:endX>
+    <pd:endY>163</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <strInput>
+            <xsd:element name="strInput" type="xsd:string"/>
+        </strInput>
+        <ServiceEnvelop ref="pfx2:ServiceEnverlop"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1438309143360</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>385</pd:x>
+        <pd:y>161</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns2:FML32MessageType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <ns:SOAEnvelope>
+                    <ns:SOAServiceHeader>
+                        <ns:AppHdr>
+                            <pfx:CharSet>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:CharSet"/>
+                            </pfx:CharSet>
+                            <pfx:ServVersion>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:ServVersion"/>
+                            </pfx:ServVersion>
+                            <pfx:From>
+                                <pfx:Id>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:From/pfx:Id"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:From/pfx:Name"/>
+                                </pfx:Name>
+                            </pfx:From>
+                            <pfx:To>
+                                <pfx:Id>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:To/pfx:Id"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:To/pfx:Name"/>
+                                </pfx:Name>
+                            </pfx:To>
+                            <pfx:MsgId>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:MsgId"/>
+                            </pfx:MsgId>
+                            <pfx:MsgPreId>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:MsgPreId"/>
+                            </pfx:MsgPreId>
+                            <pfx:MsgSrcId>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:MsgSrcId"/>
+                            </pfx:MsgSrcId>
+                            <pfx:BizServ>
+                                <pfx:Id>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:BizServ/pfx:Id"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:BizServ/pfx:Name"/>
+                                </pfx:Name>
+                            </pfx:BizServ>
+                            <pfx:CreatedDate>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:CreatedDate"/>
+                            </pfx:CreatedDate>
+                            <pfx:Signature>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/pfx:AppHdr/pfx:Signature"/>
+                            </pfx:Signature>
+                        </ns:AppHdr>
+                        <ns:ServiceName>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:FML32MessageType[1]/ns2:Routing_Code"/>
+                        </ns:ServiceName>
+                        <ns:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns:ProcessName>
+                    </ns:SOAServiceHeader>
+                    <ns:ServiceBody>
+                        <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns2:FML32MessageType"/>
+                    </ns:ServiceBody>
+                </ns:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

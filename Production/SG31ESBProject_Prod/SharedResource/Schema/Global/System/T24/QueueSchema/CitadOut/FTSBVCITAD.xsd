@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns0="http://www.temenos.com/T24/event/Common/EventCommon"
+	 targetNamespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.temenos.com/T24/event/Common/EventCommon" schemaLocation="../Common-EventCommon.xsd"/>
+	<xsd:element name="FTSBVCITAD">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="eventCommon"/>
+				<xsd:element ref="id" minOccurs="0"/>
+				<xsd:element ref="debitAcctNo" minOccurs="0"/>
+				<xsd:element ref="debitAmount" minOccurs="0"/>
+				<xsd:element ref="debitCurrency" minOccurs="0"/>
+				<xsd:element ref="debitValueDate" minOccurs="0"/>
+				<xsd:element ref="creditAcctNo" minOccurs="0"/>
+				<xsd:element ref="creditCurrency" minOccurs="0"/>
+				<xsd:element ref="creditValueDate" minOccurs="0"/>
+				<xsd:element ref="citadType" minOccurs="0"/>
+				<xsd:element ref="transactionType" minOccurs="0"/>
+				<xsd:element ref="orderingCustList" minOccurs="0"/>
+				<xsd:element ref="benAcctNo" minOccurs="0"/>
+				<xsd:element ref="benCustomerList" minOccurs="0"/>
+				<xsd:element ref="oIndirectCode" minOccurs="0"/>
+				<xsd:element ref="paymentDetailsList" minOccurs="0"/>
+				<xsd:element ref="signatoryList" minOccurs="0"/>
+				<xsd:element ref="rIndirectCode" minOccurs="0"/>
+				<xsd:element ref="creditAmount" minOccurs="0"/>
+				<xsd:element ref="benOurCharges" minOccurs="0"/>
+				<xsd:element ref="bcBankSortCode" minOccurs="0"/>
+				<xsd:element ref="lOCiCode" minOccurs="0"/>
+				<xsd:element ref="lRCiCode" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="eventCommon" type="ns0:EventCommon"/>
+	<xsd:element name="id" type="xsd:string"/>
+	<xsd:element name="debitAcctNo" type="xsd:string"/>
+	<xsd:element name="debitAmount" type="xsd:decimal"/>
+	<xsd:element name="debitCurrency" type="xsd:string"/>
+	<xsd:element name="debitValueDate" type="xsd:date"/>
+	<xsd:element name="creditAcctNo" type="xsd:string"/>
+	<xsd:element name="creditCurrency" type="xsd:string"/>
+	<xsd:element name="creditValueDate" type="xsd:date"/>
+	<xsd:element name="citadType" type="xsd:string"/>
+	<xsd:element name="transactionType" type="xsd:string"/>
+	<xsd:element name="orderingCustList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="orderingCust" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="benAcctNo" type="xsd:string"/>
+	<xsd:element name="benCustomerList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="benCustomer" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="oIndirectCode" type="xsd:string"/>
+	<xsd:element name="paymentDetailsList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="paymentDetails" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="signatoryList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="signatory" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:decimal">
+								<xsd:attribute name="index" type="xsd:integer"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="rIndirectCode" type="xsd:string"/>
+	<xsd:element name="creditAmount" type="xsd:decimal"/>
+	<xsd:element name="benOurCharges" type="xsd:string"/>
+	<xsd:element name="bcBankSortCode" type="xsd:string"/>
+	<xsd:element name="lOCiCode" type="xsd:string"/>
+	<xsd:element name="lRCiCode" type="xsd:string"/>
+</xsd:schema>

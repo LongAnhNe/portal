@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:pfx15="http://tempuri.org/" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx13="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx12="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx11="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx17="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/TTBTDT/SBV.FT.TTBT.PAYMENT.WS.wsdl"/>
+    <pd:name>Services/Global/Account/AccountInfo/Version1.0/getAccountBalanceTTBT/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>52</pd:startX>
+    <pd:startY>204</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseStatus/root/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$ResponseStatus/root/Msg"/>
+                    </ns3:ErrorMessage>
+                    <ns3:ErrorInfo>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx17:TTBTCheckBalanceResponse/Status/messages[1]"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:for-each select="$ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType">
+                        <ns7:AccountBalance>
+                            <ns7:AccountNo>
+                                <xsl:value-of select="CitadCode"/>
+                            </ns7:AccountNo>
+                            <ns7:SystemDate>
+                                <xsl:value-of select="SystemDate"/>
+                            </ns7:SystemDate>
+                            <ns7:BalAmount>
+                                <xsl:value-of select="$ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/UseableBalance"/>
+                            </ns7:BalAmount>
+                            <ns7:HoldAmount>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </ns7:HoldAmount>
+                            <ns7:OpenBalance>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </ns7:OpenBalance>
+                        </ns7:AccountBalance>
+                    </xsl:for-each>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>798</pd:endX>
+    <pd:endY>198</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseStatus>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseStatus>
+        <List>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="ns7:AccountBalance" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </List>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/accountstatus/requestresponse/version1.0</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>59</pd:y>
+        <pd:width>280</pd:width>
+        <pd:height>273</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$SOAPRequestReply/outputMessage/pfx17:TTBTCheckBalanceResponse/ENQTTBTQUERYACCOUNTType/gENQTTBTQUERYACCOUNTDetailType/mENQTTBTQUERYACCOUNTDetailType</pd:over>
+            <pd:iterationElementSlot>ENQTTBTQUERYACCOUNTDetail</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>JDBC Call Procedure</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC Call Procedure</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="JDBC Call Procedure">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>433</pd:x>
+            <pd:y>209</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/TTBTTT DB.sharedjdbc</jdbcSharedConfig>
+                <catalog>TTBT_PACK</catalog>
+                <ProcedureName>INSERT_UPDATE_SODU</ProcedureName>
+                <parameterTypes>
+                    <parameter>
+                        <colName>PI_TAIKHOAN</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_SHNH</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_NGAYSODU</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_SODU</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_NGAYHETHONG</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>PI_ERR_MSG</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <PI_TAIKHOAN>
+                            <xsl:choose>
+                                <xsl:when test="exists($ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/AccountID)">
+                                    <xsl:value-of select="$ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/AccountID"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_TAIKHOAN>
+                        <PI_SHNH>
+                            <xsl:choose>
+                                <xsl:when test="exists($ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/CitadCode)">
+                                    <xsl:value-of select="$ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/CitadCode"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_SHNH>
+                        <PI_NGAYSODU>
+                            <xsl:choose>
+                                <xsl:when test="exists($ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/SystemDate)">
+                                    <xsl:value-of select="$ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/SystemDate"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_NGAYSODU>
+                        <PI_SODU>
+                            <xsl:choose>
+                                <xsl:when test="exists(tib:substring-before-last(translate($ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/UseableBalance, ',', ''), &quot;.&quot;))">
+                                    <xsl:value-of select="tib:substring-before-last(translate($ENQTTBTQUERYACCOUNTDetail/mENQTTBTQUERYACCOUNTDetailType/UseableBalance, ',', ''), &quot;.&quot;)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </PI_SODU>
+                        <PI_NGAYHETHONG>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </PI_NGAYHETHONG>
+                        <PI_ERR_MSG>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </PI_ERR_MSG>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>681</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>345</pd:x>
+        <pd:y>466</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;LOI GOI WEBSERVICE&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>126</pd:x>
+        <pd:y>569</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Assign-2">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>332</pd:x>
+        <pd:y>572</pd:y>
+        <config>
+            <variableName>ResponseStatus</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;LOI EXCEPTION&quot;"/>
+                </Msg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>182</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx17:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>TTBTCheckBalance</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24TTBT%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns7:CitadCode"/>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns7:AccountNo"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx17:TTBTCheckBalance>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24Pass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24User"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <ENQTTBTQUERYACCOUNTType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;CITAD.CODE.LIST&quot;"/>
+                            </columnName>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns7:CitadCode">
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns7:CitadCode"/>
+                                </criteriaValue>
+                            </xsl:if>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;ACCOUNT.LIST&quot;"/>
+                            </columnName>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns7:AccountNo">
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns7:AccountNo"/>
+                                </criteriaValue>
+                            </xsl:if>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </ENQTTBTQUERYACCOUNTType>
+                </pfx17:TTBTCheckBalance>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Assign-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

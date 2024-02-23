@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" name="Untitled" targetNamespace="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0">
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" location="../../Account/AccountInfo/AccountInfo.xsd"/>
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:include schemaLocation="../../../../../SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="AccountInfo">
+        <wsdl:port name="PortTypeEndpoint4" binding="tns:PortTypeEndpoint4Binding">
+            <soap:address location=""/>
+            <jms:connectionFactory>FTQueueConnectionFactory</jms:connectionFactory>
+            <jms:targetAddress destination="queue">accountinfo1.0</jms:targetAddress>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="PortType">
+        <wsdl:operation name="getAccountBalance">
+            <wsdl:input message="tns:getAccountBalanceReq"/>
+            <wsdl:output message="tns:getAccountBalanceRes"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAccountStatus">
+            <wsdl:input message="tns:getAccountStatusReq"/>
+            <wsdl:output message="tns:getAccountStatusRes"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PortTypeEndpoint4Binding" type="tns:PortType">
+        <soap:binding style="document" transport="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS"/>
+        <jms:binding messageFormat="bytes"/>
+        <wsdl:operation name="getAccountBalance">
+            <soap:operation style="document" soapAction="/Services/Global/Account/AccountInfo/OperationImpl/AccountInfo-service4.serviceagent/PortTypeEndpoint4/getAccountBalance"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Req"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="Res"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAccountStatus">
+            <soap:operation style="document" soapAction="/Services/Global/Account/AccountInfo/OperationImpl/AccountInfo-service4.serviceagent/PortTypeEndpoint4/getAccountStatus"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Req"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="Res"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="getAccountBalanceReq">
+        <wsdl:part name="Req" element="ns:getAccountBalanceReq"/>
+    </wsdl:message>
+    <wsdl:message name="getAccountBalanceRes">
+        <wsdl:part name="Res" element="ns:getAccountBalanceRes"/>
+    </wsdl:message>
+    <wsdl:message name="getAccountStatusReq">
+        <wsdl:part name="Req" element="ns:getAccountStatusReq"/>
+    </wsdl:message>
+    <wsdl:message name="getAccountStatusRes">
+        <wsdl:part name="Res" element="ns:getAccountStatusRes"/>
+    </wsdl:message>
+</wsdl:definitions>

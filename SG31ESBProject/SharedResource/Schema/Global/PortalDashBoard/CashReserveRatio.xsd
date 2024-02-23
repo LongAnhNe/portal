@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/portaldashboard/cashreserveratio/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/portaldashboard/cashreserveratio/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="cashReserveRatioReq" type="cashReserveRatioReqType"/>
+	<xs:complexType name="cashReserveRatioReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element name="ReqBody" type="ReqBodyType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="cashReserveRatioResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="gCashReserveRatio"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="cashReserveRatioRes" type="cashReserveRatioResType"/>
+	<xs:element name="gCashReserveRatio" type="gCashReserveRatioType"/>
+	<xs:complexType name="gCashReserveRatioType">
+		<xs:sequence>
+			<xs:element ref="mCashReserveRatio" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="mCashReserveRatio" type="mCashReserveRatioType"/>
+	<xs:complexType name="mCashReserveRatioType">
+		<xs:sequence>
+			<xs:element name="DepositMobilization" type="xs:string" minOccurs="0"/>
+			<xs:element name="CrrAccNum" type="xs:string" minOccurs="0"/>
+			<xs:element name="ReserveBalances" type="xs:string" minOccurs="0"/>
+			<xs:element name="AvgBalance" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReqBodyType">
+		<xs:sequence>
+			<xs:element name="CustomerID" type="xs:string"/>
+			<xs:element name="Month" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://xmlns.example.com/1440058534699" xmlns:pfx="http://xmlns.example.com/1437532900936" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" xmlns:ns3="www.tibco.com/plugin/Sleep" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="sbv/common/envelope/commonheader/1.0" xmlns:pfx2="http://www.temenos.com/T24/event/T242ERP/T24Entries" xmlns:pfx9="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries" xmlns:pfx8="http://xmlns.example.com/1437649150739" xmlns:pfx7="sbv/services/glposting/requestresponse/version1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="sbv/common/envelope/soaenvelope/1.0">
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/T242ERP/T24Entries" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/T24-Entries.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/T24-T24COBEntries.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1437532900936"/>
+    <wsdl:import namespace="sbv/services/glposting/requestresponse/version1.0"/>
+    <wsdl:import namespace="http://xmlns.example.com/1437649150739" location="/SharedResource/Schema/Global/Local/GLPosting/GLPosting.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1440058534699" location="/SharedResource/Schema/Global/Local/GLPosting/GLPosting-sit-ver4.wsdl"/>
+    <pd:name>Services/Global/System/T24ERP/COBT24EntriesScan/COBT24EntriesScan - 2 Selector.process</pd:name>
+    <pd:startName>JMS  - start trigger</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS  - start trigger">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>68</pd:x>
+        <pd:y>42</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>t24queue1.0</destination>
+                <selector>application = 'SBV.T24.ERP.MAPPING.COB' and cob='START'</selector>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/EMS26.18.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>798</pd:endX>
+    <pd:endY>369</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <contractList>
+            <xsd:element name="contractList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="contractID" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </contractList>
+        <AppHdr ref="pfx3:AppHdr"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1437531642946</pd:targetNamespace>
+    <pd:activity name="Assign-AppHdr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>70</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <variableName>AppHdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:AppHdr>
+                <pfx3:CharSet>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </pfx3:CharSet>
+                <pfx3:ServVersion>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </pfx3:ServVersion>
+                <pfx3:From>
+                    <pfx3:Id>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </pfx3:Id>
+                    <pfx3:Name>
+                        <xsl:value-of select="&quot;ESB&quot;"/>
+                    </pfx3:Name>
+                </pfx3:From>
+                <pfx3:To>
+                    <pfx3:Id>
+                        <xsl:value-of select="&quot;2&quot;"/>
+                    </pfx3:Id>
+                    <pfx3:Name>
+                        <xsl:value-of select="&quot;ERP&quot;"/>
+                    </pfx3:Name>
+                </pfx3:To>
+                <pfx3:MsgId>
+                    <xsl:value-of select="&quot;123&quot;"/>
+                </pfx3:MsgId>
+                <pfx3:BizServ>
+                    <pfx3:Id>
+                        <xsl:value-of select="&quot;02&quot;"/>
+                    </pfx3:Id>
+                    <pfx3:Name>
+                        <xsl:value-of select="&quot;GLPosting&quot;"/>
+                    </pfx3:Name>
+                </pfx3:BizServ>
+                <pfx3:CreatedDate>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx3:CreatedDate>
+            </pfx3:AppHdr>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallProcERP">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>438</pd:x>
+        <pd:y>419</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <schema>APPS</schema>
+            <catalog>FSAH_CREATE_EVENTS_PKG_T24</catalog>
+            <ProcedureName>MAIN</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_INTERFACE_ID</colName>
+                    <colType>2</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_STATUS</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_MESSAGE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_INTERFACE_ID>
+                        <xsl:choose>
+                            <xsl:when test="exists($Start-Fomat/pfx9:T24COBEntries/pfx9:id)">
+                                <xsl:value-of select="$Start-Fomat/pfx9:T24COBEntries/pfx9:id"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </P_INTERFACE_ID>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>590</pd:x>
+        <pd:y>442</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>T24EntriesError</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <JMSProperties/>
+                <Body>
+                    <xsl:value-of select="$JMS----start-trigger/ns:ActivityOutput/Body"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Start-Fomat">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>72</pd:x>
+        <pd:y>224</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx9:T24COBEntries"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JMS----start-trigger/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="confirm 'START'">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>75</pd:x>
+        <pd:y>333</pd:y>
+        <config>
+            <ConfirmEvent>JMS  - start trigger</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>194</pd:x>
+        <pd:y>7</pd:y>
+        <pd:width>447</pd:width>
+        <pd:height>364</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$COB-Format/pfx9:T24COBEntries/pfx9:entryIdGroup/pfx9:entryId='COBEND'</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Get COB Message</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign-CntrList</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Get COB Message</pd:from>
+            <pd:to>COB-Format</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm</pd:from>
+            <pd:to>Assign-CntrList</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>COB-Format</pd:from>
+            <pd:to>Confirm</pd:to>
+            <pd:xpathDescription>COBEND</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$COB-Format/pfx9:T24COBEntries/pfx9:entryIdGroup/pfx9:entryId='COBEND'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>COB-Format</pd:from>
+            <pd:to>COBGLPosting</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>COBGLPosting</pd:from>
+            <pd:to>Confirm</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Confirm">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:x>484</pd:x>
+            <pd:y>194</pd:y>
+            <config>
+                <ConfirmEvent>Get COB Message</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Get COB Message">
+            <pd:type>com.tibco.plugin.jms.JMSQueueGetMessageActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueGetMessageActivity</pd:resourceType>
+            <pd:x>292</pd:x>
+            <pd:y>94</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>2</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <selector>application = 'SBV.T24.ERP.MAPPING.COB'</selector>
+                    <destination>t24queue1.0</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/EMS26.18.sharedjmscon</ConnectionReference>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput/>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="COB-Format">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>342</pd:x>
+            <pd:y>271</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>true</validateOutput>
+                <term ref="pfx9:T24COBEntries"/>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="$Get-COB-Message/ns:ActivityOutput/Body"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign-CntrList">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>555</pd:x>
+            <pd:y>269</pd:y>
+            <config>
+                <variableName>contractList</variableName>
+            </config>
+            <pd:inputBindings>
+                <contractList>
+                    <xsl:copy-of select="$contractList/contractList/contractID"/>
+                    <xsl:if test="$COB-Format/pfx9:T24COBEntries/pfx9:entryIdGroup[1]/pfx9:contractId">
+                        <contractID>
+                            <xsl:value-of select="$COB-Format/pfx9:T24COBEntries/pfx9:entryIdGroup[1]/pfx9:contractId"/>
+                        </contractID>
+                    </xsl:if>
+                </contractList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="COBGLPosting">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>432</pd:x>
+            <pd:y>103</pd:y>
+            <config>
+                <processName>/Services/Global/Remittance/GLPosting/OperationImpl/createCOBGLPosting.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns0:COBGLPostingReq xmlns:ns0="http://xmlns.example.com/1436322400562">
+                    <COBReq>
+                        <ns2:COBGLPostingReq>
+                            <xsl:copy-of select="$AppHdr/pfx3:AppHdr"/>
+                            <pfx9:T24COBEntries>
+                                <xsl:copy-of select="$COB-Format/pfx9:T24COBEntries/pfx9:eventCommon"/>
+                                <xsl:if test="$Start-Fomat/pfx9:T24COBEntries/pfx9:id">
+                                    <pfx9:id>
+                                        <xsl:value-of select="$Start-Fomat/pfx9:T24COBEntries/pfx9:id"/>
+                                    </pfx9:id>
+                                </xsl:if>
+                                <xsl:copy-of select="$COB-Format/pfx9:T24COBEntries/pfx9:entryIdGroup"/>
+                                <pfx9:noOfEntries>
+                                    <xsl:value-of select="$COB-Format/pfx9:T24COBEntries/pfx9:noOfEntries"/>
+                                </pfx9:noOfEntries>
+                                <pfx9:onlineOrCob>
+                                    <xsl:value-of select="$COB-Format/pfx9:T24COBEntries/pfx9:onlineOrCob"/>
+                                </pfx9:onlineOrCob>
+                                <pfx9:entryTime>
+                                    <xsl:value-of select="$COB-Format/pfx9:T24COBEntries/pfx9:entryTime"/>
+                                </pfx9:entryTime>
+                            </pfx9:T24COBEntries>
+                        </ns2:COBGLPostingReq>
+                    </COBReq>
+                </ns0:COBGLPostingReq>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>418</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS  - start trigger</pd:from>
+        <pd:to>Assign-AppHdr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-AppHdr</pd:from>
+        <pd:to>Start-Fomat</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CallProcERP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallProcERP</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallProcERP</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start-Fomat</pd:from>
+        <pd:to>confirm 'START'</pd:to>
+        <pd:xpathDescription>COBSTART'</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start-Fomat/pfx9:T24COBEntries/pfx9:entryIdGroup/pfx9:entryId='COBSTART'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>confirm 'START'</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

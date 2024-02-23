@@ -1,0 +1,1351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <pd:name>Services/Global/Report/CDTKKT/CDTKKT_FileRead.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>41</pd:startX>
+    <pd:startY>293</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>242</pd:endX>
+    <pd:endY>759</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <StartBlockIndex>
+            <xsd:element name="BlockIndex" type="xsd:int"/>
+        </StartBlockIndex>
+        <LineIndex>
+            <xsd:element name="lineIndex" type="xsd:int"/>
+        </LineIndex>
+        <ResponseState>
+            <xsd:element name="Response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseState>
+        <CDTKKT_DATA>
+            <xsd:element name="CDTKKT_DATA">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Records" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="MADONVI" type="xsd:string"/>
+                                    <xsd:element name="TAIKHOAN" type="xsd:string"/>
+                                    <xsd:element name="TENFILEBC" type="xsd:string"/>
+                                    <xsd:element name="STT_LAN_GUI" type="xsd:string"/>
+                                    <xsd:element name="NGAY_BC" type="xsd:string"/>
+                                    <xsd:element name="DUDAUKY_NO" type="xsd:string"/>
+                                    <xsd:element name="DUDAUKY_CO" type="xsd:string"/>
+                                    <xsd:element name="PS_NO" type="xsd:string"/>
+                                    <xsd:element name="PS_CO" type="xsd:string"/>
+                                    <xsd:element name="DUCUOIKY_NO" type="xsd:string"/>
+                                    <xsd:element name="DUCUOIKY_CO" type="xsd:string"/>
+                                    <xsd:element name="TONG_DONG_BC" type="xsd:string"/>
+                                    <xsd:element name="STATUS" type="xsd:string"/>
+                                    <xsd:element name="ERROR_MSG" type="xsd:string"/>
+                                    <xsd:element name="CREATION_DATE" type="xsd:string"/>
+                                    <xsd:element name="CREATED_BY" type="xsd:string"/>
+                                    <xsd:element name="CREATED_DATE_BC" type="xsd:string"/>
+                                    <xsd:element name="THUYET_MINH" type="xsd:string"/>
+                                    <xsd:element name="CURRENCY_CODE" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </CDTKKT_DATA>
+        <EndCDTKKT>
+            <xsd:element name="End" type="xsd:boolean"/>
+        </EndCDTKKT>
+        <EndHCSN_Line>
+            <xsd:element name="EndLine" type="xsd:boolean"/>
+        </EndHCSN_Line>
+        <EndCDTKKT_Line>
+            <xsd:element name="EndLine" type="xsd:boolean"/>
+        </EndCDTKKT_Line>
+        <LineIndexHCSN>
+            <xsd:element name="Line" type="xsd:int"/>
+        </LineIndexHCSN>
+        <CDTKKT_LINE>
+            <xsd:element name="LINE">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="MADONVI" type="xsd:string"/>
+                        <xsd:element name="TAIKHOAN" type="xsd:string"/>
+                        <xsd:element name="TENFILEBC" type="xsd:string"/>
+                        <xsd:element name="STT_LAN_GUI" type="xsd:string"/>
+                        <xsd:element name="NGAY_BC" type="xsd:string"/>
+                        <xsd:element name="DUDAUKY_NO" type="xsd:string"/>
+                        <xsd:element name="DUDAUKY_CO" type="xsd:string"/>
+                        <xsd:element name="PS_NO" type="xsd:string"/>
+                        <xsd:element name="PS_CO" type="xsd:string"/>
+                        <xsd:element name="DUCUOIKY_NO" type="xsd:string"/>
+                        <xsd:element name="DUCUOIKY_CO" type="xsd:string"/>
+                        <xsd:element name="TONG_DONG_BC" type="xsd:string"/>
+                        <xsd:element name="STATUS" type="xsd:string"/>
+                        <xsd:element name="ERROR_MSG" type="xsd:string"/>
+                        <xsd:element name="CREATION_DATE" type="xsd:string"/>
+                        <xsd:element name="CREATED_BY" type="xsd:string"/>
+                        <xsd:element name="CREATED_DATE_BC" type="xsd:string"/>
+                        <xsd:element name="THUYET_MINH" type="xsd:string"/>
+                        <xsd:element name="CURRENCY_CODE" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </CDTKKT_LINE>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1450170032532</pd:targetNamespace>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>142</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <pfx:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="&quot;E:\SBV_Project\Trien khai\Requirements\ERP\Z15111.A01101020.1&quot;"/>
+                </fileName>
+            </pfx:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseHCSN_BG">
+        <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+        <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+        <pd:x>550</pd:x>
+        <pd:y>553</pd:y>
+        <config>
+            <InputType>String</InputType>
+            <Encoding>ASCII</Encoding>
+            <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/HCSN_Begin.sharedparse</ParseSharedConfig>
+            <SpecifyStartRecord>true</SpecifyStartRecord>
+            <StrictValidation>true</StrictValidation>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <text>
+                    <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                </text>
+                <startRecord>
+                    <xsl:value-of select="$StartBlockIndex/BlockIndex+1"/>
+                </startRecord>
+                <noOfRecords>
+                    <xsl:value-of select="1"/>
+                </noOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="ReadHCSN">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>620</pd:x>
+        <pd:y>625</pd:y>
+        <pd:width>623</pd:width>
+        <pd:height>250</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>lineHCSNIdx</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$EndHCSN_Line/EndLine='true'</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ParseHCSN_EN</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignEndLineHCSN</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IncreLineIndexHCSN</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseHCSN_EN</pd:from>
+            <pd:to>ParseHCSN_Line</pd:to>
+            <pd:xpathDescription>END</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$ParseHCSN_EN/Output/Rows/HCSN_End[1]/EN='EN'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseHCSN_EN</pd:from>
+            <pd:to>IncreLineIndexHCSN</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseHCSN_Line</pd:from>
+            <pd:to>UpdateHCSN</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateHCSN</pd:from>
+            <pd:to>AssignEndLineHCSN</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ParseHCSN_EN">
+            <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+            <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+            <pd:x>716</pd:x>
+            <pd:y>693</pd:y>
+            <config>
+                <InputType>String</InputType>
+                <Encoding>ASCII</Encoding>
+                <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/HCSN_End.sharedparse</ParseSharedConfig>
+                <SpecifyStartRecord>true</SpecifyStartRecord>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <text>
+                        <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                    </text>
+                    <startRecord>
+                        <xsl:value-of select="$LineIndexHCSN/Line"/>
+                    </startRecord>
+                    <noOfRecords>
+                        <xsl:value-of select="1"/>
+                    </noOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseHCSN_Line">
+            <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+            <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+            <pd:x>782</pd:x>
+            <pd:y>799</pd:y>
+            <config>
+                <InputType>String</InputType>
+                <Encoding>ASCII</Encoding>
+                <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/HCSN_Line.sharedparse</ParseSharedConfig>
+                <SpecifyStartRecord>true</SpecifyStartRecord>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <text>
+                        <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                    </text>
+                    <startRecord>
+                        <xsl:value-of select="$LineIndex/lineIndex+2"/>
+                    </startRecord>
+                    <noOfRecords>
+                        <xsl:value-of select="$LineIndexHCSN/Line - $LineIndex/lineIndex - 2"/>
+                    </noOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="IncreLineIndexHCSN">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1005</pd:x>
+            <pd:y>693</pd:y>
+            <config>
+                <variableName>LineIndexHCSN</variableName>
+            </config>
+            <pd:inputBindings>
+                <Line>
+                    <xsl:value-of select="$LineIndexHCSN/Line+1"/>
+                </Line>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignEndLineHCSN">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1065</pd:x>
+            <pd:y>797</pd:y>
+            <config>
+                <variableName>EndHCSN_Line</variableName>
+            </config>
+            <pd:inputBindings>
+                <EndLine>
+                    <xsl:value-of select="'true'"/>
+                </EndLine>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="UpdateHCSN">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>921</pd:x>
+            <pd:y>799</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                <statement>INSERT INTO fpt_quyettoannam_loaitru(COMPANY_CODE,TAI_KHOAN,GIATRI_NO,GIATRI_CO,CREATION_DATE,NGAY_HT,SO_LAN)
+VALUES (?,?,?,?,?,?,?)</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>COMPANY_CODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TAI_KHOAN</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>GIATRI_NO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>GIATRI_CO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CREATION_DATE</parameterName>
+                        <dataType>TIMESTAMP</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>NGAY_HT</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>SO_LAN</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <batchUpdate>true</batchUpdate>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <xsl:for-each select="$ParseHCSN_Line/Output/Rows/HCSN_Line">
+                        <Record>
+                            <COMPANY_CODE>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/MADONVI"/>
+                            </COMPANY_CODE>
+                            <TAI_KHOAN>
+                                <xsl:value-of select="TK"/>
+                            </TAI_KHOAN>
+                            <GIATRI_NO>
+                                <xsl:value-of select="DC"/>
+                            </GIATRI_NO>
+                            <GIATRI_CO>
+                                <xsl:value-of select="'0'"/>
+                            </GIATRI_CO>
+                            <CREATION_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </CREATION_DATE>
+                            <NGAY_HT>
+                                <xsl:value-of select="if ($CDTKKT_LINE/LINE/NGAY_BC !=&quot;&quot; ) then&#xA;tib:format-date(&quot;YYYY-MM-dd&quot;,concat(tib:right($CDTKKT_LINE/LINE/NGAY_BC, 4),'-',substring($CDTKKT_LINE/LINE/NGAY_BC, 3,2),'-',tib:left($CDTKKT_LINE/LINE/NGAY_BC, 2)))&#xA;else tib:format-date(&quot;YYYY-MM-dd&quot;,tib:parse-date('MM/dd/yyyy','01/01/1900'))"/>
+                            </NGAY_HT>
+                            <SO_LAN>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/STT_LAN_GUI"/>
+                            </SO_LAN>
+                        </Record>
+                    </xsl:for-each>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="SetLineIndexHCSN">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>815</pd:x>
+        <pd:y>553</pd:y>
+        <config>
+            <variableName>LineIndexHCSN</variableName>
+        </config>
+        <pd:inputBindings>
+            <Line>
+                <xsl:value-of select="$StartBlockIndex/BlockIndex+2"/>
+            </Line>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseFooter">
+        <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+        <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+        <pd:x>511</pd:x>
+        <pd:y>755</pd:y>
+        <config>
+            <InputType>String</InputType>
+            <Encoding>ASCII</Encoding>
+            <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/ENDFILE.sharedparse</ParseSharedConfig>
+            <SpecifyStartRecord>true</SpecifyStartRecord>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <text>
+                    <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                </text>
+                <startRecord>
+                    <xsl:value-of select="if ($LineIndexHCSN/Line>0) then $LineIndexHCSN/Line +1 else&#xA;$LineIndex/lineIndex + 2"/>
+                </startRecord>
+                <noOfRecords>
+                    <xsl:value-of select="2"/>
+                </noOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignLineIndex">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>253</pd:x>
+        <pd:y>172</pd:y>
+        <config>
+            <variableName>LineIndex</variableName>
+        </config>
+        <pd:inputBindings>
+            <lineIndex>
+                <xsl:value-of select="2"/>
+            </lineIndex>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignLine">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <variableName>CDTKKT_LINE</variableName>
+        </config>
+        <pd:inputBindings>
+            <LINE>
+                <MADONVI>
+                    <xsl:value-of select="$ParseCDTKKT_BG/Output/Rows/CDTKKT_Begin[1]/MaDonVi"/>
+                </MADONVI>
+                <TAIKHOAN>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TAIKHOAN>
+                <TENFILEBC>
+                    <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileInfo/fileName"/>
+                </TENFILEBC>
+                <STT_LAN_GUI>
+                    <xsl:value-of select="tib:substring-after-last($Read-File/ns:ReadActivityOutputTextClass/fileInfo/fileName, '.')"/>
+                </STT_LAN_GUI>
+                <NGAY_BC>
+                    <xsl:value-of select="$ParseCDTKKT_BG/Output/Rows/CDTKKT_Begin[1]/Date"/>
+                </NGAY_BC>
+                <DUDAUKY_NO>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </DUDAUKY_NO>
+                <DUDAUKY_CO>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </DUDAUKY_CO>
+                <PS_NO>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </PS_NO>
+                <PS_CO>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </PS_CO>
+                <DUCUOIKY_NO>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </DUCUOIKY_NO>
+                <DUCUOIKY_CO>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </DUCUOIKY_CO>
+                <TONG_DONG_BC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TONG_DONG_BC>
+                <STATUS>
+                    <xsl:value-of select="&quot;RECEIVED&quot;"/>
+                </STATUS>
+                <ERROR_MSG>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </ERROR_MSG>
+                <CREATION_DATE>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </CREATION_DATE>
+                <CREATED_BY>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </CREATED_BY>
+                <CREATED_DATE_BC>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </CREATED_DATE_BC>
+                <THUYET_MINH>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </THUYET_MINH>
+                <CURRENCY_CODE>
+                    <xsl:value-of select="&quot;VND&quot;"/>
+                </CURRENCY_CODE>
+            </LINE>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseCDTKKT_BG">
+        <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+        <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+        <pd:x>260</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <InputType>String</InputType>
+            <Encoding>ASCII</Encoding>
+            <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/CDTKKT_Begin.sharedparse</ParseSharedConfig>
+            <SpecifyStartRecord>true</SpecifyStartRecord>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <text>
+                    <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                </text>
+                <startRecord>
+                    <xsl:value-of select="0"/>
+                </startRecord>
+                <noOfRecords>
+                    <xsl:value-of select="1"/>
+                </noOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>497</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>1025</pd:width>
+        <pd:height>453</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>idxLoop2</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$EndCDTKKT/End='true'</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ReadCDTKKT</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReadCDTKKT</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResetEndLine</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseCDTKKT_BG2</pd:from>
+            <pd:to>AssignLine2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignLine2</pd:from>
+            <pd:to>SetStartBlockIndex</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReadCDTKKT</pd:from>
+            <pd:to>SetCDTKKT_DATA-1</pd:to>
+            <pd:xpathDescription>ExistBlock</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$EndCDTKKT/End = 'false'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetCDTKKT_DATA-1</pd:from>
+            <pd:to>InsertCDTKKTDB</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InsertCDTKKTDB</pd:from>
+            <pd:to>ParseCDTKKT_BG2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignLineIndex2</pd:from>
+            <pd:to>ResetEndLine</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetStartBlockIndex</pd:from>
+            <pd:to>AssignLineIndex2</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ParseCDTKKT_BG2">
+            <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+            <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+            <pd:x>997</pd:x>
+            <pd:y>377</pd:y>
+            <config>
+                <InputType>String</InputType>
+                <Encoding>ASCII</Encoding>
+                <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/CDTKKT_Begin.sharedparse</ParseSharedConfig>
+                <SpecifyStartRecord>true</SpecifyStartRecord>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <text>
+                        <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                    </text>
+                    <startRecord>
+                        <xsl:value-of select="$LineIndex/lineIndex+1"/>
+                    </startRecord>
+                    <noOfRecords>
+                        <xsl:value-of select="1"/>
+                    </noOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="ReadCDTKKT">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>589</pd:x>
+            <pd:y>41</pd:y>
+            <pd:width>497</pd:width>
+            <pd:height>287</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>repeat</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:indexSlot>lineIdx</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:repeatCondition>$EndCDTKKT_Line/EndLine = 'true'</pd:repeatCondition>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>ParseCDTKKT_EN</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignEndLine</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>IncreLineIndex</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>ParseCDTKKT_EN</pd:from>
+                <pd:to>IncreLineIndex</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>ParseCDTKKT_EN</pd:from>
+                <pd:to>ParseCDTKKT_Line</pd:to>
+                <pd:xpathDescription>END</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>$ParseCDTKKT_EN/Output/Rows/CDTKKT_END[1]/EN='EN'</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>ParseCDTKKT_Line</pd:from>
+                <pd:to>AssignEndLine</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>ParseCDTKKT_Line</pd:from>
+                <pd:to>ExitLoop</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>error</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>ExitLoop</pd:from>
+                <pd:to>AssignEndLine</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="ParseCDTKKT_Line">
+                <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+                <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+                <pd:x>798</pd:x>
+                <pd:y>203</pd:y>
+                <config>
+                    <InputType>String</InputType>
+                    <Encoding>ASCII</Encoding>
+                    <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/CDTKKT_Line.sharedparse</ParseSharedConfig>
+                    <SpecifyStartRecord>true</SpecifyStartRecord>
+                </config>
+                <pd:inputBindings>
+                    <Input>
+                        <text>
+                            <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                        </text>
+                        <startRecord>
+                            <xsl:value-of select="$StartBlockIndex/BlockIndex"/>
+                        </startRecord>
+                        <noOfRecords>
+                            <xsl:value-of select="$LineIndex/lineIndex - $StartBlockIndex/BlockIndex"/>
+                        </noOfRecords>
+                    </Input>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="ParseCDTKKT_EN">
+                <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+                <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+                <pd:x>679</pd:x>
+                <pd:y>115</pd:y>
+                <config>
+                    <InputType>String</InputType>
+                    <Encoding>ASCII</Encoding>
+                    <ParseSharedConfig>/SharedResource/Schema/Global/Remittance/Report/CDTKKT/CDTKKT_End.sharedparse</ParseSharedConfig>
+                    <SpecifyStartRecord>true</SpecifyStartRecord>
+                    <StrictValidation>true</StrictValidation>
+                </config>
+                <pd:inputBindings>
+                    <Input>
+                        <text>
+                            <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileContent/textContent"/>
+                        </text>
+                        <startRecord>
+                            <xsl:value-of select="$LineIndex/lineIndex"/>
+                        </startRecord>
+                        <noOfRecords>
+                            <xsl:value-of select="1"/>
+                        </noOfRecords>
+                    </Input>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="AssignEndLine">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>971</pd:x>
+                <pd:y>173</pd:y>
+                <config>
+                    <variableName>EndCDTKKT_Line</variableName>
+                </config>
+                <pd:inputBindings>
+                    <EndLine>
+                        <xsl:value-of select="'true'"/>
+                    </EndLine>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="IncreLineIndex">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>944</pd:x>
+                <pd:y>107</pd:y>
+                <config>
+                    <variableName>LineIndex</variableName>
+                </config>
+                <pd:inputBindings>
+                    <lineIndex>
+                        <xsl:value-of select="$LineIndex/lineIndex+1"/>
+                    </lineIndex>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="ExitLoop">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>920</pd:x>
+                <pd:y>268</pd:y>
+                <config>
+                    <variableName>EndCDTKKT</variableName>
+                </config>
+                <pd:inputBindings>
+                    <End>
+                        <xsl:value-of select="'true'"/>
+                    </End>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="AssignLine2">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1131</pd:x>
+            <pd:y>370</pd:y>
+            <config>
+                <variableName>CDTKKT_LINE</variableName>
+            </config>
+            <pd:inputBindings>
+                <LINE>
+                    <MADONVI>
+                        <xsl:value-of select="$ParseCDTKKT_BG2/Output/Rows/CDTKKT_Begin[1]/MaDonVi"/>
+                    </MADONVI>
+                    <TAIKHOAN>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TAIKHOAN>
+                    <TENFILEBC>
+                        <xsl:value-of select="$Read-File/ns:ReadActivityOutputTextClass/fileInfo/fileName"/>
+                    </TENFILEBC>
+                    <STT_LAN_GUI>
+                        <xsl:value-of select="tib:substring-after-last($Read-File/ns:ReadActivityOutputTextClass/fileInfo/fileName, '.')"/>
+                    </STT_LAN_GUI>
+                    <NGAY_BC>
+                        <xsl:value-of select="$ParseCDTKKT_BG2/Output/Rows/CDTKKT_Begin[1]/Date"/>
+                    </NGAY_BC>
+                    <DUDAUKY_NO>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </DUDAUKY_NO>
+                    <DUDAUKY_CO>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </DUDAUKY_CO>
+                    <PS_NO>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </PS_NO>
+                    <PS_CO>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </PS_CO>
+                    <DUCUOIKY_NO>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </DUCUOIKY_NO>
+                    <DUCUOIKY_CO>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </DUCUOIKY_CO>
+                    <TONG_DONG_BC>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TONG_DONG_BC>
+                    <STATUS>
+                        <xsl:value-of select="&quot;RECEIVED&quot;"/>
+                    </STATUS>
+                    <ERROR_MSG>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ERROR_MSG>
+                    <CREATION_DATE>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </CREATION_DATE>
+                    <CREATED_BY>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </CREATED_BY>
+                    <CREATED_DATE_BC>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </CREATED_DATE_BC>
+                    <THUYET_MINH>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </THUYET_MINH>
+                    <CURRENCY_CODE>
+                        <xsl:value-of select="&quot;VND&quot;"/>
+                    </CURRENCY_CODE>
+                </LINE>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignLineIndex2">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1405</pd:x>
+            <pd:y>376</pd:y>
+            <config>
+                <variableName>LineIndex</variableName>
+            </config>
+            <pd:inputBindings>
+                <lineIndex>
+                    <xsl:value-of select="$LineIndex/lineIndex+1"/>
+                </lineIndex>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetCDTKKT_DATA-1">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>684</pd:x>
+            <pd:y>383</pd:y>
+            <config>
+                <variableName>CDTKKT_DATA</variableName>
+            </config>
+            <pd:inputBindings>
+                <CDTKKT_DATA>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ParseCDTKKT_Line/Output/Rows/CDTKKT">
+                        <Records>
+                            <MADONVI>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/MADONVI"/>
+                            </MADONVI>
+                            <TAIKHOAN>
+                                <xsl:value-of select="TK"/>
+                            </TAIKHOAN>
+                            <TENFILEBC>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/TENFILEBC"/>
+                            </TENFILEBC>
+                            <STT_LAN_GUI>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/STT_LAN_GUI"/>
+                            </STT_LAN_GUI>
+                            <NGAY_BC>
+                                <xsl:value-of select="if ($CDTKKT_LINE/LINE/NGAY_BC !=&quot;&quot; ) then&#xA;tib:format-date(&quot;YYYY-MM-dd&quot;,concat(tib:right($CDTKKT_LINE/LINE/NGAY_BC, 4),'-',substring($CDTKKT_LINE/LINE/NGAY_BC, 3,2),'-',tib:left($CDTKKT_LINE/LINE/NGAY_BC, 2)))&#xA;else tib:format-date(&quot;YYYY-MM-dd&quot;,tib:parse-date('MM/dd/yyyy','01/01/1900'))"/>
+                            </NGAY_BC>
+                            <DUDAUKY_NO>
+                                <xsl:value-of select="DDN"/>
+                            </DUDAUKY_NO>
+                            <DUDAUKY_CO>
+                                <xsl:value-of select="DDC"/>
+                            </DUDAUKY_CO>
+                            <PS_NO>
+                                <xsl:value-of select="PSN"/>
+                            </PS_NO>
+                            <PS_CO>
+                                <xsl:value-of select="PSC"/>
+                            </PS_CO>
+                            <DUCUOIKY_NO>
+                                <xsl:value-of select="DCN"/>
+                            </DUCUOIKY_NO>
+                            <DUCUOIKY_CO>
+                                <xsl:value-of select="DCC"/>
+                            </DUCUOIKY_CO>
+                            <TONG_DONG_BC>
+                                <xsl:value-of select="$ParseCDTKKT_EN/Output/Rows/CDTKKT_END[1]/SBG"/>
+                            </TONG_DONG_BC>
+                            <STATUS>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/STATUS"/>
+                            </STATUS>
+                            <ERROR_MSG>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/ERROR_MSG"/>
+                            </ERROR_MSG>
+                            <CREATION_DATE>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/CREATION_DATE"/>
+                            </CREATION_DATE>
+                            <CREATED_BY>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </CREATED_BY>
+                            <CREATED_DATE_BC>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </CREATED_DATE_BC>
+                            <THUYET_MINH>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </THUYET_MINH>
+                            <CURRENCY_CODE>
+                                <xsl:value-of select="$CDTKKT_LINE/LINE/CURRENCY_CODE"/>
+                            </CURRENCY_CODE>
+                        </Records>
+                    </xsl:for-each>
+                </CDTKKT_DATA>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="InsertCDTKKTDB">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>860</pd:x>
+            <pd:y>380</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                <statement>INSERT INTO FPT_CDTKKT_SBV (MADONVI,TAIKHOAN,TENFILEBC,STT_LAN_GUI,NGAY_BC,DUDAUKY_NO,DUDAUKY_CO,PS_NO,PS_CO,DUCUOIKY_NO,DUCUOIKY_CO,TONG_DONG_BC,STATUS,ERROR_MSG,CREATION_DATE,CREATED_BY,CREATED_DATE_BC,THUYET_MINH,CURRENCY_CODE)
+VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+                <batchUpdate>true</batchUpdate>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>MADONVI</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TAIKHOAN</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TENFILEBC</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>STT_LAN_GUI</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>NGAY_BC</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DUDAUKY_NO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DUDAUKY_CO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>PS_NO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>PS_CO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DUCUOIKY_NO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>DUCUOIKY_CO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TONG_DONG_BC</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>STATUS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ERROR_MSG</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CREATION_DATE</parameterName>
+                        <dataType>TIMESTAMP</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CREATED_BY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CREATED_DATE_BC</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>THUYET_MINH</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CURRENCY_CODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CDTKKT_DATA/CDTKKT_DATA/Records">
+                        <Record>
+                            <MADONVI>
+                                <xsl:value-of select="MADONVI"/>
+                            </MADONVI>
+                            <TAIKHOAN>
+                                <xsl:value-of select="TAIKHOAN"/>
+                            </TAIKHOAN>
+                            <TENFILEBC>
+                                <xsl:value-of select="TENFILEBC"/>
+                            </TENFILEBC>
+                            <STT_LAN_GUI>
+                                <xsl:value-of select="STT_LAN_GUI"/>
+                            </STT_LAN_GUI>
+                            <NGAY_BC>
+                                <xsl:value-of select="NGAY_BC"/>
+                            </NGAY_BC>
+                            <DUDAUKY_NO>
+                                <xsl:value-of select="DUDAUKY_NO"/>
+                            </DUDAUKY_NO>
+                            <DUDAUKY_CO>
+                                <xsl:value-of select="DUDAUKY_CO"/>
+                            </DUDAUKY_CO>
+                            <PS_NO>
+                                <xsl:value-of select="PS_NO"/>
+                            </PS_NO>
+                            <PS_CO>
+                                <xsl:value-of select="PS_CO"/>
+                            </PS_CO>
+                            <DUCUOIKY_NO>
+                                <xsl:value-of select="DUCUOIKY_NO"/>
+                            </DUCUOIKY_NO>
+                            <DUCUOIKY_CO>
+                                <xsl:value-of select="DUCUOIKY_CO"/>
+                            </DUCUOIKY_CO>
+                            <TONG_DONG_BC>
+                                <xsl:value-of select="TONG_DONG_BC"/>
+                            </TONG_DONG_BC>
+                            <STATUS>
+                                <xsl:value-of select="STATUS"/>
+                            </STATUS>
+                            <ERROR_MSG>
+                                <xsl:value-of select="ERROR_MSG"/>
+                            </ERROR_MSG>
+                            <CREATION_DATE>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </CREATION_DATE>
+                            <CREATED_BY>
+                                <xsl:value-of select="CREATED_BY"/>
+                            </CREATED_BY>
+                            <CREATED_DATE_BC>
+                                <xsl:value-of select="CREATED_DATE_BC"/>
+                            </CREATED_DATE_BC>
+                            <THUYET_MINH>
+                                <xsl:value-of select="THUYET_MINH"/>
+                            </THUYET_MINH>
+                            <CURRENCY_CODE>
+                                <xsl:value-of select="CURRENCY_CODE"/>
+                            </CURRENCY_CODE>
+                        </Record>
+                    </xsl:for-each>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResetEndLine">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1365</pd:x>
+            <pd:y>269</pd:y>
+            <config>
+                <variableName>EndCDTKKT_Line</variableName>
+            </config>
+            <pd:inputBindings>
+                <EndLine>
+                    <xsl:value-of select="'false'"/>
+                </EndLine>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetStartBlockIndex">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1260</pd:x>
+            <pd:y>372</pd:y>
+            <config>
+                <variableName>StartBlockIndex</variableName>
+            </config>
+            <pd:inputBindings>
+                <BlockIndex>
+                    <xsl:value-of select="$LineIndex/lineIndex +2"/>
+                </BlockIndex>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="SetBlockIndex">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>400</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <variableName>StartBlockIndex</variableName>
+        </config>
+        <pd:inputBindings>
+            <BlockIndex>
+                <xsl:value-of select="'2'"/>
+            </BlockIndex>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateCDTKKTDB">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>376</pd:x>
+        <pd:y>756</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <statement>UPDATE  FPT_CDTKKT_SBV SET CREATED_BY= ?,CREATED_DATE_BC=? WHERE MADONVI=? and TENFILEBC=? and STT_LAN_GUI=?</statement>
+            <batchUpdate>false</batchUpdate>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CREATED_BY</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CREATED_DATE_BC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MADONVI</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TENFILEBC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>STT_LAN_GUI</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <CREATED_BY>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseFooter/Output/Rows/EndLine[1]/Content)">
+                            <xsl:value-of select="$ParseFooter/Output/Rows/EndLine[1]/Content"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CREATED_BY>
+                <CREATED_DATE_BC>
+                    <xsl:choose>
+                        <xsl:when test="exists($ParseFooter/Output/Rows/EndLine[2]/Content)">
+                            <xsl:value-of select="$ParseFooter/Output/Rows/EndLine[2]/Content"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CREATED_DATE_BC>
+                <MADONVI>
+                    <xsl:value-of select="$CDTKKT_DATA/CDTKKT_DATA/Records[1]/MADONVI"/>
+                </MADONVI>
+                <TENFILEBC>
+                    <xsl:value-of select="$CDTKKT_DATA/CDTKKT_DATA/Records[1]/TENFILEBC"/>
+                </TENFILEBC>
+                <STT_LAN_GUI>
+                    <xsl:value-of select="$CDTKKT_DATA/CDTKKT_DATA/Records[1]/STT_LAN_GUI"/>
+                </STT_LAN_GUI>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InitEndLine">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>429</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <variableName>EndCDTKKT</variableName>
+        </config>
+        <pd:inputBindings>
+            <End>
+                <xsl:value-of select="'false'"/>
+            </End>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseHCSN_BG</pd:from>
+        <pd:to>SetLineIndexHCSN</pd:to>
+        <pd:xpathDescription>HCSN</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$ParseHCSN_BG/Output/Rows/HCSN_Begin[1]/HDSN</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReadHCSN</pd:from>
+        <pd:to>ParseFooter</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetLineIndexHCSN</pd:from>
+        <pd:to>ReadHCSN</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseHCSN_BG</pd:from>
+        <pd:to>ParseFooter</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseFooter</pd:from>
+        <pd:to>UpdateCDTKKTDB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>ParseCDTKKT_BG</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseCDTKKT_BG</pd:from>
+        <pd:to>AssignLine</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignLine</pd:from>
+        <pd:to>AssignLineIndex</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignLineIndex</pd:from>
+        <pd:to>SetBlockIndex</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>ParseHCSN_BG</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetBlockIndex</pd:from>
+        <pd:to>InitEndLine</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateCDTKKTDB</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitEndLine</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

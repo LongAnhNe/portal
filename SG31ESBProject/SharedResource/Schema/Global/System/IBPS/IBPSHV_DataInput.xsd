@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="sbv/services/remittance/ibpshv/version1.0"
+	 xmlns:cmd-dt="sbv/global/datatype/datatype/version1.0"
+	 targetNamespace="sbv/services/remittance/ibpshv/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/global/datatype/datatype/version1.0" schemaLocation="../../DataType/DataType1.0.xsd"/>
+	<xs:element name="SystemType" type="xs:string"/>
+	<xs:element name="SourceSystemID" type="xs:string"/>
+	<xs:element name="DebitAccNo" type="xs:string"/>
+	<xs:element name="CreditAccNo" type="xs:string"/>
+	<xs:element name="DebitDate" type="xs:string"/>
+	<xs:element name="CreditDate" type="xs:string"/>
+	<xs:element name="ProcessDate" type="xs:string"/>
+	<xs:element name="NettingAmt" type="xs:string"/>
+	<xs:element name="IBPSHVReq">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CreditDate"/>
+				<xs:element ref="CreditAccNo"/>
+				<xs:element ref="DebitDate"/>
+				<xs:element ref="DebitAccNo"/>
+				<xs:element ref="NettingAmt"/>
+				<xs:element ref="ProcessDate"/>
+				<xs:element ref="SourceSystemID"/>
+				<xs:element ref="SystemType"/>
+				<xs:element ref="CreditAmt"/>
+				<xs:element ref="CreditCurrency"/>
+				<xs:element ref="DebitAmt"/>
+				<xs:element ref="DebitCurrency"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="IBPSHVRes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CreditDate"/>
+				<xs:element ref="DebitDate"/>
+				<xs:element ref="DebitAccNo"/>
+				<xs:element ref="NettingAmt"/>
+				<xs:element ref="ProcessDate"/>
+				<xs:element ref="SourceSystemID"/>
+				<xs:element ref="SystemType"/>
+				<xs:element ref="CreditAccNo"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DebitAmt" type="xs:string"/>
+	<xs:element name="DebitCurrency" type="xs:string"/>
+	<xs:element name="CreditAmt" type="xs:string"/>
+	<xs:element name="CreditCurrency" type="xs:string"/>
+</xs:schema>

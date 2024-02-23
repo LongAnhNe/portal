@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:FTProposal="schema://www.sbv.gov.vn/schema/global/System/Proposal/FTProposal.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/System/Proposal/FTProposal.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="FTNostroAccountRequest" type="FTProposal:FTNostroAccountRequestType"/>
+	<xs:complexType name="FTNostroAccountRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FTProposal:FTNostroAccountRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTNostroAccountRequestBody" type="FTProposal:FTNostroAccountRequestBodyType"/>
+	<xs:complexType name="FTNostroAccountRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SOURCEAPPID" type="xs:string" minOccurs="0"/>
+			<xs:element name="TRANSACTIONTYPE" type="xs:string" minOccurs="0"/>
+			<xs:element name="DEBITACCOUNT" type="xs:string" minOccurs="0"/>
+			<xs:element name="CREDITACCOUNT" type="xs:string" minOccurs="0"/>
+			<xs:element name="CREDITCURRENCY" type="xs:string" minOccurs="0"/>
+			<xs:element name="DEBITCURRENCY" type="xs:string" minOccurs="0"/>
+			<xs:element name="CREDITAMOUNT" type="xs:string" minOccurs="0"/>
+			<xs:element name="CREDITVALUEDATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="PAYDETAIL" type="xs:string" minOccurs="0"/>
+			<xs:element name="COCODE" type="xs:string" minOccurs="0"/>
+			<xs:element name="MT200TAG57" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FTNostroAccountResponse" type="FTProposal:FTNostroAccountResponseType"/>
+	<xs:complexType name="FTNostroAccountResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FTProposal:FTNostroAccountResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTNostroAccountResponseBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="RecordStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="FTNostroAccountResponseBodyType"/>
+	<xs:element name="ESBRequestAdd" type="FTProposal:ESBRequestAddType"/>
+	<xs:complexType name="ESBRequestAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBResponseAdd" type="FTProposal:ESBResponseAddType"/>
+	<xs:complexType name="ESBResponseAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="FTProposal:ESBRequestAdd"/>
+				<xs:element ref="FTProposal:ESBResponseAdd"/>
+				<xs:element ref="FTProposal:ESBServiceState"/>
+				<xs:element ref="FTProposal:FTNostroAccountRequest"/>
+				<xs:element ref="FTProposal:FTNostroAccountResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FTNostroOT22Request" type="FTProposal:FTNostroOT22RequestType"/>
+	<xs:complexType name="FTNostroOT22RequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FTProposal:FTNostroOT22RequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTNostroOT22RequestBody" type="FTProposal:FTNostroOT22RequestBodyType"/>
+	<xs:complexType name="FTNostroOT22RequestBodyType">
+		<xs:sequence>
+			<xs:element name="MaToTrinhPortal" type="xs:string" minOccurs="0"/>
+			<xs:element name="LoaiTransaction" type="xs:string" minOccurs="0"/>
+			<xs:element name="TaiKhoanGhiNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="TaiKhoanGhiCo" type="xs:string" minOccurs="0"/>
+			<xs:element name="LoaiTienTeGhiNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="LoaiTienTeGhiCo" type="xs:string" minOccurs="0"/>
+			<xs:element name="SoTienChuyen" type="xs:string" minOccurs="0"/>
+			<xs:element name="NgayGiaTri" type="xs:string" minOccurs="0"/>
+			<xs:element name="NgayGiaoDich" type="xs:string" minOccurs="0"/>
+			<xs:element name="NoiDungChuyenTien" type="xs:string" minOccurs="0"/>
+			<xs:element name="NganHangPhucVuNguoiThuHuong" type="xs:string" minOccurs="0"/>
+			<xs:element name="NguoiThuHuong" type="xs:string" minOccurs="0"/>
+			<xs:element name="Quy" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FTNostroOT22Response" type="FTProposal:FTNostroOT22ResponseType"/>
+	<xs:complexType name="FTNostroOT22ResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FTProposal:FTNostroOT22ResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTNostroOT22ResponseBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="RecordStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="FTNostroOT22ResponseBodyType"/>
+</xs:schema>

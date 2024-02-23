@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTPosting.xsd"
+	 targetNamespace="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTPosting.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="BTCTPostingRequest" type="BTCTPostingRequestType"/>
+	<xs:element name="BTCTPostingResponse" type="BTCTPostingResponseType"/>
+	<xs:complexType name="BTCTPostingRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="RequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BTCTPostingResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CHUTRI_REF" type="xs:string"/>
+	<xs:element name="SENT_TO_T24" type="xs:string"/>
+	<xs:element name="RequestBody" type="RequestBodyType"/>
+	<xs:complexType name="RequestBodyType">
+		<xs:sequence>
+			<xs:element ref="CHUTRI_REF" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ResponseBody" type="ResponseBodyType"/>
+	<xs:complexType name="ResponseBodyType">
+		<xs:sequence>
+			<xs:element ref="SENT_TO_T24"/>
+			<xs:element ref="ERR_MSG" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ERR_MSG" type="xs:string"/>
+</xs:schema>

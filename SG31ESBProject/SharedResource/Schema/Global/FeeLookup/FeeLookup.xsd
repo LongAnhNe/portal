@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/FeeLookup.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/FeeLookup.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../System/ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="FeeLookupRequest"/>
+				<xs:element ref="FeeLookupResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FeeLookupRequest" type="FeeLookupRequestType"/>
+	<xs:complexType name="FeeLookupRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FeeLookupRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FeeLookupRequestBody" type="FeeLookupRequestBodyType"/>
+	<xs:complexType name="FeeLookupRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="FeeType" type="xs:string" minOccurs="0"/>
+			<xs:element name="Month" type="xs:string" minOccurs="0"/>
+			<xs:element name="Year" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FeeLookupResponse" type="FeeLookupResponseType"/>
+	<xs:complexType name="FeeLookupResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FeeLookupResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FeeLookupResponseBody" type="FeeLookupResponseBodyType"/>
+	<xs:complexType name="FeeLookupResponseBodyType">
+		<xs:sequence>
+			<xs:element name="PKGStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="ResponseCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMessage" type="xs:string" minOccurs="0"/>
+			<xs:element ref="Resultsets" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InsertPKGParam" type="InsertPKGParamType"/>
+	<xs:complexType name="InsertPKGParamType">
+		<xs:sequence>
+			<xs:element name="P_BRANCH" type="xs:string" minOccurs="0"/>
+			<xs:element name="P_TYPE" type="xs:string" minOccurs="0"/>
+			<xs:element name="P_DATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="P_BANKCODE" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FeeLookupResponseBodyListElement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="MANGANHANG" type="xs:string" minOccurs="0"/>
+				<xs:element name="TENTCTD" type="xs:string" minOccurs="0"/>
+				<xs:element name="TONGSOTIENGD" type="xs:string" minOccurs="0"/>
+				<xs:element name="TONGTIENPHI" type="xs:string" minOccurs="0"/>
+				<xs:element name="P_DATE" type="xs:string" minOccurs="0"/>
+				<xs:element name="CHINHANH" type="xs:string" minOccurs="0"/>
+				<xs:element name="SOMON" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Resultsets">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ResultSet1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ResultSet1">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Record1" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Record1">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="MANGANHANG" type="xs:string" minOccurs="0"/>
+				<xs:element name="TENTCTD" type="xs:string" minOccurs="0"/>
+				<xs:element name="TONGSOTIENGD" type="xs:string" minOccurs="0"/>
+				<xs:element name="TONGTIENPHI" type="xs:string" minOccurs="0"/>
+				<xs:element name="P_DATE" type="xs:string" minOccurs="0"/>
+				<xs:element name="CHINHANH" type="xs:string" minOccurs="0"/>
+				<xs:element name="SOMON" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

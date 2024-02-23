@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002" xmlns:AESDK="http://www.tibco.com/xmlns/aemeta/adapter/2002" xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <adtuxedo:adapter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002" name="TuxedoAdapter">
+        <AESDK:instanceId>TuxedoAdapterConfiguration</AESDK:instanceId>
+        <AESDK:startup>
+            <AESDK:defaultStartup>active</AESDK:defaultStartup>
+            <AESDK:banner>true</AESDK:banner>
+            <AESDK:hasStdMicroAgent>true</AESDK:hasStdMicroAgent>
+            <AESDK:stdMicroAgentName>COM.TIBCO.ADAPTER.adtuxedo.%%Deployment%%.%%InstanceId%%</AESDK:stdMicroAgentName>
+            <AESDK:stdMicroAgentTimeout>10000</AESDK:stdMicroAgentTimeout>
+            <AESDK:hasClassMicroAgent>%%HawkEnabled%%</AESDK:hasClassMicroAgent>
+            <AESDK:classMicroAgentTimeout>10000</AESDK:classMicroAgentTimeout>
+            <AESDK:classMicroAgentName>COM.TIBCO.adtuxedo.%%Deployment%%.%%InstanceId%%</AESDK:classMicroAgentName>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>DefaultRVSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:defaultSession>DefaultRVSession</AESDK:defaultSession>
+            <AESDK:defaultMicroAgentSession>HawkSession</AESDK:defaultMicroAgentSession>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>HawkSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>AdapterTerminateSubscriber</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>ClientAgentSubscriber</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>RequestResponseInvocationServiceEndPoint</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>DefaultRVCMSession</AESDK:name>
+            </AESDK:startComponent>
+            <AESDK:startComponent>
+                <AESDK:state>active</AESDK:state>
+                <AESDK:name>RequestResponseServiceEndPoint</AESDK:name>
+            </AESDK:startComponent>
+        </AESDK:startup>
+        <AESDK:deployment>
+            <AESDK:advisories>
+                <AESDK:advisory>
+                    <AESDK:name>RVErrorAdvisory</AESDK:name>
+                    <AESDK:subject>_RV.ERROR.&gt;</AESDK:subject>
+                </AESDK:advisory>
+                <AESDK:advisory>
+                    <AESDK:name>RVWarnAdvisory</AESDK:name>
+                    <AESDK:subject>_RV.WARN.&gt;</AESDK:subject>
+                </AESDK:advisory>
+                <AESDK:advisory>
+                    <AESDK:name>SDKErrorAdvisory</AESDK:name>
+                    <AESDK:subject>_SDK.ERROR.&gt;</AESDK:subject>
+                </AESDK:advisory>
+                <AESDK:advisory>
+                    <AESDK:name>SDKWarnAdvisory</AESDK:name>
+                    <AESDK:subject>_SDK.WARN.&gt;</AESDK:subject>
+                </AESDK:advisory>
+                <AESDK:advisory>
+                    <AESDK:name>SDKInfoAdvisory</AESDK:name>
+                    <AESDK:subject>_SDK.INFO.&gt;</AESDK:subject>
+                </AESDK:advisory>
+            </AESDK:advisories>
+            <AESDK:sessions>
+                <AESDK:messaging>
+                    <AESDK:rvSession isRef="true">#rvSession.DefaultRVSession</AESDK:rvSession>
+                    <AESDK:rvSession isRef="true">#rvSession.HawkSession</AESDK:rvSession>
+                    <AESDK:rvCmSession isRef="true">#rvCmSession.DefaultRVCMSession</AESDK:rvCmSession>
+                </AESDK:messaging>
+            </AESDK:sessions>
+            <AESDK:consumers>
+                <AESDK:rvSubscriber isRef="true">#consumer.AdapterTerminateSubscriber</AESDK:rvSubscriber>
+                <AESDK:rvSubscriber isRef="true">#consumer.ClientAgentSubscriber</AESDK:rvSubscriber>
+            </AESDK:consumers>
+            <AESDK:clients>
+                <AESDK:rvRpcClient isRef="true">#client.RequestResponseInvocationServiceEndPoint</AESDK:rvRpcClient>
+            </AESDK:clients>
+            <AESDK:servers>
+                <AESDK:rvCmRpcServer isRef="true">#server.RequestResponseServiceEndPoint</AESDK:rvCmRpcServer>
+            </AESDK:servers>
+        </AESDK:deployment>
+        <AESDK:timers xsi:nil="true"/>
+        <AESDK:txControls xsi:nil="true"/>
+        <AESDK:reporting>
+            <AESDK:fileSink>
+                <AESDK:fileName>%%DirTrace%%/%%Deployment%%.%%InstanceId%%.log</AESDK:fileName>
+                <AESDK:fileCount>3</AESDK:fileCount>
+                <AESDK:fileLimit>30000</AESDK:fileLimit>
+                <AESDK:appendMode>true</AESDK:appendMode>
+                <AESDK:name>fileSink</AESDK:name>
+                <AESDK:role>
+                    <AESDK:name>infoRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>errorRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>warnRole</AESDK:name>
+                </AESDK:role>
+            </AESDK:fileSink>
+            <AESDK:stdioSink>
+                <AESDK:ioName>stdout</AESDK:ioName>
+                <AESDK:name>stdioSink</AESDK:name>
+                <AESDK:role>
+                    <AESDK:name>infoRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>errorRole</AESDK:name>
+                </AESDK:role>
+                <AESDK:role>
+                    <AESDK:name>warnRole</AESDK:name>
+                </AESDK:role>
+            </AESDK:stdioSink>
+        </AESDK:reporting>
+        <AESDK:metadata>
+            <AESDK:loadUrl isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#rpcClass</AESDK:loadUrl>
+            <AESDK:loadUrl isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#rpcClass</AESDK:loadUrl>
+        </AESDK:metadata>
+        <AESDK:hawk xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+            <AESDK:microAgentName>COM.TIBCO.adtuxedo.%%Deployment%%.%%InstanceId%%.EXTENSION</AESDK:microAgentName>
+            <AESDK:sessionName isRef="true">#rvSession.HawkSession</AESDK:sessionName>
+            <AESDK:help>TIBCO Adapter For Tuxedo Microagent</AESDK:help>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getActivityStatistics</AESDK:name>
+                <AESDK:help>Returns statistics about the data handled by the adapter instance since it was started</AESDK:help>
+                <AESDK:inputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>GetSubTotalBy</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                    <AESDK:legalValueChoices>Service,Operation</AESDK:legalValueChoices>
+                </AESDK:inputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Name</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Total</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Success</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Failure</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>Name</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getActivityStatisticsByService</AESDK:name>
+                <AESDK:help>Returns statistics about the data handled by a particular adapter service since it was started</AESDK:help>
+                <AESDK:inputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>ServiceName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:inputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>TuxedoServiceName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>CommunicationType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>SchemaName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Total</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Success</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Failure</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>TuxedoServiceName</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getActivityStatisticsBySchema</AESDK:name>
+                <AESDK:help>Returns statistics about any activities on a particular object or schema</AESDK:help>
+                <AESDK:inputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>SchemaName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:inputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>TuxedoServiceName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>CommunicationType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Total</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Success</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Failure</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>TuxedoServiceName</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getActivityStatisticsByOperation</AESDK:name>
+                <AESDK:help>Returns statistics about one operation</AESDK:help>
+                <AESDK:inputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>TuxedoServiceName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:inputParameter>
+                <AESDK:inputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>CommunicationType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:inputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>ServiceName</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Total</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Success</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>Failure</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>ServiceName</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getThreadStatistics</AESDK:name>
+                <AESDK:help>Return the operation counts of the current threads</AESDK:help>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>ThreadID</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>ThreadType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>TaskType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>TaskCount</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>ThreadID</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getQueueStatistics</AESDK:name>
+                <AESDK:help>Return the current count of elements in any internal queue used by the adapter</AESDK:help>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>QueueID</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>QueueType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>QueueCount</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>MaxQueueSize</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>QueueID</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getConnectionStatistics</AESDK:name>
+                <AESDK:help>Return the state and statistics for all the current connections used by the adapter</AESDK:help>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>ConnectionID</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>ConnectionType</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>State</AESDK:name>
+                    <AESDK:type>string</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>NumRetries</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>TotalNumOperations</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>CurrentNumOperations</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+                <AESDK:index>ConnectionID</AESDK:index>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>resetActivityStatistics</AESDK:name>
+                <AESDK:help>Reset all the counts for the activity statistics</AESDK:help>
+                <AESDK:type>ACTION</AESDK:type>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>resetThreadStatistics</AESDK:name>
+                <AESDK:help>Reset all the counts for the thread statistics</AESDK:help>
+                <AESDK:type>ACTION</AESDK:type>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>resetConnectionStatistics</AESDK:name>
+                <AESDK:help>Reset all the counts for the connection statistics</AESDK:help>
+                <AESDK:type>ACTION</AESDK:type>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>getPollingInterval</AESDK:name>
+                <AESDK:help>Gets the current polling interval setting</AESDK:help>
+                <AESDK:outputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>PollingInterval</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:outputParameter>
+            </AESDK:method>
+            <AESDK:method xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <AESDK:name>setPollingInterval</AESDK:name>
+                <AESDK:help>Sets the current polling interval setting</AESDK:help>
+                <AESDK:type>ACTION</AESDK:type>
+                <AESDK:inputParameter xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                    <AESDK:name>PollingInterval</AESDK:name>
+                    <AESDK:type>integer</AESDK:type>
+                </AESDK:inputParameter>
+            </AESDK:method>
+        </AESDK:hawk>
+        <AESDK:designer>
+            <AESDK:advancedLogging>false</AESDK:advancedLogging>
+            <AESDK:adapterVersion>sdk52</AESDK:adapterVersion>
+            <AESDK:resourceDescriptions>
+                <AESDK:node>
+                    <AESDK:description/>
+                </AESDK:node>
+            </AESDK:resourceDescriptions>
+            <AESDK:serviceOwnedSessions>
+                <AESDK:session>DefaultRVSession</AESDK:session>
+                <AESDK:session>DefaultRVCMSession</AESDK:session>
+            </AESDK:serviceOwnedSessions>
+            <AESDK:fixedChildren>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions</AESDK:resource>
+                    <AESDK:children>DefaultRVSession,HawkSession,DefaultRVCMSession</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession</AESDK:resource>
+                    <AESDK:children>RequestResponseServiceEndPoint</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession/RequestResponseServiceEndPoint</AESDK:resource>
+                    <AESDK:children>RequestResponseServiceRPCClass</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession</AESDK:resource>
+                    <AESDK:children>AdapterTerminateSubscriber,ClientAgentSubscriber,RequestResponseInvocationServiceEndPoint</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession/RequestResponseInvocationServiceEndPoint</AESDK:resource>
+                    <AESDK:children>RequestResponseInvocationServiceRPCClass</AESDK:children>
+                </AESDK:fixed>
+                <AESDK:fixed>
+                    <AESDK:resource>/Advanced/Advisories</AESDK:resource>
+                    <AESDK:children>RVErrorAdvisory,RVWarnAdvisory,SDKErrorAdvisory,SDKWarnAdvisory,SDKInfoAdvisory</AESDK:children>
+                </AESDK:fixed>
+            </AESDK:fixedChildren>
+            <AESDK:lockedProperties>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVCMSession/RequestResponseServiceEndPoint</AESDK:resource>
+                    <AESDK:properties>subject,name,sessionType,wireFormat</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/HawkSession</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession/RequestResponseInvocationServiceEndPoint</AESDK:resource>
+                    <AESDK:properties>subject,name,wireFormat,sessionType</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession/ClientAgentSubscriber</AESDK:resource>
+                    <AESDK:properties>name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Sessions/DefaultRVSession/AdapterTerminateSubscriber</AESDK:resource>
+                    <AESDK:properties>subject,name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Advisories/SDKInfoAdvisory</AESDK:resource>
+                    <AESDK:properties>subject,name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Advisories/SDKWarnAdvisory</AESDK:resource>
+                    <AESDK:properties>subject,name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Advisories/SDKErrorAdvisory</AESDK:resource>
+                    <AESDK:properties>subject,name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Advisories/RVWarnAdvisory</AESDK:resource>
+                    <AESDK:properties>subject,name</AESDK:properties>
+                </AESDK:locked>
+                <AESDK:locked>
+                    <AESDK:resource>/Advanced/Advisories/RVErrorAdvisory</AESDK:resource>
+                    <AESDK:properties>subject,name</AESDK:properties>
+                </AESDK:locked>
+            </AESDK:lockedProperties>
+            <AESDK:adapterTester>
+                <AESDK:exe>/opt/esb/tibco/adapter/adtuxedo/6.0/bin/adtuxedo_wrkstn</AESDK:exe>
+                <AESDK:args>--run --propFile</AESDK:args>
+                <AESDK:workingDir>/opt/esb/tibco/adapter/adtuxedo/6.0/bin</AESDK:workingDir>
+            </AESDK:adapterTester>
+        </AESDK:designer>
+        <adtuxedo:services xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+            <adtuxedo:client xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <adtuxedo:jmsAgentTransportFactoryType>RV</adtuxedo:jmsAgentTransportFactoryType>
+                <adtuxedo:clientAgentTransportFactoryType>RV</adtuxedo:clientAgentTransportFactoryType>
+                <adtuxedo:queueName/>
+                <adtuxedo:qspaceName/>
+                <adtuxedo:type>tuxedo.service.rpcclient</adtuxedo:type>
+                <adtuxedo:bufferType>FML32</adtuxedo:bufferType>
+                <adtuxedo:replyLength>10</adtuxedo:replyLength>
+                <adtuxedo:requestLength>10</adtuxedo:requestLength>
+                <AESDK:serviceName>RequestResponseInvocationService</AESDK:serviceName>
+                <adtuxedo:name>RequestResponseInvocationService</adtuxedo:name>
+                <adtuxedo:transportType>rv</adtuxedo:transportType>
+                <adtuxedo:qualityOfService>ae.sessions.rvsession</adtuxedo:qualityOfService>
+                <adtuxedo:wireFormat>aeRvMsg</adtuxedo:wireFormat>
+                <adtuxedo:sessionReference isRef="true">#rvSession.DefaultRVSession</adtuxedo:sessionReference>
+                <adtuxedo:endpointReference isRef="true">#client.RequestResponseInvocationServiceEndPoint</adtuxedo:endpointReference>
+                <adtuxedo:messageSubject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseInvocationService</adtuxedo:messageSubject>
+                <adtuxedo:requestSchemaReferenceFile>/opt/esb/ws/SG31ESBProject/SharedResource/Schema/Global/DataType/co_fwfml32.h</adtuxedo:requestSchemaReferenceFile>
+                <adtuxedo:replySchemaReferenceFile>/opt/esb/ws/SG31ESBProject/SharedResource/Schema/Global/DataType/co_fwfml32.h</adtuxedo:replySchemaReferenceFile>
+                <adtuxedo:requestSchemaReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#class.RequestResponseInvocationServiceRequest</adtuxedo:requestSchemaReference>
+                <adtuxedo:schemaReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#rpcClass.RequestResponseInvocationServiceRPCClass</adtuxedo:schemaReference>
+                <adtuxedo:replySchemaReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#class.RequestResponseInvocationServiceReply</adtuxedo:replySchemaReference>
+                <adtuxedo:classReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#rpcClass.RequestResponseInvocationServiceRPCClass</adtuxedo:classReference>
+            </adtuxedo:client>
+            <adtuxedo:server xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+                <adtuxedo:jmsAgentTransportFactoryType>RV</adtuxedo:jmsAgentTransportFactoryType>
+                <adtuxedo:clientAgentTransportFactoryType>RV</adtuxedo:clientAgentTransportFactoryType>
+                <adtuxedo:queueName/>
+                <adtuxedo:qspaceName/>
+                <adtuxedo:type>tuxedo.service.rpcserver</adtuxedo:type>
+                <adtuxedo:bufferType>FML32</adtuxedo:bufferType>
+                <adtuxedo:replyLength>10</adtuxedo:replyLength>
+                <adtuxedo:requestLength>10</adtuxedo:requestLength>
+                <AESDK:serviceName>RequestResponseService</AESDK:serviceName>
+                <adtuxedo:name>RequestResponseService</adtuxedo:name>
+                <adtuxedo:transportType>rv</adtuxedo:transportType>
+                <adtuxedo:qualityOfService>ae.sessions.rvcmsession</adtuxedo:qualityOfService>
+                <adtuxedo:wireFormat>aeRvMsg</adtuxedo:wireFormat>
+                <adtuxedo:sessionReference isRef="true">#rvCmSession.DefaultRVCMSession</adtuxedo:sessionReference>
+                <adtuxedo:endpointReference isRef="true">#server.RequestResponseServiceEndPoint</adtuxedo:endpointReference>
+                <adtuxedo:messageSubject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseService</adtuxedo:messageSubject>
+                <adtuxedo:requestSchemaReferenceFile>/opt/esb/ws/SG31ESBProject/SharedResource/Schema/Global/DataType/co_fwfml32.h</adtuxedo:requestSchemaReferenceFile>
+                <adtuxedo:replySchemaReferenceFile>/opt/esb/ws/SG31ESBProject/SharedResource/Schema/Global/DataType/co_fwfml32.h</adtuxedo:replySchemaReferenceFile>
+                <adtuxedo:requestSchemaReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#class.RequestResponseServiceRequest</adtuxedo:requestSchemaReference>
+                <adtuxedo:schemaReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#rpcClass.RequestResponseServiceRPCClass</adtuxedo:schemaReference>
+                <adtuxedo:replySchemaReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#class.RequestResponseServiceReply</adtuxedo:replySchemaReference>
+                <adtuxedo:classReference isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#rpcClass.RequestResponseServiceRPCClass</adtuxedo:classReference>
+            </adtuxedo:server>
+        </adtuxedo:services>
+        <adtuxedo:connection xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+            <adtuxedo:retriesBeforeSuspend>3</adtuxedo:retriesBeforeSuspend>
+            <adtuxedo:connRetryAttempts>-1</adtuxedo:connRetryAttempts>
+            <adtuxedo:connRetryInterval>1000</adtuxedo:connRetryInterval>
+            <adtuxedo:encoding>ascii</adtuxedo:encoding>
+            <adtuxedo:showExpertSettings>false</adtuxedo:showExpertSettings>
+            <adtuxedo:password>%%adtuxedo.connection.password%%</adtuxedo:password>
+            <adtuxedo:userPassword>%%adtuxedo.connection.userPassword%%</adtuxedo:userPassword>
+            <adtuxedo:userName>%%adtuxedo.connection.userName%%</adtuxedo:userName>
+            <adtuxedo:clientName>%%adtuxedo.connection.clientName%%</adtuxedo:clientName>
+            <adtuxedo:groupName>%%adtuxedo.connection.groupName%%</adtuxedo:groupName>
+            <adtuxedo:flags>%%adtuxedo.connection.flags%%</adtuxedo:flags>
+            <adtuxedo:software>adtuxedo_wrkstn</adtuxedo:software>
+            <adtuxedo:description/>
+        </adtuxedo:connection>
+        <adtuxedo:adapterservices xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+            <adtuxedo:numOfMaxPendingInvcns>%%numOfMaxPendingInvcns%%</adtuxedo:numOfMaxPendingInvcns>
+            <adtuxedo:pollingInterval>%%pollingInterval%%</adtuxedo:pollingInterval>
+            <adtuxedo:pollIntervalForReplies>%%pollIntervalForReplies%%</adtuxedo:pollIntervalForReplies>
+            <adtuxedo:pollIntervalForOutStandingInvcn>%%pollIntervalForOutStandingInvcn%%</adtuxedo:pollIntervalForOutStandingInvcn>
+        </adtuxedo:adapterservices>
+        <adtuxedo:general xmlns:adtuxedo="http://www.tibco.com/xmlns/adapter/adtuxedo/2002">
+            <adtuxedo:terminateSubject>%%Domain%%.%%Deployment%%.adtuxedo.%%InstanceId%%.exit</adtuxedo:terminateSubject>
+        </adtuxedo:general>
+    </adtuxedo:adapter>
+    <AEService:rvSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.RV" name="DefaultRVSession">
+        <AEService:daemon>%%RvDaemon%%</AEService:daemon>
+        <AEService:service>%%RvService%%</AEService:service>
+        <AEService:network>%%RvNetwork%%</AEService:network>
+        <AEService:extendedProperties>
+            <dispatcherCount>0</dispatcherCount>
+        </AEService:extendedProperties>
+    </AEService:rvSession>
+    <AEService:rvSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.RV" name="HawkSession">
+        <AEService:daemon>%%TIBHawkDaemon%%</AEService:daemon>
+        <AEService:service>%%TIBHawkService%%</AEService:service>
+        <AEService:network>%%TIBHawkNetwork%%</AEService:network>
+        <AEService:extendedProperties>
+            <dispatcherCount>1</dispatcherCount>
+        </AEService:extendedProperties>
+    </AEService:rvSession>
+    <AEService:rvCmSession xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="session.RVCM" name="DefaultRVCMSession">
+        <AEService:daemon>%%RvDaemon%%</AEService:daemon>
+        <AEService:service>%%RvService%%</AEService:service>
+        <AEService:network>%%RvNetwork%%</AEService:network>
+        <AEService:cmName>%%Domain%%.%%Deployment%%.%%AppName%%.%%InstanceId%%.CM</AEService:cmName>
+        <AEService:relayAgent/>
+        <AEService:ledgerFile>%%DirLedger%%/%%Domain%%.%%Deployment%%.%%AppName%%.%%InstanceId%%.ldg</AEService:ledgerFile>
+        <AEService:syncLedger>true</AEService:syncLedger>
+        <AEService:defaultTimeLimit>0</AEService:defaultTimeLimit>
+        <AEService:requireOldMessages>true</AEService:requireOldMessages>
+    </AEService:rvCmSession>
+    <AEService:consumer xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVSubscriber" name="AdapterTerminateSubscriber">
+        <AEService:subject>%%Domain%%.%%Deployment%%.adtuxedo.%%InstanceId%%.exit</AEService:subject>
+        <AEService:wireFormat>rvMsg</AEService:wireFormat>
+        <AEService:session isRef="true">#rvSession.DefaultRVSession</AEService:session>
+    </AEService:consumer>
+    <AEService:consumer xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVSubscriber" name="ClientAgentSubscriber">
+        <AEService:subject>TuxedoAdapterClientAgent</AEService:subject>
+        <AEService:wireFormat>rvMsg</AEService:wireFormat>
+        <AEService:session isRef="true">#rvSession.DefaultRVSession</AEService:session>
+    </AEService:consumer>
+    <AEService:client xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVRPCClient" name="RequestResponseInvocationServiceEndPoint">
+        <AEService:class isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService.aeschema#rpcClass.RequestResponseInvocationServiceRPCClass</AEService:class>
+        <AEService:subject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseInvocationService</AEService:subject>
+        <AEService:wireFormat>aeRvMsg</AEService:wireFormat>
+        <AEService:invocationTimeout>0</AEService:invocationTimeout>
+        <AEService:session isRef="true">#rvSession.DefaultRVSession</AEService:session>
+    </AEService:client>
+    <AEService:server xmlns:AEService="http://www.tibco.com/xmlns/aemeta/services/2002" objectType="endpoint.RVCMRPCServer" name="RequestResponseServiceEndPoint">
+        <AEService:class isRef="true">/AESchemas/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseService.aeschema#rpcClass.RequestResponseServiceRPCClass</AEService:class>
+        <AEService:wireFormat>aeRvMsg</AEService:wireFormat>
+        <AEService:session isRef="true">#rvCmSession.DefaultRVCMSession</AEService:session>
+        <AEService:subject>%%Domain%%.%%Deployment%%.TuxedoAdapter.TuxedoAdapterConfiguration.RequestResponseService</AEService:subject>
+    </AEService:server>
+</Repository:repository>

@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://tempuri.org/" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx13="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx12="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx10="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx19="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx18="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:pfx17="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns12="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/LendingCustomerInfo/Schema.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:ns13="http://www.sbv.gov.vn/global/remitance/autiongold/version1.0" xmlns:ns10="http://www.sbv.gov.vn/global/CheckAccountBalance/CheckAccountBalance/version1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns11="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:pfx22="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx23="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx20="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx21="http://xmlns.example.com/1438330850951" xmlns:pfx26="http://xmlns.example.com/1469593316763" xmlns:pfx27="http://www.tibco.com/pe/CheckpointSchema" xmlns:pfx24="http://www.sbv.gov.vn/schema/global/customer/brokerinfo/BrokerInfo.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx25="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/CheckAccountBalance/CheckAccountBalance/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/CheckAccountBalance/CheckAccountBalance.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" schemaLocation="/SharedResource/Schema/Global/System/CSD/InquiryLoanState/InquiryLoanState.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/customer/brokerinfo/BrokerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/BrokerInfo/BrokerInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/SecuritiesCustomerInfo/SecuritiesCustomerInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/Customer/LendingCustomerInfo/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/Customer/LendingCustomerInfo/LendingCustomerInfo.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remitance/autiongold/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/AutionGold/AOMMetalDeal.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" schemaLocation="/SharedResource/Schema/Global/System/T24/AOMMetalDeal/SBV.CSD.GOLD.AUCTION.MANAGEMENT_xsd1.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/TTBTDT/BTCTPosting/SBV.FT.TTBT.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/AOMMetalDeal/SBV.CSD.GOLD.AUCTION.MANAGEMENT.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1469593316763" location="/SharedResource/Schema/Global/Remittance/AutionGold/AutionGold.wsdl"/>
+    <pd:name>Services/Global/Remittance/AutionGold/Version1.0/createMetalDleal/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>26</pd:startX>
+    <pd:startY>397</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$T24Response/root/*" type="xsd:anyType"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$AppHdr/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:To/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:To/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:From/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:From/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:MsgId"/>
+                    </ns3:MsgId>
+                    <xsl:if test="$AppHdr/ns3:AppHdr/ns3:MsgPreId">
+                        <ns3:MsgPreId>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:MsgPreId"/>
+                        </ns3:MsgPreId>
+                    </xsl:if>
+                    <xsl:if test="$AppHdr/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:BizServ/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:BizServ/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$AppHdr/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$AppHdr/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$T24Response/root/ns3:ResponseStatus/ns3:Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$T24Response/root/ns3:ResponseStatus/ns3:ErrorMessage"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$T24Response/root/Response-T24/ns13:createMetalDealRes"/>
+                    <xsl:copy-of select="$checkSourceReferencyReq/root/pfx19:CheckSourceReferency"/>
+                    <xsl:copy-of select="$CheckSourceReferency/outputMessage"/>
+                    <xsl:copy-of select="$AOMCreateMetalDealReq/root/pfx19:AOMCreateMetalDeal"/>
+                    <xsl:copy-of select="$AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>907</pd:endX>
+    <pd:endY>404</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <T24Response>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="ns3:ResponseStatus"/>
+                        <xsd:element name="Response-T24" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element ref="ns13:createMetalDealRes" minOccurs="0"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </T24Response>
+        <AppHdr ref="ns3:AppHdr"/>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/global/customer/lendingcustomerinfo/getlendingbycuscat/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="AppHeader">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>119</pd:x>
+        <pd:y>397</pd:y>
+        <config>
+            <variableName>AppHdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CheckSourceReferency">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>380</pd:x>
+        <pd:y>399</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx19:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>CheckSourceReferency</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSCSD%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" type="ns13:createMetalDealReqBodyType" cardinality="?"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$checkSourceReferencyReq/root/pfx19:CheckSourceReferency"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AOMCreateMetalDeal">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>636</pd:x>
+        <pd:y>400</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx19:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>AOMCreateMetalDeal</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSCSD%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" type="ns13:createMetalDealReqBodyType" cardinality=""/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$AOMCreateMetalDealReq/root/pfx19:AOMCreateMetalDeal"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="T24Err">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>378</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <variableName>T24Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="if($CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/successIndicator!=&quot;Success&quot;) then &#xA;&#x9;concat($CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/messages[1],&quot; - &quot;,$CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/messages[2])&#xA;else &#xA;&#x9;concat( $AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse/Status/messages[1],&quot;-&quot;,$AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse/Status/messages[2])"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="T24Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>773</pd:x>
+        <pd:y>400</pd:y>
+        <config>
+            <variableName>T24Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="&quot;0&quot;"/>
+                    </ns3:Status>
+                </ns3:ResponseStatus>
+                <Response-T24>
+                    <ns13:createMetalDealRes>
+                        <xsl:copy-of select="$AppHdr/ns3:AppHdr"/>
+                        <ns3:ResponseStatus>
+                            <ns3:Status>
+                                <xsl:value-of select="&quot;0&quot;"/>
+                            </ns3:Status>
+                        </ns3:ResponseStatus>
+                        <ns13:ScreateMetalDealResBody>
+                            <xsl:if test="$AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse/FOREXType/@id">
+                                <ns13:FxRef>
+                                    <xsl:value-of select="$AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse/FOREXType/@id"/>
+                                </ns13:FxRef>
+                            </xsl:if>
+                        </ns13:ScreateMetalDealResBody>
+                    </ns13:createMetalDealRes>
+                </Response-T24>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="TransExists">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>384</pd:x>
+        <pd:y>527</pd:y>
+        <config>
+            <variableName>T24Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="&quot;Record exists in T24&quot;"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>489</pd:x>
+        <pd:y>603</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>653</pd:x>
+        <pd:y>601</pd:y>
+        <config>
+            <variableName>T24Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="&quot;1&quot;"/>
+                    </ns3:Status>
+                    <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                        <ns3:ErrorCode>
+                            <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                        </ns3:ErrorCode>
+                    </xsl:if>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,&quot;-&quot;,substring-after($_error/ns:ErrorReport/ProcessStack,&quot;RequestResponse.process/&quot;))"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="checkSourceReferencyReq">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>246</pd:x>
+        <pd:y>399</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx19:CheckSourceReferency"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" type="ns13:createMetalDealReqBodyType" cardinality="?"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <pfx19:CheckSourceReferency>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24CSDPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24CSDUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <SBVCHECKSOURCEREFType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="&quot;@ID&quot;"/>
+                            </columnName>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:OrderNo">
+                                <criteriaValue>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:OrderNo"/>
+                                </criteriaValue>
+                            </xsl:if>
+                            <operand>
+                                <xsl:value-of select="&quot;EQ&quot;"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </SBVCHECKSOURCEREFType>
+                </pfx19:CheckSourceReferency>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AOMCreateMetalDealReq">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>504</pd:x>
+        <pd:y>398</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx19:AOMCreateMetalDeal"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx19:AOMCreateMetalDeal>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="&quot;VN0010001&quot;"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24CSDPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24CSDUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <OfsFunction>
+                        <activityName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </activityName>
+                        <assignReason>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </assignReason>
+                        <dueDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </dueDate>
+                        <extProcess>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcess>
+                        <extProcessID>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcessID>
+                        <gtsControl>
+                            <xsl:value-of select="if(empty($Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:CounterParty)) then &quot;4&quot;&#xA;else &quot;&quot;"/>
+                        </gtsControl>
+                        <messageId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </messageId>
+                        <noOfAuth>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </noOfAuth>
+                        <owner>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </owner>
+                        <replace>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </replace>
+                        <startDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </startDate>
+                        <user>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </user>
+                    </OfsFunction>
+                    <FOREXAOMMETALDEALSBVINPType>
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </xsl:attribute>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:CounterParty">
+                            <CounterParty>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:CounterParty"/>
+                            </CounterParty>
+                        </xsl:if>
+                        <CurrencyBought>
+                            <xsl:value-of select="if($Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:Bors=&quot;B&quot;) then &quot;XAU&quot;&#xA;else &quot;VND&quot;"/>
+                        </CurrencyBought>
+                        <AmountBought>
+                            <xsl:value-of select="if($Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:Bors=&quot;B&quot;) &#xA;then &quot;&quot; &#xA;else &#xA;$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:SettValue"/>
+                        </AmountBought>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:ValueDate">
+                            <ValueDateBuy>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:ValueDate"/>
+                            </ValueDateBuy>
+                        </xsl:if>
+                        <CurrencySold>
+                            <xsl:value-of select="if($Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:Bors=&quot;S&quot;) then &quot;XAU&quot;&#xA;else &quot;VND&quot;"/>
+                        </CurrencySold>
+                        <AmountSold>
+                            <xsl:value-of select="if($Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:Bors=&quot;S&quot;) &#xA;then &quot;&quot; &#xA;else &#xA;$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:SettValue"/>
+                        </AmountSold>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:ValueDate">
+                            <ValueDateSell>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:ValueDate"/>
+                            </ValueDateSell>
+                        </xsl:if>
+                        <gOURACCOUNTPAY>
+                            <mOURACCOUNTPAY>
+                                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:gOURACCOUNTPAY/ns13:mOURACCOUNTPAY/ns13:SettlementAcforSell">
+                                    <SettlementAcforSell>
+                                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:gOURACCOUNTPAY/ns13:mOURACCOUNTPAY/ns13:SettlementAcforSell"/>
+                                    </SettlementAcforSell>
+                                </xsl:if>
+                                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:gOURACCOUNTPAY/ns13:mOURACCOUNTPAY/ns13:SettlementAcforBuy">
+                                    <SettlementAcforBuy>
+                                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:gOURACCOUNTPAY/ns13:mOURACCOUNTPAY/ns13:SettlementAcforBuy"/>
+                                    </SettlementAcforBuy>
+                                </xsl:if>
+                            </mOURACCOUNTPAY>
+                        </gOURACCOUNTPAY>
+                        <MetalType>
+                            <xsl:value-of select="&quot;GOLD&quot;"/>
+                        </MetalType>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:ExecExcQtty">
+                            <GoldAmount>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:ExecExcQtty"/>
+                            </GoldAmount>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:OrderNo">
+                            <AOMRef>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:OrderNo"/>
+                            </AOMRef>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:AutionDate">
+                            <AutionDate>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:AutionDate"/>
+                            </AutionDate>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:AutionNo">
+                            <OrderID>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ns13:AutionNo"/>
+                            </OrderID>
+                        </xsl:if>
+                    </FOREXAOMMETALDEALSBVINPType>
+                </pfx19:AOMCreateMetalDeal>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AppHeader</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AppHeader</pd:from>
+        <pd:to>checkSourceReferencyReq</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckSourceReferency</pd:from>
+        <pd:to>AOMCreateMetalDealReq</pd:to>
+        <pd:xpathDescription>Create</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/successIndicator="Success"
+
+and contains($CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/messages[2], "No records were found that matched the selection criteria")</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AOMCreateMetalDeal</pd:from>
+        <pd:to>T24Success</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse/Status/successIndicator="Success"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckSourceReferency</pd:from>
+        <pd:to>T24Err</pd:to>
+        <pd:xpathDescription>T24Err</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/successIndicator!="Success"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Err</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AOMCreateMetalDeal</pd:from>
+        <pd:to>T24Err</pd:to>
+        <pd:xpathDescription>T24Err</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$AOMCreateMetalDeal/outputMessage/pfx19:AOMCreateMetalDealResponse/Status/successIndicator!="Success"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckSourceReferency</pd:from>
+        <pd:to>TransExists</pd:to>
+        <pd:xpathDescription>TransExists</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/Status/successIndicator="Success"
+
+and exists($CheckSourceReferency/outputMessage/pfx19:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType/TransactionID)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TransExists</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>checkSourceReferencyReq</pd:from>
+        <pd:to>CheckSourceReferency</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AOMCreateMetalDealReq</pd:from>
+        <pd:to>AOMCreateMetalDeal</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

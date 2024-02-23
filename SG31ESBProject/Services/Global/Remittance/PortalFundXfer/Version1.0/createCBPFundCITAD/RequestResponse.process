@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="sbv/service/global/utilities/cbsstatus/inquiry/version1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx13="http://temenos.com/SBV.FT.BULK.IBPS.LV" xmlns:pfx12="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx11="http://temenos.com/T24.ACCOUNT.STATE" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx19="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx18="http://xmlns.example.com/1438330850951" xmlns:pfx17="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx5="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/FTIBPSHV" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx6="www.tibco.com/plugin/Sleep" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="sbv/global/remittance/fundxfer/version1.0" xmlns:ns6="sbv/global/datatype/datatype/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://xmlns.tibco.com/encodings/mime" xmlns:ns10="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx28="http://xmlns.example.com/1469593316763" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx22="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx23="http://www.temenos.com/T24/event/CollaterisedLending/CollaterisedLendingFlow" xmlns:pfx20="http://temenos.com/SBV.ERP.T24.INTEGRATION" xmlns:pfx21="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" xmlns:pfx26="http://temenos.com/T24PORTAL" xmlns:pfx27="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx24="http://www.sbv.gov.vn/global/remittance/cbpfundxfer/version1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx25="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.xsd"/>
+    <wsdl:import namespace="http://temenos.com/FTIBPSHV"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" location="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION" location="/SharedResource/Schema/Global/System/T24/SBV.ERP.T24.INTEGRATION/SBV.ERP.T24.INTEGRATION.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/T24PORTAL"/>
+    <wsdl:import namespace="http://temenos.com/T24PORTAL" location="/SharedResource/Schema/Global/System/T24/SBV.FT.T24.PORTAL/SBV.FT.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <pd:name>Services/Global/Remittance/PortalFundXfer/Version1.0/createCBPFundCITAD/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>705</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="" element="pfx21:FTCITADResType"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$CitadResponse/Citad/TransRef"/>
+                    </ns3:MsgId>
+                    <ns3:MsgPreId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:MsgPreId>
+                    <ns3:MsgSrcId>
+                        <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:PortalIDReference"/>
+                    </ns3:MsgSrcId>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$CitadResponse/Citad/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$CitadResponse/Citad/ErrorMessage"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx25:CBPFundXferCITADInfoRes>
+                        <pfx25:TransId>
+                            <xsl:value-of select="$CitadResponse/Citad/TransRef"/>
+                        </pfx25:TransId>
+                        <pfx25:SourceAppId>
+                            <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:PortalIDReference"/>
+                        </pfx25:SourceAppId>
+                    </pfx25:CBPFundXferCITADInfoRes>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1172</pd:endX>
+    <pd:endY>700</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <InputInformationList>
+            <xsd:element name="InputInformation">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="orderingCustomerList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="orderingCustomer" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="orderingAddressList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="orderingAddress" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="inBeneficiaryList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="inBeneficiary" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="benAddressList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="benAddress" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InputInformationList>
+        <CitadResponse>
+            <xsd:element name="Citad">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="TransRef" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </CitadResponse>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/portalfundxfer/createcbpfundcitad/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>139</pd:x>
+        <pd:y>707</pd:y>
+        <config>
+            <element ref="pfx25:CBPFundXferCITADInfoReq"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx25:CBPFundXferCITADInfoReq"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx25:CBPFundXferCITADInfoReq"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseOtherwise">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>453</pd:x>
+        <pd:y>705</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="&quot;Loại giao dịch không tồn tại&quot;"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignInputInformation">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>265</pd:x>
+        <pd:y>705</pd:y>
+        <config>
+            <variableName>InputInformationList</variableName>
+        </config>
+        <pd:inputBindings>
+            <InputInformation>
+                <orderingCustomerList>
+                    <orderingCustomer>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName) &lt; 35 ) &#xA;then $Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName&#xA;else substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName, 1 , 35 )"/>
+                    </orderingCustomer>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName) > 35">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName, 36 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName) > 70">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName, 71 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName) > 105">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerName, 106 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                </orderingCustomerList>
+                <orderingAddressList>
+                    <orderingAddress>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress) &lt; 35 ) &#xA;then $Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress&#xA;else substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress, 1 , 35 )"/>
+                    </orderingAddress>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress) > 35">
+                        <orderingAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress, 36 , 35 )"/>
+                        </orderingAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress) > 70">
+                        <orderingAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress, 71 , 35 )"/>
+                        </orderingAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress) > 105">
+                        <orderingAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAddress, 106 , 35 )"/>
+                        </orderingAddress>
+                    </xsl:if>
+                </orderingAddressList>
+                <inBeneficiaryList>
+                    <inBeneficiary>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary) &lt; 35 ) &#xA;then $Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary&#xA;else substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary, 1 , 35 )"/>
+                    </inBeneficiary>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary) > 35">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary, 36 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary) > 70">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary, 71 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary) > 105">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary, 106 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                </inBeneficiaryList>
+                <benAddressList>
+                    <benAddress>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress) &lt; 35 ) &#xA;then $Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress&#xA;else substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress, 1 , 35 )"/>
+                    </benAddress>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress) > 35">
+                        <benAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress, 36 , 35 )"/>
+                        </benAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress) > 70">
+                        <benAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress, 71 , 35 )"/>
+                        </benAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress) > 105">
+                        <benAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAddress, 106 , 35 )"/>
+                        </benAddress>
+                    </xsl:if>
+                </benAddressList>
+            </InputInformation>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1458</pd:x>
+        <pd:y>695</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1330</pd:x>
+        <pd:y>698</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="&quot;Giao dịch thực hiện lỗi&quot;"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="BTTV-CC">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>288</pd:x>
+        <pd:y>247</pd:y>
+        <pd:width>351</pd:width>
+        <pd:height>304</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24PortalWSBTTVCredit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTCreditError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTCreditSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTCreditExisted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24PortalWSBTTVCredit</pd:from>
+            <pd:to>ResponseBTCreditSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24PortalWSBTTVCredit</pd:from>
+            <pd:to>ResponseBTCreditExisted</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/successIndicator='T24Error' 
+and contains($CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24PortalWSBTTVCredit</pd:from>
+            <pd:to>ResponseBTCreditError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallT24PortalWSBTTVCredit">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>369</pd:x>
+            <pd:y>407</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx27:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>FTPortalCreateCitad</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSPortal%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx27:FTPortalCreateCitad>
+                        <WebRequestCommon>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq[1]/pfx25:CompanyCode">
+                                <company>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq[1]/pfx25:CompanyCode"/>
+                                </company>
+                            </xsl:if>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <FUNDSTRANSFERSBVPORTCITADOUTType>
+                            <TransactionType>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:TransType"/>
+                            </TransactionType>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:DebitAccount">
+                                <DebitAccount>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:DebitAccount"/>
+                                </DebitAccount>
+                            </xsl:if>
+                            <Currency>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Currency"/>
+                            </Currency>
+                            <Amount>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Amount"/>
+                            </Amount>
+                            <ValueDate>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:ValueDate"/>
+                            </ValueDate>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CreditAccount">
+                                <CreditAccount>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CreditAccount"/>
+                                </CreditAccount>
+                            </xsl:if>
+                            <gORDERINGCUST>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingCustomerList/orderingCustomer">
+                                    <OrderingCustomer>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustomer>
+                                </xsl:for-each>
+                            </gORDERINGCUST>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAccount">
+                                <BeneficiaryAccountNo>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:BenCustomerAccount"/>
+                                </BeneficiaryAccountNo>
+                            </xsl:if>
+                            <gBENCUSTOMER>
+                                <Beneficiary>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:Benificiary"/>
+                                </Beneficiary>
+                            </gBENCUSTOMER>
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:ReceiveBank"/>
+                            </ReceivingBank>
+                            <CitadType>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:TypeCITAD"/>
+                            </CitadType>
+                            <SendingBank>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:SendingBank"/>
+                            </SendingBank>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:InSendingBank">
+                                <InSendingBank>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:InSendingBank"/>
+                                </InSendingBank>
+                            </xsl:if>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:InReceiveBank">
+                                <InReceivingBank>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:InReceiveBank"/>
+                                </InReceivingBank>
+                            </xsl:if>
+                            <PortReference>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:PortalIDReference"/>
+                            </PortReference>
+                            <xsl:if test="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:PaymentDetail">
+                                <PaymentDetails>
+                                    <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:PaymentDetail"/>
+                                </PaymentDetails>
+                            </xsl:if>
+                            <gL.ORD.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingAddressList/orderingAddress">
+                                    <OrderingCustAddr>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustAddr>
+                                </xsl:for-each>
+                            </gL.ORD.CUST.ADD>
+                            <OrderingCustAcct>
+                                <xsl:value-of select="$Map-Data/pfx25:CBPFundXferCITADInfoReq/pfx25:CustomerAccount"/>
+                            </OrderingCustAcct>
+                            <gL.BEN.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/benAddressList/benAddress">
+                                    <BeneficiaryCustAddr>
+                                        <xsl:value-of select="."/>
+                                    </BeneficiaryCustAddr>
+                                </xsl:for-each>
+                            </gL.BEN.CUST.ADD>
+                        </FUNDSTRANSFERSBVPORTCITADOUTType>
+                    </pfx27:FTPortalCreateCitad>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTCreditSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>529</pd:x>
+            <pd:y>309</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="if($CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/successIndicator='Success') then '0' else '1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="if($CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/successIndicator='Success') then &#xA;$CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/transactionId  else ''"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="if($CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/successIndicator='Success') then ''&#xA;else&#xA;concat($CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/messageId, $CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/messages[1])"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTCreditError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>526</pd:x>
+            <pd:y>473</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-',$_error/ns:ErrorReport/Data)"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTCreditExisted">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>523</pd:x>
+            <pd:y>389</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'0'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="substring-before(substring-after($CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO#&quot;), &quot;#&quot;)"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="$CallT24PortalWSBTTVCredit/outputMessage/pfx27:FTPortalCreateCitadResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="ResponseDebitStatusError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1002</pd:x>
+        <pd:y>700</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="$CitadResponse/Citad/Status"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="if($CitadResponse/Citad/Status='0') then &#xA;$CitadResponse/Citad/TransRef  else ''"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="if($CitadResponse/Citad/Status='0') then ''&#xA;else&#xA;$CitadResponse/Citad/ErrorMessage"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>730</pd:x>
+        <pd:y>701</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseOtherwise</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>AssignInputInformation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>ResponseOtherwise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>ResponseException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>BTTV-CC</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BTTV-CC</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseDebitStatusError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

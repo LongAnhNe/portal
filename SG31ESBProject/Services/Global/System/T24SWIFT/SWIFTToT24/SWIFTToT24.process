@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns22="sbv/common/envelope/commonheader/1.0" xmlns:ns23="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns24="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns13="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="schema://www.sbv.gov.vn/schema/global/system/T24SWIFT/T24ToSWIFT.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="www.tibco.com/plugin/Timer" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/pe/CheckpointSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/system/T24SWIFT/T24ToSWIFT.xsd" schemaLocation="/SharedResource/Schema/Global/System/T24/T24SWIFT/T24ToSWIFT.xsd"/>
+    <pd:name>Services/Global/System/T24SWIFT/SWIFTToT24/SWIFTToT24.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>85</pd:x>
+        <pd:y>443</pd:y>
+        <config>
+            <StartTime>1451959248000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%ServiceGlobalVar/T24SWIFT/SwiftToT24/SwiftToT24TimeInterval_ms%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1209</pd:endX>
+    <pd:endY>451</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx:ESBServiceState"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1451958985607</pd:targetNamespace>
+    <pd:activity name="Scan SA Folder">
+        <pd:type>com.tibco.plugin.ftp.FTPDirActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPDirActivityUI</pd:resourceType>
+        <pd:x>212</pd:x>
+        <pd:y>444</pd:y>
+        <config>
+            <SharedUserData>/SharedResource/Connection/FTP/SWIFTConnection.sharedftp</SharedUserData>
+            <NLST>false</NLST>
+            <logout>true</logout>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <Directory>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24SWIFT/SwiftToT24/SAScanFolder"/>
+                </Directory>
+                <Timeout>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24SWIFT/SwiftToT24/SAScanTimeout_ms"/>
+                </Timeout>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Get file to Swift">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>311</pd:x>
+        <pd:y>154</pd:y>
+        <pd:width>819</pd:width>
+        <pd:height>576</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Scan-SA-Folder/Output/DirectoryItems</pd:over>
+            <pd:iterationElementSlot>filename</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetFileName</pd:to>
+            <pd:xpathDescription>IsSwiftMessage</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>contains($filename/DirectoryItems, "MSG.")</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Go to end 1</pd:to>
+            <pd:xpathDescription>Otherwise, not SWIFT Msg</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Go to end 1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>File exist, no need to send.</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Go to End 2</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Delete DB</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Go to End 4</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Go to End 3</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckFileExists</pd:from>
+            <pd:to>Get SWIFT Msg</pd:to>
+            <pd:xpathDescription>isNewFile</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>not(exists($CheckFileExists/resultSet/Record/FILE_NAME))</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send To T24</pd:from>
+            <pd:to>Update DB</pd:to>
+            <pd:xpathDescription>Sent Success</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Insert DB</pd:from>
+            <pd:to>Send To T24</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Get SWIFT Msg</pd:from>
+            <pd:to>Insert DB</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckFileExists</pd:from>
+            <pd:to>Navigate</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Get SWIFT Msg</pd:from>
+            <pd:to>01.GetFileError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send To T24</pd:from>
+            <pd:to>Delete DB</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd</pd:from>
+            <pd:to>Go to End 4</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckFileExists</pd:from>
+            <pd:to>Go to end 1</pd:to>
+            <pd:xpathDescription>Exist File (Otherwise)</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Navigate</pd:from>
+            <pd:to>IsWriteLogs</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IsWriteLogs</pd:from>
+            <pd:to>LogEnd</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>IsWriteLogs</pd:from>
+            <pd:to>Go to End 2</pd:to>
+            <pd:xpathDescription>Exist</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>01.GetFileError</pd:from>
+            <pd:to>Navigate</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Insert DB</pd:from>
+            <pd:to>Go to End 4</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Delete DB</pd:from>
+            <pd:to>Go to End 3</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Update DB</pd:from>
+            <pd:to>LogEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Update DB</pd:from>
+            <pd:to>Go to End 4</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetFileName</pd:from>
+            <pd:to>CheckFileExists</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CheckFileExists">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>473</pd:x>
+            <pd:y>481</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/T24SWIFT/SwiftToT24/DBTimeout_sec%%</timeout>
+                <commit>false</commit>
+                <maxRows>%%ServiceGlobalVar/T24SWIFT/SwiftToT24/DBMaxRow%%</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <statement>select FILE_NAME from SWIFT_MSG_LOGS s where s.FILE_NAME = ?  order by s.receive_date desc
+</statement>
+                <wizardData/>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>FILE_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <oraObjects/>
+                <oraTables/>
+                <QueryOutputCachedSchemaColumns>FILE_NAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput>
+                    <FILE_NAME>
+                        <xsl:choose>
+                            <xsl:when test="exists($ESBServiceState/pfx:ESBServiceState/pfx:filename)">
+                                <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </FILE_NAME>
+                </jdbcQueryActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Go to end 1">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>470</pd:x>
+            <pd:y>683</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Send To T24">
+            <pd:type>com.tibco.plugin.ftp.FTPPutActivity</pd:type>
+            <pd:resourceType>ae.activities.FTPPutActivityUI</pd:resourceType>
+            <pd:x>814</pd:x>
+            <pd:y>485</pd:y>
+            <config>
+                <Timeout/>
+                <FireWall>false</FireWall>
+                <isBinary>false</isBinary>
+                <Append>false</Append>
+                <useProcessData>false</useProcessData>
+                <Overwrite>true</Overwrite>
+                <SharedUserData>/SharedResource/Connection/FTP/T24Connection.sharedftp</SharedUserData>
+            </config>
+            <pd:inputBindings>
+                <FTPPutInputDataFile>
+                    <RemoteFileName>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24SWIFT/SwiftToT24/T24FolderPath, $ESBServiceState/pfx:ESBServiceState/pfx:filename )"/>
+                    </RemoteFileName>
+                    <LocalFileName>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24SWIFT/SwiftToT24/TempFolderPath, $ESBServiceState/pfx:ESBServiceState/pfx:filename )"/>
+                    </LocalFileName>
+                </FTPPutInputDataFile>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Insert DB">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>695</pd:x>
+            <pd:y>484</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/T24SWIFT/SwiftToT24/DBTimeout_sec%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>insert into SWIFT_MSG_LOGS(FILE_NAME,FILE_SIZE,SOURCE_SYSTEM,RECEIVE_DATE,STATUS) values(?,?,?,?,?)</statement>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>FILE_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>FILE_SIZE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>SOURCE_SYSTEM</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>RECEIVE_DATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>STATUS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <FILE_NAME>
+                        <xsl:choose>
+                            <xsl:when test="exists($ESBServiceState/pfx:ESBServiceState/pfx:filename)">
+                                <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </FILE_NAME>
+                    <FILE_SIZE>
+                        <xsl:choose>
+                            <xsl:when test="exists($Get-SWIFT-Msg/FTPGetOutputFile/FileTransferred[1]/NumOfBytes)">
+                                <xsl:value-of select="$Get-SWIFT-Msg/FTPGetOutputFile/FileTransferred[1]/NumOfBytes"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </FILE_SIZE>
+                    <SOURCE_SYSTEM>
+                        <xsl:value-of select="&quot;SWIFT&quot;"/>
+                    </SOURCE_SYSTEM>
+                    <RECEIVE_DATE>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </RECEIVE_DATE>
+                    <STATUS>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </STATUS>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogEnd">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>1039</pd:x>
+            <pd:y>486</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;SWIFTToT24&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat( 'SWIFTToT24' ,': End ', 'SWIFTToT24' )"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns13:SOAEnvelope>
+                        <ns13:SOAServiceHeader>
+                            <ns13:AppHdr>
+                                <ns22:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns22:CharSet>
+                                <ns22:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns22:ServVersion>
+                                <ns22:From>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;09&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;SWIFT&quot;"/>
+                                    </ns22:Name>
+                                </ns22:From>
+                                <ns22:To>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </ns22:Name>
+                                </ns22:To>
+                                <ns22:MsgId>
+                                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                                </ns22:MsgId>
+                                <ns22:BizServ>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;9&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;T24SWIFT&quot;"/>
+                                    </ns22:Name>
+                                </ns22:BizServ>
+                                <ns22:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns22:CreatedDate>
+                            </ns13:AppHdr>
+                            <ns13:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext/ProcessId),  tib:timestamp())"/>
+                            </ns13:SOAMsgId>
+                            <ns13:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24SWIFT/SWIFTToT24&quot;"/>
+                            </ns13:ServiceName>
+                            <ns13:OperationName>
+                                <xsl:value-of select="&quot;SWIFTToT24&quot;"/>
+                            </ns13:OperationName>
+                            <ns13:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns13:ProcessName>
+                        </ns13:SOAServiceHeader>
+                        <ns13:ServiceBody>
+                            <ns13:AppHdr>
+                                <ns22:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns22:CharSet>
+                                <ns22:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns22:ServVersion>
+                                <ns22:From>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;09&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;SWIFT&quot;"/>
+                                    </ns22:Name>
+                                </ns22:From>
+                                <ns22:To>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </ns22:Name>
+                                </ns22:To>
+                                <ns22:MsgId>
+                                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                                </ns22:MsgId>
+                                <ns22:BizServ>
+                                    <ns22:Id>
+                                        <xsl:value-of select="&quot;9&quot;"/>
+                                    </ns22:Id>
+                                    <ns22:Name>
+                                        <xsl:value-of select="&quot;T24SWIFT&quot;"/>
+                                    </ns22:Name>
+                                </ns22:BizServ>
+                                <ns22:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns22:CreatedDate>
+                            </ns13:AppHdr>
+                            <ns23:ServiceEnverlop>
+                                <ns22:AppHdr>
+                                    <ns22:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </ns22:CharSet>
+                                    <ns22:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns22:ServVersion>
+                                    <ns22:From>
+                                        <ns22:Id>
+                                            <xsl:value-of select="&quot;09&quot;"/>
+                                        </ns22:Id>
+                                        <ns22:Name>
+                                            <xsl:value-of select="&quot;SWIFT&quot;"/>
+                                        </ns22:Name>
+                                    </ns22:From>
+                                    <ns22:To>
+                                        <ns22:Id>
+                                            <xsl:value-of select="&quot;24&quot;"/>
+                                        </ns22:Id>
+                                        <ns22:Name>
+                                            <xsl:value-of select="&quot;T24&quot;"/>
+                                        </ns22:Name>
+                                    </ns22:To>
+                                    <ns22:MsgId>
+                                        <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                                    </ns22:MsgId>
+                                    <ns22:BizServ>
+                                        <ns22:Id>
+                                            <xsl:value-of select="&quot;9&quot;"/>
+                                        </ns22:Id>
+                                        <ns22:Name>
+                                            <xsl:value-of select="&quot;T24SWIFT&quot;"/>
+                                        </ns22:Name>
+                                    </ns22:BizServ>
+                                    <ns22:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </ns22:CreatedDate>
+                                </ns22:AppHdr>
+                                <ns22:ResponseStatus>
+                                    <ns22:Status>
+                                        <xsl:value-of select="if ($Insert-DB/jdbcUpdateActivityOutput = 1)&#xA;then 0&#xA;else 1"/>
+                                    </ns22:Status>
+                                    <ns22:ErrorCode>
+                                        <xsl:value-of select="$Insert-DB/jdbcUpdateActivityOutput/noOfUpdates"/>
+                                    </ns22:ErrorCode>
+                                    <xsl:if test="$_error/ns1:ErrorReport/Msg">
+                                        <ns22:ErrorMessage>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                                        </ns22:ErrorMessage>
+                                    </xsl:if>
+                                </ns22:ResponseStatus>
+                                <ServiceBody>
+                                    <xsl:copy-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                                    <xsl:copy-of select="$Get-SWIFT-Msg/FTPGetOutputFile"/>
+                                    <xsl:copy-of select="$Send-To-T24/FTPPutOutputFile"/>
+                                    <xsl:copy-of select="$Insert-DB/jdbcUpdateActivityOutput"/>
+                                    <xsl:copy-of select="$ESBServiceState/pfx:ESBServiceState"/>
+                                    <xsl:copy-of select="$_error/ns1:ErrorReport"/>
+                                </ServiceBody>
+                            </ns23:ServiceEnverlop>
+                        </ns13:ServiceBody>
+                    </ns13:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;End&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp() - $ESBServiceState/pfx:ESBServiceState/ns24:timestamps"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Get SWIFT Msg">
+            <pd:type>com.tibco.plugin.ftp.FTPGetActivity</pd:type>
+            <pd:resourceType>ae.activities.FTPGetActivityUI</pd:resourceType>
+            <pd:x>582</pd:x>
+            <pd:y>484</pd:y>
+            <config>
+                <Timeout>120000</Timeout>
+                <isBinary>false</isBinary>
+                <Overwrite>true</Overwrite>
+                <useProcessData>false</useProcessData>
+                <SharedUserData>/SharedResource/Connection/FTP/SWIFTConnection.sharedftp</SharedUserData>
+                <logout>true</logout>
+            </config>
+            <pd:inputBindings>
+                <FTPGetInputDataFile>
+                    <RemoteFileName>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24SWIFT/SwiftToT24/SAScanFolder, $ESBServiceState/pfx:ESBServiceState/pfx:filename )"/>
+                    </RemoteFileName>
+                    <LocalFileName>
+                        <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24SWIFT/SwiftToT24/TempFolderPath, $ESBServiceState/pfx:ESBServiceState/pfx:filename )"/>
+                    </LocalFileName>
+                </FTPGetInputDataFile>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Navigate">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>585</pd:x>
+            <pd:y>290</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Go to End 4">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1043</pd:x>
+            <pd:y>618</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="IsWriteLogs">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>702</pd:x>
+            <pd:y>282</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns0:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$filename/DirectoryItems"/>
+                    </duplicateKey>
+                </ns0:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Go to End 2">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>816</pd:x>
+            <pd:y>213</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="01.GetFileError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>582</pd:x>
+            <pd:y>380</pd:y>
+            <config>
+                <variableName>ESBServiceState</variableName>
+            </config>
+            <pd:inputBindings>
+                <pfx:ESBServiceState>
+                    <ns24:Status>
+                        <xsl:value-of select="1"/>
+                    </ns24:Status>
+                    <ns24:ErrorMessage>
+                        <xsl:value-of select="concat(&quot;Get File Error :: &quot;, $_error/ns1:ErrorReport/Msg)"/>
+                    </ns24:ErrorMessage>
+                    <ns24:NotifyMsg>
+                        <xsl:value-of select="concat(&quot;Get File Error :: &quot;, $_error/ns1:ErrorReport/Msg)"/>
+                    </ns24:NotifyMsg>
+                    <ns24:ErrorExist>
+                        <xsl:value-of select="&quot;true&quot;"/>
+                    </ns24:ErrorExist>
+                    <xsl:if test="$ESBServiceState/pfx:ESBServiceState/pfx:filename">
+                        <ns24:Unique_ID>
+                            <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                        </ns24:Unique_ID>
+                    </xsl:if>
+                    <xsl:if test="$ESBServiceState/pfx:ESBServiceState/ns24:timestamps">
+                        <ns24:timestamps>
+                            <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns24:timestamps"/>
+                        </ns24:timestamps>
+                    </xsl:if>
+                    <xsl:if test="$ESBServiceState/pfx:ESBServiceState/ns24:CurrentDateTime">
+                        <ns24:CurrentDateTime>
+                            <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns24:CurrentDateTime"/>
+                        </ns24:CurrentDateTime>
+                    </xsl:if>
+                    <xsl:if test="$ESBServiceState/pfx:ESBServiceState/pfx:filename">
+                        <pfx:filename>
+                            <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                        </pfx:filename>
+                    </xsl:if>
+                </pfx:ESBServiceState>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Delete DB">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>813</pd:x>
+            <pd:y>391</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/T24SWIFT/SwiftToT24/DBTimeout_sec%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>delete SWIFT_MSG_LOGS s.FILE_NAME = ?  </statement>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>FILE_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <FILE_NAME>
+                        <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                    </FILE_NAME>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Go to End 3">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>924</pd:x>
+            <pd:y>325</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="Update DB">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>927</pd:x>
+            <pd:y>488</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/T24SWIFT/SwiftToT24/DBTimeout_sec%%</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>update SWIFT_MSG_LOGS s set s.status = ? where s.file_name = ?
+</statement>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>STATUS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>FILE_NAME</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <STATUS>
+                        <xsl:value-of select="'SENT'"/>
+                    </STATUS>
+                    <FILE_NAME>
+                        <xsl:choose>
+                            <xsl:when test="exists($ESBServiceState/pfx:ESBServiceState/pfx:filename)">
+                                <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/pfx:filename"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </FILE_NAME>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetFileName">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>409</pd:x>
+            <pd:y>383</pd:y>
+            <config>
+                <variableName>ESBServiceState</variableName>
+            </config>
+            <pd:inputBindings>
+                <pfx:ESBServiceState>
+                    <ns24:Status>
+                        <xsl:value-of select="0"/>
+                    </ns24:Status>
+                    <ns24:ErrorExist>
+                        <xsl:value-of select="&quot;false&quot;"/>
+                    </ns24:ErrorExist>
+                    <ns24:Unique_ID>
+                        <xsl:value-of select="tib:substring-after-last($filename/DirectoryItems, &quot; &quot; )"/>
+                    </ns24:Unique_ID>
+                    <ns24:timestamps>
+                        <xsl:value-of select="tib:timestamp()"/>
+                    </ns24:timestamps>
+                    <ns24:CurrentDateTime>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns24:CurrentDateTime>
+                    <pfx:filename>
+                        <xsl:value-of select="tib:substring-after-last($filename/DirectoryItems, &quot; &quot; )"/>
+                    </pfx:filename>
+                </pfx:ESBServiceState>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="FTPError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>211</pd:x>
+        <pd:y>763</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1368</pd:x>
+        <pd:y>448</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Scan SA Folder</pd:from>
+        <pd:to>Get file to Swift</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get file to Swift</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Scan SA Folder</pd:from>
+        <pd:to>FTPError</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>FTPError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Go to End</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>Scan SA Folder</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

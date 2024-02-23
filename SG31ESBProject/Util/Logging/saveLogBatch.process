@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="sbv/common/envelope/commonheader/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/SOALogRecord.xsd" xmlns:pfx2="sbv/common/envelope/soaenvelope/1.0" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/SOALogRecord.xsd" schemaLocation="/SharedResource/Schema/Common/Logging/SOALogRecord.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <pd:name>Util/Logging/saveLogBatch.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="MsgCount" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>61</pd:startX>
+    <pd:startY>243</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1003</pd:endX>
+    <pd:endY>120</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <SetNull>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Null" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </SetNull>
+        <LogType>
+            <xsd:element name="File" type="xsd:boolean"/>
+        </LogType>
+        <LogMsgRecords ref="pfx3:SOALogRecord"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1444642616827</pd:targetNamespace>
+    <pd:group name="ReadLogMsg">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>227</pd:x>
+        <pd:y>87</pd:y>
+        <pd:width>571</pd:width>
+        <pd:height>357</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>while</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:whileCondition>$i&lt;=$Start/root/MsgCount and $i&lt; $_globalVariables/pfx:GlobalVariables/Logging/batchcount</pd:whileCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetLogQueueMsg</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Confirm</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetLogQueueMsg</pd:from>
+            <pd:to>AssignRecords</pd:to>
+            <pd:xpathDescription>LogStart</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetLogQueueMsg</pd:from>
+            <pd:to>ParseResponseStatus</pd:to>
+            <pd:xpathDescription>LogEnd</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value = 'End'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseResponseStatus</pd:from>
+            <pd:to>AssignRecords</pd:to>
+            <pd:xpathDescription>Success</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignRecords</pd:from>
+            <pd:to>Confirm</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseResponseStatus</pd:from>
+            <pd:to>WriteLogError</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WriteLogError</pd:from>
+            <pd:to>Confirm</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetLogQueueMsg</pd:from>
+            <pd:to>WriteLogError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GetLogQueueMsg">
+            <pd:type>com.tibco.plugin.jms.JMSQueueGetMessageActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueGetMessageActivity</pd:resourceType>
+            <pd:x>353</pd:x>
+            <pd:y>169</pd:y>
+            <config>
+                <PermittedMessageType>XML Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>23</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>esblog.1.0</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <OutDataxsdString ref="pfx2:SOAEnvelope"/>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput/>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignRecords">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>518</pd:x>
+            <pd:y>169</pd:y>
+            <config>
+                <variableName>LogMsgRecords</variableName>
+            </config>
+            <pd:inputBindings>
+                <pfx3:SOALogRecord>
+                    <xsl:copy-of select="$LogMsgRecords/pfx3:SOALogRecord/pfx3:Record"/>
+                    <pfx3:Record>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property[1]/value">
+                            <pfx3:Direction>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property[1]/value"/>
+                            </pfx3:Direction>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property[1]/name">
+                            <pfx3:TimeDuration>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property[1]/name"/>
+                            </pfx3:TimeDuration>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:SOAMsgId">
+                            <pfx3:SOAMSGID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:SOAMsgId"/>
+                            </pfx3:SOAMSGID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:MsgId">
+                            <pfx3:MSGID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:MsgId"/>
+                            </pfx3:MSGID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:From/ns1:Id">
+                            <pfx3:FROMID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:From/ns1:Id"/>
+                            </pfx3:FROMID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:From/ns1:Name">
+                            <pfx3:FROMNAME>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:From/ns1:Name"/>
+                            </pfx3:FROMNAME>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:To/ns1:Id">
+                            <pfx3:TOID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:To/ns1:Id"/>
+                            </pfx3:TOID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:To/ns1:Name">
+                            <pfx3:TONAME>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:To/ns1:Name"/>
+                            </pfx3:TONAME>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:MsgPreId">
+                            <pfx3:MSGPREID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:MsgPreId"/>
+                            </pfx3:MSGPREID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:MsgSrcId">
+                            <pfx3:MSGSRCID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:MsgSrcId"/>
+                            </pfx3:MSGSRCID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:BizServ/ns1:Id">
+                            <pfx3:BIZSERVID>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:BizServ/ns1:Id"/>
+                            </pfx3:BIZSERVID>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:BizServ/ns1:Name">
+                            <pfx3:BIZSERVNAME>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:BizServ/ns1:Name"/>
+                            </pfx3:BIZSERVNAME>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:CreatedDate">
+                            <pfx3:CREATEDATE>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:CreatedDate"/>
+                            </pfx3:CREATEDATE>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:ServiceName">
+                            <pfx3:SERVICENAME>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:ServiceName"/>
+                            </pfx3:SERVICENAME>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:OperationName">
+                            <pfx3:OPERATIONNAME>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:OperationName"/>
+                            </pfx3:OPERATIONNAME>
+                        </xsl:if>
+                        <xsl:if test="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:ServVersion">
+                            <pfx3:SERVICEVERSION>
+                                <xsl:value-of select="$GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:SOAServiceHeader/pfx2:AppHdr/ns1:ServVersion"/>
+                            </pfx3:SERVICEVERSION>
+                        </xsl:if>
+                        <xsl:if test="$ParseResponseStatus/ns1:ResponseStatus/ns1:Status">
+                            <pfx3:RESPONSESTATUS>
+                                <xsl:value-of select="$ParseResponseStatus/ns1:ResponseStatus/ns1:Status"/>
+                            </pfx3:RESPONSESTATUS>
+                        </xsl:if>
+                        <xsl:if test="if ($GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value[1] = 'End') then $ParseResponseStatus/ns1:ResponseStatus/ns1:ErrorCode else $SetNull/root/Null">
+                            <pfx3:ERRORCODE>
+                                <xsl:value-of select="if ($GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value[1] = 'End') then $ParseResponseStatus/ns1:ResponseStatus/ns1:ErrorCode else $SetNull/root/Null"/>
+                            </pfx3:ERRORCODE>
+                        </xsl:if>
+                        <xsl:if test="if ($GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value[1] = 'End') then $ParseResponseStatus/ns1:ResponseStatus/ns1:ErrorMessage else $SetNull/root/Null">
+                            <pfx3:ERRORMESSAGE>
+                                <xsl:value-of select="if ($GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value[1] = 'End') then $ParseResponseStatus/ns1:ResponseStatus/ns1:ErrorMessage else $SetNull/root/Null"/>
+                            </pfx3:ERRORMESSAGE>
+                        </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value=&quot;Start&quot;">
+                                <pfx3:TRANSACTIONBEFORE>
+                                    <xsl:value-of select="tib:render-xml($GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope,false(),true())"/>
+                                </pfx3:TRANSACTIONBEFORE>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx3:TRANSACTIONBEFORE>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </pfx3:TRANSACTIONBEFORE>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="$GetLogQueueMsg/ns:ActivityOutput/DynamicProperties/property/value[1] = 'End' and exists($GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:ServiceBody/*)">
+                                <pfx3:TRANSACTIONAFTER>
+                                    <xsl:value-of select="tib:render-xml($GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:ServiceBody,false(),true())"/>
+                                </pfx3:TRANSACTIONAFTER>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <pfx3:TRANSACTIONAFTER>
+                                    <xsl:value-of select="&quot;&quot;"/>
+                                </pfx3:TRANSACTIONAFTER>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </pfx3:Record>
+                </pfx3:SOALogRecord>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseResponseStatus">
+            <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+            <pd:x>372</pd:x>
+            <pd:y>367</pd:y>
+            <config>
+                <inputStyle>text</inputStyle>
+                <xsdVersion>default</xsdVersion>
+                <validateOutput>false</validateOutput>
+                <term ref="ns1:ResponseStatus"/>
+            </config>
+            <pd:inputBindings>
+                <xmlString>
+                    <xsl:value-of select="if (exists($GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:ServiceBody/*)) &#xA;then  tib:render-xml($GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope/pfx2:ServiceBody/*[1]/*[2])&#xA;else '&lt;rs:ResponseStatus xmlns:rs = &quot;sbv/common/envelope/commonheader/1.0&quot;/>'"/>
+                </xmlString>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Confirm">
+            <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+            <pd:resourceType>activity.confirm</pd:resourceType>
+            <pd:x>693</pd:x>
+            <pd:y>255</pd:y>
+            <config>
+                <ConfirmEvent>GetLogQueueMsg</ConfirmEvent>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="WriteLogError">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>553</pd:x>
+            <pd:y>365</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <append>true</append>
+                <createMissingDirectories>true</createMissingDirectories>
+            </config>
+            <pd:inputBindings>
+                <ns12:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="$_globalVariables/pfx:GlobalVariables/Logging/logfile"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="concat(&quot;&#xD;&#xA;Transaction Time: &quot;, current-dateTime(),&quot;&#xD;&#xA;&quot;,tib:render-xml($GetLogQueueMsg/ns:ActivityOutput/Body/pfx2:SOAEnvelope),  &quot;&#xD;&#xA;Error Report:&quot;,$_error/ns2:ErrorReport/StackTrace)"/>
+                    </textContent>
+                    <addLineSeparator>
+                        <xsl:value-of select="1"/>
+                    </addLineSeparator>
+                </ns12:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="saveLog">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>907</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <timeout>%%AMXSOADB/Timeout%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>insert into SOALOGS(soamsgid,msgid,fromid,fromname,toid,toname,msgpreid,msgsrcid,bizservid,bizservname,createdate,servicename,operationname,serviceversion,timeduration,responsestatus,errorcode,errormsg,transactionbefore,transactionafter) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <batchUpdate>true</batchUpdate>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>SOAMSGID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MSGID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FROMID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>FROMNAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TOID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TONAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MSGPREID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>MSGSRCID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>BIZSERVID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>BIZSERVNAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CREATEDATE</parameterName>
+                    <dataType>TIMESTAMP</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SERVICENAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>OPERATIONNAME</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SERVICEVERSION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TIMEDURATION</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>RESPONSESTATUS</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERRORCODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>ERRORMSG</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TRANSACTIONBEFORE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TRANSACTIONAFTER</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <xsl:for-each select="$LogMsgRecords/pfx3:SOALogRecord/pfx3:Record">
+                    <Record>
+                        <SOAMSGID>
+                            <xsl:value-of select="pfx3:SOAMSGID"/>
+                        </SOAMSGID>
+                        <MSGID>
+                            <xsl:value-of select="pfx3:MSGID"/>
+                        </MSGID>
+                        <FROMID>
+                            <xsl:value-of select="pfx3:FROMID"/>
+                        </FROMID>
+                        <FROMNAME>
+                            <xsl:value-of select="pfx3:FROMNAME"/>
+                        </FROMNAME>
+                        <TOID>
+                            <xsl:value-of select="pfx3:TOID"/>
+                        </TOID>
+                        <TONAME>
+                            <xsl:value-of select="pfx3:TONAME"/>
+                        </TONAME>
+                        <MSGPREID>
+                            <xsl:value-of select="pfx3:MSGPREID"/>
+                        </MSGPREID>
+                        <MSGSRCID>
+                            <xsl:value-of select="pfx3:MSGSRCID"/>
+                        </MSGSRCID>
+                        <BIZSERVID>
+                            <xsl:value-of select="pfx3:BIZSERVID"/>
+                        </BIZSERVID>
+                        <BIZSERVNAME>
+                            <xsl:value-of select="pfx3:BIZSERVNAME"/>
+                        </BIZSERVNAME>
+                        <CREATEDATE>
+                            <xsl:value-of select="pfx3:CREATEDATE"/>
+                        </CREATEDATE>
+                        <SERVICENAME>
+                            <xsl:value-of select="pfx3:SERVICENAME"/>
+                        </SERVICENAME>
+                        <OPERATIONNAME>
+                            <xsl:value-of select="pfx3:OPERATIONNAME"/>
+                        </OPERATIONNAME>
+                        <SERVICEVERSION>
+                            <xsl:value-of select="pfx3:SERVICEVERSION"/>
+                        </SERVICEVERSION>
+                        <TIMEDURATION>
+                            <xsl:value-of select="pfx3:TimeDuration"/>
+                        </TIMEDURATION>
+                        <RESPONSESTATUS>
+                            <xsl:value-of select="pfx3:RESPONSESTATUS"/>
+                        </RESPONSESTATUS>
+                        <ERRORCODE>
+                            <xsl:value-of select="pfx3:ERRORCODE"/>
+                        </ERRORCODE>
+                        <ERRORMSG>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx3:ERRORMESSAGE)">
+                                    <xsl:value-of select="pfx3:ERRORMESSAGE"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </ERRORMSG>
+                        <TRANSACTIONBEFORE>
+                            <xsl:value-of select="pfx3:TRANSACTIONBEFORE"/>
+                        </TRANSACTIONBEFORE>
+                        <TRANSACTIONAFTER>
+                            <xsl:value-of select="pfx3:TRANSACTIONAFTER"/>
+                        </TRANSACTIONAFTER>
+                    </Record>
+                </xsl:for-each>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>1056</pd:x>
+        <pd:y>252</pd:y>
+        <pd:width>301</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$LogMsgRecords/pfx3:SOALogRecord/pfx3:Record</pd:over>
+            <pd:iterationElementSlot>record</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>WriteLog</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WriteLog</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="WriteLog">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>1206</pd:x>
+            <pd:y>323</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <append>true</append>
+                <createMissingDirectories>true</createMissingDirectories>
+            </config>
+            <pd:inputBindings>
+                <ns12:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="$_globalVariables/pfx:GlobalVariables/Logging/logfile"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="concat(&quot;&#xD;&#xA;Transaction Time: &quot;, current-dateTime(),&quot;&#xD;&#xA;&quot;,tib:render-xml($record/pfx3:Record),  &quot;&#xD;&#xA;Error Report:&quot;,$_error/ns2:ErrorReport/StackTrace)"/>
+                    </textContent>
+                    <addLineSeparator>
+                        <xsl:value-of select="1"/>
+                    </addLineSeparator>
+                </ns12:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ReadLogMsg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReadLogMsg</pd:from>
+        <pd:to>saveLog</pd:to>
+        <pd:xpathDescription>ExistLogMsg</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/MsgCount&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>saveLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>saveLog</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReadLogMsg</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

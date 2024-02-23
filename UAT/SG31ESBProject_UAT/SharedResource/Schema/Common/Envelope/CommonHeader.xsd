@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cmd-header="sbv/common/envelope/commonheader/1.0"
+	 targetNamespace="sbv/common/envelope/commonheader/1.0"
+	 version="1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<annotation>
+		<documentation xml:lang="en">Unique Application Identification to identify Traget application or system within an organization, e.g "SmartLender", "Murex, "Ipay"</documentation>
+	</annotation>
+
+	<!--	<element name="Msgs" type="cmd-header:MsgsType"/> -->
+	<element name="CharSet" type="xsd:string">
+		<annotation>
+			<documentation xml:lang="en">Character encoding</documentation>
+		</annotation>
+	</element>
+	<element name="MsgId" type="xsd:string">
+		<annotation>
+			<documentation xml:lang="en">This ID can be used by Service Client to correlate respond message.</documentation>
+		</annotation>
+	</element>
+	<element name="MsgPreId" type="xsd:string">
+		<annotation>
+			<documentation xml:lang="en">ID of the previous application.</documentation>
+		</annotation>
+	</element>
+	<element name="MsgSrcId" type="xsd:string">
+		<annotation>
+			<documentation xml:lang="en">ID of the initiate application.</documentation>
+		</annotation>
+	</element>
+	<element name="CreatedDate" type="xsd:dateTime">
+		<annotation>
+			<documentation xml:lang="en">The Date of created message</documentation>
+		</annotation>
+	</element>
+	<element name="Signature" type="xsd:string">
+		<annotation>
+			<documentation xml:lang="en">Digital Signature</documentation>
+		</annotation>
+	</element>
+	<element name="NameValuePairs" type="cmd-header:PairsType"/>
+	<complexType name="PairsType">
+		<sequence>
+			<element name="Id" type="xsd:string"/>
+			<element name="Name" type="xsd:string"/>
+		</sequence>
+	</complexType>
+	<element name="AppHdr" type="cmd-header:AppHdrType"/>
+	<complexType name="AppHdrType">
+		<sequence>
+			<element ref="cmd-header:CharSet" minOccurs="0"/>
+			<element ref="cmd-header:ServVersion"/>
+			<element name="From" type="cmd-header:PairsType">
+				<annotation>
+					<documentation>The Name and ID of the application send the message to the ESB</documentation>
+				</annotation>
+			</element>
+			<element name="To" type="cmd-header:PairsType">
+				<annotation>
+					<documentation>The Name and ID of the application receive the message from the ESB</documentation>
+				</annotation>
+			</element>
+			<element ref="cmd-header:MsgId"/>
+			<element ref="cmd-header:MsgPreId" minOccurs="0"/>
+			<element ref="cmd-header:MsgSrcId" minOccurs="0"/>
+			<element name="BizServ" type="cmd-header:PairsType">
+				<annotation>
+					<documentation>Business Domain</documentation>
+				</annotation>
+			</element>
+			<element ref="cmd-header:CreatedDate"/>
+			<element ref="cmd-header:Signature" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="ResponseStatus" type="cmd-header:ResponseStatusType"/>
+	<complexType name="ResponseStatusType">
+		<sequence>
+			<element name="Status" type="xsd:string">
+				<annotation>
+					<documentation>ESB Service's processing status</documentation>
+				</annotation>
+			</element>
+			<element name="ErrorCode" type="xsd:string" minOccurs="0"/>
+			<element name="ErrorMessage" type="xsd:string" minOccurs="0"/>
+			<element name="ErrorInfo" type="cmd-header:ErrorInfoType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="ErrorInfoType">
+		<sequence>
+			<element name="Id" type="xsd:string" minOccurs="0"/>
+			<element name="ErrorCode" type="xsd:string" minOccurs="0">
+				<annotation>
+					<documentation>Error code returned by "SourceAppID" System.  This Error Code is unique to each System.</documentation>
+				</annotation>
+			</element>
+			<element name="ErrorMessage" type="xsd:string" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<element name="ServVersion" type="xsd:string">
+		<annotation>
+			<documentation>Version of the service to invoke</documentation>
+		</annotation>
+	</element>
+</schema>

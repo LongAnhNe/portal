@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="sbv/global/testtemp/version1.0" xmlns:ns="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns4="sbv/common/envelope/soaenvelope/1.0" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1430980975435" xmlns:ns9="sbv/common/logging/enginelog/1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="sbv/common/exceptionhandling/exception/1.0" xmlns:ns7="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns8="sbv/common/envelope/serviceenvelope/1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1430980975435" location="/SharedResource/Schema/Global/TestTemp/TestTemp.wsdl"/>
+    <pd:name>Services/Global/TestTemp/OperationImpl/Inquiry.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:MsgReq"/>
+    <pd:startX>151</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns4:SOAEnvelope/ns4:ServiceBody/*" element="ns1:TestTempRes"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:MsgRes>
+            <Response>
+                <xsl:copy-of select="$Response/ns1:TestTempRes"/>
+            </Response>
+        </wsdlPfx:MsgRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:MsgRes"/>
+    <pd:endX>622</pd:endX>
+    <pd:endY>67</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Response ref="ns1:TestTempRes"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1430985649016</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>302</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns4:SOAEnvelope>
+                    <ns4:SOAServiceHeader>
+                        <ns4:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:MsgReq/Request/ns1:TestTempReq/ns3:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:MsgReq/Request/ns1:TestTempReq/ns3:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:MsgReq/Request/ns1:TestTempReq/ns3:AppHdr/node()"/>
+                        </ns4:AppHdr>
+                        <ns4:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns5:ProcessContext/ProcessId)"/>
+                        </ns4:ProcessName>
+                    </ns4:SOAServiceHeader>
+                    <ns4:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:MsgReq/Request/ns1:TestTempReq/ns1:DocumentReq"/>
+                    </ns4:ServiceBody>
+                </ns4:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>150</pd:x>
+        <pd:y>241</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>306</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns5:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="generate-id($_processContext/ns5:ProcessContext/ProcessId)"/>
+                </GeneratedId>
+                <ns6:ExceptionBody>
+                    <ns6:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns6:Hostname>
+                    <ns6:Category>
+                        <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns6:Category>
+                    <ns6:Type>
+                        <xsl:value-of select="&quot;TECHINICAL&quot;"/>
+                    </ns6:Type>
+                    <ns6:Level>
+                        <xsl:value-of select="&quot;HIGH&quot;"/>
+                    </ns6:Level>
+                    <ns6:ErrorReport>
+                        <StackTrace>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/StackTrace"/>
+                        </StackTrace>
+                        <Msg>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                        </Msg>
+                        <FullClass>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/FullClass"/>
+                        </FullClass>
+                        <ObjectClass>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/Class"/>
+                        </ObjectClass>
+                        <ProcessStack>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/ProcessStack"/>
+                        </ProcessStack>
+                        <xsl:if test="$_error/ns5:ErrorReport/MsgCode">
+                            <MsgCode>
+                                <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                            </MsgCode>
+                        </xsl:if>
+                        <xsl:copy-of select="$_error/ns5:ErrorReport/Data"/>
+                    </ns6:ErrorReport>
+                </ns6:ExceptionBody>
+                <xsl:choose>
+                    <xsl:when test="contains($_error/ns5:ErrorReport/StackTrace, concat(BW:getCurrentProcessName($_processContext/ns5:ProcessContext/ProcessId),&quot;/Start]&quot;))"/>
+                    <xsl:otherwise>
+                        <ServiceInput>
+                            <xsl:copy-of select="$Start/wsdlPfx:MsgReq/Request/ns1:TestTempReq/ns3:AppHdr"/>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Start/wsdlPfx:MsgReq/Request/ns1:TestTempReq/ns1:DocumentReq"/>
+                            </ServiceBody>
+                        </ServiceInput>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="TechSucceed">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>443</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <variableName>Response</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$RequestResponse/root/ns8:ServiceEnverlop/ServiceBody/*" element="ns1:DocumentRes"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <ns1:TestTempRes>
+                <xsl:copy-of select="$RequestResponse/root/ns8:ServiceEnverlop/ns3:AppHdr"/>
+                <xsl:copy-of select="$RequestResponse/root/ns8:ServiceEnverlop/ns3:ResponseStatus"/>
+                <xsl:copy-of select="$RequestResponse/root/ns8:ServiceEnverlop/ServiceBody/ns1:DocumentRes"/>
+            </ns1:TestTempRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>451</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <variableName>Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:TestTempRes>
+                <xsl:copy-of select="$errorProcessor/Result/ns3:AppHdr"/>
+                <xsl:copy-of select="$errorProcessor/Result/ns3:ResponseStatus"/>
+                <ns1:DocumentRes>
+                    <ns1:Name>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns1:Name>
+                    <ns1:Age>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns1:Age>
+                    <ns1:Status>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns1:Status>
+                </ns1:DocumentRes>
+            </ns1:TestTempRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorFormating">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>155</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorFormating.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns9:EngineLog>
+                    <ns9:ServiceName>
+                        <xsl:value-of select="substring-before(substring-after(BW:getCurrentProcessName($_processContext/ns5:ProcessContext/ProcessId), 'Services/'),'/OperationImpl' )"/>
+                    </ns9:ServiceName>
+                    <ns9:Message>
+                        <xsl:value-of select="$_error/ns5:ErrorReport/StackTrace"/>
+                    </ns9:Message>
+                    <ns9:Category>
+                        <xsl:value-of select="$_globalVariables/ns7:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns9:Category>
+                    <ns9:TrackingId>
+                        <xsl:value-of select="generate-id($_processContext/ns5:ProcessContext)"/>
+                    </ns9:TrackingId>
+                </ns9:EngineLog>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="eFormating">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>439</pd:x>
+        <pd:y>158</pd:y>
+        <config>
+            <variableName>Response</variableName>
+        </config>
+        <pd:inputBindings>
+            <ns1:TestTempRes>
+                <xsl:copy-of select="$errorFormating/root/ns8:ServiceEnverlop/ns3:AppHdr"/>
+                <xsl:copy-of select="$errorFormating/root/ns8:ServiceEnverlop/ns3:ResponseStatus"/>
+                <ns1:DocumentRes>
+                    <ns1:Name>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns1:Name>
+                    <ns1:Age>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns1:Age>
+                    <ns1:Status>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns1:Status>
+                </ns1:DocumentRes>
+            </ns1:TestTempRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>TechSucceed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TechSucceed</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>errorFormating</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorFormating</pd:from>
+        <pd:to>eFormating</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>eFormating</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

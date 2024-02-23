@@ -1,0 +1,1405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="sbv/common/envelope/soaenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/CheckpointSchema" xmlns:ns22="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns12="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/SG4SubscribeOverdrafLimit.xsd" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:pfx="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/SyncReuterDealingData.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="www.tibco.com/plugin/Timer" xmlns:pfx2="sbv/common/envelope/commonheader/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/system/ReuterDealing/SyncReuterDealingData.xsd" schemaLocation="/SharedResource/Schema/Global/System/ReuterDealing/SyncReuterDealingData/SyncReuterDealingData.xsd"/>
+    <pd:name>Services/Global/System/ReuterDealing/OperationImpl/SyncReuterDealingData-test.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>86</pd:x>
+        <pd:y>245</pd:y>
+        <config>
+            <StartTime>1480991820000</StartTime>
+            <Frequency>true</Frequency>
+            <TimeInterval>%%ServiceGlobalVar/Reuter/Spot/TimeInterval_ms%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1078</pd:endX>
+    <pd:endY>504</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx:ESBServiceState"/>
+        <InsertSG4DB_Forward>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx:InsertSG4DB_Forward" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InsertSG4DB_Forward>
+        <InsertSG4DB_Swap>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx:InsertSG4DB_Swap" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InsertSG4DB_Swap>
+        <test>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="RunAllTime" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="StartTime" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="EndTime" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Timer_time" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Compare_Start" type="xsd:int" minOccurs="0"/>
+                        <xsd:element name="Compare_End" type="xsd:int" minOccurs="0"/>
+                        <xsd:element name="condition_start" type="xsd:boolean" minOccurs="0"/>
+                        <xsd:element name="condition_start-ends" type="xsd:boolean"/>
+                        <xsd:element name="condition_ALL" type="xsd:boolean"/>
+                        <xsd:element name="getHour" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </test>
+        <AppHdr ref="pfx2:AppHdr"/>
+        <InsertSG4DB_ALL>
+            <xsd:element name="List-ALL">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx:InsertSG4DB_ALL" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InsertSG4DB_ALL>
+        <InsertSG4DB_Spot>
+            <xsd:element name="ListRecords">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx:InsertSG4DB_Spot" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InsertSG4DB_Spot>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1466742900381</pd:targetNamespace>
+    <pd:activity name="2. Query DB Data - Spot">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>395</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/Spot/ReuterDBTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <maxRows>0</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ReuterDBGW.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT [id]
+,[Dealid]
+      ,[Dealdate]
+      ,[DealTime]
+      ,[ValueDate1]
+      ,[Rate1]
+      ,[DealType]
+      ,[CurPair]
+      ,[Volume]         
+      ,[BuyerNameVit]     
+      ,[SellerNameVit]   
+FROM VW_TRAN_REP1_SPOT s
+WHERE s.DealDate &gt;= ?
+AND s.DealDate &lt; (Convert(datetime, ? ) + 1)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CurrentDate1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CurrentDate2</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>id</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>numeric</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Dealid</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Dealdate</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DealTime</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ValueDate1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Rate1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DealType</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CurPair</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Volume</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BuyerNameVit</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>nvarchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SellerNameVit</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>nvarchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <CurrentDate1>
+                    <xsl:value-of select="&quot;20160730&quot;"/>
+                </CurrentDate1>
+                <CurrentDate2>
+                    <xsl:value-of select="&quot;20160730&quot;"/>
+                </CurrentDate2>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="0. Init ServiceState">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>89</pd:x>
+        <pd:y>513</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="0"/>
+                </ns1:Status>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init AppHdr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>183</pd:x>
+        <pd:y>504</pd:y>
+        <config>
+            <variableName>AppHdr</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:AppHdr>
+                <pfx2:CharSet>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </pfx2:CharSet>
+                <pfx2:ServVersion>
+                    <xsl:value-of select="&quot;1.0&quot;"/>
+                </pfx2:ServVersion>
+                <pfx2:From>
+                    <pfx2:Id>
+                        <xsl:value-of select="&quot;11&quot;"/>
+                    </pfx2:Id>
+                    <pfx2:Name>
+                        <xsl:value-of select="&quot;REUTER&quot;"/>
+                    </pfx2:Name>
+                </pfx2:From>
+                <pfx2:To>
+                    <pfx2:Id>
+                        <xsl:value-of select="&quot;04&quot;"/>
+                    </pfx2:Id>
+                    <pfx2:Name>
+                        <xsl:value-of select="&quot;SG4&quot;"/>
+                    </pfx2:Name>
+                </pfx2:To>
+                <pfx2:MsgId>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:CurrentDateTime"/>
+                </pfx2:MsgId>
+                <pfx2:BizServ>
+                    <pfx2:Id>
+                        <xsl:value-of select="&quot;8&quot;"/>
+                    </pfx2:Id>
+                    <pfx2:Name>
+                        <xsl:value-of select="&quot;SyncReuterDealingData&quot;"/>
+                    </pfx2:Name>
+                </pfx2:BizServ>
+                <pfx2:CreatedDate>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx2:CreatedDate>
+            </pfx2:AppHdr>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Insert to SG4 DB - Reuter">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>875</pd:x>
+        <pd:y>517</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/Spot/GWDBTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <batchUpdate>true</batchUpdate>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/SG4DBGW_Reuter.sharedjdbc</jdbcSharedConfig>
+            <statement>insert into tran_rep1 (id,dealid, dealdate, buyernamevit, valuedate1, valuedate2, dealtime, sellernamevit, volume, curpair, rate1, rate2, elapseddays_calc, puredealtypedim)
+values (?,?,?,?,?,?,TO_DATE( ? , 'yyyy-mm-dd hh24:mi:ss'),?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>id</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>dealid</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>dealdate</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>buyernamevit</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>valuedate1</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>valuedate2</parameterName>
+                    <dataType>DATE</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>dealtime</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>sellernamevit</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>volume</parameterName>
+                    <dataType>FLOAT</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>curpair</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>rate1</parameterName>
+                    <dataType>FLOAT</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>rate2</parameterName>
+                    <dataType>FLOAT</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>elapseddays_calc</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>puredealtypedim</parameterName>
+                    <dataType>SMALLINT</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <xsl:for-each select="$InsertSG4DB_ALL/List-ALL/pfx:InsertSG4DB_ALL/pfx:Record">
+                    <Record>
+                        <id>
+                            <xsl:choose>
+                                <xsl:when test="exists(pfx:id)">
+                                    <xsl:value-of select="pfx:id"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </id>
+                        <dealid>
+                            <xsl:value-of select="pfx:dealid"/>
+                        </dealid>
+                        <dealdate>
+                            <xsl:value-of select="pfx:dealdate"/>
+                        </dealdate>
+                        <buyernamevit>
+                            <xsl:value-of select="pfx:buyernamevit"/>
+                        </buyernamevit>
+                        <valuedate1>
+                            <xsl:value-of select="pfx:valuedate1"/>
+                        </valuedate1>
+                        <valuedate2>
+                            <xsl:value-of select="pfx:valuedate2"/>
+                        </valuedate2>
+                        <dealtime>
+                            <xsl:value-of select="pfx:dealtime"/>
+                        </dealtime>
+                        <sellernamevit>
+                            <xsl:value-of select="pfx:sellernamevit"/>
+                        </sellernamevit>
+                        <volume>
+                            <xsl:value-of select="pfx:volume"/>
+                        </volume>
+                        <curpair>
+                            <xsl:value-of select="pfx:curpair"/>
+                        </curpair>
+                        <rate1>
+                            <xsl:value-of select="pfx:rate1"/>
+                        </rate1>
+                        <rate2>
+                            <xsl:value-of select="pfx:rate2"/>
+                        </rate2>
+                        <elapseddays_calc>
+                            <xsl:value-of select="pfx:elapseddays_calc"/>
+                        </elapseddays_calc>
+                        <puredealtypedim>
+                            <xsl:value-of select="pfx:puredealtypedim"/>
+                        </puredealtypedim>
+                    </Record>
+                </xsl:for-each>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="2. Insert DB Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>879</pd:x>
+        <pd:y>410</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="2"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Can not insert GW DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Can not insert GW DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="1. Get Data Error - Spot">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>321</pd:x>
+        <pd:y>302</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="1"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Can not query Spot DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Can not query Spot DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop Spot List">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>444</pd:x>
+        <pd:y>324</pd:y>
+        <pd:width>176</pd:width>
+        <pd:height>117</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Query-DB-Data---Spot/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>SpotRecord</pd:iterationElementSlot>
+            <pd:indexSlot>SpotLine</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Set DB Model - Spot</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Set DB Model - Spot</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Set DB Model - Spot">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>526</pd:x>
+            <pd:y>387</pd:y>
+            <config>
+                <variableName>InsertSG4DB_Spot</variableName>
+            </config>
+            <pd:inputBindings>
+                <ListRecords>
+                    <pfx:InsertSG4DB_Spot>
+                        <xsl:copy-of select="$InsertSG4DB_Spot/ListRecords/pfx:InsertSG4DB_Spot/pfx:Record"/>
+                        <pfx:Record>
+                            <pfx:id>
+                                <xsl:value-of select="$SpotRecord/Record/id"/>
+                            </pfx:id>
+                            <pfx:dealid>
+                                <xsl:value-of select="$SpotRecord/Record/Dealid"/>
+                            </pfx:dealid>
+                            <pfx:dealdate>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SpotRecord/Record/Dealdate))"/>
+                            </pfx:dealdate>
+                            <pfx:buyernamevit>
+                                <xsl:value-of select="$SpotRecord/Record/BuyerNameVit"/>
+                            </pfx:buyernamevit>
+                            <pfx:valuedate1>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SpotRecord/Record/ValueDate1))"/>
+                            </pfx:valuedate1>
+                            <pfx:valuedate2>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SpotRecord/Record/ValueDate1))"/>
+                            </pfx:valuedate2>
+                            <pfx:dealtime>
+                                <xsl:value-of select="tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SpotRecord/Record/DealTime)"/>
+                            </pfx:dealtime>
+                            <pfx:sellernamevit>
+                                <xsl:value-of select="$SpotRecord/Record/SellerNameVit"/>
+                            </pfx:sellernamevit>
+                            <pfx:volume>
+                                <xsl:value-of select="$SpotRecord/Record/Volume"/>
+                            </pfx:volume>
+                            <pfx:curpair>
+                                <xsl:value-of select="$SpotRecord/Record/CurPair"/>
+                            </pfx:curpair>
+                            <pfx:rate1>
+                                <xsl:value-of select="$SpotRecord/Record/Rate1"/>
+                            </pfx:rate1>
+                            <pfx:rate2>
+                                <xsl:value-of select="0"/>
+                            </pfx:rate2>
+                            <pfx:elapseddays_calc>
+                                <xsl:value-of select="0"/>
+                            </pfx:elapseddays_calc>
+                            <pfx:puredealtypedim>
+                                <xsl:value-of select="2"/>
+                            </pfx:puredealtypedim>
+                        </pfx:Record>
+                    </pfx:InsertSG4DB_Spot>
+                </ListRecords>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>984</pd:x>
+        <pd:y>508</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/LogCategory/DebugRole"/>
+                </EnableRoles>
+                <ns13:EngineLog>
+                    <ns13:ServiceName>
+                        <xsl:value-of select="&quot;SyncReuterDealingData&quot;"/>
+                    </ns13:ServiceName>
+                    <ns13:Message>
+                        <xsl:value-of select="concat( 'SyncReuterDealingData' ,': End ', 'SyncReuterDealingData' )"/>
+                    </ns13:Message>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/EnableRoles"/>
+                    </ns13:Category>
+                    <ns13:TrackingId>
+                        <xsl:value-of select="concat( generate-id($_processContext/ns3:ProcessContext),   tib:timestamp() )"/>
+                    </ns13:TrackingId>
+                </ns13:EngineLog>
+                <ns14:SOAEnvelope>
+                    <ns14:SOAServiceHeader>
+                        <ns14:AppHdr>
+                            <xsl:copy-of select="$AppHdr/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$AppHdr/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$AppHdr/pfx2:AppHdr/node()"/>
+                        </ns14:AppHdr>
+                        <ns14:SOAMsgId>
+                            <xsl:value-of select="concat(generate-id($_processContext/ns3:ProcessContext), tib:timestamp())"/>
+                        </ns14:SOAMsgId>
+                        <ns14:ServiceName>
+                            <xsl:value-of select="&quot;Global/System/ReuterDealing/SyncReuterDealingData&quot;"/>
+                        </ns14:ServiceName>
+                        <ns14:OperationName>
+                            <xsl:value-of select="&quot;SyncReuterDealingData&quot;"/>
+                        </ns14:OperationName>
+                        <ns14:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns3:ProcessContext/ProcessId)"/>
+                        </ns14:ProcessName>
+                    </ns14:SOAServiceHeader>
+                    <ns14:ServiceBody>
+                        <ns22:ServiceEnverlop>
+                            <xsl:copy-of select="$AppHdr/pfx2:AppHdr"/>
+                            <pfx2:ResponseStatus>
+                                <pfx2:Status>
+                                    <xsl:value-of select="if ($ESBServiceState/pfx:ESBServiceState/ns1:Status = 0)&#xA;then 0&#xA;else 1"/>
+                                </pfx2:Status>
+                                <pfx2:ErrorCode>
+                                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Status"/>
+                                </pfx2:ErrorCode>
+                                <pfx2:ErrorMessage>
+                                    <xsl:value-of select="substring($ESBServiceState/pfx:ESBServiceState/ns1:ErrorMessage, 1 , 200 )"/>
+                                </pfx2:ErrorMessage>
+                                <pfx2:ErrorInfo/>
+                            </pfx2:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Timer/pfx3:TimerOutputSchema"/>
+                                <xsl:copy-of select="$Query-DB-Data---Spot/resultSet/Record"/>
+                                <xsl:copy-of select="$Timer/pfx3:TimerOutputSchema"/>
+                                <xsl:copy-of select="$Query-DB-Data---Forward/resultSet/Record"/>
+                                <xsl:copy-of select="$Timer/pfx3:TimerOutputSchema"/>
+                                <xsl:copy-of select="$Query-DB-Data---Swap/resultSet/Record"/>
+                                <xsl:copy-of select="$Insert-to-SG4-DB---Reuter/jdbcUpdateActivityOutput/noOfUpdates"/>
+                            </ServiceBody>
+                            <Other>
+                                <xsl:value-of select="concat(&quot;Spot : &quot;, count($Query-DB-Data---Spot/resultSet/Record), &quot;---Forward : &quot;, count($Query-DB-Data---Forward/resultSet/Record) , &quot;---Swap : &quot;, count($Query-DB-Data---Swap/resultSet/Record))"/>
+                            </Other>
+                        </ns22:ServiceEnverlop>
+                    </ns14:ServiceBody>
+                </ns14:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() - $ESBServiceState/pfx:ESBServiceState/ns1:timestamps"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch Unexpected Exception">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1079</pd:x>
+        <pd:y>753</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="99. Has Unexpected Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1080</pd:x>
+        <pd:y>626</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="99"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Has Unexpected Exception &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Has Unexpected Exception &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop Forward List">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>446</pd:x>
+        <pd:y>438</pd:y>
+        <pd:width>171</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Query-DB-Data---Forward/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>ForwardRecord</pd:iterationElementSlot>
+            <pd:indexSlot>ForwardLine</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Set DB Model - Forward</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Set DB Model - Forward</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Set DB Model - Forward">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>522</pd:x>
+            <pd:y>507</pd:y>
+            <config>
+                <variableName>InsertSG4DB_Forward</variableName>
+            </config>
+            <pd:inputBindings>
+                <List>
+                    <pfx:InsertSG4DB_Forward>
+                        <xsl:copy-of select="$InsertSG4DB_Forward/List/pfx:InsertSG4DB_Forward/pfx:Record"/>
+                        <pfx:Record>
+                            <pfx:id>
+                                <xsl:value-of select="$ForwardRecord/Record/id"/>
+                            </pfx:id>
+                            <pfx:dealid>
+                                <xsl:value-of select="$ForwardRecord/Record/Dealid"/>
+                            </pfx:dealid>
+                            <pfx:dealdate>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $ForwardRecord/Record/Dealdate))"/>
+                            </pfx:dealdate>
+                            <pfx:buyernamevit>
+                                <xsl:value-of select="$ForwardRecord/Record/BuyerNameVit"/>
+                            </pfx:buyernamevit>
+                            <pfx:valuedate1>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $ForwardRecord/Record/ValueDate1))"/>
+                            </pfx:valuedate1>
+                            <pfx:valuedate2>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $ForwardRecord/Record/ValueDate1))"/>
+                            </pfx:valuedate2>
+                            <pfx:dealtime>
+                                <xsl:value-of select="tib:format-dateTime( &quot;yyyy-MM-dd HH:mm:ss&quot;, $ForwardRecord/Record/DealTime)"/>
+                            </pfx:dealtime>
+                            <pfx:sellernamevit>
+                                <xsl:value-of select="$ForwardRecord/Record/SellerNameVit"/>
+                            </pfx:sellernamevit>
+                            <pfx:volume>
+                                <xsl:value-of select="$ForwardRecord/Record/Volume"/>
+                            </pfx:volume>
+                            <pfx:curpair>
+                                <xsl:value-of select="$ForwardRecord/Record/CurPair"/>
+                            </pfx:curpair>
+                            <pfx:rate1>
+                                <xsl:value-of select="$ForwardRecord/Record/Rate1"/>
+                            </pfx:rate1>
+                            <pfx:rate2>
+                                <xsl:value-of select="0"/>
+                            </pfx:rate2>
+                            <pfx:elapseddays_calc>
+                                <xsl:value-of select="0"/>
+                            </pfx:elapseddays_calc>
+                            <pfx:puredealtypedim>
+                                <xsl:value-of select="4"/>
+                            </pfx:puredealtypedim>
+                        </pfx:Record>
+                    </pfx:InsertSG4DB_Forward>
+                </List>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="4. Query DB Data - Forward">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>516</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/Spot/ReuterDBTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <maxRows>0</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ReuterDBGW.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT id
+,[Dealid]
+,[Dealdate]
+  ,[DealTime]
+	  ,[ValueDate1]
+     ,[ElapsedDays_calc]
+      ,[Rate1]	
+      ,[DealType]
+    ,[CurPair]
+     ,[Volume]         
+    ,[BuyerNameVit]     
+    ,[SellerNameVit]     
+FROM VW_TRAN_REP1_FWD f
+WHERE f.DealDate &gt;= ? 
+AND f.DealDate &lt; (Convert(datetime, ? ) + 1);</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CurrentDate1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CurrentDate2</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>id</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>numeric</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Dealid</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Dealdate</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DealTime</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ValueDate1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ElapsedDays_calc</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>4</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>int</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Rate1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DealType</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CurPair</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Volume</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BuyerNameVit</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>nvarchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SellerNameVit</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>nvarchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <CurrentDate1>
+                    <xsl:value-of select="&quot;20160730&quot;"/>
+                </CurrentDate1>
+                <CurrentDate2>
+                    <xsl:value-of select="&quot;20160730&quot;"/>
+                </CurrentDate2>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Set DB Model - ALL DATA">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>760</pd:x>
+        <pd:y>515</pd:y>
+        <config>
+            <variableName>InsertSG4DB_ALL</variableName>
+        </config>
+        <pd:inputBindings>
+            <List-ALL>
+                <pfx:InsertSG4DB_ALL>
+                    <xsl:copy-of select="$InsertSG4DB_Spot/ListRecords/pfx:InsertSG4DB_Spot/pfx:Record"/>
+                    <xsl:copy-of select="$InsertSG4DB_Forward/List/pfx:InsertSG4DB_Forward/pfx:Record"/>
+                    <xsl:copy-of select="$InsertSG4DB_Swap/List/pfx:InsertSG4DB_Swap/pfx:Record"/>
+                </pfx:InsertSG4DB_ALL>
+            </List-ALL>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="8. Query DB Data - Swap">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>313</pd:x>
+        <pd:y>665</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/Reuter/Spot/ReuterDBTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <maxRows>0</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ReuterDBGW.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT id
+, Dealid
+,dealdate
+,dealtime
+,valuedate1
+,valuedate2
+,volume
+,rate1
+,rate2
+,curpair
+,elapseddays_calc
+,buyerNameVit
+,sellernameVit
+     
+FROM VW_TRAN_REP1_SWAP w
+WHERE w.DealDate &gt;= ?
+AND w.DealDate &lt; (Convert(datetime, ?) + 1);</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CurrentDate1</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CurrentDate2</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>id</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>numeric</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>Dealid</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>dealdate</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>dealtime</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>valuedate1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>valuedate2</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>datetime</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>volume</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>rate1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>rate2</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>6</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>float</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>curpair</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>varchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>elapseddays_calc</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>4</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>int</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>buyerNameVit</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>nvarchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>sellernameVit</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>nvarchar</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <CurrentDate1>
+                    <xsl:value-of select="&quot;20160730&quot;"/>
+                </CurrentDate1>
+                <CurrentDate2>
+                    <xsl:value-of select="&quot;20160730&quot;"/>
+                </CurrentDate2>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Set Swap List">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>449</pd:x>
+        <pd:y>588</pd:y>
+        <pd:width>171</pd:width>
+        <pd:height>122</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Query-DB-Data---Swap/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>SwapRecord</pd:iterationElementSlot>
+            <pd:indexSlot>SwapLine</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Set DB Model - Swap</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Set DB Model - Swap</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Set DB Model - Swap">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>533</pd:x>
+            <pd:y>657</pd:y>
+            <config>
+                <variableName>InsertSG4DB_Swap</variableName>
+            </config>
+            <pd:inputBindings>
+                <List>
+                    <pfx:InsertSG4DB_Swap>
+                        <xsl:copy-of select="$InsertSG4DB_Swap/List/pfx:InsertSG4DB_Swap/pfx:Record"/>
+                        <pfx:Record>
+                            <pfx:id>
+                                <xsl:value-of select="$SwapRecord/Record/id"/>
+                            </pfx:id>
+                            <pfx:dealid>
+                                <xsl:value-of select="$SwapRecord/Record/Dealid"/>
+                            </pfx:dealid>
+                            <pfx:dealdate>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SwapRecord/Record/dealdate))"/>
+                            </pfx:dealdate>
+                            <pfx:buyernamevit>
+                                <xsl:value-of select="$SwapRecord/Record/buyerNameVit"/>
+                            </pfx:buyernamevit>
+                            <pfx:valuedate1>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SwapRecord/Record/valuedate1))"/>
+                            </pfx:valuedate1>
+                            <pfx:valuedate2>
+                                <xsl:value-of select="tib:parse-date(&quot;yyyy-MM-dd HH mm ss&quot;, tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SwapRecord/Record/valuedate2))"/>
+                            </pfx:valuedate2>
+                            <pfx:dealtime>
+                                <xsl:value-of select="tib:format-dateTime( &quot;yyyy-MM-dd HH mm ss&quot;, $SwapRecord/Record/dealtime)"/>
+                            </pfx:dealtime>
+                            <pfx:sellernamevit>
+                                <xsl:value-of select="$SwapRecord/Record/sellernameVit"/>
+                            </pfx:sellernamevit>
+                            <pfx:volume>
+                                <xsl:value-of select="$SwapRecord/Record/volume"/>
+                            </pfx:volume>
+                            <pfx:curpair>
+                                <xsl:value-of select="$SwapRecord/Record/curpair"/>
+                            </pfx:curpair>
+                            <pfx:rate1>
+                                <xsl:value-of select="$SwapRecord/Record/rate1"/>
+                            </pfx:rate1>
+                            <pfx:rate2>
+                                <xsl:value-of select="0"/>
+                            </pfx:rate2>
+                            <pfx:elapseddays_calc>
+                                <xsl:value-of select="0"/>
+                            </pfx:elapseddays_calc>
+                            <pfx:puredealtypedim>
+                                <xsl:value-of select="8"/>
+                            </pfx:puredealtypedim>
+                        </pfx:Record>
+                    </pfx:InsertSG4DB_Swap>
+                </List>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="1. Get Data Error - Forward">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>388</pd:x>
+        <pd:y>591</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="1"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Can not query Forward DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Can not query Forward DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="1. Get Data Error - Swap">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>385</pd:x>
+        <pd:y>756</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="1"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Can not query Swap DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Can not query Swap DB : &quot;, $_error/ns3:ErrorReport/Msg)"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="3.Has no records.">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>758</pd:x>
+        <pd:y>355</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ESBServiceState>
+                <ns1:Status>
+                    <xsl:value-of select="2"/>
+                </ns1:Status>
+                <ns1:ErrorMessage>
+                    <xsl:value-of select="&quot;Has no record to insert&quot;"/>
+                </ns1:ErrorMessage>
+                <ns1:NotifyMsg>
+                    <xsl:value-of select="&quot;Has no record to insert&quot;"/>
+                </ns1:NotifyMsg>
+                <ns1:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns1:ErrorExist>
+                <ns1:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:Unique_ID"/>
+                </ns1:Unique_ID>
+                <ns1:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:timestamps"/>
+                </ns1:timestamps>
+                <ns1:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx:ESBServiceState/ns1:CurrentDateTime"/>
+                </ns1:CurrentDateTime>
+            </pfx:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>0. Init ServiceState</pd:from>
+        <pd:to>Init AppHdr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init AppHdr</pd:from>
+        <pd:to>2. Query DB Data - Spot</pd:to>
+        <pd:xpathDescription>Get Spot Data</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2. Query DB Data - Spot</pd:from>
+        <pd:to>1. Get Data Error - Spot</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2. Query DB Data - Spot</pd:from>
+        <pd:to>Loop Spot List</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>2. Insert DB Error</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>write log</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1. Get Data Error - Spot</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>write log</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch Unexpected Exception</pd:from>
+        <pd:to>99. Has Unexpected Exception</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>99. Has Unexpected Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init AppHdr</pd:from>
+        <pd:to>4. Query DB Data - Forward</pd:to>
+        <pd:xpathDescription>Get Forward Data</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>4. Query DB Data - Forward</pd:from>
+        <pd:to>Loop Forward List</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert to SG4 DB - Reuter</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Insert to SG4 DB - Reuter</pd:from>
+        <pd:to>2. Insert DB Error</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>4. Query DB Data - Forward</pd:from>
+        <pd:to>1. Get Data Error - Forward</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1. Get Data Error - Forward</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>Write Logs</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init AppHdr</pd:from>
+        <pd:to>8. Query DB Data - Swap</pd:to>
+        <pd:xpathDescription>Get SWAP Data</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>8. Query DB Data - Swap</pd:from>
+        <pd:to>Set Swap List</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>8. Query DB Data - Swap</pd:from>
+        <pd:to>1. Get Data Error - Swap</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>1. Get Data Error - Swap</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:xpathDescription>Write Logs</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop Spot List</pd:from>
+        <pd:to>Set DB Model - ALL DATA</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop Forward List</pd:from>
+        <pd:to>Set DB Model - ALL DATA</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set Swap List</pd:from>
+        <pd:to>Set DB Model - ALL DATA</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set DB Model - ALL DATA</pd:from>
+        <pd:to>Insert to SG4 DB - Reuter</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>0. Init ServiceState</pd:to>
+        <pd:xpathDescription>17-22pm</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>($_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/Reuter/Spot/RunAllTime='false'   
+and $Timer/pfx3:TimerOutputSchema/Hour &gt;= $_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/Reuter/Spot/StartTime
+and $Timer/pfx3:TimerOutputSchema/Hour &lt;= $_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/Reuter/Spot/EndTime  )
+or $_globalVariables/ns2:GlobalVariables/ServiceGlobalVar/Reuter/Spot/RunAllTime='true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set DB Model - ALL DATA</pd:from>
+        <pd:to>3.Has no records.</pd:to>
+        <pd:xpathDescription>No Record</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($InsertSG4DB_Spot/ListRecords/pfx:InsertSG4DB_Spot/pfx:Record) &lt;= 0
+and count($InsertSG4DB_Forward/List/pfx:InsertSG4DB_Forward/pfx:Record) &lt;= 0
+and count($InsertSG4DB_Swap/List/pfx:InsertSG4DB_Swap/pfx:Record) &lt;= 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>3.Has no records.</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>write logs</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

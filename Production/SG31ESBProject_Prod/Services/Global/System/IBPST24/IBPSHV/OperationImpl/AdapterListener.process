@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://xmlns.example.com/1433466938916" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/remittance/fundxfer/version1.0" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx5="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="sbv/global/datatype/datatype/version1.0" xmlns:pfx2="sbv/common/envelope/commonheader/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" schemaLocation="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV_XSD1.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.xsd"/>
+    <pd:name>Services/Global/System/IBPST24/IBPSHV/OperationImpl/AdapterListener.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>55</pd:x>
+        <pd:y>219</pd:y>
+        <config>
+            <StartTime>1434449543000</StartTime>
+            <Frequency>true</Frequency>
+            <TimeInterval>1</TimeInterval>
+            <FrequencyIndex>Second</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1995</pd:endX>
+    <pd:endY>153</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <DataResponse>
+            <xsd:element name="DataResponse" type="xsd:string"/>
+        </DataResponse>
+        <Errormessage>
+            <xsd:element name="ErrorMsg" type="xsd:string"/>
+        </Errormessage>
+        <FundXferReq ref="pfx5:createFundReq"/>
+        <ErrorCodeRes>
+            <xsd:element name="ErrorCodeRes" type="xsd:string"/>
+        </ErrorCodeRes>
+        <DataInput>
+            <xsd:element name="strDataInput" type="xsd:string"/>
+        </DataInput>
+        <ServiceEnvelop ref="ns3:ServiceEnverlop"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1433912272176</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>508</pd:x>
+        <pd:y>210</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <xsl:copy-of select="$FundXferReq/pfx5:createFundReq/pfx2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$FundXferReq/pfx5:createFundReq/pfx2:AppHdr/@*"/>
+                            <xsl:copy-of select="$FundXferReq/pfx5:createFundReq/pfx2:AppHdr/node()"/>
+                        </ns12:AppHdr>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <xsl:copy-of select="$FundXferReq/pfx5:createFundReq/pfx5:FundXferInfoReq"/>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignDataInput">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>165</pd:x>
+        <pd:y>221</pd:y>
+        <config>
+            <variableName>DataInput</variableName>
+        </config>
+        <pd:inputBindings>
+            <strDataInput>
+                <xsl:value-of select="&quot;    IBPSHV1234567890123456789112345673501234567899        01903001VND              100020150615141239        01905001VND                  2015061514123920150612141239                  &quot;"/>
+            </strDataInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse Data">
+        <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+        <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+        <pd:x>268</pd:x>
+        <pd:y>223</pd:y>
+        <config>
+            <InputType>String</InputType>
+            <Encoding>ASCII</Encoding>
+            <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataFormat.sharedparse</ParseSharedConfig>
+            <SpecifyStartRecord>false</SpecifyStartRecord>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <text>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$DataInput/strDataInput"/>
+                </text>
+                <noOfRecords>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="1"/>
+                </noOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetDocumentReq">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>374</pd:x>
+        <pd:y>216</pd:y>
+        <config>
+            <variableName>FundXferReq</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:createFundReq>
+                <pfx2:AppHdr>
+                    <pfx2:CharSet>
+                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                    </pfx2:CharSet>
+                    <pfx2:ServVersion>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </pfx2:ServVersion>
+                    <pfx2:From>
+                        <pfx2:Id>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </pfx2:Id>
+                        <pfx2:Name>
+                            <xsl:value-of select="&quot;IBPS&quot;"/>
+                        </pfx2:Name>
+                    </pfx2:From>
+                    <pfx2:To>
+                        <pfx2:Id>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </pfx2:Id>
+                        <pfx2:Name>
+                            <xsl:value-of select="&quot;T24&quot;"/>
+                        </pfx2:Name>
+                    </pfx2:To>
+                    <pfx2:MsgId>
+                        <xsl:value-of select="$Parse-Data/Output/Rows/IBPSHV_Data[1]/SourceSystemID"/>
+                    </pfx2:MsgId>
+                    <xsl:if test="$Parse-Data/Output/Rows/IBPSHV_Data[1]/SourceSystemID">
+                        <pfx2:MsgSrcId>
+                            <xsl:value-of select="$Parse-Data/Output/Rows/IBPSHV_Data[1]/SourceSystemID"/>
+                        </pfx2:MsgSrcId>
+                    </xsl:if>
+                    <pfx2:BizServ>
+                        <pfx2:Id>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </pfx2:Id>
+                        <pfx2:Name>
+                            <xsl:value-of select="&quot;IBPS01&quot;"/>
+                        </pfx2:Name>
+                    </pfx2:BizServ>
+                    <pfx2:CreatedDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx2:CreatedDate>
+                </pfx2:AppHdr>
+                <pfx5:FundXferInfoReq>
+                    <pfx5:SystemType>
+                        <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/SystemType)"/>
+                    </pfx5:SystemType>
+                    <pfx5:SourceAppId>
+                        <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/SourceSystemID)"/>
+                    </pfx5:SourceAppId>
+                    <pfx5:CreditInfo>
+                        <pfx3:AccountNo>
+                            <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/CreditNo)"/>
+                        </pfx3:AccountNo>
+                        <pfx3:Currency>
+                            <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/CreditCurrency)"/>
+                        </pfx3:Currency>
+                        <pfx3:Amount>
+                            <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/CreditAmt)"/>
+                        </pfx3:Amount>
+                    </pfx5:CreditInfo>
+                    <pfx5:DebitInfo>
+                        <pfx3:AccountNo>
+                            <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/DebitNo)"/>
+                        </pfx3:AccountNo>
+                        <pfx3:Currency>
+                            <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/DebitCurrency)"/>
+                        </pfx3:Currency>
+                        <pfx3:Amount>
+                            <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/DebitAmt)"/>
+                        </pfx3:Amount>
+                    </pfx5:DebitInfo>
+                    <pfx5:CreditDate>
+                        <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',substring(tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/CreditDate), 0,8))))"/>
+                    </pfx5:CreditDate>
+                    <pfx5:DebitDate>
+                        <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',substring(tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/DebitDate), 0,8))))"/>
+                    </pfx5:DebitDate>
+                    <pfx5:ProcessDate>
+                        <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',substring(tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/ProcessDate), 0,8))))"/>
+                    </pfx5:ProcessDate>
+                    <pfx5:NettingAmt>
+                        <xsl:value-of select="tib:trim($Parse-Data/Output/Rows/IBPSHV_Data[1]/NettingAmt)"/>
+                    </pfx5:NettingAmt>
+                </pfx5:FundXferInfoReq>
+            </pfx5:createFundReq>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignErrorMsg">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>624</pd:x>
+        <pd:y>212</pd:y>
+        <config>
+            <variableName>Errormessage</variableName>
+        </config>
+        <pd:inputBindings>
+            <ErrorMsg>
+                <xsl:value-of select="$RequestResponse/root/ns3:ServiceEnverlop/pfx2:ResponseStatus/pfx2:ErrorInfo[1]/pfx2:ErrorMessage"/>
+            </ErrorMsg>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>1192</pd:x>
+        <pd:y>55</pd:y>
+        <pd:width>527</pd:width>
+        <pd:height>454</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ResponseSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$RequestResponse/root/ns3:ServiceEnverlop/pfx2:ResponseStatus/pfx2:Status='0'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ParseTransExist</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$ErrorCodeRes/ErrorCodeRes ="6000" and $RequestResponse/root/ns3:ServiceEnverlop/pfx2:ResponseStatus/pfx2:Status='1'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ResponseError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$ErrorCodeRes !="6000" and $RequestResponse/root/ns3:ServiceEnverlop/pfx2:ResponseStatus/pfx2:Status='1'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignDataResponseTransExist</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignDataResponseSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignDataResponse</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseTransExist</pd:from>
+            <pd:to>ResponseTransExist</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseTransExist</pd:from>
+            <pd:to>AssignDataResponseTransExist</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseSuccess</pd:from>
+            <pd:to>AssignDataResponseSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseError</pd:from>
+            <pd:to>AssignDataResponse</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ResponseSuccess">
+            <pd:type>com.tibco.plugin.parse.RenderActivity</pd:type>
+            <pd:resourceType>ae.activities.RenderActivity</pd:resourceType>
+            <pd:x>1399</pd:x>
+            <pd:y>330</pd:y>
+            <config>
+                <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataOutput.sharedparse</ParseSharedConfig>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/*" element="pfx5:FundXferInfoRes"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <Rows>
+                    <IBPSHV_DataOut>
+                        <T24TransId>
+                            <xsl:value-of select="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx5:FundXferInfoRes[1]/pfx5:TransId"/>
+                        </T24TransId>
+                        <SystemType>
+                            <xsl:value-of select="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx5:FundXferInfoRes[1]/pfx5:SystemType"/>
+                        </SystemType>
+                        <SourceSystemId>
+                            <xsl:value-of select="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx5:FundXferInfoRes[1]/pfx5:SourceAppId"/>
+                        </SourceSystemId>
+                        <Status>
+                            <xsl:value-of select="&quot;6000&quot;"/>
+                        </Status>
+                        <PostingTime>
+                            <xsl:value-of select="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx5:FundXferInfoRes[1]/pfx5:PostingTime"/>
+                        </PostingTime>
+                    </IBPSHV_DataOut>
+                </Rows>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseTransExist">
+            <pd:type>com.tibco.plugin.parse.RenderActivity</pd:type>
+            <pd:resourceType>ae.activities.RenderActivity</pd:resourceType>
+            <pd:x>1470</pd:x>
+            <pd:y>431</pd:y>
+            <config>
+                <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataOutput.sharedparse</ParseSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <Rows>
+                    <IBPSHV_DataOut>
+                        <T24TransId>
+                            <xsl:value-of select="$ParseTransExist/Output/Rows/root[1]/TransID"/>
+                        </T24TransId>
+                        <SystemType>
+                            <xsl:value-of select="$ParseTransExist/Output/Rows/root[1]/SystemType"/>
+                        </SystemType>
+                        <SourceSystemId>
+                            <xsl:value-of select="$ParseTransExist/Output/Rows/root[1]/SourceSysId"/>
+                        </SourceSystemId>
+                        <Status>
+                            <xsl:value-of select="&quot;6000&quot;"/>
+                        </Status>
+                        <PostingTime>
+                            <xsl:value-of select="$ParseTransExist/Output/Rows/root[1]/PostingTime"/>
+                        </PostingTime>
+                    </IBPSHV_DataOut>
+                </Rows>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ParseTransExist">
+            <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+            <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+            <pd:x>1325</pd:x>
+            <pd:y>431</pd:y>
+            <config>
+                <InputType>String</InputType>
+                <Encoding>ASCII</Encoding>
+                <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/T24TransExist.sharedparse</ParseSharedConfig>
+                <SkipBlankLines>true</SkipBlankLines>
+                <ContinueonError>false</ContinueonError>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <text>
+                        <xsl:value-of select="$Errormessage/ErrorMsg"/>
+                    </text>
+                    <noOfRecords>
+                        <xsl:value-of select="1"/>
+                    </noOfRecords>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignDataResponse">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1585</pd:x>
+            <pd:y>192</pd:y>
+            <config>
+                <variableName>DataResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <DataResponse>
+                    <xsl:value-of select="$ResponseError/Text"/>
+                </DataResponse>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignDataResponseSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1552</pd:x>
+            <pd:y>340</pd:y>
+            <config>
+                <variableName>DataResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <DataResponse>
+                    <xsl:value-of select="$ResponseSuccess/Text"/>
+                </DataResponse>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignDataResponseTransExist">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1621</pd:x>
+            <pd:y>427</pd:y>
+            <config>
+                <variableName>DataResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <DataResponse>
+                    <xsl:value-of select="$ResponseTransExist/Text"/>
+                </DataResponse>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseError">
+            <pd:type>com.tibco.plugin.parse.RenderActivity</pd:type>
+            <pd:resourceType>ae.activities.RenderActivity</pd:resourceType>
+            <pd:x>1438</pd:x>
+            <pd:y>154</pd:y>
+            <config>
+                <ParseSharedConfig>/SharedResource/Schema/Global/System/IBPS/IBPSHV_DataOutput.sharedparse</ParseSharedConfig>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/*" element="pfx5:FundXferInfoRes"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <Rows>
+                    <IBPSHV_DataOut>
+                        <T24TransId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </T24TransId>
+                        <SystemType>
+                            <xsl:value-of select="$FundXferReq/pfx5:createFundReq/pfx5:FundXferInfoReq/pfx5:SystemType"/>
+                        </SystemType>
+                        <SourceSystemId>
+                            <xsl:value-of select="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx5:FundXferInfoRes[1]/pfx5:SourceAppId"/>
+                        </SourceSystemId>
+                        <Status>
+                            <xsl:value-of select="if ($ErrorCodeRes/ErrorCodeRes=&quot;-1&quot;) then &quot;6339&quot;&#xA;else $ErrorCodeRes/ErrorCodeRes"/>
+                        </Status>
+                        <PostingTime>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </PostingTime>
+                    </IBPSHV_DataOut>
+                </Rows>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="MapErrorCodeRes">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>742</pd:x>
+        <pd:y>82</pd:y>
+        <pd:width>372</pd:width>
+        <pd:height>249</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>ifThenElse</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetErrorMappingCode</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$RequestResponse/root/ns3:ServiceEnverlop/pfx2:ResponseStatus/pfx2:Status='1'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignErrorCode</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetErrorMappingCode</pd:from>
+            <pd:to>AssignErrorCode</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="AssignErrorCode">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1006</pd:x>
+            <pd:y>251</pd:y>
+            <config>
+                <variableName>ErrorCodeRes</variableName>
+            </config>
+            <pd:inputBindings>
+                <ErrorCodeRes>
+                    <xsl:value-of select="if ($GetErrorMappingCode/resultSet/outputSet/RETURN_VALUE=&quot;&quot;) then &quot;6339&quot;&#xA;else $GetErrorMappingCode/resultSet/outputSet/RETURN_VALUE"/>
+                </ErrorCodeRes>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetErrorMappingCode">
+            <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+            <pd:x>879</pd:x>
+            <pd:y>162</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <schema>ESB</schema>
+                <ProcedureName>FUNCGETERRORCODEMAPPING</ProcedureName>
+                <parameterTypes>
+                    <parameter>
+                        <colName>RETURN_VALUE</colName>
+                        <colType>5</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                    <parameter>
+                        <colName>ERRORMSGSOURCE</colName>
+                        <colType>1</colType>
+                        <dataType>12</dataType>
+                        <typeName>VARCHAR2</typeName>
+                    </parameter>
+                </parameterTypes>
+            </config>
+            <pd:inputBindings>
+                <inputs>
+                    <inputSet>
+                        <ERRORMSGSOURCE>
+                            <xsl:value-of select="$Errormessage/ErrorMsg"/>
+                        </ERRORMSGSOURCE>
+                    </inputSet>
+                </inputs>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>AssignDataInput</pd:from>
+        <pd:to>Parse Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Data</pd:from>
+        <pd:to>SetDocumentReq</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetDocumentReq</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>AssignErrorMsg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapErrorCodeRes</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignErrorMsg</pd:from>
+        <pd:to>MapErrorCodeRes</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>AssignDataInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

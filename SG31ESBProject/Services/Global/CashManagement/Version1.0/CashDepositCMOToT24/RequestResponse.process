@@ -1,0 +1,1326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="http://temenos.com/SBV.INTE.T24.CMO.WS" xmlns:pfx15="sbv/global/cashmanagement/cashdeposit/version1.0" xmlns:pfx14="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagement/CashDeposit/CashDeposit.xsd" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx13="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagemen/CashDeposit.xsd" xmlns:pfx12="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx19="http://tempuri.org/" xmlns:pfx18="http://temenos.com/SBV.INTE.T24.CMO.PORTAL.WS" xmlns:pfx17="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns13="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns6="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" xmlns:ns10="sbv/common/exceptionhandling/exception/1.0" xmlns:ns11="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/702/basic/functionModules" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/CSDAccountInfo/CSDAccountInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagemen/CashDeposit.xsd" schemaLocation="/SharedResource/Schema/Global/CashManagement/CashDeposit.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="sbv/global/cashmanagement/cashdeposit/version1.0" schemaLocation="/SharedResource/Schema/Global/CashManagement/CashDeposit/CashDeposit.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.CMO.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/CashManagement/CashDeposit/SBV.INTE.T24.CMO.WS_xsd1.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" location="/SharedResource/Schema/Global/Account/CSDAccountInfo/CSDAccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.GOLD.AUCTION.MANAGEMENT.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.CMO.WS" location="/SharedResource/Schema/Global/System/T24/CashManagement/CashDeposit/SBV.INTE.T24.CMO.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.CMO.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.CMO.PORTAL/SBV.INTE.T24.CMO.PORTAL.wsdl"/>
+    <pd:name>Services/Global/CashManagement/Version1.0/CashDepositCMOToT24/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <ns3:CharSet>
+                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                    </ns3:CharSet>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="&quot;1.0&quot;"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="&quot;3&quot;"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="&quot;CMO&quot;"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="&quot;4&quot;"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="&quot;T24&quot;"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/TELLERType/@id"/>
+                    </ns3:MsgId>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="&quot;1000&quot;"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="&quot;CashManagement&quot;"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns3:CreatedDate>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/Root/Status"/>
+                    </ns3:Status>
+                    <xsl:if test="$ResponseResult/Root/Msg">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/Root/Msg"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <StartTime>1505982521000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%CMO/TimeInterval%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>987</pd:endX>
+    <pd:endY>321</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponeList>
+            <xsd:element name="ResponseList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ResponseDetail" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="Id" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponeList>
+        <ResponseResult>
+            <xsd:element name="Root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/CSDAccountInfo/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1094</pd:x>
+        <pd:y>129</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="QueryCoCode">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>197</pd:x>
+        <pd:y>306</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>select * from companycodemapping where CMO_CODE =?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CMO_CODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>MNEMONIC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>T24_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AGENT_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERP_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BANKCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>NOTES</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CMO_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <CMO_CODE>
+                    <xsl:choose>
+                        <xsl:when test="exists($QueryCMODeposit/resultSet/Record[1]/COMPANYCODE)">
+                            <xsl:value-of select="$QueryCMODeposit/resultSet/Record[1]/COMPANYCODE"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CMO_CODE>
+                <timeout>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/AMXSOADB/Timeout"/>
+                </timeout>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>887</pd:x>
+        <pd:y>321</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat($ServiceVariables/root/ServiceName,': End ',$ServiceVariables/root/OperationName)"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <pfx:SOAEnvelope>
+                    <pfx:SOAServiceHeader>
+                        <pfx:AppHdr>
+                            <ns3:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns3:CharSet>
+                            <ns3:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns3:ServVersion>
+                            <ns3:From>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;3&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CMO&quot;"/>
+                                </ns3:Name>
+                            </ns3:From>
+                            <ns3:To>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;4&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns3:Name>
+                            </ns3:To>
+                            <ns3:MsgId>
+                                <xsl:value-of select="$QueryCMODeposit/resultSet/Record[1]/SOURCEAPPID"/>
+                            </ns3:MsgId>
+                            <ns3:MsgSrcId>
+                                <xsl:value-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/TELLERType/@id"/>
+                            </ns3:MsgSrcId>
+                            <ns3:BizServ>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1004&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CashDepositCMOToT24&quot;"/>
+                                </ns3:Name>
+                            </ns3:BizServ>
+                            <ns3:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns3:CreatedDate>
+                        </pfx:AppHdr>
+                        <pfx:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </pfx:SOAMsgId>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </pfx:OperationName>
+                        <pfx:ProcessName>
+                            <xsl:value-of select="&quot;CashDepositCMOToT24&quot;"/>
+                        </pfx:ProcessName>
+                    </pfx:SOAServiceHeader>
+                    <pfx:ServiceBody>
+                        <pfx2:ServiceEnverlop>
+                            <ns3:AppHdr>
+                                <ns3:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns3:CharSet>
+                                <ns3:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns3:ServVersion>
+                                <ns3:From>
+                                    <ns3:Id>
+                                        <xsl:value-of select="&quot;3&quot;"/>
+                                    </ns3:Id>
+                                    <ns3:Name>
+                                        <xsl:value-of select="&quot;CMO&quot;"/>
+                                    </ns3:Name>
+                                </ns3:From>
+                                <ns3:To>
+                                    <ns3:Id>
+                                        <xsl:value-of select="&quot;4&quot;"/>
+                                    </ns3:Id>
+                                    <ns3:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </ns3:Name>
+                                </ns3:To>
+                                <ns3:MsgId>
+                                    <xsl:value-of select="$QueryCMODeposit/resultSet/Record[1]/SOURCEAPPID"/>
+                                </ns3:MsgId>
+                                <ns3:MsgSrcId>
+                                    <xsl:value-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/TELLERType/@id"/>
+                                </ns3:MsgSrcId>
+                                <ns3:BizServ>
+                                    <ns3:Id>
+                                        <xsl:value-of select="&quot;1002&quot;"/>
+                                    </ns3:Id>
+                                    <ns3:Name>
+                                        <xsl:value-of select="&quot;CashDepositCMOToT24&quot;"/>
+                                    </ns3:Name>
+                                </ns3:BizServ>
+                                <ns3:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns3:CreatedDate>
+                            </ns3:AppHdr>
+                            <ns3:ResponseStatus>
+                                <ns3:Status>
+                                    <xsl:value-of select="$ResponseResult/Root/Status"/>
+                                </ns3:Status>
+                                <xsl:if test="$ResponseResult/Root/Msg">
+                                    <ns3:ErrorMessage>
+                                        <xsl:value-of select="$ResponseResult/Root/Msg"/>
+                                    </ns3:ErrorMessage>
+                                </xsl:if>
+                                <xsl:for-each select="$ResponeList/ResponseList/ResponseDetail">
+                                    <ns3:ErrorInfo>
+                                        <xsl:if test="Id">
+                                            <ns3:Id>
+                                                <xsl:value-of select="Id"/>
+                                            </ns3:Id>
+                                        </xsl:if>
+                                        <xsl:if test="Status">
+                                            <ns3:ErrorCode>
+                                                <xsl:value-of select="Status"/>
+                                            </ns3:ErrorCode>
+                                        </xsl:if>
+                                        <xsl:if test="Message">
+                                            <ns3:ErrorMessage>
+                                                <xsl:value-of select="Message"/>
+                                            </ns3:ErrorMessage>
+                                        </xsl:if>
+                                    </ns3:ErrorInfo>
+                                </xsl:for-each>
+                            </ns3:ResponseStatus>
+                            <ServiceBody>
+                                <xsl:copy-of select="$QueryCMODeposit/resultSet"/>
+                                <xsl:copy-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse"/>
+                            </ServiceBody>
+                        </pfx2:ServiceEnverlop>
+                    </pfx:ServiceBody>
+                </pfx:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1097</pd:x>
+        <pd:y>318</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns12:EngineLog>
+                    <ns12:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns12:ServiceName>
+                    <ns12:Message>
+                        <xsl:value-of select="concat($ServiceVariables/root/ServiceName,': End ',$ServiceVariables/root/OperationName)"/>
+                    </ns12:Message>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns12:Category>
+                    <ns12:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns12:TrackingId>
+                </ns12:EngineLog>
+                <pfx:SOAEnvelope>
+                    <pfx:SOAServiceHeader>
+                        <pfx:AppHdr>
+                            <ns3:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </ns3:CharSet>
+                            <ns3:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </ns3:ServVersion>
+                            <ns3:From>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;3&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CMO&quot;"/>
+                                </ns3:Name>
+                            </ns3:From>
+                            <ns3:To>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;4&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </ns3:Name>
+                            </ns3:To>
+                            <ns3:MsgId>
+                                <xsl:value-of select="$QueryCMODeposit/resultSet/Record[1]/SOURCEAPPID"/>
+                            </ns3:MsgId>
+                            <ns3:MsgSrcId>
+                                <xsl:value-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/TELLERType/@id"/>
+                            </ns3:MsgSrcId>
+                            <ns3:BizServ>
+                                <ns3:Id>
+                                    <xsl:value-of select="&quot;1000&quot;"/>
+                                </ns3:Id>
+                                <ns3:Name>
+                                    <xsl:value-of select="&quot;CashDepositCMOToT24&quot;"/>
+                                </ns3:Name>
+                            </ns3:BizServ>
+                            <ns3:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </ns3:CreatedDate>
+                        </pfx:AppHdr>
+                        <pfx:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </pfx:SOAMsgId>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </pfx:OperationName>
+                        <pfx:ProcessName>
+                            <xsl:value-of select="&quot;CashDepositCMOToT24&quot;"/>
+                        </pfx:ProcessName>
+                    </pfx:SOAServiceHeader>
+                    <pfx:ServiceBody>
+                        <xsl:copy-of select="$ResponeList/ResponseList"/>
+                        <xsl:copy-of select="$_error/ns:ErrorReport"/>
+                        <xsl:copy-of select="$QueryCoCode/resultSet"/>
+                    </pfx:ServiceBody>
+                </pfx:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Start">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>57</pd:x>
+        <pd:y>182</pd:y>
+        <config>
+            <variableName>ServiceVariables</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </startTime>
+                <ServiceName>
+                    <xsl:value-of select="&quot;CashManagement&quot;"/>
+                </ServiceName>
+                <OperationName>
+                    <xsl:value-of select="&quot;CashDeposit&quot;"/>
+                </OperationName>
+                <SOAMsgId>
+                    <xsl:value-of select="concat(generate-id($_processContext/ns:ProcessContext), tib:timestamp())"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="QueryCoCodeErr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>203</pd:x>
+        <pd:y>557</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="concat(&quot;Query CoCode Error: &quot;, $_error/ns:ErrorReport/Msg)"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="QueryCMODeposit">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>63</pd:x>
+        <pd:y>305</pd:y>
+        <config>
+            <timeout>%%CMO/Timeout%%</timeout>
+            <commit>false</commit>
+            <maxRows>1000</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>select * from CMO_DEPOSIT where CheckCode = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CheckCode</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>SOURCEAPPID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BANKCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>COMPANYCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONTENT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AMOUNTBYNUMBER</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AMOUNTBYWORD</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>VALUEDATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CURRENCY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>STATUS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ACCOUNTNUMBER</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DEPOSITOR</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DEPOSITORADDRESS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>LINEID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MONEYCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BATCH</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BUNCH</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>PIECE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CMOREFERENCY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CHECKCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERRORMESSAGE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <CheckCode>
+                    <xsl:value-of select="&quot;01&quot;"/>
+                </CheckCode>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="QueryDepositErr">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>189</pd:x>
+        <pd:y>663</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="concat(&quot;Query Deposit Error: &quot;, $_error/ns:ErrorReport/Msg)"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="NoRecord">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>65</pd:x>
+        <pd:y>741</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="&quot;No new records&quot;"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>295</pd:x>
+        <pd:y>111</pd:y>
+        <pd:width>500</pd:width>
+        <pd:height>406</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$QueryCMODeposit/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>currentRecord</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CheckSourceSYS</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JDBC Update</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckSourceSYS</pd:from>
+            <pd:to>T24Err</pd:to>
+            <pd:xpathDescription>T24Err</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/Status/successIndicator!="Success"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckSourceSYS</pd:from>
+            <pd:to>Null</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Null</pd:from>
+            <pd:to>T24Err</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckSourceSYS</pd:from>
+            <pd:to>T24Inprocess</pd:to>
+            <pd:xpathDescription>T24Inprocess</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus="Null"
+or $CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus="INAU"
+or $CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus="REVE"
+or $CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus="RNAU"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>T24Err</pd:from>
+            <pd:to>JDBC Update</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>T24Inprocess</pd:from>
+            <pd:to>JDBC Update</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Success</pd:from>
+            <pd:to>JDBC Update</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckSourceSYS</pd:from>
+            <pd:to>Success</pd:to>
+            <pd:xpathDescription>Exist</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus="IHLD"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckSourceSYS</pd:from>
+            <pd:to>CashDeposit</pd:to>
+            <pd:xpathDescription>EditOrCreate</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>empty($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType)
+and $CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/Status/successIndicator = 'Success'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckSourceSYS</pd:from>
+            <pd:to>NoResponse</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CashDeposit</pd:from>
+            <pd:to>NoResponse</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CashDeposit</pd:from>
+            <pd:to>SuccessDeposit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SuccessDeposit</pd:from>
+            <pd:to>JDBC Update</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>NoResponse</pd:from>
+            <pd:to>JDBC Update</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CashDeposit">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>531</pd:x>
+            <pd:y>391</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx18:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>CMOCashDepositLocal</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSCMO%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx18:CMOCashDepositLocal>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="$QueryCoCode/resultSet/Record[1]/T24_CODE"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24Pass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="concat(&quot;ERP&quot;,tib:right($QueryCoCode/resultSet/Record[1]/T24_CODE, 5))"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <TELLERSBVCMOLCYCASHIN16IHOLDType>
+                            <TransactionCode>
+                                <xsl:value-of select="if($currentRecord/Record/STATUS=&quot;1021&quot;) then &#xA;&quot;16&quot; else if($currentRecord/Record/STATUS=&quot;1022&quot;) then &#xA;&quot;17&quot; else if($currentRecord/Record/STATUS=&quot;1023&quot;) then &#xA;&quot;18&quot; else &quot;19&quot;"/>
+                            </TransactionCode>
+                            <Currency>
+                                <xsl:value-of select="&quot;VND&quot;"/>
+                            </Currency>
+                            <DepositAmount>
+                                <xsl:value-of select="$currentRecord/Record/AMOUNTBYNUMBER"/>
+                            </DepositAmount>
+                            <ValueDate>
+                                <xsl:value-of select="$currentRecord/Record/VALUEDATE"/>
+                            </ValueDate>
+                            <Narrative>
+                                <xsl:value-of select="$currentRecord/Record/CONTENT"/>
+                            </Narrative>
+                            <CMOreferency>
+                                <xsl:value-of select="$currentRecord/Record/CMOREFERENCY"/>
+                            </CMOreferency>
+                            <TtDepositor>
+                                <xsl:value-of select="$currentRecord/Record/DEPOSITOR"/>
+                            </TtDepositor>
+                            <TtDepositorAd>
+                                <xsl:value-of select="$currentRecord/Record/DEPOSITORADDRESS"/>
+                            </TtDepositorAd>
+                            <BankingCode>
+                                <xsl:value-of select="$currentRecord/Record/BANKCODE"/>
+                            </BankingCode>
+                        </TELLERSBVCMOLCYCASHIN16IHOLDType>
+                    </pfx18:CMOCashDepositLocal>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CheckSourceSYS">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>377</pd:x>
+            <pd:y>301</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx18:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>CheckSourceReferency</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSCMO%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx18:CheckSourceReferency>
+                        <WebRequestCommon>
+                            <xsl:if test="$QueryCoCode/resultSet/Record[1]/T24_CODE">
+                                <company>
+                                    <xsl:value-of select="$QueryCoCode/resultSet/Record[1]/T24_CODE"/>
+                                </company>
+                            </xsl:if>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24Pass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="concat(&quot;ERP&quot;,tib:right($QueryCoCode/resultSet/Record[1]/T24_CODE, 5))"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <SBVCHECKSOURCEREFType>
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;@ID&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$currentRecord/Record/CMOREFERENCY"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="&quot;EQ&quot;"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </SBVCHECKSOURCEREFType>
+                    </pfx18:CheckSourceReferency>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="T24Err">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>436</pd:x>
+            <pd:y>186</pd:y>
+            <config>
+                <variableName>ResponeList</variableName>
+            </config>
+            <pd:inputBindings>
+                <ResponseList>
+                    <xsl:copy-of select="$ResponeList/ResponseList/ResponseDetail"/>
+                    <ResponseDetail>
+                        <Id>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </Id>
+                        <Status>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </Status>
+                        <xsl:if test="not(($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/Status/messages[1]/@xsi:nil=(&quot;true&quot;)) or ($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/Status/messages[1]/@xsi:nil=(&quot;1&quot;)))">
+                            <Message>
+                                <xsl:value-of select="$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/Status/messages[1]"/>
+                            </Message>
+                        </xsl:if>
+                    </ResponseDetail>
+                </ResponseList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Null">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>328</pd:x>
+            <pd:y>187</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="T24Inprocess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>545</pd:x>
+            <pd:y>210</pd:y>
+            <config>
+                <variableName>ResponeList</variableName>
+            </config>
+            <pd:inputBindings>
+                <ResponseList>
+                    <xsl:copy-of select="$ResponeList/ResponseList/ResponseDetail"/>
+                    <ResponseDetail>
+                        <xsl:if test="$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/TransactionID">
+                            <Id>
+                                <xsl:value-of select="$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/TransactionID"/>
+                            </Id>
+                        </xsl:if>
+                        <Status>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="if ($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus=&quot;Null&quot;) then &#xA;&quot;Giao dich da duoc duyet trong T24&quot;&#xA;else if  ($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus=&quot;INAU&quot;)&#xA;then &quot;Giao dich da duoc commit trong T24 duoi dang 1 cap duyet&quot; &#xA;else if ($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus=&quot;REVE&quot;)&#xA; then &quot;Giao dich reverse trong T24, nhung chua duoc duyet&quot;&#xA;else if ($CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/RecordStatus=&quot;RNAU&quot;)&#xA;then &quot;Giao dich da duoc reverse trong T24&quot;&#xA;else &quot;&quot;"/>
+                        </Message>
+                    </ResponseDetail>
+                </ResponseList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Success">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>542</pd:x>
+            <pd:y>298</pd:y>
+            <config>
+                <variableName>ResponeList</variableName>
+            </config>
+            <pd:inputBindings>
+                <ResponseList>
+                    <xsl:copy-of select="$ResponeList/ResponseList/ResponseDetail"/>
+                    <ResponseDetail>
+                        <Id>
+                            <xsl:value-of select="$CheckSourceSYS/outputMessage/pfx18:CheckSourceReferencyResponse/SBVCHECKSOURCEREFType[1]/gSBVCHECKSOURCEREFDetailType/mSBVCHECKSOURCEREFDetailType[1]/TransactionID"/>
+                        </Id>
+                        <Status>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="&quot;Existing in T24&quot;"/>
+                        </Message>
+                    </ResponseDetail>
+                </ResponseList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="JDBC Update">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>661</pd:x>
+            <pd:y>299</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <statement>update CMO_DEPOSIT set 
+	SOURCEAPPID = ?,
+	CHECKCODE = ?, 
+	ERRORMESSAGE  = ?
+where CMOreferency = ? 
+and CHECKCODE='01'</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>SOURCEAPPID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CHECKCODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ERRORMESSAGE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CMOREFERENCY</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <SOURCEAPPID>
+                        <xsl:choose>
+                            <xsl:when test="exists(if ($currentRecord/Record/SOURCEAPPID !=&quot;&quot;) then $currentRecord/Record/SOURCEAPPID else $ResponeList/ResponseList/ResponseDetail[last()]/Id)">
+                                <xsl:value-of select="if ($currentRecord/Record/SOURCEAPPID !=&quot;&quot;) then $currentRecord/Record/SOURCEAPPID else $ResponeList/ResponseList/ResponseDetail[last()]/Id"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </SOURCEAPPID>
+                    <CHECKCODE>
+                        <xsl:value-of select="if ($ResponeList/ResponseList/ResponseDetail[last()]/Status = '0') then &quot;02&quot; else &quot;03&quot;"/>
+                    </CHECKCODE>
+                    <ERRORMESSAGE>
+                        <xsl:choose>
+                            <xsl:when test="exists($ResponeList/ResponseList/ResponseDetail[last()]/Message)">
+                                <xsl:value-of select="$ResponeList/ResponseList/ResponseDetail[last()]/Message"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </ERRORMESSAGE>
+                    <CMOREFERENCY>
+                        <xsl:choose>
+                            <xsl:when test="exists($currentRecord/Record/CMOREFERENCY)">
+                                <xsl:value-of select="$currentRecord/Record/CMOREFERENCY"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </CMOREFERENCY>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="NoResponse">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>377</pd:x>
+            <pd:y>464</pd:y>
+            <config>
+                <variableName>ResponeList</variableName>
+            </config>
+            <pd:inputBindings>
+                <ResponseList>
+                    <xsl:copy-of select="$ResponeList/ResponseList/ResponseDetail"/>
+                    <ResponseDetail>
+                        <xsl:if test="$currentRecord/Record/CMOREFERENCY">
+                            <Id>
+                                <xsl:value-of select="$currentRecord/Record/CMOREFERENCY"/>
+                            </Id>
+                        </xsl:if>
+                        <Status>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="concat(&quot;Call T24 WS ERR: &quot;, $_error/ns:ErrorReport/Msg)"/>
+                        </Message>
+                    </ResponseDetail>
+                </ResponseList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SuccessDeposit">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>728</pd:x>
+            <pd:y>409</pd:y>
+            <config>
+                <variableName>ResponeList</variableName>
+            </config>
+            <pd:inputBindings>
+                <ResponseList>
+                    <xsl:copy-of select="$ResponeList/ResponseList/ResponseDetail"/>
+                    <ResponseDetail>
+                        <Id>
+                            <xsl:value-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/Status/transactionId"/>
+                        </Id>
+                        <Status>
+                            <xsl:value-of select="&quot;0&quot;"/>
+                        </Status>
+                        <xsl:if test="not(($CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/Status/messages[1]/@xsi:nil=(&quot;true&quot;)) or ($CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/Status/messages[1]/@xsi:nil=(&quot;1&quot;)))">
+                            <Message>
+                                <xsl:value-of select="$CashDeposit/outputMessage/pfx18:CMOCashDepositLocalResponse/Status/messages[1]"/>
+                            </Message>
+                        </xsl:if>
+                    </ResponseDetail>
+                </ResponseList>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>977</pd:x>
+        <pd:y>204</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>Start</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>QueryCMODeposit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryCMODeposit</pd:from>
+        <pd:to>NoRecord</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryCMODeposit</pd:from>
+        <pd:to>QueryDepositErr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryDepositErr</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>NoRecord</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryCMODeposit</pd:from>
+        <pd:to>QueryCoCode</pd:to>
+        <pd:xpathDescription>HasRecord</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($QueryCMODeposit/resultSet/Record) &gt; 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryCoCode</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryCoCode</pd:from>
+        <pd:to>QueryCoCodeErr</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryCoCodeErr</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

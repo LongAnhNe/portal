@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:pfx13="http://www.temenos.com/T24/event/FTSBVCLR/FTSBVCLR" xmlns:pfx12="http://xmlns.example.com/1469432349038" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx10="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx5="http://temenos.com/SBV.INTE.T24.VSD.WS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:pfx3="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.gov.vn/Schema/Global/System/VSD/BondPayment.xsd" xmlns:pfx8="http://www.sbv.gov.vn/global/system/ESB/T24TTBTDT/version1.0/BTCTUpdateModel.xsd" xmlns:pfx7="http://temenos.com/SBV.FT.TTBT.PAYMENT.WS" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.VSD.WS/SBV.INTE.T24.VSD.WS.wsdl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetExRateFrT24" xmlns:ns1="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" xmlns:ns4="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCurrencyFrT24" xmlns:ns3="http://www.temenos.com/T24/event/CreateCurrency/CreateCurrencyFlow" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/ExchangeRatePublish/ExchangeRateFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/ExchangeRatePublish/ExchangeRatePublish-ExchangeRateFlow.xsd"/>
+    <xsd:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService" schemaLocation="/SharedResource/Schema/Global/System/CSD/CsdService/T24PostToCsdService.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CreateCurrency/CreateCurrencyFlow" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CurrencyPublic/CreateCurrency-CreateCurrencyFlow.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/Schema/Global/System/VSD/BondPayment.xsd" schemaLocation="/SharedResource/Schema/Global/System/VSD/BondPayment.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.VSD.WS/SBV.INTE.T24.VSD.WS.wsdl"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.VSD.WS"/>
+    <wsdl:import namespace="http://fis.vn/iMaximusGateway/T24PostToCsdService" location="/SharedResource/Schema/Global/System/CSD/CsdService/T24PostToCsdService.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.VSD.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.VSD.WS/SBV.INTE.T24.VSD.WS.wsdl"/>
+    <pd:name>Services/Global/System/VSD/BondPayment/Version1.0/createBondPayment/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>62</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns:AppHdr"/>
+                <ns:ResponseStatus>
+                    <ns:Status>
+                        <xsl:value-of select="$ResponseResult/root/Status"/>
+                    </ns:Status>
+                    <xsl:if test="$ResponseResult/root/Message">
+                        <ns:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/root/Message"/>
+                        </ns:ErrorMessage>
+                    </xsl:if>
+                    <xsl:for-each select="$CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/SBVVSDFORMType/gSRCTRANSID/mSRCTRANSID">
+                        <ns:ErrorInfo>
+                            <xsl:if test="SRCTRANSID">
+                                <ns:Id>
+                                    <xsl:value-of select="SRCTRANSID"/>
+                                </ns:Id>
+                            </xsl:if>
+                            <xsl:if test="STATUS">
+                                <ns:ErrorCode>
+                                    <xsl:value-of select="STATUS"/>
+                                </ns:ErrorCode>
+                            </xsl:if>
+                            <xsl:if test="MAPERROR">
+                                <ns:ErrorMessage>
+                                    <xsl:value-of select="MAPERROR"/>
+                                </ns:ErrorMessage>
+                            </xsl:if>
+                        </ns:ErrorInfo>
+                    </xsl:for-each>
+                </ns:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$CallT24WS/outputMessage"/>
+                    <xsl:copy-of select="$Map-Data/pfx9:BondListPaymentReq"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>796</pd:endX>
+    <pd:endY>182</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/global/system/vsd/bondpayment/createBondPayment/RequestResponse/1.0</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>795</pd:x>
+        <pd:y>515</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CallT24WS">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>400</pd:x>
+        <pd:y>189</pd:y>
+        <config>
+            <timeout>%%T24WS/T24WSVSDTimeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx5:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>VSDCreateForm1andForm4</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSVSD%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx5:VSDCreateForm1andForm4>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="'VN0010001'"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/T24Authentication/T24VSDPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns6:GlobalVariables/T24Authentication/T24VSDUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <OfsFunction>
+                        <activityName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </activityName>
+                        <assignReason>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </assignReason>
+                        <dueDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </dueDate>
+                        <extProcess>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcess>
+                        <extProcessID>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcessID>
+                        <gtsControl>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </gtsControl>
+                        <messageId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </messageId>
+                        <noOfAuth>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </noOfAuth>
+                        <owner>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </owner>
+                        <replace>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </replace>
+                        <startDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </startDate>
+                        <user>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </user>
+                    </OfsFunction>
+                    <SBVVSDFORMWSINPType>
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="$Map-Data/pfx9:BondListPaymentReq/ns:AppHdr/ns:MsgId"/>
+                        </xsl:attribute>
+                        <FormName>
+                            <xsl:value-of select="&quot;FORM1&quot;"/>
+                        </FormName>
+                        <FormSrcId>
+                            <xsl:value-of select="$Map-Data/pfx9:BondListPaymentReq/ns:AppHdr/ns:MsgId"/>
+                        </FormSrcId>
+                        <SendingNumber>
+                            <xsl:value-of select="$Map-Data/pfx9:BondListPaymentReq/pfx9:BondListPayment/pfx9:SendingNumber"/>
+                        </SendingNumber>
+                        <FinishFlag>
+                            <xsl:value-of select="if ($Map-Data/pfx9:BondListPaymentReq/pfx9:BondListPayment/pfx9:FinishFlag = 'true') then 'TRUE'  else  'FALSE'"/>
+                        </FinishFlag>
+                        <gSRCTRANSID>
+                            <xsl:attribute name="g">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <xsl:for-each select="$Map-Data/pfx9:BondListPaymentReq/pfx9:BondListPayment/pfx9:BondListPaymentDetail">
+                                <mSRCTRANSID>
+                                    <xsl:attribute name="m">
+                                        <xsl:value-of select="1"/>
+                                    </xsl:attribute>
+                                    <SrcTransID>
+                                        <xsl:value-of select="pfx9:SrcTransID"/>
+                                    </SrcTransID>
+                                    <TransDate>
+                                        <xsl:value-of select="pfx9:TransDate"/>
+                                    </TransDate>
+                                    <ValueDate>
+                                        <xsl:value-of select="pfx9:ValueDate"/>
+                                    </ValueDate>
+                                    <BondCode>
+                                        <xsl:value-of select="pfx9:BondCode"/>
+                                    </BondCode>
+                                    <SendingBank>
+                                        <xsl:value-of select="pfx9:SendingBank"/>
+                                    </SendingBank>
+                                    <RecevingBank>
+                                        <xsl:value-of select="pfx9:RecevingBank"/>
+                                    </RecevingBank>
+                                    <Amount>
+                                        <xsl:value-of select="pfx9:Amount"/>
+                                    </Amount>
+                                    <Currency>
+                                        <xsl:value-of select="pfx9:Currency"/>
+                                    </Currency>
+                                    <Notes>
+                                        <xsl:value-of select="pfx9:Notes"/>
+                                    </Notes>
+                                </mSRCTRANSID>
+                            </xsl:for-each>
+                        </gSRCTRANSID>
+                    </SBVVSDFORMWSINPType>
+                </pfx5:VSDCreateForm1andForm4>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>240</pd:x>
+        <pd:y>191</pd:y>
+        <config>
+            <element ref="pfx9:BondListPaymentReq"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx9:BondListPayment"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx9:BondListPaymentReq>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns:AppHdr"/>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx9:BondListPayment"/>
+            </pfx9:BondListPaymentReq>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ErrT24WS">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>589</pd:x>
+        <pd:y>342</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="concat($_error/ns5:ErrorReport/MsgCode, &quot; &quot;,$_error/ns5:ErrorReport/Msg, &quot; Call T24 WS Error&quot;)"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignOtherwise">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>595</pd:x>
+        <pd:y>49</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="if ($CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/Status/successIndicator=&quot;Success&quot;&#xA;and $CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/SBVVSDFORMType/GENERATELSTAT= 'PROCESSED'&#xA;and $CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/SBVVSDFORMType/gSRCTRANSID/mSRCTRANSID/STATUS='SUCCESS') then &quot;0&quot; else &quot;1&quot;"/>
+                </Status>
+                <xsl:if test="not(($CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/Status/messages[1]/@xsi:nil=(&quot;true&quot;)) or ($CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/Status/messages[1]/@xsi:nil=(&quot;1&quot;)))">
+                    <Message>
+                        <xsl:value-of select="$CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/Status/messages[1]"/>
+                    </Message>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignEx">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>795</pd:x>
+        <pd:y>398</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;createBondPayment Exception&quot;"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignExist">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>594</pd:x>
+        <pd:y>185</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;Already Exist&quot;"/>
+                </Message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>CallT24WS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24WS</pd:from>
+        <pd:to>ErrT24WS</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24WS</pd:from>
+        <pd:to>AssignOtherwise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>AssignEx</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignEx</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignOtherwise</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrT24WS</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24WS</pd:from>
+        <pd:to>AssignExist</pd:to>
+        <pd:xpathDescription>Exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/Status/successIndicator='T24Error'
+and contains($CallT24WS/outputMessage/pfx5:VSDCreateForm1andForm4Response/Status/messages[1], 'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignExist</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

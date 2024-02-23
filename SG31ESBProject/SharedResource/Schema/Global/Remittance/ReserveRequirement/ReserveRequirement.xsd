@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ReserveRequirement="schema://www.sbv.gov.vn/schema/global/remittance/ReserveRequirement/ReserveRequirement.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ns0="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBServiceResponse.xsd"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/remittance/ReserveRequirement/ReserveRequirement.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../../System/ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="saveRRReportRequest" type="ReserveRequirement:saveRRReportRequestType"/>
+	<xs:complexType name="saveRRReportRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:saveRRReportRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="saveRRReportRequestBody" type="ReserveRequirement:saveRRReportRequestBodyType"/>
+	<xs:complexType name="saveRRReportRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CUSID" type="xs:string" minOccurs="0"/>
+			<xs:element ref="ReserveRequirement:saveRRReportRequestBodyList" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="saveRRReportResponse" type="ReserveRequirement:saveRRReportResponseType"/>
+	<xs:complexType name="saveRRReportResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:saveRRReportResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="saveRRReportResponseBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ServiceStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+				<xs:element name="RecordStatus" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="saveRRReportResponseBodyType"/>
+	<xs:element name="ESBRequestAdd" type="ReserveRequirement:ESBRequestAddType"/>
+	<xs:complexType name="ESBRequestAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBResponseAdd" type="ReserveRequirement:ESBResponseAddType"/>
+	<xs:complexType name="ESBResponseAddType">
+		<xs:sequence>
+			<xs:element name="test" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState" type="ReserveRequirement:ESBServiceStateType"/>
+	<xs:complexType name="ESBServiceStateType">
+		<xs:sequence>
+			<xs:element name="Status" type="xs:short" minOccurs="0"/>
+			<xs:element name="ErrorMessage" type="xs:string" minOccurs="0"/>
+			<xs:element name="NotifyMsg" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorExist" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="Unique_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="timestamps" type="xs:long" minOccurs="0"/>
+			<xs:element name="CurrentDateTime" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="saveRRReportRequestBodyList" type="ReserveRequirement:saveRRReportRequestBodyListType"/>
+	<xs:complexType name="saveRRReportRequestBodyListType">
+		<xs:sequence>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			<xs:element name="DepUnder12m" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="DepOver12m" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="DepOverSea" type="xs:decimal" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCRRViewRequest" type="ReserveRequirement:getCRRViewRequestType"/>
+	<xs:complexType name="getCRRViewRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:getCRRViewRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="getCRRViewRequestBody" type="ReserveRequirement:getCRRViewRequestBodyType"/>
+	<xs:complexType name="getCRRViewRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CUSID" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCRRViewResponse" type="ReserveRequirement:getCRRViewResponseType"/>
+	<xs:complexType name="getCRRViewResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:getCRRViewResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="getCRRViewResponseBody" type="ReserveRequirement:getCRRViewResponseBodyType"/>
+	<xs:complexType name="getCRRViewResponseBodyType">
+		<xs:sequence>
+			<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			<xs:element ref="ReserveRequirement:getCRRViewResponseBodyList" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCRRViewResponseBodyList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CURRENCY" type="xs:string" minOccurs="0"/>
+				<xs:element name="CRR.REQ.AMT" type="xs:string" minOccurs="0"/>
+				<xs:element name="CRR.ACTUAL.AMT" type="xs:string" minOccurs="0"/>
+				<xs:element name="INT.EXC.AMT" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ReserveRequirement:ESBRequestAdd"/>
+				<xs:element ref="ReserveRequirement:ESBResponseAdd"/>
+				<xs:element ref="ReserveRequirement:ESBServiceState"/>
+				<xs:element ref="ReserveRequirement:getCRRViewRequest"/>
+				<xs:element ref="ReserveRequirement:getCRRViewResponse"/>
+				<xs:element ref="ReserveRequirement:saveRRReportRequest"/>
+				<xs:element ref="ReserveRequirement:saveRRReportResponse"/>
+				<xs:element ref="ReserveRequirement:ENQCRRPaymentAccountRequest"/>
+				<xs:element ref="ReserveRequirement:ENQCRRPaymentAccountResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQCRRPaymentAccountRequest" type="ReserveRequirement:ENQCRRPaymentAccountRequestType"/>
+	<xs:complexType name="ENQCRRPaymentAccountRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:ENQCRRPaymentAccountRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQCRRPaymentAccountRequestBody" type="ReserveRequirement:ENQCRRPaymentAccountRequestBodyType"/>
+	<xs:complexType name="ENQCRRPaymentAccountRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CUSID" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ENQCRRPaymentAccountResponse" type="ReserveRequirement:ENQCRRPaymentAccountResponseType"/>
+	<xs:complexType name="ENQCRRPaymentAccountResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:ENQCRRPaymentAccountResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQCRRPaymentAccountResponseBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+				<xs:element ref="ReserveRequirement:ENQCRRPaymentAccountResponseBodyList" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQCRRPaymentAccountResponseBodyList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="MaTCTD" type="xs:string" minOccurs="0"/>
+				<xs:element name="TenTCTD" type="xs:string" minOccurs="0"/>
+				<xs:element name="Taikhoan" type="xs:string" minOccurs="0"/>
+				<xs:element name="Chinhanh" type="xs:string" minOccurs="0"/>
+				<xs:element name="TenTaiKhoan" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQCRRInterestAccountRequest" type="ReserveRequirement:ENQCRRInterestAccountRequestType"/>
+	<xs:complexType name="ENQCRRInterestAccountRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:ENQCRRInterestAccountRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQCRRInterestAccountResponse" type="ReserveRequirement:ENQCRRInterestAccountResponseType"/>
+	<xs:complexType name="ENQCRRInterestAccountResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ReserveRequirement:ENQCRRInterestAccountResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQCRRInterestAccountRequestBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+				<xs:element name="CusID" type="xs:string" minOccurs="0"/>
+				<xs:element name="CoCode" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQCRRInterestAccountResponseBody">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+				<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+				<xs:element ref="ReserveRequirement:ENQCRRInterestAccountResponseBodyList" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQCRRInterestAccountResponseBodyList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AccountNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="AccountName" type="xs:string" minOccurs="0"/>
+				<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

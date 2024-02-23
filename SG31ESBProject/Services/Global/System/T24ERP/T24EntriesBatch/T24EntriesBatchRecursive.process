@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file">
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatchRecursive.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="FileName" type="xsd:string"/>
+                    <xsd:element name="NumberRecords" type="xsd:string"/>
+                    <xsd:element name="State" type="xsd:string"/>
+                    <xsd:element name="DestSystem" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>39</pd:startX>
+    <pd:startY>113</pd:startY>
+    <pd:returnBindings>
+        <Output>
+            <TotalRecordsReceived>
+                <xsl:value-of select="$TotalRecords/TotalRecords/TotalReceived"/>
+            </TotalRecordsReceived>
+            <TotalRecordsProcessed>
+                <xsl:value-of select="$TotalRecords/TotalRecords/TotalProcessed"/>
+            </TotalRecordsProcessed>
+        </Output>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Output">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="TotalRecordsReceived" type="xsd:int"/>
+                    <xsd:element name="TotalRecordsProcessed" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1120</pd:endX>
+    <pd:endY>108</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <InputProcess>
+            <xsd:element name="Input">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="StartRecord" type="xsd:int"/>
+                        <xsd:element name="NumberRecords" type="xsd:string"/>
+                        <xsd:element name="EndFile" type="xsd:boolean"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InputProcess>
+        <TotalRecords>
+            <xsd:element name="TotalRecords">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="TotalReceived" type="xsd:int"/>
+                        <xsd:element name="TotalProcessed" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </TotalRecords>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1445919176431</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>527</pd:x>
+        <pd:y>10</pd:y>
+        <pd:width>470</pd:width>
+        <pd:height>186</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>repeat</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:repeatCondition>$CallT24EntriesBatch/Output/EndReadFile='true'</pd:repeatCondition>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24EntriesBatch</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SetTotalRecord</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24EntriesBatch</pd:from>
+            <pd:to>ReAssignInput</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ReAssignInput</pd:from>
+            <pd:to>SetTotalRecord</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallT24EntriesBatch">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>631</pd:x>
+            <pd:y>103</pd:y>
+            <config>
+                <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatch_filter.process</processName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <FileName>
+                        <xsl:value-of select="$Start/root/FileName"/>
+                    </FileName>
+                    <StartRecord>
+                        <xsl:value-of select="$InputProcess/Input/StartRecord"/>
+                    </StartRecord>
+                    <NumberOfRecords>
+                        <xsl:value-of select="$InputProcess/Input/NumberRecords"/>
+                    </NumberOfRecords>
+                    <EndReadFile>
+                        <xsl:value-of select="$InputProcess/Input/EndFile"/>
+                    </EndReadFile>
+                    <State>
+                        <xsl:value-of select="$Start/root/State"/>
+                    </State>
+                    <DestSystem>
+                        <xsl:value-of select="$Start/root/DestSystem"/>
+                    </DestSystem>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ReAssignInput">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>756</pd:x>
+            <pd:y>100</pd:y>
+            <config>
+                <variableName>InputProcess</variableName>
+            </config>
+            <pd:inputBindings>
+                <Input>
+                    <StartRecord>
+                        <xsl:value-of select="$CallT24EntriesBatch/Output/CurrentIndex"/>
+                    </StartRecord>
+                    <NumberRecords>
+                        <xsl:value-of select="$CallT24EntriesBatch/Output/NumberOfRecords"/>
+                    </NumberRecords>
+                    <EndFile>
+                        <xsl:value-of select="$CallT24EntriesBatch/Output/EndReadFile"/>
+                    </EndFile>
+                </Input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SetTotalRecord">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>876</pd:x>
+            <pd:y>99</pd:y>
+            <config>
+                <variableName>TotalRecords</variableName>
+            </config>
+            <pd:inputBindings>
+                <TotalRecords>
+                    <TotalReceived>
+                        <xsl:value-of select="$TotalRecords/TotalRecords/TotalReceived +$CallT24EntriesBatch/Output/TotalReceived"/>
+                    </TotalReceived>
+                    <TotalProcessed>
+                        <xsl:value-of select="$TotalRecords/TotalRecords/TotalProcessed + $CallT24EntriesBatch/Output/TotalProcessed"/>
+                    </TotalProcessed>
+                </TotalRecords>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="AssignInput">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>304</pd:x>
+        <pd:y>107</pd:y>
+        <config>
+            <variableName>InputProcess</variableName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <StartRecord>
+                    <xsl:value-of select="2"/>
+                </StartRecord>
+                <NumberRecords>
+                    <xsl:value-of select="$Start/root/NumberRecords"/>
+                </NumberRecords>
+                <EndFile>
+                    <xsl:value-of select="'false'"/>
+                </EndFile>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InitTotalRecord">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>414</pd:x>
+        <pd:y>107</pd:y>
+        <config>
+            <variableName>TotalRecords</variableName>
+        </config>
+        <pd:inputBindings>
+            <TotalRecords>
+                <TotalReceived>
+                    <xsl:value-of select="0"/>
+                </TotalReceived>
+                <TotalProcessed>
+                    <xsl:value-of select="0"/>
+                </TotalProcessed>
+            </TotalRecords>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetSignonName">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>100</pd:x>
+        <pd:y>270</pd:y>
+        <config>
+            <timeout>100</timeout>
+            <commit>false</commit>
+            <maxRows>2000</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/T24DB.sharedjdbc</jdbcSharedConfig>
+            <statement>select * from vw_user</statement>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>RECID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>COMPANY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SIGNON_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteErrorMsg">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>760</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns12:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/ErrorFileName"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="concat('ERROR get T24 Sign-on Name: ','Error Message: ', $_error/ns1:ErrorReport/Msg,'&#xA;')"/>
+                </textContent>
+            </ns12:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>495</pd:x>
+        <pd:y>335</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetSignOnNameList">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>178</pd:x>
+        <pd:y>106</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/SignOnNameList.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <SignOnNameList>
+                <Pair>
+                    <xsl:for-each select="$GetSignonName/resultSet/Record">
+                        <SignOnName>
+                            <ID>
+                                <xsl:value-of select="RECID"/>
+                            </ID>
+                            <Name>
+                                <xsl:value-of select="SIGNON_NAME"/>
+                            </Name>
+                        </SignOnName>
+                    </xsl:for-each>
+                </Pair>
+            </SignOnNameList>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetSignonName</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInput</pd:from>
+        <pd:to>InitTotalRecord</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitTotalRecord</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetSignonName</pd:from>
+        <pd:to>SetSignOnNameList</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($GetSignonName/resultSet/Record)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetSignonName</pd:from>
+        <pd:to>WriteErrorMsg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteErrorMsg</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetSignonName</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>WriteErrorMsg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetSignOnNameList</pd:from>
+        <pd:to>AssignInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

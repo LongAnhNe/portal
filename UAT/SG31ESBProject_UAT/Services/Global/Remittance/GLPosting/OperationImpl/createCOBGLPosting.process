@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.sbv.org.vn/global/remittance/glposting/glposting/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:ns3="http://www.temenos.com/T24/event/T242ERPCOB/T24COBEntries" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1436322400562" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0">
+    <wsdl:import namespace="http://xmlns.example.com/1436322400562" location="/SharedResource/Schema/Global/Remittance/GLPosting/GLPosting.wsdl"/>
+    <pd:name>Services/Global/Remittance/GLPosting/OperationImpl/createCOBGLPosting.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:COBGLPostingReq"/>
+    <pd:startX>149</pd:startX>
+    <pd:startY>67</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:COBGLPostingRes>
+            <COBRes>
+                <ns1:COBGLPostingRes>
+                    <xsl:copy-of select="$Start/wsdlPfx:COBGLPostingReq/COBReq/ns1:COBGLPostingReq/ns:AppHdr"/>
+                    <xsl:copy-of select="$Call-Process/root/ns4:ServiceEnverlop/ns:ResponseStatus"/>
+                    <ns1:TransactionStatus>
+                        <xsl:value-of select="'Write T24Entries to DB successfully'"/>
+                    </ns1:TransactionStatus>
+                </ns1:COBGLPostingRes>
+            </COBRes>
+        </wsdlPfx:COBGLPostingRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:COBGLPostingRes"/>
+    <pd:endX>451</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1440058534920</pd:targetNamespace>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <processName>/Services/Global/Remittance/GLPosting/Version1.0/createCOBGLPosting/RequestResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns4:ServiceEnverlop>
+                    <xsl:copy-of select="$Start/wsdlPfx:COBGLPostingReq/COBReq/ns1:COBGLPostingReq/ns:AppHdr"/>
+                    <ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:COBGLPostingReq/COBReq/ns1:COBGLPostingReq/ns3:T24COBEntries"/>
+                    </ServiceBody>
+                </ns4:ServiceEnverlop>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

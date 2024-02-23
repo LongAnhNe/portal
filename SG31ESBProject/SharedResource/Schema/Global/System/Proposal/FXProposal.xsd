@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:FXProposal="schema://www.sbv.gov.vn/schema/global/System/Proposal/FXProposal.xsd"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="schema://www.sbv.gov.vn/schema/global/System/Proposal/FXProposal.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../ESB/Common/ESBCommonModel.xsd"/>
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="FXProposalInputRequest" type="FXProposal:FXProposalInputRequestType"/>
+	<xs:complexType name="FXProposalInputRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FXProposal:FXProposalInputRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FXProposalInputRequestBody" type="FXProposal:FXProposalInputRequestBodyType"/>
+	<xs:complexType name="FXProposalInputRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreatedDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencySold" type="xs:string" minOccurs="0"/>
+			<xs:element name="AmountSold" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundForm" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrencyBought" type="xs:string" minOccurs="0"/>
+			<xs:element name="AmountBought" type="xs:string" minOccurs="0"/>
+			<xs:element name="FundTo" type="xs:string" minOccurs="0"/>
+			<xs:element name="SpotRate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="CusID" type="xs:string" minOccurs="0"/>
+			<xs:element name="SettlementAcforBuy" type="xs:string" minOccurs="0"/>
+			<xs:element name="SettlementAcforSell" type="xs:string" minOccurs="0"/>
+			<xs:element name="Note" type="xs:string" minOccurs="0"/>
+			<xs:element name="DealearNote" type="xs:string" minOccurs="0"/>
+			<xs:element name="SodMat" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FXProposalInputResponse" type="FXProposal:FXProposalInputResponseType"/>
+	<xs:complexType name="FXProposalInputResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FXProposal:FXProposalInputResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FXProposalInputResponseBody" type="FXProposal:FXProposalInputResponseBodyType"/>
+	<xs:complexType name="FXProposalInputResponseBodyType">
+		<xs:sequence>
+			<xs:element name="FXStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="Message" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBRequestAdd" type="FXProposal:ESBRequestAddType"/>
+	<xs:complexType name="ESBRequestAddType"/>
+	<xs:element name="ESBResponseAdd" type="FXProposal:ESBResponseAddType"/>
+	<xs:complexType name="ESBResponseAddType"/>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="FXProposal:ESBRequestAdd"/>
+				<xs:element ref="FXProposal:ESBResponseAdd"/>
+				<xs:element ref="FXProposal:ESBServiceState"/>
+				<xs:element ref="FXProposal:FXProposalInputRequest"/>
+				<xs:element ref="FXProposal:FXProposalInputResponse"/>
+				<xs:element ref="FXProposal:FXQueryRequest"/>
+				<xs:element ref="FXProposal:FXQueryResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FXQueryRequest" type="FXProposal:FXQueryRequestType"/>
+	<xs:complexType name="FXQueryRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FXProposal:FXQueryRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FXQueryRequestBody" type="FXProposal:FXQueryRequestBodyType"/>
+	<xs:complexType name="FXQueryRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransID" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FXQueryResponse" type="FXProposal:FXQueryResponseType"/>
+	<xs:complexType name="FXQueryResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FXProposal:FXQueryResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FXQueryResponseBody" type="FXProposal:FXQueryResponseBodyType"/>
+	<xs:complexType name="FXQueryResponseBodyType">
+		<xs:sequence>
+			<xs:element name="FXQueryStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="Message" type="xs:string" minOccurs="0"/>
+			<xs:element name="TaiKhoanBan" type="xs:string" minOccurs="0"/>
+			<xs:element name="TaiKhoanMua" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

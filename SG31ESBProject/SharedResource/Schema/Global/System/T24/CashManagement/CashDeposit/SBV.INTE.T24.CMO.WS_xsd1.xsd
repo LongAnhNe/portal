@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.6hudson-86  svn-revision#12773. -->
+<xsd:schema xmlns:ns0="http://temenos.com/SBV.INTE.T24.CMO.WS" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://temenos.com/SBV.INTE.T24.CMO.WS">
+    <xsd:complexType name="CMOCashDepositLocal_Validate">
+        <xsd:sequence>
+            <xsd:element name="WebRequestCommon" type="ns0:webRequestCommon" minOccurs="0"/>
+            <xsd:element name="OfsFunction" type="ns0:ofsFunction" minOccurs="0"/>
+            <xsd:element name="TELLERSBVCMOLCYCASHIN16IHOLDType" type="ns0:TELLERSBVCMOLCYCASHIN16IHOLDType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CMOCashDepositLocal_ValidateResponse">
+        <xsd:sequence>
+            <xsd:element name="Status" type="ns0:Status" minOccurs="0"/>
+            <xsd:element name="TELLERType" type="ns0:TELLERType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Status">
+        <xsd:sequence>
+            <xsd:element name="transactionId" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="messageId" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="successIndicator" type="ns0:successIndicator" minOccurs="0"/>
+            <xsd:element name="application" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="messages" type="xsd:string" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ofsFunction">
+        <xsd:sequence>
+            <xsd:element name="activityName" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="assignReason" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="dueDate" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="extProcess" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="extProcessID" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gtsControl" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="messageId" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="noOfAuth" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="owner" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="replace" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="startDate" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="user" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CMOCashDepositLocal">
+        <xsd:sequence>
+            <xsd:element name="WebRequestCommon" type="ns0:webRequestCommon" minOccurs="0"/>
+            <xsd:element name="OfsFunction" type="ns0:ofsFunction" minOccurs="0"/>
+            <xsd:element name="TELLERSBVCMOLCYCASHIN16IHOLDType" type="ns0:TELLERSBVCMOLCYCASHIN16IHOLDType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="webRequestCommon">
+        <xsd:sequence>
+            <xsd:element name="company" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="password" type="xsd:string"/>
+            <xsd:element name="userName" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CMOCashDepositLocalResponse">
+        <xsd:sequence>
+            <xsd:element name="Status" type="ns0:Status" minOccurs="0"/>
+            <xsd:element name="TELLERType" type="ns0:TELLERType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TELLERType">
+        <xsd:sequence>
+            <xsd:element name="TRANSACTIONCODE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TELLERID1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DRCRMARKER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CURRENCY1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CUSTOMER1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gACCOUNT1" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="mACCOUNT1" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="ACCOUNT1" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="AMOUNTLOCAL1" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="AMOUNTFCY1" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="sgNARRATIVE1" minOccurs="0">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:element name="NARRATIVE1" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                            </xsd:sequence>
+                                            <xsd:attribute name="sg" type="xsd:positiveInteger"/>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:sequence>
+                                <xsd:attribute name="m" type="xsd:positiveInteger"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="RATE1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="VALUEDATE1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="EXPOSUREDATE1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CURRMARKET1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="POSTYPE1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DEALRATE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CURRENCY2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TELLERID2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ACCOUNT2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CUSTOMER2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="AMOUNTLOCAL2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="RATE2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="AMOUNTFCY2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="NETAMOUNT" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="VALUEDATE2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="EXPOSUREDATE2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CURRMARKET2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="POSTYPE2" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gNARRATIVE2" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="NARRATIVE2" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="gCHEQUENUMBER" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="mCHEQUENUMBER" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="CHEQUENUMBER" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHEQUEBANKCDE" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHEQUEACCTNO" type="xsd:string" minOccurs="0"/>
+                                </xsd:sequence>
+                                <xsd:attribute name="m" type="xsd:positiveInteger"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="gCHARGECUSTOMER" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="mCHARGECUSTOMER" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="CHARGECUSTOMER" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHARGEACCOUNT" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHARGECATEGORY" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHRGDRTXNCDE" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHRGCRTXNCDE" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHRGAMTLOCAL" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHRGAMTFCCY" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="CHARGECODE" type="xsd:string" minOccurs="0"/>
+                                </xsd:sequence>
+                                <xsd:attribute name="m" type="xsd:positiveInteger"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="WAIVECHARGES" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="THEIRREFERENCE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="OURREFERENCE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gDENOMINATION" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="mDENOMINATION" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="DENOMINATION" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="UNIT" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="sgSERIALNO" minOccurs="0">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:element name="SERIALNO" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                            </xsd:sequence>
+                                            <xsd:attribute name="sg" type="xsd:positiveInteger"/>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:sequence>
+                                <xsd:attribute name="m" type="xsd:positiveInteger"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="gDRDENOM" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="mDRDENOM" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="DRDENOM" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="DRUNIT" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="sgDRSERIALNO" minOccurs="0">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:element name="DRSERIALNO" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                            </xsd:sequence>
+                                            <xsd:attribute name="sg" type="xsd:positiveInteger"/>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:sequence>
+                                <xsd:attribute name="m" type="xsd:positiveInteger"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="TRUSTCUSTOMER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ROUNDINGAMOUNT" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gNEWCUSTBAL" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="NEWCUSTBAL" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="AMOUNTDEPOSITED" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="MKTEXCHPROFIT" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TRUSTSETTLECUST" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="EXPOSURECCY" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gEXPACCT" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="mEXPACCT" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="EXPACCT" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="sgEXPSPTDAT" minOccurs="0">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:element name="EXPSPTDAT" minOccurs="0" maxOccurs="unbounded">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="EXPSPTDAT" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="EXPSPTAMT" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                        <xsd:attribute name="s" type="xsd:positiveInteger"/>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </xsd:sequence>
+                                            <xsd:attribute name="sg" type="xsd:positiveInteger"/>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:sequence>
+                                <xsd:attribute name="m" type="xsd:positiveInteger"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="DEALERDESK" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CHEQTYPE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="STOCKREGISTER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="SERIESID" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="STOCKNUMBER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CONTRACTGRP" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="AUTHDATE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CONTRACTMATDATE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="POSSDUPDATE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CARDNUMBER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gCARDTXNDETAIL" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="CARDTXNDETAIL" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="TFSREFERENCE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CHEQUEDRAWN" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CHGTYPE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ISSUECHEQUETYPE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="PAYEENAME" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="RESERVED1" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gSTMTNO" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="STMTNO" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="gOVERRIDE" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="OVERRIDE" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="RECORDSTATUS" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CURRNO" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="gINPUTTER" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="INPUTTER" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="gDATETIME" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="DATETIME" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="g" type="xsd:positiveInteger"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="AUTHORISER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="COCODE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DEPTCODE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="AUDITORCODE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="AUDITDATETIME" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="IBLCCODEDR" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="IBLCCODECR" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="IBLCCOUNTRYDR" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="IBLCCOUNTRYCR" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ATUNIQUEID" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ATMGENMAPID" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LTTCONTENT" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LERPREF" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LSYSTEMTYPE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LTRANSTYPE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="PAYDETAIL" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TTDEPOSITOR" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TTRECEIVER" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TTRECEIVERADD" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TTDEPOSITORAD" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LCHECKFEE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LBCSORTCODE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="BANKINGCODE" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string"/>
+    </xsd:complexType>
+    <xsd:complexType name="TELLERSBVCMOLCYCASHIN16IHOLDType">
+        <xsd:sequence>
+            <xsd:element name="TransactionCode" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="Currency" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DepositAmount" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CreditAccount" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ValueDate" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="Narrative" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CMOreferency" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TtDepositor" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="TtDepositorAd" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="BankingCode" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string"/>
+    </xsd:complexType>
+    <xsd:element name="CMOCashDepositLocal_Validate" type="ns0:CMOCashDepositLocal_Validate"/>
+    <xsd:element name="CMOCashDepositLocal_ValidateResponse" type="ns0:CMOCashDepositLocal_ValidateResponse"/>
+    <xsd:element name="CMOCashDepositLocal" type="ns0:CMOCashDepositLocal"/>
+    <xsd:element name="CMOCashDepositLocalResponse" type="ns0:CMOCashDepositLocalResponse"/>
+    <xsd:simpleType name="successIndicator">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Success"/>
+            <xsd:enumeration value="TWSError"/>
+            <xsd:enumeration value="T24Error"/>
+            <xsd:enumeration value="T24Override"/>
+            <xsd:enumeration value="T24Offline"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

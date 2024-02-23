@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/remittance/ftbulk/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:cmd-dt="sbv/global/datatype/datatype/version1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/remittance/ftbulk/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="sbv/global/datatype/datatype/version1.0" schemaLocation="../../DataType/DataType1.0.xsd"/>
+	<xs:element name="createFTBulkReq" type="createFTBulkReqType"/>
+	<xs:element name="createFTBulkRes" type="createFTBulkResType"/>
+	<xs:complexType name="createFTBulkReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="NettingInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createFTBulkResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="NettingInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NettingInfoReqType">
+		<xs:sequence>
+			<xs:element name="SystemType" type="xs:string"/>
+			<xs:element name="NettingType" type="xs:string"/>
+			<xs:element name="NettingId" type="xs:string"/>
+			<xs:element name="PostingDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="Transaction" type="TransactionType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NettingInfoResType">
+		<xs:sequence>
+			<xs:element name="SystemType" type="xs:string"/>
+			<xs:element name="NettingType" type="xs:string"/>
+			<xs:element name="NettingId" type="xs:string"/>
+			<xs:element name="Status" type="xs:string"/>
+			<xs:element name="PostingTime" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionType">
+		<xs:sequence>
+			<xs:element name="TransactionId" type="xs:string"/>
+			<xs:element name="CreditInfo" type="cmd-dt:FTAcctIdType" minOccurs="0"/>
+			<xs:element name="DebitInfo" type="cmd-dt:FTAcctIdType" minOccurs="0"/>
+			<xs:element name="CreditDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="LVCount" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TransactionResType">
+		<xs:sequence>
+			<xs:element name="AccountNo" type="xs:string"/>
+			<xs:element name="Amount" type="xs:string"/>
+			<xs:element name="PostingType" type="xs:string"/>
+			<xs:element name="PostingStatus" type="xs:string"/>
+			<xs:element name="CurrentBalance" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="NettingInfoReq" type="NettingInfoReqType"/>
+	<xs:element name="NettingInfoRes" type="NettingInfoResType"/>
+</xs:schema>

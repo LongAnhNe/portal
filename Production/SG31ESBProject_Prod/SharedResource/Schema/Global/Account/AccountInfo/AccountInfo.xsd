@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/account/accountInfo/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="getAccountBalanceReq" type="getAccountBalanceReqType"/>
+	<xs:element name="getAccountBalanceRes" type="getAccountBalanceResType"/>
+	<xs:complexType name="getAccountBalanceReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="AccountNo"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getAccountBalanceResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="AccountBalance"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AccountBalanceType">
+		<xs:sequence>
+			<xs:element name="AccountNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="SystemDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="BalAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="HoldAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="OpenBalance" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getAccountStatusReq" type="getAccountStatusReqType"/>
+	<xs:element name="getAccountStatusRes" type="getAccountStatusResType"/>
+	<xs:complexType name="getAccountStatusReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="AccountNo"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getAccountStatusResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="AccountStatus" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AccountStatusType">
+		<xs:sequence>
+			<xs:element name="AccountNo" type="xs:string"/>
+			<xs:element name="Status" type="xs:string"/>
+			<xs:element name="BalAmount" type="xs:string"/>
+			<xs:element name="OverLimit" type="xs:string" minOccurs="0"/>
+			<xs:element name="OpenBalance" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AccountNo" type="xs:string"/>
+	<xs:element name="AccountBalance" type="AccountBalanceType"/>
+	<xs:element name="AccountStatus" type="AccountStatusType"/>
+</xs:schema>

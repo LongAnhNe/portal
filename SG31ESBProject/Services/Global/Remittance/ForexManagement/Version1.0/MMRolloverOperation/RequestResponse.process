@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1438330850951" xmlns:pfx3="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx7="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx6="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/ForexManagement/MoneyMarket.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL_xsd1.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL.TT01/SBV.INTE.T24.PORTAL.TT01_xsd1.xsd"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.TT01.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL.TT01/SBV.INTE.T24.PORTAL.TT01.wsdl"/>
+    <pd:name>Services/Global/Remittance/ForexManagement/Version1.0/MMRolloverOperation/RequestResponse.process</pd:name>
+    <pd:description>tuedn</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:startType>
+    <pd:startX>338</pd:startX>
+    <pd:startY>567</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx3:MMRolloverRequestBody"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns:AppHdr"/>
+                <ns:ResponseStatus>
+                    <ns:Status>
+                        <xsl:value-of select="if ($MMRolloverResponseBody/pfx3:MMRolloverResponseBody/pfx3:MMStatus = &quot;Success&quot; ) &#xA;then 0&#xA;else 1"/>
+                    </ns:Status>
+                    <ns:ErrorCode>
+                        <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Status"/>
+                    </ns:ErrorCode>
+                    <ns:ErrorMessage>
+                        <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:ErrorMessage"/>
+                    </ns:ErrorMessage>
+                </ns:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$MMRolloverResponseBody/pfx3:MMRolloverResponseBody"/>
+                    <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody"/>
+                    <xsl:copy-of select="$MapToT24Model/pfx6:MMRollover"/>
+                    <xsl:copy-of select="$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse"/>
+                    <xsl:copy-of select="$ESBServiceState/pfx3:ESBServiceState"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1186</pd:endX>
+    <pd:endY>569</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx3:ESBServiceState"/>
+        <MMRolloverResponseBody ref="pfx3:MMRolloverResponseBody"/>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/forexmanagement/MMRolloverOperation/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="MapToT24Model">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>560</pd:x>
+        <pd:y>568</pd:y>
+        <config>
+            <element ref="pfx6:MMRollover"/>
+        </config>
+        <pd:inputBindings>
+            <pfx6:MMRollover>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:FundIn"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/T24Authentication/T24PortalPass"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/T24Authentication/T24PortalUser"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                </OfsFunction>
+                <MMMONEYMARKETSBVPORTALROLLAMDROLLType>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:MMID">
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:MMID"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <EndDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:EndDate"/>
+                    </EndDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:Bank">
+                        <BankCode>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:Bank"/>
+                        </BankCode>
+                    </xsl:if>
+                    <IntRate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:Int.Rate"/>
+                    </IntRate>
+                    <InvestOrigin>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:InvestOrigin"/>
+                    </InvestOrigin>
+                    <ProposalID>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:SourceAppID"/>
+                    </ProposalID>
+                </MMMONEYMARKETSBVPORTALROLLAMDROLLType>
+            </pfx6:MMRollover>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24MMRollover">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>681</pd:x>
+        <pd:y>570</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx6:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>MMRollover</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortalTT01%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$MapToT24Model/pfx6:MMRollover"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>553</pd:x>
+        <pd:y>363</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="3"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Map Error : &quot; , $_error/ns1:ErrorReport/Msg)"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Map Error : &quot; , $_error/ns1:ErrorReport/Msg)"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>797</pd:x>
+        <pd:y>283</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CatchException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>925</pd:x>
+        <pd:y>283</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="5"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Has Exception in service : &quot;, $_error/ns1:ErrorReport/Msg)"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Has Exception in service : &quot;, $_error/ns1:ErrorReport/Msg)"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>925</pd:x>
+        <pd:y>470</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="0"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1]"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WSTimeout">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>924</pd:x>
+        <pd:y>618</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="7"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns1:ErrorReport/Msg )"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;T24WS Timeout : &quot; , $_error/ns1:ErrorReport/Msg )"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WSError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>822</pd:x>
+        <pd:y>667</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="OtherError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>924</pd:x>
+        <pd:y>709</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="8"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns1:ErrorReport/Msg)"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Other  T24 WS Error : &quot;  , $_error/ns1:ErrorReport/Msg)"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WSResponse">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>822</pd:x>
+        <pd:y>473</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Exist">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>925</pd:x>
+        <pd:y>385</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="0"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot; MM Exist : &quot;, $CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1])"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="OtherResponse">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>924</pd:x>
+        <pd:y>543</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="6"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/successIndicator, &quot;Msg : &quot;  , $CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1] )"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="concat(&quot; T24 WS Response  : &quot; ,$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/successIndicator, &quot;Msg : &quot;  , $CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1] )"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:Unique_ID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:timestamps"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:CurrentDateTime"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Init ServiceState">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>444</pd:x>
+        <pd:y>569</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx3:MMRolloverRequestBody"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx3:ESBServiceState>
+                <ns4:Status>
+                    <xsl:value-of select="0"/>
+                </ns4:Status>
+                <ns4:ErrorMessage>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </ns4:ErrorMessage>
+                <ns4:NotifyMsg>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </ns4:NotifyMsg>
+                <ns4:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns4:ErrorExist>
+                <ns4:Unique_ID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx3:MMRolloverRequestBody[1]/pfx3:SourceAppID"/>
+                </ns4:Unique_ID>
+                <ns4:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns4:timestamps>
+                <ns4:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns4:CurrentDateTime>
+            </pfx3:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="setMMRolloverResponseBody">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1080</pd:x>
+        <pd:y>570</pd:y>
+        <config>
+            <variableName>MMRolloverResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:MMRolloverResponseBody>
+                <pfx3:MMStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx3:ESBServiceState/ns4:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx3:MMStatus>
+                <pfx3:IDRef>
+                    <xsl:value-of select="$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/transactionId"/>
+                </pfx3:IDRef>
+                <pfx3:ErrorMsg>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:ErrorMessage"/>
+                </pfx3:ErrorMsg>
+                <xsl:if test="$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/MMMONEYMARKETType/NEXTINTAMOUNT">
+                    <pfx3:NextIntAmount>
+                        <xsl:value-of select="$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/MMMONEYMARKETType/NEXTINTAMOUNT"/>
+                    </pfx3:NextIntAmount>
+                </xsl:if>
+            </pfx3:MMRolloverResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="setMMRolloverResponseBody-Exception-">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1062</pd:x>
+        <pd:y>289</pd:y>
+        <config>
+            <variableName>MMRolloverResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:MMRolloverResponseBody>
+                <pfx3:MMStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx3:ESBServiceState/ns4:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx3:MMStatus>
+                <pfx3:IDRef>
+                    <xsl:value-of select="$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/transactionId"/>
+                </pfx3:IDRef>
+                <pfx3:ErrorMsg>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:ErrorMessage"/>
+                </pfx3:ErrorMsg>
+            </pfx3:MMRolloverResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="setMMRolloverResponseBody-ConvertError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1063</pd:x>
+        <pd:y>367</pd:y>
+        <config>
+            <variableName>MMRolloverResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:MMRolloverResponseBody>
+                <pfx3:MMStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx3:ESBServiceState/ns4:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx3:MMStatus>
+                <pfx3:ErrorMsg>
+                    <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:ErrorMessage"/>
+                </pfx3:ErrorMsg>
+            </pfx3:MMRolloverResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="setResBody">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1075</pd:x>
+        <pd:y>466</pd:y>
+        <config>
+            <variableName>MMRolloverResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:MMRolloverResponseBody>
+                <pfx3:MMStatus>
+                    <xsl:value-of select="&quot;Success&quot;"/>
+                </pfx3:MMStatus>
+                <pfx3:IDRef>
+                    <xsl:value-of select="if (contains($CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1], 'KEY ALREADY ASSIGNED TO #'))&#xA;then substring-after($CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1],'ALREADY ASSIGNED TO #') &#xA;else $CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/transactionId"/>
+                </pfx3:IDRef>
+                <xsl:if test="$ESBServiceState/pfx3:ESBServiceState/ns4:ErrorMessage">
+                    <pfx3:ErrorMsg>
+                        <xsl:value-of select="$ESBServiceState/pfx3:ESBServiceState/ns4:ErrorMessage"/>
+                    </pfx3:ErrorMsg>
+                </xsl:if>
+            </pfx3:MMRolloverResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Init ServiceState</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapToT24Model</pd:from>
+        <pd:to>CallT24MMRollover</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24MMRollover</pd:from>
+        <pd:to>WSResponse</pd:to>
+        <pd:xpathDescription>Has Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapToT24Model</pd:from>
+        <pd:to>MapError</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapError</pd:from>
+        <pd:to>setMMRolloverResponseBody-ConvertError</pd:to>
+        <pd:xpathDescription>go to end</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24MMRollover</pd:from>
+        <pd:to>WSError</pd:to>
+        <pd:xpathDescription>Error, No Response</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>CatchException</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CatchException</pd:from>
+        <pd:to>setMMRolloverResponseBody-Exception-</pd:to>
+        <pd:xpathDescription>go to end</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Success</pd:from>
+        <pd:to>setMMRolloverResponseBody</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError</pd:from>
+        <pd:to>WSTimeout</pd:to>
+        <pd:xpathDescription>Timeout</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns1:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSError</pd:from>
+        <pd:to>OtherError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSTimeout</pd:from>
+        <pd:to>setMMRolloverResponseBody</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OtherError</pd:from>
+        <pd:to>setMMRolloverResponseBody</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSResponse</pd:from>
+        <pd:to>Success</pd:to>
+        <pd:xpathDescription>Inserted</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/successIndicator = 'Success'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSResponse</pd:from>
+        <pd:to>Exist</pd:to>
+        <pd:xpathDescription>Exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1], 'KEY ALREADY ASSIGNED TO')
+or contains($CallT24MMRollover/outputMessage/pfx6:MMRolloverResponse/Status/messages[1], ' RECORD NOT CHANGED')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WSResponse</pd:from>
+        <pd:to>OtherResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OtherResponse</pd:from>
+        <pd:to>setMMRolloverResponseBody</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Init ServiceState</pd:from>
+        <pd:to>MapToT24Model</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>setMMRolloverResponseBody</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>setMMRolloverResponseBody-Exception-</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>setMMRolloverResponseBody-ConvertError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-6697729</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exist</pd:from>
+        <pd:to>setResBody</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>setResBody</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://xmlns.example.com/1469432349038" xmlns:pfx2="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://temenos.com/SBV.INTE.T24.VSD.WS">
+    <xsd:import namespace="http://temenos.com/SBV.INTE.T24.VSD.WS" schemaLocation="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.VSD.WS/SBV.INTE.T24.VSD.WS_xsd1.xsd"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.VSD.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.VSD.WS/SBV.INTE.T24.VSD.WS.wsdl"/>
+    <pd:name>Services/Global/System/VSD/VSDTransUpdate/TestT24.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>608</pd:endX>
+    <pd:endY>75</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1478073913412</pd:targetNamespace>
+    <pd:activity name="T24TransUpdate">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>485</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/VSDTransUpdate/T24WS_Timeout_ms%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>VSDConfirm</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSVSD%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$MapToT24Model/pfx:VSDConfirm"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapToT24Model">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <element ref="pfx:VSDConfirm"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:VSDConfirm>
+                <WebRequestCommon>
+                    <company>
+                        <xsl:value-of select="&quot;VN0010001&quot;"/>
+                    </company>
+                    <password>
+                        <xsl:value-of select="&quot;VSD321&quot;"/>
+                    </password>
+                    <userName>
+                        <xsl:value-of select="&quot;VSD001&quot;"/>
+                    </userName>
+                </WebRequestCommon>
+                <OfsFunction>
+                    <activityName>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </activityName>
+                    <assignReason>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </assignReason>
+                    <dueDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </dueDate>
+                    <extProcess>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcess>
+                    <extProcessID>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </extProcessID>
+                    <gtsControl>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </gtsControl>
+                    <messageId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </messageId>
+                    <noOfAuth>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </noOfAuth>
+                    <owner>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </owner>
+                    <replace>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </replace>
+                    <startDate>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </startDate>
+                    <user>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </user>
+                </OfsFunction>
+                <SBVVSDTRANSACTIONVSDCONFIRMType>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="&quot;16081030035244566&quot;"/>
+                    </xsl:attribute>
+                    <RESULTVSD>
+                        <xsl:value-of select="&quot;SUCCESSED&quot;"/>
+                    </RESULTVSD>
+                    <RESULTERR>
+                        <xsl:value-of select="&quot;Test&quot;"/>
+                    </RESULTERR>
+                </SBVVSDTRANSACTIONVSDCONFIRMType>
+            </pfx:VSDConfirm>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapToT24Model</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapToT24Model</pd:from>
+        <pd:to>T24TransUpdate</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>T24TransUpdate</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,1688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns="sbv/common/envelope/soaenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="sbv/sharedresource/CitadIn/CitadUpdateSchema.xsd" xmlns:pfx5="http://xmlns.example.com/1438330850951" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="sbv/sharedresource/CitadIn/ESBCitadInModel" xmlns:pfx3="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" xmlns:pfx2="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" xmlns:pfx9="http://fis.vn/iMaximusGateway/T24PostToCsdService/GetCalendarFrT24" xmlns:pfx8="sbv/sharedresource/CitadIn/CitadInESBModel" xmlns:pfx7="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:pfx6="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns12="sbv/common/logging/enginelog/1.0" xmlns:ns6="www.tibco.com/plugin/Sleep" xmlns:ns13="sbv/common/exceptionhandling/exception/1.0" xmlns:ns7="http://www.tibco.com/pe/CheckpointSchema" xmlns:pfx="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns3="http://temenos.com/FTSBVCITAD" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://temenos.com/FTSBVCITAD"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/CITADOUT/CITADOUTFlow" schemaLocation="/SharedResource/Schema/Global/T24Citad/CitadIn/CitadToESB.xsd"/>
+    <xsd:import namespace="http://www.temenos.com/T24/event/FTSBVCITAD/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadOut/FTSBVCITAD.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/ESBCitadInModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/ESBCitadInModel.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/CitadInESBModel" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/CitadInESBModel.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="http://temenos.com/FTSBVCITAD" schemaLocation="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadIn/T24WebServicesImplService_CitadIn.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/sharedresource/CitadIn/CitadUpdateSchema.xsd" schemaLocation="/SharedResource/Schema/Global/System/ESB/T24Citad/CitadIn/CitadUpdateSchema.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1438330850951" location="/SharedResource/Schema/Global/Local/AccountMapping/AccountMapping1.0.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/FTSBVCITAD" location="/SharedResource/Schema/Global/System/T24/QueueSchema/CitadIn/T24WebServicesImplService_CitadIn.wsdl"/>
+    <pd:name>Services/Global/System/T24CITAD/CitadIn/OperationImpl/CitadIn.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>99</pd:x>
+        <pd:y>208</pd:y>
+        <config>
+            <StartTime>1439431200000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%ServiceGlobalVar/CitadIn/TimeInterval%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1244</pd:endX>
+    <pd:endY>355</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <inBeneficiaryList>
+            <xsd:element name="inBeneficiaryList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="inBeneficiary" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </inBeneficiaryList>
+        <paymentDetailList>
+            <xsd:element name="paymentDetailList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="paymentDetail" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </paymentDetailList>
+        <AppHdr ref="pfx:AppHdr"/>
+        <orderingCustomerList>
+            <xsd:element name="orderingCustomerList">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="orderingCust" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </orderingCustomerList>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1436581729763</pd:targetNamespace>
+    <pd:activity name="QueryCitadData">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>101</pd:x>
+        <pd:y>355</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CitadIn/CitadDBTimeOut_ms%%</timeout>
+            <commit>false</commit>
+            <maxRows>%%ServiceGlobalVar/CitadIn/MaxRowsCitad%%</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/Citad DB.sharedjdbc</jdbcSharedConfig>
+            <statement>select a.* from TBLTRANSACTIONMSG_GTW a where 1=1
+and CHECK_CODE = '05'
+and TYPE_FLAG = '0'
+and CREATE_FILE_RESULT_FLAG = '0'
+and TRX_TYPE IN('201001','101001','205001','105001')
+and ROWNUM &lt; ?
+order by a.SD_TIME </statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>ROWNUM</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>CHECK_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CREATE_FILE_RESULT_FLAG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FILE_NAME_RESULT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TRX_TYPE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERR_STATUS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RESPONSE_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SERIAL_NO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>O_CI_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>R_CI_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>O_INDIRECT_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>R_INDIRECT_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FEE_CI_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TRX_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>BALANCE_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CURRENCY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_ADDR</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_ACCNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_ADDR</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_ACCNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONTENT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPERT1</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPERT2</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FILE_NAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RELATION_NO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_IDENTIFY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_IDENTIFY</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>AUTHORIZED</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FEE_FLAG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>REFERENCE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TAX_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SD_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>RV_CODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>EX_E_SIGN</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MSG_REASON</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ORIG_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONFIRM_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>APPR_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CREATE_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>APPR_TIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MAC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TYPE_FLAG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>1</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>CHAR</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>E_SIGN</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPTIONCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONTENTFROMFILE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERR_MSG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>LINEPOSITION</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>FILEPROCESSINGTIME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CONTENT_EX</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <ROWNUM>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadIn/ROWNUM_CITAD"/>
+                </ROWNUM>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Loop Handling Record">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:description>Convert/Format Each Record</pd:description>
+        <pd:x>216</pd:x>
+        <pd:y>107</pd:y>
+        <pd:width>926</pd:width>
+        <pd:height>483</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$QueryCitadData/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>CitadRecord</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Map ESB Model</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd-Success</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>errorProcessor</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>GotoEnd</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign Multi inBeneficary</pd:from>
+            <pd:to>Assign Multi paymentDetail</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign Multi paymentDetail</pd:from>
+            <pd:to>Assign Multi OrderingCustomer</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>EMS Update Queue Sender</pd:from>
+            <pd:to>LogEnd-Success</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign Multi OrderingCustomer</pd:from>
+            <pd:to>GetCompanyCode</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Render XML</pd:from>
+            <pd:to>EMS Update Queue Sender</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>FTCitadInwardRemittance</pd:from>
+            <pd:to>Render XML</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map ESB Model</pd:from>
+            <pd:to>Checkpoint</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint</pd:from>
+            <pd:to>LogStart-Success</pd:to>
+            <pd:xpathDescription>Success</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Checkpoint</pd:from>
+            <pd:to>Assign Multi inBeneficary</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogStart-Success</pd:from>
+            <pd:to>Assign Multi inBeneficary</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map-to-T24-Model</pd:from>
+            <pd:to>FTCitadInwardRemittance</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetCompanyCode</pd:from>
+            <pd:to>Map-to-T24-Model</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map ESB Model</pd:from>
+            <pd:to>LogEnd-Data Invalid</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd-Data Invalid</pd:from>
+            <pd:to>errorProcessor</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map ESB Model">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:description>// Dữ liệu về T24. Add thêm Unique_ID, current_timestamps với mỗi Record</pd:description>
+            <pd:x>316</pd:x>
+            <pd:y>171</pd:y>
+            <config>
+                <element ref="pfx8:Citad_Out_Data"/>
+            </config>
+            <pd:inputBindings>
+                <pfx8:Citad_Out_Data>
+                    <pfx8:Unique_ID>
+                        <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/RELATION_NO, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE)"/>
+                    </pfx8:Unique_ID>
+                    <pfx8:TRANSACTION_TYPE>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx8:TRANSACTION_TYPE>
+                    <pfx8:O_CI_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/O_CI_CODE"/>
+                    </pfx8:O_CI_CODE>
+                    <pfx8:TRX_DATE>
+                        <xsl:value-of select="$CitadRecord/Record/TRX_DATE"/>
+                    </pfx8:TRX_DATE>
+                    <pfx8:RELATION_NO>
+                        <xsl:value-of select="$CitadRecord/Record/RELATION_NO"/>
+                    </pfx8:RELATION_NO>
+                    <pfx8:TYPE_FLAG>
+                        <xsl:value-of select="$CitadRecord/Record/TYPE_FLAG"/>
+                    </pfx8:TYPE_FLAG>
+                    <xsl:if test="$CitadRecord/Record/CHECK_CODE">
+                        <pfx8:CHECK_CODE>
+                            <xsl:value-of select="$CitadRecord/Record/CHECK_CODE"/>
+                        </pfx8:CHECK_CODE>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/TRX_TYPE">
+                        <pfx8:TRX_TYPE>
+                            <xsl:value-of select="$CitadRecord/Record/TRX_TYPE"/>
+                        </pfx8:TRX_TYPE>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SD_TIME">
+                        <pfx8:SD_TIME>
+                            <xsl:value-of select="$CitadRecord/Record/SD_TIME"/>
+                        </pfx8:SD_TIME>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SERIAL_NO">
+                        <pfx8:SERIAL_NO>
+                            <xsl:value-of select="$CitadRecord/Record/SERIAL_NO"/>
+                        </pfx8:SERIAL_NO>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/RESPONSE_CODE">
+                        <pfx8:RESPONSE_CODE>
+                            <xsl:value-of select="$CitadRecord/Record/RESPONSE_CODE"/>
+                        </pfx8:RESPONSE_CODE>
+                    </xsl:if>
+                    <pfx8:R_CI_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/R_CI_CODE"/>
+                    </pfx8:R_CI_CODE>
+                    <pfx8:O_INDIRECT_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/O_INDIRECT_CODE"/>
+                    </pfx8:O_INDIRECT_CODE>
+                    <pfx8:R_INDIRECT_CODE>
+                        <xsl:value-of select="$CitadRecord/Record/R_INDIRECT_CODE"/>
+                    </pfx8:R_INDIRECT_CODE>
+                    <xsl:if test="$CitadRecord/Record/FEE_CI_CODE">
+                        <pfx8:FEE_CI_CODE>
+                            <xsl:value-of select="$CitadRecord/Record/FEE_CI_CODE"/>
+                        </pfx8:FEE_CI_CODE>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/CURRENCY">
+                        <pfx8:CURRENCY>
+                            <xsl:value-of select="$CitadRecord/Record/CURRENCY"/>
+                        </pfx8:CURRENCY>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/AMOUNT">
+                        <pfx8:AMOUNT>
+                            <xsl:value-of select="$CitadRecord/Record/AMOUNT"/>
+                        </pfx8:AMOUNT>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SD_NAME">
+                        <pfx8:SD_NAME>
+                            <xsl:value-of select="$CitadRecord/Record/SD_NAME"/>
+                        </pfx8:SD_NAME>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/SD_ACCNT">
+                        <pfx8:SD_ACCNT>
+                            <xsl:value-of select="$CitadRecord/Record/SD_ACCNT"/>
+                        </pfx8:SD_ACCNT>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/RV_NAME">
+                        <pfx8:RV_NAME>
+                            <xsl:value-of select="$CitadRecord/Record/RV_NAME"/>
+                        </pfx8:RV_NAME>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/RV_ACCNT">
+                        <pfx8:RV_ACCNT>
+                            <xsl:value-of select="$CitadRecord/Record/RV_ACCNT"/>
+                        </pfx8:RV_ACCNT>
+                    </xsl:if>
+                    <pfx8:CONTENT>
+                        <xsl:value-of select="concat(tib:concat-sequence-format(tib:tokenize(tib:concat-sequence-format(tib:tokenize($CitadRecord/Record/CONTENT, '//'), '/'), '_'), '-' ), '.' )"/>
+                    </pfx8:CONTENT>
+                    <xsl:if test="$CitadRecord/Record/OPERT1">
+                        <pfx8:OPERT1>
+                            <xsl:value-of select="$CitadRecord/Record/OPERT1"/>
+                        </pfx8:OPERT1>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/OPERT2">
+                        <pfx8:OPERT2>
+                            <xsl:value-of select="$CitadRecord/Record/OPERT2"/>
+                        </pfx8:OPERT2>
+                    </xsl:if>
+                    <xsl:if test="$CitadRecord/Record/REFERENCE">
+                        <pfx8:REFERENCE>
+                            <xsl:value-of select="$CitadRecord/Record/REFERENCE"/>
+                        </pfx8:REFERENCE>
+                    </xsl:if>
+                    <pfx8:CONTENT_EX>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx8:CONTENT_EX>
+                    <xsl:if test="$CitadRecord/Record/MAC">
+                        <pfx8:MAC>
+                            <xsl:value-of select="$CitadRecord/Record/MAC"/>
+                        </pfx8:MAC>
+                    </xsl:if>
+                    <pfx8:currency_timestamp>
+                        <xsl:value-of select="tib:timestamp()"/>
+                    </pfx8:currency_timestamp>
+                </pfx8:Citad_Out_Data>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="EMS Update Queue Sender">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>947</pd:x>
+            <pd:y>307</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>CitadDBUpdateQueue</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/SharedResource/Connection/Jms/T24JMSQueue_Application Properties.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns0:ActivityInput>
+                    <JMSCorrelationID>
+                        <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                    </JMSCorrelationID>
+                    <OtherProperties>
+                        <application>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadIn/UpdateQueueMessSelector"/>
+                        </application>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$Render-XML/xmlString"/>
+                    </Body>
+                </ns0:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign Multi inBeneficary">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>460</pd:x>
+            <pd:y>302</pd:y>
+            <config>
+                <variableName>inBeneficiaryList</variableName>
+            </config>
+            <pd:inputBindings>
+                <inBeneficiaryList>
+                    <inBeneficiary>
+                        <xsl:value-of select="if (string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME) &lt; 35 ) &#xA;then $Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME&#xA;else substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME, 1 , 35 )"/>
+                    </inBeneficiary>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME) > 35">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME, 36 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME) > 70">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME, 71 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME) > 105">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_NAME, 106 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                </inBeneficiaryList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign Multi paymentDetail">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>565</pd:x>
+            <pd:y>302</pd:y>
+            <config>
+                <variableName>paymentDetailList</variableName>
+            </config>
+            <pd:inputBindings>
+                <paymentDetailList>
+                    <paymentDetail>
+                        <xsl:value-of select="if (string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT) &lt; 35 ) &#xA;then $Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT&#xA;else substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT, 1 , 35 )"/>
+                    </paymentDetail>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT) > 35">
+                        <paymentDetail>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT, 36 , 35 )"/>
+                        </paymentDetail>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT) > 70">
+                        <paymentDetail>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT, 71 , 35 )"/>
+                        </paymentDetail>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT) > 105">
+                        <paymentDetail>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT, 106 , 35 )"/>
+                        </paymentDetail>
+                    </xsl:if>
+                </paymentDetailList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign Multi OrderingCustomer">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>675</pd:x>
+            <pd:y>304</pd:y>
+            <config>
+                <variableName>orderingCustomerList</variableName>
+            </config>
+            <pd:inputBindings>
+                <orderingCustomerList>
+                    <orderingCust>
+                        <xsl:value-of select="if (string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME) &lt; 35 ) &#xA;then $Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME&#xA;else substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME, 1 , 35 )"/>
+                    </orderingCust>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME) > 35">
+                        <orderingCust>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME, 36 , 35 )"/>
+                        </orderingCust>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME) > 70">
+                        <orderingCust>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME, 71 , 35 )"/>
+                        </orderingCust>
+                    </xsl:if>
+                    <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="string-length($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME) > 105">
+                        <orderingCust>
+                            <xsl:value-of select="substring($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_NAME, 106 , 35 )"/>
+                        </orderingCust>
+                    </xsl:if>
+                </orderingCustomerList>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="FTCitadInwardRemittance">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>837</pd:x>
+            <pd:y>534</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/CitadIn/T24ServiceTimeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>ns3:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>FTCitadInwardRemittance</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSCITAD%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <xsl:copy-of select="$Map-to-T24-Model/ns3:FTCitadInwardRemittance"/>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Render XML">
+            <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+            <pd:x>835</pd:x>
+            <pd:y>299</pd:y>
+            <config>
+                <renderAsText>text</renderAsText>
+                <validateInput>false</validateInput>
+                <textEncoding>UTF-8</textEncoding>
+                <term ref="pfx10:CitadUpdate"/>
+            </config>
+            <pd:inputBindings>
+                <pfx10:CitadUpdate>
+                    <pfx10:Unique_ID>
+                        <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                    </pfx10:Unique_ID>
+                    <xsl:if test="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/transactionId">
+                        <pfx10:FTID>
+                            <xsl:value-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/transactionId"/>
+                        </pfx10:FTID>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:O_CI_CODE">
+                        <pfx10:O_CI_CODE>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:O_CI_CODE"/>
+                        </pfx10:O_CI_CODE>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TRX_DATE">
+                        <pfx10:TRX_DATE>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TRX_DATE"/>
+                        </pfx10:TRX_DATE>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TYPE_FLAG">
+                        <pfx10:TYPE_FLAG>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TYPE_FLAG"/>
+                        </pfx10:TYPE_FLAG>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_CI_CODE">
+                        <pfx10:R_CI_CODE>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_CI_CODE"/>
+                        </pfx10:R_CI_CODE>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SERIAL_NO">
+                        <pfx10:SERIAL_NO>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SERIAL_NO"/>
+                        </pfx10:SERIAL_NO>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_TIME">
+                        <pfx10:SD_TIME>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:SD_TIME"/>
+                        </pfx10:SD_TIME>
+                    </xsl:if>
+                    <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:MAC">
+                        <pfx10:MAC>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:MAC"/>
+                        </pfx10:MAC>
+                    </xsl:if>
+                    <xsl:if test="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/successIndicator">
+                        <pfx10:successIndicator>
+                            <xsl:value-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/successIndicator"/>
+                        </pfx10:successIndicator>
+                    </xsl:if>
+                    <xsl:for-each select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/messages">
+                        <pfx10:messages>
+                            <xsl:value-of select="current()"/>
+                        </pfx10:messages>
+                    </xsl:for-each>
+                </pfx10:CitadUpdate>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogEnd-Success">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>1064</pd:x>
+            <pd:y>300</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat( 'T24CITAD' ,': End ', 'T24CITAD' )"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;06&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;Citad&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                                </pfx:MsgId>
+                                <pfx:MsgSrcId>
+                                    <xsl:value-of select="$EMS-Update-Queue-Sender/ns0:aEmptyOutputClass/ns0:MessageID"/>
+                                </pfx:MsgSrcId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                            </ns:SOAMsgId>
+                            <ns:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24CITAD/CitadIn&quot;"/>
+                            </ns:ServiceName>
+                            <ns:OperationName>
+                                <xsl:value-of select="&quot;CitadIn&quot;"/>
+                            </ns:OperationName>
+                            <ns:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <ns2:ServiceEnverlop>
+                                <pfx:AppHdr>
+                                    <pfx:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </pfx:CharSet>
+                                    <pfx:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </pfx:ServVersion>
+                                    <pfx:From>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;06&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;Citad&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:From>
+                                    <pfx:To>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;24&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:To>
+                                    <pfx:MsgId>
+                                        <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                                    </pfx:MsgId>
+                                    <pfx:BizServ>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;5&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:BizServ>
+                                    <pfx:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </pfx:CreatedDate>
+                                </pfx:AppHdr>
+                                <pfx:ResponseStatus>
+                                    <pfx:Status>
+                                        <xsl:value-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/transactionId"/>
+                                    </pfx:Status>
+                                    <pfx:ErrorCode>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/T24SystemResponseStatus/ErrorCode_NoError"/>
+                                    </pfx:ErrorCode>
+                                    <pfx:ErrorMessage>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/T24SystemResponseStatus/ErrorMessage_ConnectSuccess"/>
+                                    </pfx:ErrorMessage>
+                                    <pfx:ErrorInfo>
+                                        <xsl:if test="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/transactionId">
+                                            <pfx:Id>
+                                                <xsl:value-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/transactionId"/>
+                                            </pfx:Id>
+                                        </xsl:if>
+                                        <xsl:if test="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/messageId">
+                                            <pfx:ErrorCode>
+                                                <xsl:value-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/messageId"/>
+                                            </pfx:ErrorCode>
+                                        </xsl:if>
+                                        <pfx:ErrorMessage>
+                                            <xsl:value-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse/Status/messages[1]"/>
+                                        </pfx:ErrorMessage>
+                                    </pfx:ErrorInfo>
+                                </pfx:ResponseStatus>
+                                <ServiceBody>
+                                    <xsl:copy-of select="$Map-to-T24-Model/ns3:FTCitadInwardRemittance"/>
+                                </ServiceBody>
+                            </ns2:ServiceEnverlop>
+                            <xsl:copy-of select="$FTCitadInwardRemittance/outputMessage/ns3:FTCitadInwardRemittanceResponse"/>
+                            <xsl:copy-of select="$EMS-Update-Queue-Sender/ns0:aEmptyOutputClass"/>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;End&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp() - $Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:currency_timestamp"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogStart-Success">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>389</pd:x>
+            <pd:y>475</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat(&quot;T24CITAD&quot;,': Start ',&quot;T24CITAD&quot;)"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;06&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;Citad&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                                </pfx:MsgId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext),tib:timestamp())"/>
+                            </ns:SOAMsgId>
+                            <ns:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24CITAD/CitadIn&quot;"/>
+                            </ns:ServiceName>
+                            <ns:OperationName>
+                                <xsl:value-of select="&quot;CitadIn&quot;"/>
+                            </ns:OperationName>
+                            <ns:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <xsl:copy-of select="$Map-ESB-Model/pfx8:Citad_Out_Data"/>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;Start&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp()  - $Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:currency_timestamp"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Checkpoint">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>318</pd:x>
+            <pd:y>293</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns7:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                    </duplicateKey>
+                </ns7:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map-to-T24-Model">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>676</pd:x>
+            <pd:y>532</pd:y>
+            <config>
+                <element ref="ns3:FTCitadInwardRemittance"/>
+            </config>
+            <pd:inputBindings>
+                <ns3:FTCitadInwardRemittance>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="$GetCompanyCode/resultSet/Record[1]/T24_CODE"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/T24Authentication/T24Pass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/T24Authentication/T24User"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <OfsFunction>
+                        <activityName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </activityName>
+                        <assignReason>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </assignReason>
+                        <dueDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </dueDate>
+                        <extProcess>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcess>
+                        <extProcessID>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcessID>
+                        <gtsControl>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </gtsControl>
+                        <messageId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </messageId>
+                        <noOfAuth>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </noOfAuth>
+                        <owner>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </owner>
+                        <replace>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </replace>
+                        <startDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </startDate>
+                        <user>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </user>
+                    </OfsFunction>
+                    <FUNDSTRANSFERSBVCITADINType>
+                        <TransactionType>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadIn/T24_TransactionType"/>
+                        </TransactionType>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CURRENCY">
+                            <Currency>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CURRENCY"/>
+                            </Currency>
+                        </xsl:if>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:AMOUNT">
+                            <Amount>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:AMOUNT"/>
+                            </Amount>
+                        </xsl:if>
+                        <ValueDate>
+                            <xsl:value-of select="upper-case(tib:format-dateTime( 'dd MMM yyyy' , tib:parse-dateTime( 'yyyyMMdd',  $Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TRX_DATE ) ) )"/>
+                        </ValueDate>
+                        <gORDERINGCUST>
+                            <xsl:for-each select="$orderingCustomerList/orderingCustomerList/orderingCust">
+                                <OrderingCustomer>
+                                    <xsl:value-of select="current()"/>
+                                </OrderingCustomer>
+                            </xsl:for-each>
+                        </gORDERINGCUST>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_ACCNT">
+                            <InBeneficiaryAccountNo>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:RV_ACCNT"/>
+                            </InBeneficiaryAccountNo>
+                        </xsl:if>
+                        <gINBENCUSTOMER>
+                            <xsl:for-each select="$inBeneficiaryList/inBeneficiaryList/inBeneficiary">
+                                <InBeneficiary>
+                                    <xsl:value-of select="current()"/>
+                                </InBeneficiary>
+                            </xsl:for-each>
+                        </gINBENCUSTOMER>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_CI_CODE">
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_CI_CODE"/>
+                            </ReceivingBank>
+                        </xsl:if>
+                        <IBPSTransReference>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                        </IBPSTransReference>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TRX_TYPE">
+                            <CitadType>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:TRX_TYPE"/>
+                            </CitadType>
+                        </xsl:if>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_INDIRECT_CODE">
+                            <InReceivingBank>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_INDIRECT_CODE"/>
+                            </InReceivingBank>
+                        </xsl:if>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:O_CI_CODE">
+                            <SendingBank>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:O_CI_CODE"/>
+                            </SendingBank>
+                        </xsl:if>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:O_INDIRECT_CODE">
+                            <InSendingBank>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:O_INDIRECT_CODE"/>
+                            </InSendingBank>
+                        </xsl:if>
+                        <xsl:if test="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT">
+                            <PaymentDetails>
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:CONTENT"/>
+                            </PaymentDetails>
+                        </xsl:if>
+                    </FUNDSTRANSFERSBVCITADINType>
+                </ns3:FTCitadInwardRemittance>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetCompanyCode">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>677</pd:x>
+            <pd:y>424</pd:y>
+            <config>
+                <timeout>%%ServiceGlobalVar/CitadIn/CompanyDBTimeOut_ms%%</timeout>
+                <commit>false</commit>
+                <maxRows>%%ServiceGlobalVar/CitadIn/MaxRowCompanyCodeDB%%</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <statement>select MNEMONIC,T24_CODE,AGENT_NAME from COMPANYCODEMAPPING where BANKCODE=?</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>BANKCODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <oraObjects/>
+                <oraTables/>
+                <QueryOutputCachedSchemaColumns>MNEMONIC</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>T24_CODE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>AGENT_NAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput>
+                    <BANKCODE>
+                        <xsl:choose>
+                            <xsl:when test="exists($Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_CI_CODE)">
+                                <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:R_CI_CODE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </BANKCODE>
+                </jdbcQueryActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="errorProcessor">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>818</pd:x>
+            <pd:y>171</pd:y>
+            <config>
+                <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ProcessName>
+                        <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                    </ProcessName>
+                    <GeneratedId>
+                        <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE, $CitadRecord/Record/SERIAL_NO,$CitadRecord/Record/SD_TIME)"/>
+                    </GeneratedId>
+                    <ns13:ExceptionBody>
+                        <ns13:Hostname>
+                            <xsl:value-of select="BW:getHostName()"/>
+                        </ns13:Hostname>
+                        <ns13:Category>
+                            <xsl:value-of select="&quot;ERROR&quot;"/>
+                        </ns13:Category>
+                        <ns13:Type>
+                            <xsl:value-of select="&quot;MAP ERROR&quot;"/>
+                        </ns13:Type>
+                        <ns13:Level>
+                            <xsl:value-of select="&quot;level&quot;"/>
+                        </ns13:Level>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                            <ns13:ErrorReport>
+                                <StackTrace>
+                                    <xsl:value-of select="StackTrace"/>
+                                </StackTrace>
+                                <Msg>
+                                    <xsl:value-of select="Msg"/>
+                                </Msg>
+                                <FullClass>
+                                    <xsl:value-of select="FullClass"/>
+                                </FullClass>
+                                <ObjectClass>
+                                    <xsl:value-of select="Class"/>
+                                </ObjectClass>
+                                <ProcessStack>
+                                    <xsl:value-of select="ProcessStack"/>
+                                </ProcessStack>
+                                <xsl:if test="MsgCode">
+                                    <MsgCode>
+                                        <xsl:value-of select="MsgCode"/>
+                                    </MsgCode>
+                                </xsl:if>
+                                <xsl:copy-of select="Data"/>
+                            </ns13:ErrorReport>
+                        </xsl:for-each>
+                    </ns13:ExceptionBody>
+                    <ServiceInput>
+                        <pfx:AppHdr>
+                            <pfx:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx:CharSet>
+                            <pfx:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx:ServVersion>
+                            <pfx:From>
+                                <pfx:Id>
+                                    <xsl:value-of select="&quot;06&quot;"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="&quot;Citad&quot;"/>
+                                </pfx:Name>
+                            </pfx:From>
+                            <pfx:To>
+                                <pfx:Id>
+                                    <xsl:value-of select="&quot;24&quot;"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </pfx:Name>
+                            </pfx:To>
+                            <pfx:MsgId>
+                                <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE, $CitadRecord/Record/SERIAL_NO,$CitadRecord/Record/SD_TIME)"/>
+                            </pfx:MsgId>
+                            <pfx:BizServ>
+                                <pfx:Id>
+                                    <xsl:value-of select="&quot;6&quot;"/>
+                                </pfx:Id>
+                                <pfx:Name>
+                                    <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                </pfx:Name>
+                            </pfx:BizServ>
+                            <pfx:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx:CreatedDate>
+                        </pfx:AppHdr>
+                        <ServiceBody/>
+                    </ServiceInput>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogEnd-Data Invalid">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>583</pd:x>
+            <pd:y>181</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/DebugRole"/>
+                    </EnableRoles>
+                    <ns12:EngineLog>
+                        <ns12:ServiceName>
+                            <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                        </ns12:ServiceName>
+                        <ns12:Message>
+                            <xsl:value-of select="concat( 'T24CITAD' ,': End ', 'T24CITAD' )"/>
+                        </ns12:Message>
+                        <ns12:Category>
+                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/EnableRoles"/>
+                        </ns12:Category>
+                        <ns12:TrackingId>
+                            <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE, $CitadRecord/Record/SERIAL_NO,$CitadRecord/Record/SD_TIME)"/>
+                        </ns12:TrackingId>
+                    </ns12:EngineLog>
+                    <ns:SOAEnvelope>
+                        <ns:SOAServiceHeader>
+                            <ns:AppHdr>
+                                <pfx:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </pfx:CharSet>
+                                <pfx:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </pfx:ServVersion>
+                                <pfx:From>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;06&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;Citad&quot;"/>
+                                    </pfx:Name>
+                                </pfx:From>
+                                <pfx:To>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;24&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24&quot;"/>
+                                    </pfx:Name>
+                                </pfx:To>
+                                <pfx:MsgId>
+                                    <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE, $CitadRecord/Record/SERIAL_NO,$CitadRecord/Record/SD_TIME)"/>
+                                </pfx:MsgId>
+                                <pfx:BizServ>
+                                    <pfx:Id>
+                                        <xsl:value-of select="&quot;5&quot;"/>
+                                    </pfx:Id>
+                                    <pfx:Name>
+                                        <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                    </pfx:Name>
+                                </pfx:BizServ>
+                                <pfx:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </pfx:CreatedDate>
+                            </ns:AppHdr>
+                            <ns:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns1:ProcessContext), tib:timestamp())"/>
+                            </ns:SOAMsgId>
+                            <ns:ServiceName>
+                                <xsl:value-of select="&quot;Global/System/T24Citad/CitadIn&quot;"/>
+                            </ns:ServiceName>
+                            <ns:OperationName>
+                                <xsl:value-of select="&quot;CitadIn&quot;"/>
+                            </ns:OperationName>
+                            <ns:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </ns:ProcessName>
+                        </ns:SOAServiceHeader>
+                        <ns:ServiceBody>
+                            <ns2:ServiceEnverlop>
+                                <pfx:AppHdr>
+                                    <pfx:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </pfx:CharSet>
+                                    <pfx:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </pfx:ServVersion>
+                                    <pfx:From>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;06&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;Citad&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:From>
+                                    <pfx:To>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;24&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:To>
+                                    <pfx:MsgId>
+                                        <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE, $CitadRecord/Record/SERIAL_NO,$CitadRecord/Record/SD_TIME)"/>
+                                    </pfx:MsgId>
+                                    <pfx:BizServ>
+                                        <pfx:Id>
+                                            <xsl:value-of select="&quot;6&quot;"/>
+                                        </pfx:Id>
+                                        <pfx:Name>
+                                            <xsl:value-of select="&quot;T24CITAD&quot;"/>
+                                        </pfx:Name>
+                                    </pfx:BizServ>
+                                    <pfx:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </pfx:CreatedDate>
+                                </pfx:AppHdr>
+                                <pfx:ResponseStatus>
+                                    <pfx:Status>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadDBStates/DataInvalid_Status"/>
+                                    </pfx:Status>
+                                    <pfx:ErrorCode>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadDBStates/DataInvalid_ErrorCode"/>
+                                    </pfx:ErrorCode>
+                                    <pfx:ErrorMessage>
+                                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadDBStates/DataInvalid_ErrorMessage"/>
+                                    </pfx:ErrorMessage>
+                                    <pfx:ErrorInfo>
+                                        <pfx:Id>
+                                            <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadDBStates/DataInvalid_Status"/>
+                                        </pfx:Id>
+                                        <pfx:ErrorCode>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                                        </pfx:ErrorCode>
+                                        <pfx:ErrorMessage>
+                                            <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                                        </pfx:ErrorMessage>
+                                    </pfx:ErrorInfo>
+                                </pfx:ResponseStatus>
+                                <ServiceBody>
+                                    <xsl:copy-of select="$CitadRecord/Record"/>
+                                </ServiceBody>
+                            </ns2:ServiceEnverlop>
+                        </ns:ServiceBody>
+                    </ns:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;End&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp()"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1245</pd:x>
+        <pd:y>681</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>1246</pd:x>
+        <pd:y>566</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns6:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/ServiceGlobalVar/CitadIn/SleepingTime"/>
+                </IntervalInMillisec>
+            </ns6:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorProcessor-Unexpected">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1243</pd:x>
+        <pd:y>464</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="concat( $CitadRecord/Record/O_CI_CODE ,$CitadRecord/Record/TRX_DATE, $CitadRecord/Record/TYPE_FLAG, $CitadRecord/Record/R_CI_CODE, $CitadRecord/Record/SERIAL_NO,$CitadRecord/Record/SD_TIME)"/>
+                </GeneratedId>
+                <ns13:ExceptionBody>
+                    <ns13:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns13:Hostname>
+                    <ns13:Category>
+                        <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns13:Category>
+                    <ns13:Type>
+                        <xsl:value-of select="&quot;TYPE&quot;"/>
+                    </ns13:Type>
+                    <ns13:Level>
+                        <xsl:value-of select="&quot;LEVEL&quot;"/>
+                    </ns13:Level>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$_error/ns1:ErrorReport">
+                        <ns13:ErrorReport>
+                            <StackTrace>
+                                <xsl:value-of select="StackTrace"/>
+                            </StackTrace>
+                            <Msg>
+                                <xsl:value-of select="Msg"/>
+                            </Msg>
+                            <FullClass>
+                                <xsl:value-of select="FullClass"/>
+                            </FullClass>
+                            <ObjectClass>
+                                <xsl:value-of select="Class"/>
+                            </ObjectClass>
+                            <ProcessStack>
+                                <xsl:value-of select="ProcessStack"/>
+                            </ProcessStack>
+                            <xsl:if test="MsgCode">
+                                <MsgCode>
+                                    <xsl:value-of select="MsgCode"/>
+                                </MsgCode>
+                            </xsl:if>
+                            <xsl:copy-of select="Data"/>
+                        </ns13:ErrorReport>
+                    </xsl:for-each>
+                </ns13:ExceptionBody>
+                <ServiceInput>
+                    <pfx:AppHdr>
+                        <pfx:CharSet>
+                            <xsl:value-of select="&quot;UTF-8&quot;"/>
+                        </pfx:CharSet>
+                        <pfx:ServVersion>
+                            <xsl:value-of select="&quot;1.0&quot;"/>
+                        </pfx:ServVersion>
+                        <pfx:From>
+                            <pfx:Id>
+                                <xsl:value-of select="&quot;06&quot;"/>
+                            </pfx:Id>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;Citad&quot;"/>
+                            </pfx:Name>
+                        </pfx:From>
+                        <pfx:To>
+                            <pfx:Id>
+                                <xsl:value-of select="&quot;24&quot;"/>
+                            </pfx:Id>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;T24&quot;"/>
+                            </pfx:Name>
+                        </pfx:To>
+                        <pfx:MsgId>
+                            <xsl:value-of select="$Map-ESB-Model/pfx8:Citad_Out_Data/pfx8:Unique_ID"/>
+                        </pfx:MsgId>
+                        <pfx:BizServ>
+                            <pfx:Id>
+                                <xsl:value-of select="&quot;05&quot;"/>
+                            </pfx:Id>
+                            <pfx:Name>
+                                <xsl:value-of select="&quot;T24Citad&quot;"/>
+                            </pfx:Name>
+                        </pfx:BizServ>
+                        <pfx:CreatedDate>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </pfx:CreatedDate>
+                    </pfx:AppHdr>
+                    <ServiceBody/>
+                </ServiceInput>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>QueryCitadData</pd:from>
+        <pd:to>Loop Handling Record</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Loop Handling Record</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>errorProcessor-Unexpected</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>QueryCitadData</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor-Unexpected</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

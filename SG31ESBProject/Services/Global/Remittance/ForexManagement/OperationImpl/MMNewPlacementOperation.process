@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/soaenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns="sbv/common/envelope/commonheader/1.0" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="schema://www.sbv.gov.vn/schema/global/remittance/forexmanagement/MoneyMarket.xsd" schemaLocation="/SharedResource/Schema/Global/Remittance/ForexManagement/MoneyMarket.xsd"/>
+    <wsdl:import namespace="http://wsdl.www.sbv.gov.vn/schema/global/remittance/forexmanagement/ForexManagement.wsdl" location="/SharedResource/Schema/Global/Remittance/ForexManagement/ForexManagement.wsdl"/>
+    <pd:name>Services/Global/Remittance/ForexManagement/OperationImpl/MMNewPlacementOperation.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:MMNewPlacementRequest"/>
+    <pd:startX>264</pd:startX>
+    <pd:startY>127</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$CallMMNewPlacementOperation/root/ns3:ServiceEnverlop/ServiceBody/*" element="ns1:MMNewPlacementResponseBody"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:MMNewPlacementResponse>
+            <Response>
+                <ns1:MMNewPlacementResponse>
+                    <xsl:copy-of select="$CallMMNewPlacementOperation/root/ns3:ServiceEnverlop/ns:AppHdr"/>
+                    <xsl:copy-of select="$CallMMNewPlacementOperation/root/ns3:ServiceEnverlop/ns:ResponseStatus"/>
+                    <xsl:copy-of select="$CallMMNewPlacementOperation/root/ns3:ServiceEnverlop/ServiceBody[1]/ns1:MMNewPlacementResponseBody"/>
+                </ns1:MMNewPlacementResponse>
+            </Response>
+        </wsdlPfx:MMNewPlacementResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:MMNewPlacementResponse"/>
+    <pd:endX>614</pd:endX>
+    <pd:endY>129</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1456195779602</pd:targetNamespace>
+    <pd:activity name="CallMMNewPlacementOperation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>423</pd:x>
+        <pd:y>126</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns2:SOAEnvelope>
+                    <ns2:SOAServiceHeader>
+                        <ns2:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:MMNewPlacementRequest/Request/ns1:MMNewPlacementRequest/ns:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:MMNewPlacementRequest/Request/ns1:MMNewPlacementRequest/ns:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:MMNewPlacementRequest/Request/ns1:MMNewPlacementRequest/ns:AppHdr/node()"/>
+                        </ns2:AppHdr>
+                        <ns2:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns4:ProcessContext/ProcessId)"/>
+                        </ns2:ProcessName>
+                    </ns2:SOAServiceHeader>
+                    <ns2:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:MMNewPlacementRequest/Request/ns1:MMNewPlacementRequest/ns1:MMNewPlacementRequestBody"/>
+                    </ns2:ServiceBody>
+                </ns2:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallMMNewPlacementOperation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallMMNewPlacementOperation</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

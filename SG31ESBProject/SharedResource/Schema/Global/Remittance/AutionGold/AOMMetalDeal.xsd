@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/remitance/autiongold/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/global/remitance/autiongold/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="createMetalDlealReq" type="createMetalDealReqType"/>
+	<xs:complexType name="createMetalDealReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element name="createMetalDealReqBody" type="createMetalDealReqBodyType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createMetalDealReqBodyType">
+		<xs:sequence>
+			<xs:element ref="AutionNo" minOccurs="0"/>
+			<xs:element ref="Bors" minOccurs="0"/>
+			<xs:element ref="AutionDate" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element ref="gOURACCOUNTPAY" minOccurs="0"/>
+			<xs:element name="GoldCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CounterParty" type="xs:string" minOccurs="0"/>
+			<xs:element name="ExecExcQtty" type="xs:string" minOccurs="0"/>
+			<xs:element name="SettValue" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrderNo" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AutionNo" type="xs:string"/>
+	<xs:element name="Bors" type="xs:string"/>
+	<xs:element name="AutionDate" type="xs:string"/>
+	<xs:element name="createMetalDealRes" type="createMetalDealResType"/>
+	<xs:complexType name="createMetalDealResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element name="ScreateMetalDealResBody" type="createMetalDealResBodyType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createMetalDealResBodyType">
+		<xs:sequence>
+			<xs:element name="FxRef" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="deleteMetalDlealReq" type="deleteMetalDlealReqType"/>
+	<xs:complexType name="deleteMetalDlealReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element name="deleteMetalDlealReqBody" type="deleteMetalDlealReqBodyType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="deleteMetalDlealReqBodyType">
+		<xs:sequence>
+			<xs:element name="OrderNo" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="deleteMetalDlealResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element name="SdeleteMetalDlealResBody" type="deleteMetalDlealResBodyType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="deleteMetalDlealRes" type="deleteMetalDlealResType"/>
+	<xs:complexType name="deleteMetalDlealResBodyType">
+		<xs:sequence>
+			<xs:element name="OrderNo" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="mOURACCOUNTPAYType">
+		<xs:sequence>
+			<xs:element name="SettlementAcforSell" type="xs:string" minOccurs="0"/>
+			<xs:element name="SettlementAcforBuy" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="gOURACCOUNTPAY">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="mOURACCOUNTPAY" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mOURACCOUNTPAY" type="mOURACCOUNTPAYType"/>
+	<xs:element name="createCSDFundCITADReq" type="createCSDFundCITADReqType"/>
+	<xs:element name="createCSDFundCITADRes" type="createCSDFundCITADResType"/>
+	<xs:complexType name="createCSDFundCITADReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CSDFundXferCITADInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createCSDFundCITADResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SCSDFundXferCITADInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CSDFundXferCITADInfoReq" type="CSDFundXferCITADInfoReqType"/>
+	<xs:complexType name="CSDFundXferCITADInfoReqType">
+		<xs:sequence>
+			<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+			<xs:element name="CSDReference" type="xs:string" minOccurs="0"/>
+			<xs:element name="CitadType" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankingCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="SendingBank" type="xs:string" minOccurs="0"/>
+			<xs:element name="ReceivingBank" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrderingCustomer" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrderingCustAddr" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrderingCustAcct" type="xs:string" minOccurs="0"/>
+			<xs:element name="InSendingBank" type="xs:string" minOccurs="0"/>
+			<xs:element name="Beneficiary" type="xs:string" minOccurs="0"/>
+			<xs:element name="BeneficiaryAddr" type="xs:string" minOccurs="0"/>
+			<xs:element name="BeneficiaryAcct" type="xs:string" minOccurs="0"/>
+			<xs:element name="InReceivingBank" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentDetails" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SCSDFundXferCITADInfoRes" type="SCSDFundXferCITADInfoResType"/>
+	<xs:complexType name="SCSDFundXferCITADInfoResType">
+		<xs:sequence>
+			<xs:element name="TransId" type="xs:string"/>
+			<xs:element name="PostingTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

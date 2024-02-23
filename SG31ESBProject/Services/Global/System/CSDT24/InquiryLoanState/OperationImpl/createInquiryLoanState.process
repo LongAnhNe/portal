@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="sbv/common/envelope/soaenvelope/1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" xmlns:pfx="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" schemaLocation="/SharedResource/Schema/Global/System/CSD/InquiryLoanState/InquiryLoanState.xsd"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/system/inquiryloanstate/version1.0" location="/SharedResource/Schema/Global/System/CSD/InquiryLoanState/InquiryLoanState.wsdl"/>
+    <pd:name>Services/Global/System/CSDT24/InquiryLoanState/OperationImpl/createInquiryLoanState.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:createInquiryLoanStateReq"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/*" element="wsdlPfx:SInquiryLoanStateList"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <wsdlPfx:createInquiryLoanStateRes>
+            <Res>
+                <wsdlPfx:createInquiryLoanStateRes>
+                    <xsl:copy-of select="$RequestResponse/root/ns3:ServiceEnverlop/ns2:AppHdr"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns3:ServiceEnverlop/ns2:ResponseStatus"/>
+                    <xsl:copy-of select="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/wsdlPfx:SInquiryLoanStateList"/>
+                </wsdlPfx:createInquiryLoanStateRes>
+            </Res>
+        </wsdlPfx:createInquiryLoanStateRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:createInquiryLoanStateRes"/>
+    <pd:endX>552</pd:endX>
+    <pd:endY>96</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <responseVar ref="wsdlPfx:createInquiryLoanStateRes"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1446453815356</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>147</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns1:SOAEnvelope>
+                    <ns1:SOAServiceHeader>
+                        <ns1:AppHdr>
+                            <xsl:copy-of select="$Start/wsdlPfx:createInquiryLoanStateReq/Req/wsdlPfx:createInquiryLoanStateReq/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createInquiryLoanStateReq/Req/wsdlPfx:createInquiryLoanStateReq/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/wsdlPfx:createInquiryLoanStateReq/Req/wsdlPfx:createInquiryLoanStateReq/ns2:AppHdr/node()"/>
+                        </ns1:AppHdr>
+                        <ns1:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                        </ns1:ProcessName>
+                    </ns1:SOAServiceHeader>
+                    <ns1:ServiceBody>
+                        <xsl:copy-of select="$Start/wsdlPfx:createInquiryLoanStateReq/Req/wsdlPfx:createInquiryLoanStateReq/wsdlPfx:InquiryLoanState"/>
+                    </ns1:ServiceBody>
+                </ns1:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

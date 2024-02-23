@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCINetCreditLimit.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCINetCreditLimit.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="UpdateCINetCreditLimitRequest"/>
+				<xs:element ref="UpdateCINetCreditLimitResponse"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UpdateCINetCreditLimitRequest" type="UpdateCINetCreditLimitRequestType"/>
+	<xs:complexType name="UpdateCINetCreditLimitRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="UpdateCINetCreditLimitRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="UpdateCINetCreditLimitRequestBody" type="UpdateCINetCreditLimitRequestBodyType"/>
+	<xs:complexType name="UpdateCINetCreditLimitRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="NetCreditLimitAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="Date" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="UpdateCINetCreditLimitResponse" type="UpdateCINetCreditLimitResponseType"/>
+	<xs:complexType name="UpdateCINetCreditLimitResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="UpdateCINetCreditLimitResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="UpdateCINetCreditLimitResponseBody" type="UpdateCINetCreditLimitResponseBodyType"/>
+	<xs:complexType name="UpdateCINetCreditLimitResponseBodyType">
+		<xs:sequence>
+			<xs:element name="DataStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="NoOfInsert" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InsertDBModel">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="MSGID" type="xs:string" minOccurs="0"/>
+				<xs:element name="SOURCEAPPID" type="xs:string" minOccurs="0"/>
+				<xs:element name="BANKCODE" type="xs:string" minOccurs="0"/>
+				<xs:element name="AMOUNT" type="xs:string" minOccurs="0"/>
+				<xs:element name="CREATEDDATE" type="xs:string" minOccurs="0"/>
+				<xs:element name="CONTENT" type="xs:string" minOccurs="0"/>
+				<xs:element name="TRANSTYPE" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

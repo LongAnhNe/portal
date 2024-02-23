@@ -1,0 +1,1831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="sbv/service/global/utilities/cbsstatus/inquiry/version1.0" xmlns:pfx15="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx13="http://temenos.com/SBV.FT.BULK.IBPS.LV" xmlns:pfx12="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx10="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx19="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx18="http://xmlns.example.com/1438330850951" xmlns:pfx17="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx5="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/FTIBPSHV" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx6="www.tibco.com/plugin/Sleep" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="sbv/global/remittance/fundxfer/version1.0" xmlns:ns6="sbv/global/datatype/datatype/version1.0" xmlns:ns10="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns7="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:pfx22="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx23="http://www.temenos.com/T24/event/CollaterisedLending/CollaterisedLendingFlow" xmlns:pfx20="http://temenos.com/SBV.ERP.T24.INTEGRATION" xmlns:pfx21="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" xmlns:pfx24="http://www.sbv.gov.vn/global/remittance/cbpfundxfer/version1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.xsd"/>
+    <wsdl:import namespace="http://temenos.com/FTIBPSHV"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" location="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION" location="/SharedResource/Schema/Global/System/T24/SBV.ERP.T24.INTEGRATION/SBV.ERP.T24.INTEGRATION.wsdl"/>
+    <pd:name>Services/Global/Remittance/FundXfer/Version1.0/createFTCITAD/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>705</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="" element="pfx21:FTCITADResType"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$CitadResponse/Citad/TransRef"/>
+                    </ns3:MsgId>
+                    <ns3:MsgPreId>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:MsgPreId>
+                    <ns3:MsgSrcId>
+                        <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                    </ns3:MsgSrcId>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$CitadResponse/Citad/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$CitadResponse/Citad/ErrorMessage"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx21:FTCITADResType>
+                        <pfx21:TransId>
+                            <xsl:value-of select="$CitadResponse/Citad/TransRef"/>
+                        </pfx21:TransId>
+                        <pfx21:SourceAppId>
+                            <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                        </pfx21:SourceAppId>
+                    </pfx21:FTCITADResType>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1172</pd:endX>
+    <pd:endY>700</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <InputInformationList>
+            <xsd:element name="InputInformation">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="orderingCustomerList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="orderingCustomer" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="orderingAddressList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="orderingAddress" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="inBeneficiaryList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="inBeneficiary" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="benAddressList">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="benAddress" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </InputInformationList>
+        <CitadResponse>
+            <xsd:element name="Citad">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="TransRef" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </CitadResponse>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/fundxfer/createftcitad/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>32</pd:x>
+        <pd:y>862</pd:y>
+        <config>
+            <element ref="pfx21:FTCITADReqType"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx21:FTCITADReqType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx21:FTCITADReqType"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseOtherwise">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>454</pd:x>
+        <pd:y>704</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="&quot;GIAO DICH SAI TRANSACTION TYPE&quot;"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignInputInformation">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>266</pd:x>
+        <pd:y>706</pd:y>
+        <config>
+            <variableName>InputInformationList</variableName>
+        </config>
+        <pd:inputBindings>
+            <InputInformation>
+                <orderingCustomerList>
+                    <orderingCustomer>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName) &lt; 35 ) &#xA;then $Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName&#xA;else substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName, 1 , 35 )"/>
+                    </orderingCustomer>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName) > 35">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName, 36 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName) > 70">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName, 71 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName) > 105">
+                        <orderingCustomer>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerName, 106 , 35 )"/>
+                        </orderingCustomer>
+                    </xsl:if>
+                </orderingCustomerList>
+                <orderingAddressList>
+                    <orderingAddress>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress) &lt; 35 ) &#xA;then $Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress&#xA;else substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress, 1 , 35 )"/>
+                    </orderingAddress>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress) > 35">
+                        <orderingAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress, 36 , 35 )"/>
+                        </orderingAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress) > 70">
+                        <orderingAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress, 71 , 35 )"/>
+                        </orderingAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress) > 105">
+                        <orderingAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAddress, 106 , 35 )"/>
+                        </orderingAddress>
+                    </xsl:if>
+                </orderingAddressList>
+                <inBeneficiaryList>
+                    <inBeneficiary>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary) &lt; 35 ) &#xA;then $Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary&#xA;else substring($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary, 1 , 35 )"/>
+                    </inBeneficiary>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary) > 35">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary, 36 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary) > 70">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary, 71 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary) > 105">
+                        <inBeneficiary>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:Benificiary, 106 , 35 )"/>
+                        </inBeneficiary>
+                    </xsl:if>
+                </inBeneficiaryList>
+                <benAddressList>
+                    <benAddress>
+                        <xsl:value-of select="if (string-length($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress) &lt; 35 ) &#xA;then $Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress&#xA;else substring($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress, 1 , 35 )"/>
+                    </benAddress>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress) > 35">
+                        <benAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress, 36 , 35 )"/>
+                        </benAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress) > 70">
+                        <benAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress, 71 , 35 )"/>
+                        </benAddress>
+                    </xsl:if>
+                    <xsl:if test="string-length($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress) > 105">
+                        <benAddress>
+                            <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAddress, 106 , 35 )"/>
+                        </benAddress>
+                    </xsl:if>
+                </benAddressList>
+            </InputInformation>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1458</pd:x>
+        <pd:y>695</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1330</pd:x>
+        <pd:y>698</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="&quot;GIAO DICH BI EXCEPTION&quot;"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="BTTV-CC">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>432</pd:x>
+        <pd:y>921</pd:y>
+        <pd:width>351</pd:width>
+        <pd:height>304</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>false</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24ERPWSBTTVCredit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTCreditError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTCreditSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTCreditExisted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSBTTVCredit</pd:from>
+            <pd:to>ResponseBTCreditSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSBTTVCredit</pd:from>
+            <pd:to>ResponseBTCreditExisted</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/successIndicator='T24Error' 
+and contains($CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSBTTVCredit</pd:from>
+            <pd:to>ResponseBTCreditError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallT24ERPWSBTTVCredit">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>510</pd:x>
+            <pd:y>1086</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx20:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>ERPClearingCredit</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSERP%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx20:ERPClearingCredit>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType[1]/pfx21:CompanyCode"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPPass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPUser"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <FUNDSTRANSFERSBVERPCLROUTType>
+                            <TransactionType>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:TransType"/>
+                            </TransactionType>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:DebitAccount">
+                                <DebitAccount>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:DebitAccount"/>
+                                </DebitAccount>
+                            </xsl:if>
+                            <Currency>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Currency"/>
+                            </Currency>
+                            <Amount>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Amount"/>
+                            </Amount>
+                            <ValueDate>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ValueDate"/>
+                            </ValueDate>
+                            <gORDERINGCUST>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingCustomerList/orderingCustomer">
+                                    <OrderingCustomer>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustomer>
+                                </xsl:for-each>
+                            </gORDERINGCUST>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAccount">
+                                <BeneficiaryAccountNo>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAccount"/>
+                                </BeneficiaryAccountNo>
+                            </xsl:if>
+                            <gBENCUSTOMER>
+                                <xsl:for-each select="$InputInformationList/InputInformation/inBeneficiaryList/inBeneficiary">
+                                    <Beneficiary>
+                                        <xsl:value-of select="."/>
+                                    </Beneficiary>
+                                </xsl:for-each>
+                            </gBENCUSTOMER>
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ReceiveBank"/>
+                            </ReceivingBank>
+                            <SendingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:SendingBank"/>
+                            </SendingBank>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:InSendingBank">
+                                <InSendingBank>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InSendingBank"/>
+                                </InSendingBank>
+                            </xsl:if>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:InReceiveBank">
+                                <InReceivingBank>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InReceiveBank"/>
+                                </InReceivingBank>
+                            </xsl:if>
+                            <ERPReference>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                            </ERPReference>
+                            <PaymentDetails>
+                                <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:PaymentDetail, 1, 210)"/>
+                            </PaymentDetails>
+                            <gL.ORD.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingAddressList/orderingAddress">
+                                    <OrderingCustAddr>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustAddr>
+                                </xsl:for-each>
+                            </gL.ORD.CUST.ADD>
+                            <OrderingCustAcct>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAccount"/>
+                            </OrderingCustAcct>
+                            <gL.BEN.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/benAddressList/benAddress">
+                                    <BeneficiaryCustAddr>
+                                        <xsl:value-of select="."/>
+                                    </BeneficiaryCustAddr>
+                                </xsl:for-each>
+                            </gL.BEN.CUST.ADD>
+                        </FUNDSTRANSFERSBVERPCLROUTType>
+                    </pfx20:ERPClearingCredit>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTCreditSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>674</pd:x>
+            <pd:y>983</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="if($CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/successIndicator='Success') then '0' else '1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="if($CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/successIndicator='Success') then &#xA;$CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/transactionId  else ''"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="if($CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/successIndicator='Success') then ''&#xA;else&#xA;$CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTCreditError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>671</pd:x>
+            <pd:y>1147</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-',$_error/ns:ErrorReport/Data)"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTCreditExisted">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>668</pd:x>
+            <pd:y>1063</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'0'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="substring-before(substring-after($CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO#&quot;), &quot;#&quot;)"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="$CallT24ERPWSBTTVCredit/outputMessage/pfx20:ERPClearingCreditResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="LCC">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>425</pd:x>
+        <pd:y>497</pd:y>
+        <pd:width>324</pd:width>
+        <pd:height>307</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>false</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24ERPWSCITADCredit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseCreditExisted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseCreditError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseCreditSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSCITADCredit</pd:from>
+            <pd:to>ResponseCreditSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSCITADCredit</pd:from>
+            <pd:to>ResponseCreditError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSCITADCredit</pd:from>
+            <pd:to>ResponseCreditExisted</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/successIndicator='T24Error' 
+and contains($CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+        </pd:transition>
+        <pd:activity name="ResponseCreditSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>642</pd:x>
+            <pd:y>560</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="if($CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/successIndicator='Success') then '0' else '1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="if($CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/successIndicator='Success') then &#xA;$CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/transactionId  else ''"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="if($CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/successIndicator='Success') then &quot;&quot;&#xA;else&#xA;$CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseCreditError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>643</pd:x>
+            <pd:y>727</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-',$_error/ns:ErrorReport/Data)"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CallT24ERPWSCITADCredit">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>503</pd:x>
+            <pd:y>646</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx20:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>ERPToCitadCredit</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSERP%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx21:FTCITADReqType"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx20:ERPToCitadCredit>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType[1]/pfx21:CompanyCode"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPPass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPUser"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <FUNDSTRANSFERSBVERPCITADOUTCREDITType>
+                            <TransactionType>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:TransType"/>
+                            </TransactionType>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:DebitAccount">
+                                <DebitAccount>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:DebitAccount"/>
+                                </DebitAccount>
+                            </xsl:if>
+                            <Currency>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Currency"/>
+                            </Currency>
+                            <Amount>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Amount"/>
+                            </Amount>
+                            <ValueDate>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ValueDate"/>
+                            </ValueDate>
+                            <gORDERINGCUST>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingCustomerList/orderingCustomer">
+                                    <OrderingCustomer>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustomer>
+                                </xsl:for-each>
+                            </gORDERINGCUST>
+                            <BeneficiaryAccountNo>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAccount"/>
+                            </BeneficiaryAccountNo>
+                            <gBENCUSTOMER>
+                                <xsl:for-each select="$InputInformationList/InputInformation/inBeneficiaryList/inBeneficiary">
+                                    <Beneficiary>
+                                        <xsl:value-of select="."/>
+                                    </Beneficiary>
+                                </xsl:for-each>
+                            </gBENCUSTOMER>
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ReceiveBank"/>
+                            </ReceivingBank>
+                            <CitadType>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CITADType"/>
+                            </CitadType>
+                            <SendingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:SendingBank"/>
+                            </SendingBank>
+                            <InSendingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InSendingBank"/>
+                            </InSendingBank>
+                            <InReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InReceiveBank"/>
+                            </InReceivingBank>
+                            <ERPReference>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                            </ERPReference>
+                            <PaymentDetails>
+                                <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:PaymentDetail, 1, 210)"/>
+                            </PaymentDetails>
+                            <gL.ORD.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingAddressList/orderingAddress">
+                                    <OrderingCustAddr>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustAddr>
+                                </xsl:for-each>
+                            </gL.ORD.CUST.ADD>
+                            <OrderingCustAcct>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAccount"/>
+                            </OrderingCustAcct>
+                            <gL.BEN.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/benAddressList/benAddress">
+                                    <BeneficiaryCustAddr>
+                                        <xsl:value-of select="."/>
+                                    </BeneficiaryCustAddr>
+                                </xsl:for-each>
+                            </gL.BEN.CUST.ADD>
+                        </FUNDSTRANSFERSBVERPCITADOUTCREDITType>
+                    </pfx20:ERPToCitadCredit>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseCreditExisted">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>644</pd:x>
+            <pd:y>646</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'0'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="substring-before(substring-after($CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO#&quot;), &quot;#&quot;)"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="$CallT24ERPWSCITADCredit/outputMessage/pfx20:ERPToCitadCreditResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="ResponseDebitStatusError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1002</pd:x>
+        <pd:y>700</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="$CitadResponse/Citad/Status"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="if($CitadResponse/Citad/Status='0') then &#xA;$CitadResponse/Citad/TransRef  else ''"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="if(exists($QueryErrorMapping/resultSet/Record[1]/ERRORMSGDEST)) then&#xA;concat($QueryErrorMapping/resultSet/Record[1]/ERRORMSGDEST, ' - T24ErrMsg: ', $CitadResponse/Citad/ErrorMessage)&#xA;else &#xA;$CitadResponse/Citad/ErrorMessage"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="QueryErrorMapping">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>767</pd:x>
+        <pd:y>843</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <wizardData/>
+            <statement>SELECT ERRORMSGDEST
+FROM ERRORMAPPING
+WHERE SOURCESYSTEM ='T24' AND DESTSYSTEM ='ERP' AND ERRORMSGSRC = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>P_ERRORMSGSRC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>ERRORMSGDEST</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <P_ERRORMSGSRC>
+                    <xsl:value-of select="$CitadResponse/Citad/ErrorMessage"/>
+                </P_ERRORMSGSRC>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>900</pd:x>
+        <pd:y>845</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:group name="BTTV-CN">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>430</pd:x>
+        <pd:y>784</pd:y>
+        <pd:width>336</pd:width>
+        <pd:height>386</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>false</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24ERPWSBTTVDebit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTDebitSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseBTDebitError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseDebitExisted-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSBTTVDebit</pd:from>
+            <pd:to>ResponseBTDebitSuccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSBTTVDebit</pd:from>
+            <pd:to>ResponseDebitExisted-1</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/successIndicator='T24Error' 
+and contains($CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSBTTVDebit</pd:from>
+            <pd:to>ResponseBTDebitError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallT24ERPWSBTTVDebit">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>507</pd:x>
+            <pd:y>949</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx20:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>ERPClearingDebit</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSERP%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx20:ERPClearingDebit>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType[1]/pfx21:CompanyCode"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPPass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPUser"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <FUNDSTRANSFERSBVERPCLROUTDEBITType>
+                            <TransactionType>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:TransType"/>
+                            </TransactionType>
+                            <Currency>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Currency"/>
+                            </Currency>
+                            <Amount>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Amount"/>
+                            </Amount>
+                            <ValueDate>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ValueDate"/>
+                            </ValueDate>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:CreditAccount">
+                                <CreditAccount>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CreditAccount"/>
+                                </CreditAccount>
+                            </xsl:if>
+                            <CREDITVALUEDATE>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ValueDate"/>
+                            </CREDITVALUEDATE>
+                            <gORDERINGCUST>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingCustomerList/orderingCustomer">
+                                    <OrderingCustomer>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustomer>
+                                </xsl:for-each>
+                            </gORDERINGCUST>
+                            <SendingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:SendingBank"/>
+                            </SendingBank>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:InSendingBank">
+                                <InSendingBank>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InSendingBank"/>
+                                </InSendingBank>
+                            </xsl:if>
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ReceiveBank"/>
+                            </ReceivingBank>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:InReceiveBank">
+                                <InReceivingBank>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InReceiveBank"/>
+                                </InReceivingBank>
+                            </xsl:if>
+                            <ERPReference>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                            </ERPReference>
+                            <PaymentDetails>
+                                <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:PaymentDetail, 1, 210)"/>
+                            </PaymentDetails>
+                            <gL.ORD.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingAddressList/orderingAddress">
+                                    <OrderingCusAdd>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCusAdd>
+                                </xsl:for-each>
+                            </gL.ORD.CUST.ADD>
+                            <OrderingCusAcc>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAccount"/>
+                            </OrderingCusAcc>
+                            <gL.BEN.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/benAddressList/benAddress">
+                                    <BenAdd>
+                                        <xsl:value-of select="."/>
+                                    </BenAdd>
+                                </xsl:for-each>
+                            </gL.BEN.CUST.ADD>
+                            <gL.BEN>
+                                <xsl:for-each select="$InputInformationList/InputInformation/inBeneficiaryList/inBeneficiary">
+                                    <Beneficiary>
+                                        <xsl:value-of select="."/>
+                                    </Beneficiary>
+                                </xsl:for-each>
+                            </gL.BEN>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAccount">
+                                <BenAcctNo>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAccount"/>
+                                </BenAcctNo>
+                            </xsl:if>
+                        </FUNDSTRANSFERSBVERPCLROUTDEBITType>
+                    </pfx20:ERPClearingDebit>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTDebitSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>646</pd:x>
+            <pd:y>847</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="if($CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/successIndicator='Success') then '0' else '1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="if($CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/successIndicator='Success') then &#xA;$CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/transactionId  else ''"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="if($CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/successIndicator='Success') then ''&#xA;else&#xA;$CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseBTDebitError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>657</pd:x>
+            <pd:y>1093</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-',$_error/ns:ErrorReport/Data)"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseDebitExisted-1">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>648</pd:x>
+            <pd:y>955</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'0'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="substring-before(substring-after($CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO#&quot;), &quot;#&quot;)"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="$CallT24ERPWSBTTVDebit/outputMessage/pfx20:ERPClearingDebitResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="LCN">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>420</pd:x>
+        <pd:y>263</pd:y>
+        <pd:width>601</pd:width>
+        <pd:height>376</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>false</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallT24ERPWSCITADDebit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseDebitExisted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseDebitError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ResponseDebitSuccess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSCITADDebit</pd:from>
+            <pd:to>ResponseDebitError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSCITADDebit</pd:from>
+            <pd:to>ResponseDebitExisted</pd:to>
+            <pd:xpathDescription>Existed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/successIndicator='T24Error' 
+and contains($CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallT24ERPWSCITADDebit</pd:from>
+            <pd:to>ResponseDebitSuccess</pd:to>
+            <pd:xpathDescription>Success</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ResponseDebitError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>700</pd:x>
+            <pd:y>553</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-',$_error/ns:ErrorReport/Data)"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CallT24ERPWSCITADDebit">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+            <pd:x>505</pd:x>
+            <pd:y>428</pd:y>
+            <config>
+                <timeout>%%T24WS/Timeout%%</timeout>
+                <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                <timeoutType>Seconds</timeoutType>
+                <service>pfx20:T24WebServicesImplService</service>
+                <servicePort>T24WebServicesImplPort</servicePort>
+                <operation>ERPToCitadDebit</operation>
+                <soapAction/>
+                <endpointURL>%%T24WS/T24WSERP%%</endpointURL>
+                <authScheme>NONE</authScheme>
+            </config>
+            <pd:coercions>
+                <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx21:FTCITADReqType"/>
+            </pd:coercions>
+            <pd:inputBindings>
+                <inputMessage>
+                    <pfx20:ERPToCitadDebit>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType[1]/pfx21:CompanyCode"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPPass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPUser"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <FUNDSTRANSFERSBVERPCITADOUTDEBITType>
+                            <TransactionType>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:TransType"/>
+                            </TransactionType>
+                            <Currency>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Currency"/>
+                            </Currency>
+                            <Amount>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:Amount"/>
+                            </Amount>
+                            <ValueDate>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ValueDate"/>
+                            </ValueDate>
+                            <xsl:if test="$Map-Data/pfx21:FTCITADReqType/pfx21:CreditAccount">
+                                <CreditAccount>
+                                    <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CreditAccount"/>
+                                </CreditAccount>
+                            </xsl:if>
+                            <CREDITVALUEDATE>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ValueDate"/>
+                            </CREDITVALUEDATE>
+                            <gORDERINGCUST>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingCustomerList/orderingCustomer">
+                                    <OrderingCustomer>
+                                        <xsl:value-of select="."/>
+                                    </OrderingCustomer>
+                                </xsl:for-each>
+                            </gORDERINGCUST>
+                            <CitadType>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CITADType"/>
+                            </CitadType>
+                            <SendingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:SendingBank"/>
+                            </SendingBank>
+                            <InSendingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InSendingBank"/>
+                            </InSendingBank>
+                            <ReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ReceiveBank"/>
+                            </ReceivingBank>
+                            <InReceivingBank>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:InReceiveBank"/>
+                            </InReceivingBank>
+                            <ERPReference>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                            </ERPReference>
+                            <PaymentDetails>
+                                <xsl:value-of select="substring($Map-Data/pfx21:FTCITADReqType/pfx21:PaymentDetail, 1, 210)"/>
+                            </PaymentDetails>
+                            <gL.ORD.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/orderingAddressList/orderingAddress">
+                                    <LORDCUSTADD>
+                                        <xsl:value-of select="."/>
+                                    </LORDCUSTADD>
+                                </xsl:for-each>
+                            </gL.ORD.CUST.ADD>
+                            <OrderingCusAcc>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:CustomerAccount"/>
+                            </OrderingCusAcc>
+                            <gL.BEN.CUST.ADD>
+                                <xsl:for-each select="$InputInformationList/InputInformation/benAddressList/benAddress">
+                                    <BenCusAdd>
+                                        <xsl:value-of select="."/>
+                                    </BenCusAdd>
+                                </xsl:for-each>
+                            </gL.BEN.CUST.ADD>
+                            <gL.BEN>
+                                <xsl:for-each select="$InputInformationList/InputInformation/inBeneficiaryList/inBeneficiary">
+                                    <Beneficiary>
+                                        <xsl:value-of select="."/>
+                                    </Beneficiary>
+                                </xsl:for-each>
+                            </gL.BEN>
+                            <BeneficiaryAccountNo>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:BenCustomerAccount"/>
+                            </BeneficiaryAccountNo>
+                        </FUNDSTRANSFERSBVERPCITADOUTDEBITType>
+                    </pfx20:ERPToCitadDebit>
+                </inputMessage>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseDebitExisted">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>721</pd:x>
+            <pd:y>437</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="'0'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="substring-before(substring-after($CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO#&quot;), &quot;#&quot;)"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="$CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ResponseDebitSuccess">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>641</pd:x>
+            <pd:y>330</pd:y>
+            <config>
+                <variableName>CitadResponse</variableName>
+            </config>
+            <pd:inputBindings>
+                <Citad>
+                    <Status>
+                        <xsl:value-of select="if($CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/successIndicator='Success') then '0' else '1'"/>
+                    </Status>
+                    <TransRef>
+                        <xsl:value-of select="if($CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/successIndicator='Success') then &#xA;$CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/transactionId  else ''"/>
+                    </TransRef>
+                    <ErrorMessage>
+                        <xsl:value-of select="if($CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/successIndicator='Success') then &#xA;&quot;&quot; else $CallT24ERPWSCITADDebit/outputMessage/pfx20:ERPToCitadDebitResponse/Status/messages[1]"/>
+                    </ErrorMessage>
+                </Citad>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>730</pd:x>
+        <pd:y>701</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CheckExistsFT">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>156</pd:x>
+        <pd:y>865</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx20:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>ERPCheckRef</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSERP%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx20:ERPCheckRef>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType[1]/pfx21:CompanyCode"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <SBVERPCHECKREFType>
+                        <enquiryInputCollection>
+                            <columnName>
+                                <xsl:value-of select="'@ID'"/>
+                            </columnName>
+                            <criteriaValue>
+                                <xsl:value-of select="$Map-Data/pfx21:FTCITADReqType/pfx21:ERPIDReference"/>
+                            </criteriaValue>
+                            <operand>
+                                <xsl:value-of select="'EQ'"/>
+                            </operand>
+                        </enquiryInputCollection>
+                    </SBVERPCHECKREFType>
+                </pfx20:ERPCheckRef>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>454</pd:x>
+        <pd:y>1101</pd:y>
+        <config>
+            <variableName>CitadResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Citad>
+                <Status>
+                    <xsl:value-of select="'0'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="$CheckExistsFT/outputMessage/pfx20:ERPCheckRefResponse/SBVERPCHECKREFType[1]/gSBVERPCHECKREFDetailType/mSBVERPCHECKREFDetailType[1]/FTID"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="''"/>
+                </ErrorMessage>
+            </Citad>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>265</pd:x>
+        <pd:y>863</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>QueryErrorMapping</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryErrorMapping</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseOtherwise</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>CheckExistsFT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>ResponseOtherwise</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>ResponseException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>BTTV-CC</pd:to>
+        <pd:xpathDescription>BTTV Credit Transaction</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Map-Data/pfx21:FTCITADReqType/pfx21:TransType = 'BCBT'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BTTV-CC</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LCC</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>LCC</pd:to>
+        <pd:xpathDescription>Citad Credit Transaction</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Map-Data/pfx21:FTCITADReqType/pfx21:TransType = 'BC' or $Map-Data/pfx21:FTCITADReqType/pfx21:TransType = 'BIBC'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>BTTV-CN</pd:to>
+        <pd:xpathDescription>BTTV Debit Transaction</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Map-Data/pfx21:FTCITADReqType/pfx21:TransType = 'ACBD'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BTTV-CN</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseDebitStatusError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignInputInformation</pd:from>
+        <pd:to>LCN</pd:to>
+        <pd:xpathDescription>Citad Debit Transaction</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Map-Data/pfx21:FTCITADReqType/pfx21:TransType = 'ACCD' or $Map-Data/pfx21:FTCITADReqType/pfx21:TransType = 'ACBC'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LCN</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>QueryErrorMapping</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CitadResponse/Citad/Status = 1</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckExistsFT</pd:from>
+        <pd:to>AssignInputInformation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckExistsFT</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:xpathDescription>Exists</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CheckExistsFT/outputMessage/pfx20:ERPCheckRefResponse/Status/successIndicator = 'Success' and
+exists($CheckExistsFT/outputMessage/pfx20:ERPCheckRefResponse/SBVERPCHECKREFType[1]/gSBVERPCHECKREFDetailType/mSBVERPCHECKREFDetailType[1]/FTID)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckExistsFT</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>AssignInputInformation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

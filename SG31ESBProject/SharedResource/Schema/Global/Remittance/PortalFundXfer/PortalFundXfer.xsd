@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 xmlns:cmd-dt="sbv/global/datatype/datatype/version1.0"
+	 xmlns:ESBCommonModel="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd"
+	 targetNamespace="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:import namespace="sbv/global/datatype/datatype/version1.0" schemaLocation="../../DataType/DataType1.0.xsd"/>
+	<xs:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" schemaLocation="../../System/ESB/Common/ESBCommonModel.xsd"/>
+	<xs:element name="createCDPFundReq" type="createCDPFundReqType"/>
+	<xs:element name="createCDPFundRes" type="createCDPFundResType"/>
+	<xs:complexType name="createCDPFundReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CDPFundXferInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createCDPFundResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="CDPFundXferInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CDPFundXferReqType">
+		<xs:sequence>
+			<xs:element name="MT103Type" type="xs:string"/>
+			<xs:element name="SourceAppId" type="xs:string"/>
+			<xs:element name="TransType" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditInfo" type="cmd-dt:FTAcctIdType" minOccurs="0"/>
+			<xs:element name="DebitInfo" type="cmd-dt:FTAcctIdType" minOccurs="0"/>
+			<xs:element name="DebitValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="TreasuryRate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProcessingDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrderingCustomer" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="OrderingInstitution" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AccountWithInstitutionTag57" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="BeneficiaryAccountNoTag59" type="xs:string" minOccurs="0"/>
+			<xs:element name="BeneficiaryCustomerTag59" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PaymentDetails" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="IntermedBank" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="BENOURCHARGES" type="xs:string" minOccurs="0"/>
+			<xs:element name="CommissionCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerSpread" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerRate" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountWithBankAcctTag57" type="xs:string" minOccurs="0"/>
+			<xs:element name="IntermedBankAcc" type="xs:string" minOccurs="0"/>
+			<xs:element name="RoundingType" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrdCustAcct" type="xs:string" minOccurs="0"/>
+			<xs:element name="IBANBenefAccountNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="BeneficiaryBICBankName" type="xs:string" minOccurs="0"/>
+			<xs:element name="BICIBANBENNAME" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="BICIBANBENCITY" type="xs:string" minOccurs="0"/>
+			<xs:element name="PayDetail" type="xs:string" minOccurs="0"/>
+			<xs:element name="CoCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="Tag53" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CDPFundXferResType">
+		<xs:sequence>
+			<xs:element name="TransId" type="xs:string"/>
+			<xs:element name="PostingTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CDPFundXferInfoReq" type="CDPFundXferReqType"/>
+	<xs:element name="CDPFundXferInfoRes" type="CDPFundXferResType"/>
+	<xs:element name="createCBPFundReq" type="createCBPFundReqType"/>
+	<xs:element name="createCBPFundRes" type="createCBPFundResType"/>
+	<xs:complexType name="createCBPFundReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CBPFundXferInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createCBPFundResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="CBPFundXferInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CBPFundXferInfoReq" type="CBPFundXferInfoReqType"/>
+	<xs:element name="CBPFundXferInfoRes" type="CBPFundXferInfoResType"/>
+	<xs:complexType name="CBPFundXferInfoReqType">
+		<xs:sequence>
+			<xs:element name="SystemType" type="xs:string"/>
+			<xs:element name="SourceAppId" type="xs:string"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="Amount" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CBPFundXferInfoResType">
+		<xs:sequence>
+			<xs:element name="TransId" type="xs:string"/>
+			<xs:element name="PostingTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="createCBPFundCITADReq" type="createCBPFundCITADReqType"/>
+	<xs:element name="createCBPFundCITADRes" type="createCBPFundCITADResType"/>
+	<xs:complexType name="createCBPFundCITADReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="CBPFundXferCITADInfoReq"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createCBPFundCITADResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="CBPFundXferCITADInfoRes"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CBPFundXferCITADInfoReq" type="CBPFundXferCITADInfoReqType"/>
+	<xs:element name="CBPFundXferCITADInfoRes" type="CBPFundXferCITADInfoResType"/>
+	<xs:complexType name="CBPFundXferCITADInfoReqType">
+		<xs:sequence>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="TypeCITAD" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransType" type="xs:string" minOccurs="0"/>
+			<xs:element name="PortalIDReference" type="xs:string"/>
+			<xs:element name="SendingBank" type="xs:string"/>
+			<xs:element name="ReceiveBank" type="xs:string"/>
+			<xs:element name="InSendingBank" type="xs:string" minOccurs="0"/>
+			<xs:element name="InReceiveBank" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string"/>
+			<xs:element name="Amount" type="xs:string"/>
+			<xs:element name="CustomerName" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerAddress" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerAccount" type="xs:string"/>
+			<xs:element name="Benificiary" type="xs:string"/>
+			<xs:element name="BenCustomerAddress" type="xs:string"/>
+			<xs:element name="BenCustomerAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="PortalStatus" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CBPFundXferCITADInfoResType">
+		<xs:sequence>
+			<xs:element name="TransId" type="xs:string"/>
+			<xs:element name="PostingTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ALLSCHEMA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="createCDPFundReq"/>
+				<xs:element ref="createCDPFundRes"/>
+				<xs:element ref="CDPFundXferInfoReq"/>
+				<xs:element ref="CDPFundXferInfoRes"/>
+				<xs:element ref="CBPFundXferInfoReq"/>
+				<xs:element ref="CBPFundXferInfoRes"/>
+				<xs:element ref="createCBPFundCITADReq"/>
+				<xs:element ref="createCBPFundCITADRes"/>
+				<xs:element ref="CBPFundXferCITADInfoReq"/>
+				<xs:element ref="CBPFundXferCITADInfoRes"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQTransactionFeeByIDRequest" type="ENQTransactionFeeByIDRequestType"/>
+	<xs:complexType name="ENQTransactionFeeByIDRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ENQTransactionFeeByIDRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByIDRequestBody" type="ENQTransactionFeeByIDRequestBodyType"/>
+	<xs:complexType name="ENQTransactionFeeByIDRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransID" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankingCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByIDResponse" type="ENQTransactionFeeByIDResponseType"/>
+	<xs:complexType name="ENQTransactionFeeByIDResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ENQTransactionFeeByIDResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByIDResponseBody" type="ENQTransactionFeeByIDResponseBodyType"/>
+	<xs:complexType name="ENQTransactionFeeByIDResponseBodyType">
+		<xs:sequence>
+			<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			<xs:element name="SourceTransID" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankingCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="Amount" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="FeeAmount" type="xs:decimal" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ESBServiceState">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ESBCommonModel:ESBServiceStateType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENQTransactionFeeByTypeRequest" type="ENQTransactionFeeByTypeRequestType"/>
+	<xs:complexType name="ENQTransactionFeeByTypeRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="ENQTransactionFeeByTypeRequestBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByTypeRequestBody" type="ENQTransactionFeeByTypeRequestBodyType"/>
+	<xs:complexType name="ENQTransactionFeeByTypeRequestBodyType">
+		<xs:sequence>
+			<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankingCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransType" type="xs:string" minOccurs="0"/>
+			<xs:element name="QueryMonth" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByTypeResponse" type="ENQTransactionFeeByTypeResponseType"/>
+	<xs:complexType name="ENQTransactionFeeByTypeResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="ENQTransactionFeeByTypeResponseBody"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByTypeResponseFTBody" type="ENQTransactionFeeByTypeResponseFTBodyType"/>
+	<xs:complexType name="ENQTransactionFeeByTypeResponseFTBodyType">
+		<xs:sequence>
+			<xs:element name="TransType" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankingCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="ShortName" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+			<xs:element name="TotalFee" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByTypeResponseTTBody" type="ENQTransactionFeeByTypeResponseTTBodyType"/>
+	<xs:complexType name="ENQTransactionFeeByTypeResponseTTBodyType">
+		<xs:sequence>
+			<xs:element name="TotalTrans" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="TotalWithdrawalAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="TotalFeeAmount" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ENQTransactionFeeByTypeResponseBody" type="ENQTransactionFeeByTypeResponseBodyType"/>
+	<xs:complexType name="ENQTransactionFeeByTypeResponseBodyType">
+		<xs:sequence>
+			<xs:element name="ENQStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="ErrorMsg" type="xs:string" minOccurs="0"/>
+			<xs:element ref="ENQTransactionFeeByTypeResponseFTBody" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="ENQTransactionFeeByTypeResponseTTBody" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="createInquiryFTTransactionReq" type="createInquiryFTTransactionReqType"/>
+	<xs:element name="createInquiryFTTransactionRes" type="createInquiryFTTransactionResType"/>
+	<xs:complexType name="createInquiryFTTransactionReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="FTTransactionInput" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createInquiryFTTransactionResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="FTTransactionList" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="FTTransactionInput" type="FTTransactionInputType"/>
+	<xs:complexType name="FTTransactionInputType">
+		<xs:sequence>
+			<xs:element name="Bankcode" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccountNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FTTransactionList" type="FTTransactionListType"/>
+	<xs:element name="FTTransactionDetail" type="FTTransactionDetailType"/>
+	<xs:complexType name="FTTransactionListType">
+		<xs:sequence>
+			<xs:element ref="FTTransactionDetail" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FTTransactionDetailType">
+		<xs:sequence>
+			<xs:element name="FTId" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="DebitAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreditAmount" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProcessingDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentDetail" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="BankingCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="OtherSystemRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

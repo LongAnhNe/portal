@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/schema/global/remittance/forexmanagement/Securities.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="createSecuritiesSubRequest" type="createSecuritiesSubReqType"/>
+	<xs:element name="createSecuritiesSubResponse" type="createSecuritiesSubResType"/>
+	<xs:complexType name="createSecuritiesSubReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesSubmission"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createSecuritiesSubResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="root"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SecuritiesSubmission" type="SecuritiesSubmissionType"/>
+	<xs:complexType name="SecuritiesSubmissionType">
+		<xs:sequence>
+			<xs:element name="SourceAppId" type="xs:string" minOccurs="0"/>
+			<xs:element name="CreatedProposal" type="xs:string" minOccurs="0"/>
+			<xs:element name="TransactionType" type="xs:string" minOccurs="0"/>
+			<xs:element name="NostroAccNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="SecuritiesCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompanyCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="TradeDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="TradeCCY" type="xs:string" minOccurs="0"/>
+			<xs:element name="BrokerNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="BrNoNom" type="xs:string" minOccurs="0"/>
+			<xs:element name="BrPrice" type="xs:string" minOccurs="0"/>
+			<xs:element name="BrIntrAmTRd" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomerSecAcc" type="xs:string" minOccurs="0"/>
+			<xs:element name="Depositor" type="xs:string" minOccurs="0"/>
+			<xs:element name="NostroAccSBV" type="xs:string" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="CUST.INTR.AMT" type="xs:string" minOccurs="0"/>
+			<xs:element name="L.22F" type="xs:string" minOccurs="0"/>
+			<xs:element name="L.70E" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="TransactionId" type="xs:string"/>
+	<xs:element name="InquirySecTradeRequest" type="InquirySecTradeRequestType"/>
+	<xs:element name="InquirySecTradeResponse" type="InquirySecTradeResponseType"/>
+	<xs:complexType name="InquirySecTradeRequestType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesTradeId"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="InquirySecTradeResponseType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesTradingDetail"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SecuritiesTradeId" type="xs:string"/>
+	<xs:element name="mCustomerNo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CustomerNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustTransCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustSecAccount" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustAccNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="sgCustNoNom" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CustNoNom">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CustNoNom" type="xs:string" minOccurs="0"/>
+										<xs:element name="CustPrice" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CustTotNom" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cugrossamsec" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cugrossamtrd" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cugrossaccr" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cubrkrcomm" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cuforeignfee" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cucommission" type="xs:string" minOccurs="0"/>
+				<xs:element name="Custamptax" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cuebvfees" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cufeesmisc" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cudiscamt" type="xs:string" minOccurs="0"/>
+				<xs:element name="sgCutaxcode" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Cutaxcode">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Cutaxtcy" type="xs:string" minOccurs="0"/>
+										<xs:element name="Cutaxlcy" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Cunetamtrd" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cuexrateref" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cuexrateacc" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cuaccountccy" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cuamountdue" type="xs:string" minOccurs="0"/>
+				<xs:element name="Curefccy" type="xs:string" minOccurs="0"/>
+				<xs:element name="Cudelivinstr" type="xs:string" minOccurs="0"/>
+				<xs:element name="Discountamount" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mBrokerNo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="BrokerNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="BrokerType" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRTranscode" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRAccNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="sgBRNoNom" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BRNoNom" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="BRNoNom" type="xs:string" minOccurs="0"/>
+										<xs:element name="BRPrice" type="xs:string" minOccurs="0"/>
+										<xs:element name="BRTrdTime" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="BRTotNom" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRGrossamsec" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRGrossamtrd" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRIntAmt" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRGrossAcc" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRBrokerCom" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRForeignfee" type="xs:string" minOccurs="0"/>
+				<xs:element name="CLCommission" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRStampTax" type="xs:string" minOccurs="0"/>
+				<xs:element name="BREbvfee" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRFeemisc" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRNetamt" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRExRateAcc" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRAccountCcy" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRAmountDue" type="xs:string" minOccurs="0"/>
+				<xs:element name="BRDelivinstr" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecuritiesTradingDetail" type="SecuritiesTradingDetailType"/>
+	<xs:complexType name="SecuritiesTradingDetailType">
+		<xs:sequence>
+			<xs:element name="SecTradeId" type="xs:string" minOccurs="0"/>
+			<xs:element name="SecCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="SecCurrency" type="xs:string" minOccurs="0"/>
+			<xs:element name="PriceType" type="xs:string" minOccurs="0"/>
+			<xs:element name="Depository" type="xs:string" minOccurs="0"/>
+			<xs:element name="TradeDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ValueDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="TradeCcy" type="xs:string" minOccurs="0"/>
+			<xs:element name="StockExchange" type="xs:string" minOccurs="0"/>
+			<xs:element name="NetTrade" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastPayDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="InterestRate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ExchangeRateSec" type="xs:string" minOccurs="0"/>
+			<xs:element name="ExchangeRateTrd" type="xs:string" minOccurs="0"/>
+			<xs:element name="MaturityDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="MarketType" type="xs:string" minOccurs="0"/>
+			<xs:element name="gCustomerNo" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="mCustomerNo"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="gBrokerNo" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="mBrokerNo"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TradeTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="Bndrndmeth" type="xs:string" minOccurs="0"/>
+			<xs:element name="CgTradeTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="PaymentReqd" type="xs:string" minOccurs="0"/>
+			<xs:element name="Brokeradvicereqd" type="xs:string" minOccurs="0"/>
+			<xs:element name="Depotadvicereqd" type="xs:string" minOccurs="0"/>
+			<xs:element name="Cashholdsettle" type="xs:string" minOccurs="0"/>
+			<xs:element name="Secholdsettle" type="xs:string" minOccurs="0"/>
+			<xs:element name="BulkProcessing" type="xs:string" minOccurs="0"/>
+			<xs:element name="gStatementNos" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StatementNos" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="gOverride" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Override" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RecordStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="CurrNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="gInputter" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Inputter" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="gDatetime" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DateTime" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CoCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="DeptCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="SourceRef" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="createSCMasterReq" type="createSCMasterReqType"/>
+	<xs:element name="createSCMasterRes" type="createSCMasterResType"/>
+	<xs:complexType name="createSCMasterReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SCMasterInfo"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="createSCMasterResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="TransactionId"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SCMasterInfo" type="SCMasterInfoType"/>
+	<xs:complexType name="SCMasterInfoType">
+		<xs:sequence>
+			<xs:element name="CompanyName" type="xs:string" minOccurs="0"/>
+			<xs:element name="Descript" type="xs:string" minOccurs="0"/>
+			<xs:element name="ShortName" type="xs:string" minOccurs="0"/>
+			<xs:element name="Mnemonic" type="xs:string" minOccurs="0"/>
+			<xs:element name="CompDomicile" type="xs:string" minOccurs="0"/>
+			<xs:element name="Currency" type="xs:string" minOccurs="0"/>
+			<xs:element name="SubAssetType" type="xs:string" minOccurs="0"/>
+			<xs:element name="PriceUpdateCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="Industry" type="xs:string" minOccurs="0"/>
+			<xs:element name="StockExchange" type="xs:string" minOccurs="0"/>
+			<xs:element name="CouponTaxCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="MaturityDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="NoOfPayments" type="xs:string" minOccurs="0"/>
+			<xs:element name="IntPaymentDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="AccrualStartDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="ISINCODE" type="xs:string" minOccurs="0"/>
+			<xs:element name="CUSIPNO" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastDayofMonth" type="xs:string" minOccurs="0"/>
+			<xs:element name="PTCK" type="xs:string" minOccurs="0"/>
+			<xs:element name="InterestRate" type="xs:string" minOccurs="0"/>
+			<xs:element name="CSDReference" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TransId" type="xs:string" minOccurs="0"/>
+				<xs:element name="Status" type="xs:string" minOccurs="0"/>
+				<xs:element name="ErrorMessage" type="xs:string" minOccurs="0"/>
+				<xs:element name="SourceAppID" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

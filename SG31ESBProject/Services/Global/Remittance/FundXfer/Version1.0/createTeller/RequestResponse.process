@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="sbv/service/global/utilities/cbsstatus/inquiry/version1.0" xmlns:pfx15="http://www.sbv.org.vn/service/global/remittance/ftbulk/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:pfx13="http://temenos.com/SBV.FT.BULK.IBPS.LV" xmlns:pfx12="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx10="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx19="http://www.sbv.org.vn/service/global/account/accountInfo/version1.0" xmlns:pfx18="http://xmlns.example.com/1438330850951" xmlns:pfx17="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx5="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://temenos.com/FTIBPSHV" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/remittance/fundxfer/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx6="www.tibco.com/plugin/Sleep" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="sbv/global/remittance/fundxfer/version1.0" xmlns:ns6="sbv/global/datatype/datatype/version1.0" xmlns:ns10="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns7="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns11="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx20="http://temenos.com/SBV.ERP.T24.INTEGRATION" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/erpfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.xsd"/>
+    <wsdl:import namespace="http://temenos.com/FTIBPSHV"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW"/>
+    <wsdl:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" location="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS"/>
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/SharedResource/Schema/Global/System/T24/SBV.FT.SETTLE.IBPS.PAYMENT.WS/SBV.FT.SETTLE.IBPS.PAYMENT.WS.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.ERP.T24.INTEGRATION"/>
+    <wsdl:import namespace="http://xmlns.example.com/1433466938916" location="/SharedResource/Schema/Global/Remittance/ERPFundXfer/ERPFundXfer.wsdl"/>
+    <pd:name>Services/Global/Remittance/FundXfer/Version1.0/createTeller/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>80</pd:startX>
+    <pd:startY>142</pd:startY>
+    <pd:returnCoercions>
+        <pd:coercion xpath="" element="ns11:TellerResType"/>
+    </pd:returnCoercions>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <ns3:AppHdr>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet">
+                        <ns3:CharSet>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CharSet"/>
+                        </ns3:CharSet>
+                    </xsl:if>
+                    <ns3:ServVersion>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:ServVersion"/>
+                    </ns3:ServVersion>
+                    <ns3:From>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:From/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:From>
+                    <ns3:To>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:To/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:To>
+                    <ns3:MsgId>
+                        <xsl:value-of select="$TellerResponse/Teller/TransRef"/>
+                    </ns3:MsgId>
+                    <ns3:MsgPreId>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                    </ns3:MsgPreId>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId">
+                        <ns3:MsgSrcId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgSrcId"/>
+                        </ns3:MsgSrcId>
+                    </xsl:if>
+                    <ns3:BizServ>
+                        <ns3:Id>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Id"/>
+                        </ns3:Id>
+                        <ns3:Name>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:BizServ/ns3:Name"/>
+                        </ns3:Name>
+                    </ns3:BizServ>
+                    <ns3:CreatedDate>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:CreatedDate"/>
+                    </ns3:CreatedDate>
+                    <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature">
+                        <ns3:Signature>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:Signature"/>
+                        </ns3:Signature>
+                    </xsl:if>
+                </ns3:AppHdr>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$TellerResponse/Teller/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$TellerResponse/Teller/ErrorMessage"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <ns11:createTellerRes>
+                        <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                        <ns3:ResponseStatus>
+                            <ns3:Status>
+                                <xsl:value-of select="$TellerResponse/Teller/TransRef"/>
+                            </ns3:Status>
+                        </ns3:ResponseStatus>
+                        <ns11:TellerResType>
+                            <ns11:TransId>
+                                <xsl:value-of select="$TellerResponse/Teller/Status"/>
+                            </ns11:TransId>
+                            <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:SourceAppId">
+                                <ns11:SourceAppId>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:SourceAppId"/>
+                                </ns11:SourceAppId>
+                            </xsl:if>
+                        </ns11:TellerResType>
+                    </ns11:createTellerRes>
+                    <ns11:TellerResType>
+                        <ns11:TransId>
+                            <xsl:value-of select="$TellerResponse/Teller/TransRef"/>
+                        </ns11:TransId>
+                        <ns11:SourceAppId>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:SourceAppId"/>
+                        </ns11:SourceAppId>
+                    </ns11:TellerResType>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>943</pd:endX>
+    <pd:endY>145</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <TellerResponse>
+            <xsd:element name="Teller">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="TransRef" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </TellerResponse>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/fundxfer/createfund/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="ResponseSuccess">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>480</pd:x>
+        <pd:y>37</pd:y>
+        <config>
+            <variableName>TellerResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Teller>
+                <Status>
+                    <xsl:value-of select="if($CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/successIndicator='Success') then '0' else '1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="if($CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/successIndicator='Success')  then&#xA;$CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/transactionId else ''"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="$CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/messages[1]"/>
+                </ErrorMessage>
+            </Teller>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>474</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <variableName>TellerResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Teller>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/Msg,'-', $_error/ns:ErrorReport/Data)"/>
+                </ErrorMessage>
+            </Teller>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24ERPWSTeller">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>292</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx20:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>ERPCreateTT</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSERP%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="ns11:TellerReqType"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx20:ERPCreateTT>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:CompanyCode"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24ERPPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="concat('ERP',tib:right($Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:CompanyCode, 5))"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <OfsFunction>
+                        <activityName>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </activityName>
+                        <assignReason>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </assignReason>
+                        <dueDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </dueDate>
+                        <extProcess>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcess>
+                        <extProcessID>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </extProcessID>
+                        <gtsControl>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </gtsControl>
+                        <messageId>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </messageId>
+                        <noOfAuth>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </noOfAuth>
+                        <owner>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </owner>
+                        <replace>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </replace>
+                        <startDate>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </startDate>
+                        <user>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </user>
+                    </OfsFunction>
+                    <TELLERSBVERPCASHINType>
+                        <TransactionCode>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:TransactionCode"/>
+                        </TransactionCode>
+                        <Currency1>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:CurrencyCash"/>
+                        </Currency1>
+                        <gACCOUNT1>
+                            <xsl:attribute name="g">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <mACCOUNT1>
+                                <xsl:attribute name="m">
+                                    <xsl:value-of select="1"/>
+                                </xsl:attribute>
+                                <Account1>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:AccountCash"/>
+                                </Account1>
+                                <Amount>
+                                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Amount"/>
+                                </Amount>
+                            </mACCOUNT1>
+                        </gACCOUNT1>
+                        <ValueDate1>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:ValueDateCash"/>
+                        </ValueDate1>
+                        <Currency2>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Currency2"/>
+                        </Currency2>
+                        <Account2>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Account2"/>
+                        </Account2>
+                        <ValueDate2>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:ValueDate2"/>
+                        </ValueDate2>
+                        <PaymentDetail>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:PaymentDetail"/>
+                        </PaymentDetail>
+                        <ERPReference>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:SourceAppId"/>
+                        </ERPReference>
+                        <SystemType>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:SystemType"/>
+                        </SystemType>
+                        <TransactionType>
+                            <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:TransactionType"/>
+                        </TransactionType>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Depositor">
+                            <TtDepositor>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Depositor"/>
+                            </TtDepositor>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:DepositorAd">
+                            <TtDepositorAd>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:DepositorAd"/>
+                            </TtDepositorAd>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Receiver">
+                            <TtReceiver>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:Receiver"/>
+                            </TtReceiver>
+                        </xsl:if>
+                        <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:ReceiverAd">
+                            <TtReceiverAdd>
+                                <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/ns11:TellerReqType[1]/ns11:ReceiverAd"/>
+                            </TtReceiverAdd>
+                        </xsl:if>
+                    </TELLERSBVERPCASHINType>
+                </pfx20:ERPCreateTT>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ResponseExisted">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>470</pd:x>
+        <pd:y>146</pd:y>
+        <config>
+            <variableName>TellerResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Teller>
+                <Status>
+                    <xsl:value-of select="'0'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="substring-before(substring-after($CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/messages[1],&quot;ALREADY ASSIGNED TO &quot;), &quot; &quot;)"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="$CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/messages[1]"/>
+                </ErrorMessage>
+            </Teller>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1261</pd:x>
+        <pd:y>145</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1096</pd:x>
+        <pd:y>148</pd:y>
+        <config>
+            <variableName>TellerResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Teller>
+                <Status>
+                    <xsl:value-of select="'1'"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="&quot;GIAO DICH BI EXCEPTION&quot;"/>
+                </ErrorMessage>
+            </Teller>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>654</pd:x>
+        <pd:y>146</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ResponseDebitStatusError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>820</pd:x>
+        <pd:y>145</pd:y>
+        <config>
+            <variableName>TellerResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <Teller>
+                <Status>
+                    <xsl:value-of select="$TellerResponse/Teller/Status"/>
+                </Status>
+                <TransRef>
+                    <xsl:value-of select="if($TellerResponse/Teller/Status='0') then &#xA;$TellerResponse/Teller/TransRef  else ''"/>
+                </TransRef>
+                <ErrorMessage>
+                    <xsl:value-of select="if(exists($QueryErrorMapping/resultSet/Record[1]/ERRORMSGDEST)) then&#xA;concat($QueryErrorMapping/resultSet/Record[1]/ERRORMSGDEST, ' - T24ErrMsg: ', $TellerResponse/Teller/ErrorMessage)&#xA;else &#xA;$TellerResponse/Teller/ErrorMessage"/>
+                </ErrorMessage>
+            </Teller>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>853</pd:x>
+        <pd:y>312</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="QueryErrorMapping">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>741</pd:x>
+        <pd:y>314</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>SELECT ERRORMSGDEST
+FROM ERRORMAPPING
+WHERE SOURCESYSTEM ='T24' AND DESTSYSTEM ='ERP' AND ERRORMSGSRC = ?</statement>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>P_ERRORMSGSRC</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>ERRORMSGDEST</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <P_ERRORMSGSRC>
+                    <xsl:value-of select="$TellerResponse/Teller/ErrorMessage"/>
+                </P_ERRORMSGSRC>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ResponseSuccess</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseError</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallT24ERPWSTeller</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24ERPWSTeller</pd:from>
+        <pd:to>ResponseSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24ERPWSTeller</pd:from>
+        <pd:to>ResponseError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24ERPWSTeller</pd:from>
+        <pd:to>ResponseExisted</pd:to>
+        <pd:xpathDescription>Existed</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/successIndicator='T24Error' 
+and contains($CallT24ERPWSTeller/outputMessage/pfx20:ERPCreateTTResponse/Status/messages[1],'ALT KEY ALREADY ASSIGNED')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseExisted</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>ResponseException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseException</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>QueryErrorMapping</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$TellerResponse/Teller/Status = 1</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryErrorMapping</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryErrorMapping</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>ResponseDebitStatusError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ResponseDebitStatusError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

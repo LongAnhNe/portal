@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx16="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx15="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://fis.vn/iMaximusGateway/T24PostToCsdService" xmlns:pfx13="http://temenos.com/SBV.INTE.T24.PORTAL.WS" xmlns:pfx12="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:pfx10="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:pfx17="http://temenos.com/SBV.FT.BULK.IBPS.LV" xmlns:pfx5="http://temenos.com/FTIBPSHV" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://xmlns.example.com/1433466938916" xmlns:pfx3="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://www.sbv.org.vn/global/account/accountInfo/version1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="http://temenos.com/QUERY.ACCOUNT" xmlns:pfx6="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns10="sbv/common/exceptionhandling/exception/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/CSDAccountInfo/CSDAccountInfo.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/portalfundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/PortalFundXfer/PortalFundXfer.xsd"/>
+    <wsdl:import namespace="http://temenos.com/T24.ACCOUNT.STATE" location="/SharedResource/Schema/Global/System/T24/AccountStatus/T24AccountStatus.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/QUERY.ACCOUNT" location="/SharedResource/Schema/Global/System/T24/AccountInfo/T24AcccountInfo.wsdl"/>
+    <wsdl:import namespace="http://www.sbv.gov.vn/global/account/CSDAccountInfo/version1.0" location="/SharedResource/Schema/Global/Account/CSDAccountInfo/CSDAccountInfo.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.GOLD.AUCTION.MANAGEMENT.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.INTE.T24.PORTAL.WS" location="/SharedResource/Schema/Global/System/T24/SBV.INTE.T24.PORTAL/SBV.INTE.T24.PORTAL.wsdl"/>
+    <pd:name>Services/Global/Remittance/PortalFundXfer/Version1.0/createInquiryFTTransaction/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>36</pd:startX>
+    <pd:startY>132</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/Root/Status"/>
+                    </ns3:Status>
+                    <xsl:if test="$ResponseResult/Root/Msg">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/Root/Msg"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                    <ns3:ErrorInfo>
+                        <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                            <ns3:ErrorCode>
+                                <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                            </ns3:ErrorCode>
+                        </xsl:if>
+                        <xsl:if test="$ResponseResult/Root/Msg">
+                            <ns3:ErrorMessage>
+                                <xsl:value-of select="$ResponseResult/Root/Msg"/>
+                            </ns3:ErrorMessage>
+                        </xsl:if>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx16:FTTransactionList>
+                        <xsl:copy-of select="$List/List/pfx16:FTTransactionDetail"/>
+                    </pfx16:FTTransactionList>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>813</pd:endX>
+    <pd:endY>353</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseResult>
+            <xsd:element name="Root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Msg" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <List>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx16:FTTransactionDetail" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </List>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/portalfundxfer/createinquiryfttransaction/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>152</pd:x>
+        <pd:y>133</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx16:FTTransactionInput"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx16:FTTransactionInput"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx16:FTTransactionInput"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>762</pd:x>
+        <pd:y>147</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="if ($SOAPRequestReply/outputMessage/pfx13:ACQueryFTTransactionResponse/Status/successIndicator=&quot;Success&quot;) then '0'&#xA;else '1'"/>
+                </Status>
+                <xsl:if test="$SOAPRequestReply/outputMessage/pfx13:ACQueryFTTransactionResponse/Status/messages[1]">
+                    <Msg>
+                        <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx13:ACQueryFTTransactionResponse/Status/messages[1]"/>
+                    </Msg>
+                </xsl:if>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>449</pd:x>
+        <pd:y>492</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, $_error/ns:ErrorReport/Msg, &quot;. LOI GOI WEBSERVICE&quot;)"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>592</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>587</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Msg>
+                    <xsl:value-of select="concat(&quot;Loi Catch Exception: &quot;, $_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg)"/>
+                </Msg>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Return Err">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>449</pd:x>
+        <pd:y>344</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <Root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <xsl:if test="$SOAPRequestReply/outputMessage/pfx13:ACQueryFTTransactionResponse/Status/messages[2]">
+                    <Msg>
+                        <xsl:value-of select="$SOAPRequestReply/outputMessage/pfx13:ACQueryFTTransactionResponse/Status/messages[2]"/>
+                    </Msg>
+                </xsl:if>
+            </Root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>253</pd:x>
+        <pd:y>37</pd:y>
+        <pd:width>365</pd:width>
+        <pd:height>198</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$SOAPRequestReply/outputMessage/pfx13:ACQueryFTTransactionResponse/SBVPORTENQFTTRANSACTIONType/gSBVPORTENQFTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType</pd:over>
+            <pd:iterationElementSlot>FTTRANSACTIONDetailType</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>MapInquiryESBModel</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Assign</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapInquiryESBModel</pd:from>
+            <pd:to>Assign</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MapInquiryESBModel">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>370</pd:x>
+            <pd:y>146</pd:y>
+            <config>
+                <element ref="pfx16:FTTransactionDetail"/>
+            </config>
+            <pd:inputBindings>
+                <pfx16:FTTransactionDetail>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/ID">
+                        <pfx16:FTId>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/ID"/>
+                        </pfx16:FTId>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/DebitAccount">
+                        <pfx16:DebitAccount>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/DebitAccount"/>
+                        </pfx16:DebitAccount>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/DebitCurrency">
+                        <pfx16:DebitCurrency>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/DebitCurrency"/>
+                        </pfx16:DebitCurrency>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CreditAccount">
+                        <pfx16:CreditAccount>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CreditAccount"/>
+                        </pfx16:CreditAccount>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CreditCurrency">
+                        <pfx16:CreditCurrency>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CreditCurrency"/>
+                        </pfx16:CreditCurrency>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/DebitAmount">
+                        <pfx16:DebitAmount>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/DebitAmount"/>
+                        </pfx16:DebitAmount>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CreditAmount">
+                        <pfx16:CreditAmount>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CreditAmount"/>
+                        </pfx16:CreditAmount>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/ValueDate">
+                        <pfx16:ValueDate>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/ValueDate"/>
+                        </pfx16:ValueDate>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/ProcessingDate">
+                        <pfx16:ProcessingDate>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/ProcessingDate"/>
+                        </pfx16:ProcessingDate>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/PaymentDetail">
+                        <pfx16:PaymentDetail>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/PaymentDetail"/>
+                        </pfx16:PaymentDetail>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CompanyCode">
+                        <pfx16:CompanyCode>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/CompanyCode"/>
+                        </pfx16:CompanyCode>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/BankingCode">
+                        <pfx16:BankingCode>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/BankingCode"/>
+                        </pfx16:BankingCode>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/OrtherSystemRef">
+                        <pfx16:OtherSystemRef>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/OrtherSystemRef"/>
+                        </pfx16:OtherSystemRef>
+                    </xsl:if>
+                    <xsl:if test="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/TransactionCode">
+                        <pfx16:TransactionCode>
+                            <xsl:value-of select="$FTTRANSACTIONDetailType/mSBVPORTENQFTTRANSACTIONDetailType/TransactionCode"/>
+                        </pfx16:TransactionCode>
+                    </xsl:if>
+                </pfx16:FTTransactionDetail>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Assign">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>514</pd:x>
+            <pd:y>147</pd:y>
+            <config>
+                <variableName>List</variableName>
+            </config>
+            <pd:inputBindings>
+                <List>
+                    <xsl:copy-of select="$List/List/pfx16:FTTransactionDetail"/>
+                    <xsl:copy-of select="$MapInquiryESBModel/pfx16:FTTransactionDetail"/>
+                </List>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="SOAPRequestReply">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>155</pd:x>
+        <pd:y>353</pd:y>
+        <config>
+            <timeout>%%T24WS/Timeout%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx13:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>ACQueryFTTransaction</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSPortal%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx13:ACQueryFTTransaction>
+                    <WebRequestCommon>
+                        <company>
+                            <xsl:value-of select="'VN0010001'"/>
+                        </company>
+                        <password>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalPass"/>
+                        </password>
+                        <userName>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24PortalUser"/>
+                        </userName>
+                    </WebRequestCommon>
+                    <SBVPORTENQFTTRANSACTIONType>
+                        <xsl:if test="$Map-Data/root/pfx16:FTTransactionInput/pfx16:Bankcode !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;BANKING.CODE&quot;"/>
+                                </columnName>
+                                <xsl:if test="$Map-Data/root/pfx16:FTTransactionInput/pfx16:Bankcode">
+                                    <criteriaValue>
+                                        <xsl:value-of select="$Map-Data/root/pfx16:FTTransactionInput/pfx16:Bankcode"/>
+                                    </criteriaValue>
+                                </xsl:if>
+                                <operand>
+                                    <xsl:value-of select="'EQ'"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                        <xsl:if test="$Map-Data/root/pfx16:FTTransactionInput/pfx16:AccountNumber !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;ACCOUNT.ID&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Map-Data/root/pfx16:FTTransactionInput/pfx16:AccountNumber"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="'EQ'"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                        <xsl:if test="$Map-Data/root/pfx16:FTTransactionInput/pfx16:TransactionType !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;TRANSACTION.TYPE&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Map-Data/root/pfx16:FTTransactionInput/pfx16:TransactionType"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="'EQ'"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                        <xsl:if test="$Map-Data/root/pfx16:FTTransactionInput/pfx16:CompanyCode !=&quot;&quot;">
+                            <enquiryInputCollection>
+                                <columnName>
+                                    <xsl:value-of select="&quot;CO.CODE&quot;"/>
+                                </columnName>
+                                <criteriaValue>
+                                    <xsl:value-of select="$Map-Data/root/pfx16:FTTransactionInput/pfx16:CompanyCode"/>
+                                </criteriaValue>
+                                <operand>
+                                    <xsl:value-of select="'EQ'"/>
+                                </operand>
+                            </enquiryInputCollection>
+                        </xsl:if>
+                    </SBVPORTENQFTTRANSACTIONType>
+                </pfx13:ACQueryFTTransaction>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>SOAPRequestReply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Return Err</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Return Err</pd:to>
+        <pd:xpathDescription>SOAP Return Err</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPRequestReply</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

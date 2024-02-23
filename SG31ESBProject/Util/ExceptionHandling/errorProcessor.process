@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="sbv/common/exceptionhandling/errorreport/1.0" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="sbv/common/exceptionhandling/exception/1.0" xmlns:pfx6="sbv/common/envelope/soaenvelope/1.0">
+    <xsd:import namespace="sbv/common/exceptionhandling/exception/1.0" schemaLocation="/SharedResource/Schema/Common/ExceptionHandling/Exception.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <pd:name>Util/ExceptionHandling/errorProcessor.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="ProcessName" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="GeneratedId" type="xsd:string"/>
+                    <xsd:element ref="pfx:ExceptionBody" minOccurs="0"/>
+                    <xsd:element name="ServiceInput" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx5:AppHdr" minOccurs="0"/>
+                                <xsd:element name="ServiceBody" type="pfx6:ServiceBodyType" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>76</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnBindings>
+        <Result>
+            <xsl:copy-of select="$Start/root/ServiceInput/pfx5:AppHdr"/>
+            <xsl:copy-of select="$errorTranslator/pfx5:ResponseStatus"/>
+        </Result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Result">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx5:AppHdr"/>
+                    <xsd:element ref="pfx5:ResponseStatus"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>743</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Variable>
+            <xsd:element name="Flag" type="xsd:string"/>
+        </Variable>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/process/global/errorProcessor/1.0</pd:targetNamespace>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>236</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <element ref="pfx:Exception"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:Exception>
+                <pfx6:SOAEnvelope>
+                    <pfx6:SOAServiceHeader>
+                        <pfx6:AppHdr>
+                            <xsl:copy-of select="$Start/root/ServiceInput/pfx5:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/root/ServiceInput/pfx5:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/root/ServiceInput/pfx5:AppHdr/node()"/>
+                        </pfx6:AppHdr>
+                        <pfx6:SOAMsgId>
+                            <xsl:value-of select="$Start/root/GeneratedId"/>
+                        </pfx6:SOAMsgId>
+                        <pfx6:ServiceName>
+                            <xsl:value-of select="substring-before(substring-after($Start/root/ProcessName, 'Services/'),'/OperationImpl' )"/>
+                        </pfx6:ServiceName>
+                        <pfx6:OperationName>
+                            <xsl:value-of select="substring-before(substring-after($Start/root/ProcessName, 'OperationImpl/'),'.process' )"/>
+                        </pfx6:OperationName>
+                        <xsl:if test="$Start/root/ProcessName">
+                            <pfx6:ProcessName>
+                                <xsl:value-of select="$Start/root/ProcessName"/>
+                            </pfx6:ProcessName>
+                        </xsl:if>
+                    </pfx6:SOAServiceHeader>
+                    <pfx6:ServiceBody>
+                        <xsl:copy-of select="$Start/root/ServiceInput/ServiceBody/ancestor-or-self::*/namespace::node()"/>
+                        <xsl:copy-of select="$Start/root/ServiceInput/ServiceBody/@*"/>
+                        <xsl:copy-of select="$Start/root/ServiceInput/ServiceBody/node()"/>
+                    </pfx6:ServiceBody>
+                </pfx6:SOAEnvelope>
+                <xsl:copy-of select="$Start/root/pfx:ExceptionBody"/>
+            </pfx:Exception>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="handleException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>413</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/handleException.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Exception/pfx:Exception"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="errorTranslator">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>596</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorTranslator.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns:ErrorReport>
+                    <xsl:copy-of select="$Exception/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/ancestor-or-self::*/namespace::node()"/>
+                    <xsl:copy-of select="$Exception/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/@*"/>
+                    <xsl:copy-of select="$Exception/pfx:Exception/pfx:ExceptionBody/pfx:ErrorReport/node()"/>
+                </ns:ErrorReport>
+                <SourceAppId>
+                    <xsl:value-of select="$Exception/pfx:Exception/pfx6:SOAEnvelope/pfx6:SOAServiceHeader/pfx6:AppHdr/pfx5:From/pfx5:Id"/>
+                </SourceAppId>
+                <ErrorAppId>
+                    <xsl:value-of select="$Exception/pfx:Exception/pfx6:SOAEnvelope/pfx6:SOAServiceHeader/pfx6:AppHdr/pfx5:From/pfx5:Id"/>
+                </ErrorAppId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>handleException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>handleException</pd:from>
+        <pd:to>errorTranslator</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorTranslator</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

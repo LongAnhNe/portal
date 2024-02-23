@@ -1,0 +1,2170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="sbv/common/envelope/soaenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns15="http://www.tibco.com/pe/CheckpointSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns22="http://xmlns.tibco.com/body" xmlns:ns23="sbv/common/envelope/commonheader/1.0" xmlns:ns24="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns13="sbv/common/logging/enginelog/1.0" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/Utilities/SendNotification/Sent_Notify_GW.xsd" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.vnpay.vn/VASContent" xmlns:pfx2="http://xmlns.example.com/1461384745410" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResource/Schema/Global/Utilities/SendNotification/Sent_Notify_GW.xsd" schemaLocation="/SharedResource/Schema/Global/Utilities/SendNotification/Sent_Notify_GW.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1461384745410" location="/SharedResource/Schema/Global/Utilities/SendNotification/SendNotification.wsdl"/>
+    <wsdl:import namespace="http://www.vnpay.vn/VASContent" location="/SharedResource/Schema/Global/System/SMS/MTSend.wsdl"/>
+    <pd:name>Services/Global/Utilities/SendNotification/OperationImpl/AutoSendNotification.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>27</pd:x>
+        <pd:y>579</pd:y>
+        <config>
+            <StartTime>1462434343000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%ServiceGlobalVar/SMS/TimeScanInterval%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>985</pd:endX>
+    <pd:endY>1205</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ListSMSPhoneNo>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx:SMSPhoneNo" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ListSMSPhoneNo>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string"/>
+                        <xsd:element name="TransactionID" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <EmailSent>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="TO" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="CC" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="BCC" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </EmailSent>
+        <ServicesVariable>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServicesVariable>
+        <NotifyContentVariable>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Subject" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Content" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </NotifyContentVariable>
+        <SentSMSStatus>
+            <xsd:element name="Status">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Success" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Error" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </SentSMSStatus>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1462433795733</pd:targetNamespace>
+    <pd:activity name="QueryTransaction">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>153</pd:x>
+        <pd:y>578</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            <statement>select * from tbl_sent_notify_gw where status = 0</statement>
+            <wizardData/>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>NOTIFY_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>TEMPLATE_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SENT_TO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SENT_CONTENT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SMS_TO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>EMAIL_TO</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>STATUS</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ERROR_MSG</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DATE_CREATED</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DATE_SENT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>SENT_TYPE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>EMAIL_CC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>EMAIL_BCC</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>EMAIL_SUBJECT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="LoopAllTransaction">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>6</pd:y>
+        <pd:width>1985</pd:width>
+        <pd:height>1102</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$QueryTransaction/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>NotificationSent</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>AssignServiceInfo</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetTemplateNotificationNull</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusProcessFailed</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ExistLogEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>SplitBranch</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SplitBranch</pd:from>
+            <pd:to>AuthenQuery</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuthenQuery</pd:from>
+            <pd:to>SMSQuery</pd:to>
+            <pd:xpathDescription>SMS</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$NotificationSent/Record/SENT_TYPE = 'SMS' and count($AuthenQuery/resultSet/Record) &gt; 0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuthenQuery</pd:from>
+            <pd:to>EmailQuery</pd:to>
+            <pd:xpathDescription>EMAIL</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$NotificationSent/Record/SENT_TYPE = 'EMAIL' and count($AuthenQuery/resultSet/Record) &gt; 0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>EmailQuery</pd:from>
+            <pd:to>GroupAssignEmail</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GroupAssignEmail</pd:from>
+            <pd:to>AssignFullEmail</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send SMS</pd:from>
+            <pd:to>UpdateStatusTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send Email</pd:from>
+            <pd:to>UpdateStatusTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignFullEmail</pd:from>
+            <pd:to>Send Email</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSMSBranchList</pd:from>
+            <pd:to>JavaSplitSMS</pd:to>
+            <pd:xpathDescription>ExistSMSSentTo</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$NotificationSent/Record/SENT_TO !=""</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSMSBranchList</pd:from>
+            <pd:to>Send SMS</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>JavaSplitSMS</pd:from>
+            <pd:to>MapSMSSentTo</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MapSMSSentTo</pd:from>
+            <pd:to>Send SMS</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SMSQuery</pd:from>
+            <pd:to>MapSMSBranchList</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SMSQuery</pd:from>
+            <pd:to>AssignQueryError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuthenQuery</pd:from>
+            <pd:to>AssignQueryError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>EmailQuery</pd:from>
+            <pd:to>AssignQueryError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignQueryError</pd:from>
+            <pd:to>UpdateStatusTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuthenQuery</pd:from>
+            <pd:to>WrongSentType</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>WrongSentType</pd:from>
+            <pd:to>UpdateStatusTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuthenQuery</pd:from>
+            <pd:to>NoAuthentication</pd:to>
+            <pd:xpathDescription>AuthenFailed</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>count($AuthenQuery/resultSet/Record) = 0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>NoAuthentication</pd:from>
+            <pd:to>UpdateStatusTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusTransaction</pd:from>
+            <pd:to>UpdateStatusError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusProccess</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:xpathDescription>UpdateProcessSuccess</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$UpdateStatusProccess/jdbcUpdateActivityOutput/noOfUpdates  = 1</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusProccess</pd:from>
+            <pd:to>UpdateStatusProcessFailed</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusTransaction</pd:from>
+            <pd:to>CheckBeforeLogEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusError</pd:from>
+            <pd:to>CheckBeforeLogEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateStatusProccess</pd:from>
+            <pd:to>NonTransactionUpdated</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>NonTransactionUpdated</pd:from>
+            <pd:to>UpdateStatusProcessFailed</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignServiceInfo</pd:from>
+            <pd:to>CheckNotifyID</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckNotifyID</pd:from>
+            <pd:to>LogStart</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckNotifyID</pd:from>
+            <pd:to>ExistNotifyID</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ExistNotifyID</pd:from>
+            <pd:to>UpdateStatusProccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>LogStart</pd:from>
+            <pd:to>UpdateStatusProccess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckBeforeLogEnd</pd:from>
+            <pd:to>LogEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CheckBeforeLogEnd</pd:from>
+            <pd:to>ExistLogEnd</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>GetTemplateNotification</pd:to>
+            <pd:xpathDescription>NoContent</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>tib:trim($NotificationSent/Record/SENT_CONTENT) = ""</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetTemplateNotification</pd:from>
+            <pd:to>SplitBranch</pd:to>
+            <pd:xpathDescription>ExistTemplate</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>count($GetTemplateNotification/resultSet/Record) &gt; 0</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetTemplateNotification</pd:from>
+            <pd:to>GetTemplateNotificationNull</pd:to>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetTemplateNotification</pd:from>
+            <pd:to>GetTemplateNotificationError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetTemplateNotificationError</pd:from>
+            <pd:to>GetTemplateNotificationNull</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>846</pd:x>
+            <pd:y>564</pd:y>
+            <config>
+                <element ref="pfx:resultSet"/>
+            </config>
+            <pd:inputBindings>
+                <resultSet>
+                    <xsl:copy-of select="$NotificationSent/Record"/>
+                </resultSet>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SplitBranch">
+            <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+            <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+            <pd:x>1003</pd:x>
+            <pd:y>563</pd:y>
+            <config>
+                <fileName>AutoSendNotificationSplitBranch</fileName>
+                <packageName>Services.Global.Utilities.SendNotification.OperationImpl.AutoSendNotification</packageName>
+                <fullsource>package Services.Global.Utilities.SendNotification.OperationImpl.AutoSendNotification;
+import java.util.*;
+import java.io.*;
+public class AutoSendNotificationSplitBranch{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String inString = "";
+	protected String outString = "";
+	public String getinString() {
+		return inString;
+	}
+	public void setinString(String val) {
+		inString = val;
+	}
+	public String getoutString() {
+		return outString;
+	}
+	public void setoutString(String val) {
+		outString = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public AutoSendNotificationSplitBranch() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String inString
+	Out : String outString
+* Available Variables: DO NOT MODIFY *****/
+        outString = "'" +  inString.replace("#","','")  + "'";
+}
+}
+</fullsource>
+                <inputData>
+                    <row>
+                        <fieldName>inString</fieldName>
+                        <fieldType>string</fieldType>
+                        <fieldRequired>optional</fieldRequired>
+                    </row>
+                </inputData>
+                <outputData>
+                    <row>
+                        <fieldName>outString</fieldName>
+                        <fieldType>string</fieldType>
+                        <fieldRequired>optional</fieldRequired>
+                    </row>
+                </outputData>
+                <javaArchive/>
+                <byteCode>
+                    <class>
+                        <name>AutoSendNotificationSplitBranch</name>
+                        <byteCode>yv66vgAAADMANgkADQAhCQANACIKAA4AIwgAJAcAJQoABQAjCAAmCgAFACcIACgIACkKACoAKwoABQAsBwAtBwAuAQAIaW5TdHJpbmcBABJMamF2YS9sYW5nL1N0cmluZzsBAAlvdXRTdHJpbmcBAAtnZXRpblN0cmluZwEAFCgpTGphdmEvbGFuZy9TdHJpbmc7AQAEQ29kZQEAD0xpbmVOdW1iZXJUYWJsZQEAC3NldGluU3RyaW5nAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWAQAMZ2V0b3V0U3RyaW5nAQAMc2V0b3V0U3RyaW5nAQAGPGluaXQ+AQADKClWAQAGaW52b2tlAQAKRXhjZXB0aW9ucwcALwEAClNvdXJjZUZpbGUBACRBdXRvU2VuZE5vdGlmaWNhdGlvblNwbGl0QnJhbmNoLmphdmEMAA8AEAwAEQAQDAAaABsBAAABABdqYXZhL2xhbmcvU3RyaW5nQnVpbGRlcgEAAScMADAAMQEAASMBAAMnLCcHADIMADMANAwANQATAQBtU2VydmljZXMvR2xvYmFsL1V0aWxpdGllcy9TZW5kTm90aWZpY2F0aW9uL09wZXJhdGlvbkltcGwvQXV0b1NlbmROb3RpZmljYXRpb24vQXV0b1NlbmROb3RpZmljYXRpb25TcGxpdEJyYW5jaAEAEGphdmEvbGFuZy9PYmplY3QBABNqYXZhL2xhbmcvRXhjZXB0aW9uAQAGYXBwZW5kAQAtKExqYXZhL2xhbmcvU3RyaW5nOylMamF2YS9sYW5nL1N0cmluZ0J1aWxkZXI7AQAQamF2YS9sYW5nL1N0cmluZwEAB3JlcGxhY2UBAEQoTGphdmEvbGFuZy9DaGFyU2VxdWVuY2U7TGphdmEvbGFuZy9DaGFyU2VxdWVuY2U7KUxqYXZhL2xhbmcvU3RyaW5nOwEACHRvU3RyaW5nACEADQAOAAAAAgAEAA8AEAAAAAQAEQAQAAAABgABABIAEwABABQAAAAdAAEAAQAAAAUqtAABsAAAAAEAFQAAAAYAAQAAAAkAAQAWABcAAQAUAAAAIgACAAIAAAAGKiu1AAGxAAAAAQAVAAAACgACAAAADAAFAA0AAQAYABMAAQAUAAAAHQABAAEAAAAFKrQAArAAAAABABUAAAAGAAEAAAAPAAEAGQAXAAEAFAAAACIAAgACAAAABiortQACsQAAAAEAFQAAAAoAAgAAABIABQATAAEAGgAbAAEAFAAAADUAAgABAAAAESq3AAMqEgS1AAEqEgS1AAKxAAAAAQAVAAAAEgAEAAAAFQAEAAYACgAHABAAFgABABwAGwACABQAAABDAAUAAQAAACcquwAFWbcABhIHtgAIKrQAARIJEgq2AAu2AAgSB7YACLYADLUAArEAAAABABUAAAAKAAIAAAAcACYAHQAdAAAABAABAB4AAQAfAAAAAgAg</byteCode>
+                    </class>
+                </byteCode>
+            </config>
+            <pd:inputBindings>
+                <javaCodeActivityInput>
+                    <inString>
+                        <xsl:value-of select="$NotificationSent/Record/SENT_TO"/>
+                    </inString>
+                </javaCodeActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SMSQuery">
+            <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+            <pd:x>1157</pd:x>
+            <pd:y>307</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <jdbcGeneralActivityInput>
+                    <statement>
+                        <xsl:value-of select="concat('SELECT t.*, f.usr_receive_sms,f.usr_receive_email FROM  tbl_user_branch t inner join tbl_user_function f on t.user_id = f.user_id  WHERE f.usr_receive_sms = ',&quot;'Y'&quot;,' and  f.notify_template_id =', &quot;'&quot; ,$NotificationSent/Record/TEMPLATE_ID, &quot;'&quot; ,' and t.branch_code in (',$SplitBranch/javaCodeActivityOutput/outString,')')"/>
+                    </statement>
+                </jdbcGeneralActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="EmailQuery">
+            <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+            <pd:x>1159</pd:x>
+            <pd:y>834</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <jdbcGeneralActivityInput>
+                    <statement>
+                        <xsl:value-of select="concat('select t.*,f.usr_receive_sms,f.usr_receive_email from  tbl_user_branch t inner join tbl_user_function f on t.user_id = f.user_id WHERE f.usr_receive_email in ',&quot;('TO','CC', 'BCC')&quot;,' and  f.notify_template_id =', &quot;'&quot; ,$NotificationSent/Record/TEMPLATE_ID, &quot;'&quot; ,' and t.branch_code in (',$SplitBranch/javaCodeActivityOutput/outString,')')"/>
+                    </statement>
+                </jdbcGeneralActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="Send SMS">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>1650</pd:x>
+            <pd:y>275</pd:y>
+            <pd:width>401</pd:width>
+            <pd:height>428</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$ListSMSPhoneNo/List/SMSPhoneNo</pd:over>
+                <pd:iterationElementSlot>SMSNotifyLoop</pd:iterationElementSlot>
+                <pd:indexSlot>SMSindex</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>false</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>SMSContent</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignErrorNoContent</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignSMSResult</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>CallSmsWS</pd:from>
+                <pd:to>SmsSuccess</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>CallSmsWS</pd:from>
+                <pd:to>SmsError</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>error</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>SmsSuccess</pd:from>
+                <pd:to>AssignSMSResult</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>SmsError</pd:from>
+                <pd:to>AssignSMSResult</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>SMSContent</pd:from>
+                <pd:to>CallSmsWS</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>SMSContent</pd:from>
+                <pd:to>AssignErrorNoContent</pd:to>
+                <pd:xpathDescription>No Content</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>tib:trim($NotifyContentVariable/root/Content) = ""</pd:xpath>
+            </pd:transition>
+            <pd:activity name="CallSmsWS">
+                <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+                <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+                <pd:x>1824</pd:x>
+                <pd:y>498</pd:y>
+                <config>
+                    <timeout>%%T24WS/Timeout%%</timeout>
+                    <soapAttachmentStyle>SwA</soapAttachmentStyle>
+                    <timeoutType>Seconds</timeoutType>
+                    <service>pfx3:MTSend</service>
+                    <servicePort>MTSend</servicePort>
+                    <operation>SendMT</operation>
+                    <soapAction>http://www.vnpay.vn/VASContent/SendMT</soapAction>
+                    <endpointURL>%%SMSWS/SmsSent%%</endpointURL>
+                    <authScheme>NONE</authScheme>
+                    <useProxy>true</useProxy>
+                    <requireBasicAuth>false</requireBasicAuth>
+                    <proxyName>/SharedResource/Configuration/ProxySms.httpProxy</proxyName>
+                </config>
+                <pd:inputBindings>
+                    <inputMessage>
+                        <pfx3:SendMT>
+                            <pfx3:Destination>
+                                <xsl:value-of select="$SMSNotifyLoop/SMSPhoneNo"/>
+                            </pfx3:Destination>
+                            <pfx3:SendFrom>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/SMS/SendFrom"/>
+                            </pfx3:SendFrom>
+                            <pfx3:KeywordName>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/SMS/KeywordName"/>
+                            </pfx3:KeywordName>
+                            <xsl:if test="$NotifyContentVariable/root/Content">
+                                <pfx3:OutContent>
+                                    <xsl:value-of select="$NotifyContentVariable/root/Content"/>
+                                </pfx3:OutContent>
+                            </xsl:if>
+                            <pfx3:ChargingFlag>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/SMS/ChargingFlag"/>
+                            </pfx3:ChargingFlag>
+                            <pfx3:MOSeqNo>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/SMS/MOSeqNo"/>
+                            </pfx3:MOSeqNo>
+                            <pfx3:TotalMessage>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/SMS/TotalMessage"/>
+                            </pfx3:TotalMessage>
+                            <pfx3:ContentType>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/SMS/ContentType"/>
+                            </pfx3:ContentType>
+                            <pfx3:SecretCode>
+                                <xsl:value-of select="$AuthenQuery/resultSet/Record[1]/SECRETKEY"/>
+                            </pfx3:SecretCode>
+                        </pfx3:SendMT>
+                    </inputMessage>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="SmsSuccess">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1895</pd:x>
+                <pd:y>417</pd:y>
+                <config>
+                    <variableName>SentSMSStatus</variableName>
+                </config>
+                <pd:inputBindings>
+                    <Status>
+                        <Success>
+                            <xsl:value-of select="concat($SentSMSStatus/Status/Success,',', $SMSNotifyLoop/SMSPhoneNo)"/>
+                        </Success>
+                    </Status>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="SmsError">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1916</pd:x>
+                <pd:y>624</pd:y>
+                <config>
+                    <variableName>SentSMSStatus</variableName>
+                </config>
+                <pd:inputBindings>
+                    <Status>
+                        <Error>
+                            <xsl:value-of select="concat($SentSMSStatus/Status/Error,',', $SMSNotifyLoop/SMSPhoneNo)"/>
+                        </Error>
+                    </Status>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="AssignSMSResult">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1973</pd:x>
+                <pd:y>524</pd:y>
+                <config>
+                    <variableName>ResponseResult</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Status>
+                            <xsl:value-of select="if(not($SentSMSStatus/Status/Success)  and not($SentSMSStatus/Status/Error)) then '4'&#xA;else if((exists($SentSMSStatus/Status/Success))  and (not($SentSMSStatus/Status/Error))) then '2'&#xA;else if((not($SentSMSStatus/Status/Success))  and (exists($SentSMSStatus/Status/Error))) then '1'&#xA;else if((exists($SentSMSStatus/Status/Success))  and (exists($SentSMSStatus/Status/Error))) then '3'&#xA;else '4'"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="concat('Success: ' , $SentSMSStatus/Status/Success, 'Error: ', $SentSMSStatus/Status/Error)"/>
+                        </Message>
+                        <TransactionID>
+                            <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                        </TransactionID>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="SMSContent">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1730</pd:x>
+                <pd:y>495</pd:y>
+                <config>
+                    <variableName>NotifyContentVariable</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Content>
+                            <xsl:value-of select="if(tib:trim($NotificationSent/Record/SENT_CONTENT) !=&quot;&quot;) then $NotificationSent/Record/SENT_CONTENT&#xA;else if($GetTemplateNotification/resultSet/Record[1]/TEMPLATE_CONTENT !=&quot;&quot;) then &#xA;$GetTemplateNotification/resultSet/Record[1]/TEMPLATE_CONTENT&#xA;else&#xA;&quot;&quot;"/>
+                        </Content>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="AssignErrorNoContent">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1887</pd:x>
+                <pd:y>331</pd:y>
+                <config>
+                    <variableName>ResponseResult</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Status>
+                            <xsl:value-of select="&quot;4&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="&quot;Error: No content to send sms&quot;"/>
+                        </Message>
+                        <TransactionID>
+                            <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                        </TransactionID>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="AuthenQuery">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>1160</pd:x>
+            <pd:y>564</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <statement>select * from authentication_sms where status = 'A'</statement>
+                <oraObjects/>
+                <oraTables/>
+                <QueryOutputCachedSchemaColumns>SYSTEM_TYPE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>USER_NAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>PASSWORD</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>STATUS</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>SECRETKEY</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput/>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="GroupAssignEmail">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>1219</pd:x>
+            <pd:y>875</pd:y>
+            <pd:width>233</pd:width>
+            <pd:height>139</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$EmailQuery/jdbcGeneralActivityOutput/unknownResultset/row</pd:over>
+                <pd:iterationElementSlot>EmailNotifyLoop</pd:iterationElementSlot>
+                <pd:indexSlot>EmailIdx</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>AssignEmail</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignEmail</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="AssignEmail">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1333</pd:x>
+                <pd:y>956</pd:y>
+                <config>
+                    <variableName>EmailSent</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <xsl:choose>
+                            <xsl:when test="$EmailNotifyLoop/row/column[9]/value = 'TO'">
+                                <TO>
+                                    <xsl:value-of select="concat($EmailSent/root/TO, ';', $EmailNotifyLoop/row/column[5]/value)"/>
+                                </TO>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:if test="$EmailSent/root/TO">
+                                    <TO>
+                                        <xsl:value-of select="$EmailSent/root/TO"/>
+                                    </TO>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="$EmailNotifyLoop/row/column[9]/value = 'CC'">
+                                <CC>
+                                    <xsl:value-of select="concat($EmailSent/root/CC, ';', $EmailNotifyLoop/row/column[5]/value)"/>
+                                </CC>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:if test="$EmailSent/root/CC">
+                                    <CC>
+                                        <xsl:value-of select="$EmailSent/root/CC"/>
+                                    </CC>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="$EmailNotifyLoop/row/column[9]/value = 'BCC'">
+                                <BCC>
+                                    <xsl:value-of select="concat($EmailSent/root/BCC, ';', $EmailNotifyLoop/row/column[5]/value)"/>
+                                </BCC>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:if test="$EmailSent/root/BCC">
+                                    <BCC>
+                                        <xsl:value-of select="$EmailSent/root/BCC"/>
+                                    </BCC>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:group name="Send Email">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>1644</pd:x>
+            <pd:y>801</pd:y>
+            <pd:width>383</pd:width>
+            <pd:height>303</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>simpleGroup</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>false</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>NonExists</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>EmailContent</pd:to>
+                <pd:xpathDescription>ExistEmail</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>tib:trim($EmailSent/root/TO) !=""</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>EmailError</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>EmailSuccess</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignErrorNoContentEmail</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>NonExists</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Send-Mail-SBV</pd:from>
+                <pd:to>EmailSuccess</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Send-Mail-SBV</pd:from>
+                <pd:to>EmailError</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>error</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>EmailContent</pd:from>
+                <pd:to>Send-Mail-SBV</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>otherwise</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>EmailContent</pd:from>
+                <pd:to>AssignErrorNoContentEmail</pd:to>
+                <pd:xpathDescription>No content</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>tib:trim($NotifyContentVariable/root/Content) = ""</pd:xpath>
+            </pd:transition>
+            <pd:activity name="Send-Mail-SBV">
+                <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+                <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+                <pd:x>1749</pd:x>
+                <pd:y>867</pd:y>
+                <config>
+                    <newMimeSupport>true</newMimeSupport>
+                    <inputOutputVersion>5.2.0</inputOutputVersion>
+                    <host>10.1.44.9:25</host>
+                    <useSsl>false</useSsl>
+                    <authenticate>true</authenticate>
+                    <username>esbadmin</username>
+                    <password>Adm123$$</password>
+                    <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                        <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                        <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+                    </ns0:ssl>
+                    <InputHeaders>
+                        <xsd:element name="root">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </InputHeaders>
+                </config>
+                <pd:inputBindings>
+                    <ns12:mailActivityInput>
+                        <from>
+                            <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                        </from>
+                        <to>
+                            <xsl:value-of select="$EmailSent/root/TO"/>
+                        </to>
+                        <cc>
+                            <xsl:value-of select="$EmailSent/root/CC"/>
+                        </cc>
+                        <bcc>
+                            <xsl:value-of select="$EmailSent/root/BCC"/>
+                        </bcc>
+                        <xsl:if test="$NotifyContentVariable/root/Subject">
+                            <subject>
+                                <xsl:value-of select="$NotifyContentVariable/root/Subject"/>
+                            </subject>
+                        </xsl:if>
+                        <ns22:bodyElement>
+                            <bodyText>
+                                <xsl:value-of select="$NotifyContentVariable/root/Content"/>
+                            </bodyText>
+                        </ns22:bodyElement>
+                        <Headers/>
+                    </ns12:mailActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="EmailSuccess">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1903</pd:x>
+                <pd:y>857</pd:y>
+                <config>
+                    <variableName>ResponseResult</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Status>
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </Message>
+                        <TransactionID>
+                            <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                        </TransactionID>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="EmailError">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1906</pd:x>
+                <pd:y>936</pd:y>
+                <config>
+                    <variableName>ResponseResult</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Status>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="&quot;Send-Mail-SBV Error&quot;"/>
+                        </Message>
+                        <TransactionID>
+                            <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                        </TransactionID>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="NonExists">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1779</pd:x>
+                <pd:y>1140</pd:y>
+                <config>
+                    <variableName>ResponseResult</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Status>
+                            <xsl:value-of select="&quot;2&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="&quot;No destination Email Exists&quot;"/>
+                        </Message>
+                        <TransactionID>
+                            <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                        </TransactionID>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="EmailContent">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1751</pd:x>
+                <pd:y>1013</pd:y>
+                <config>
+                    <variableName>NotifyContentVariable</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Subject>
+                            <xsl:value-of select="if(tib:trim($NotificationSent/Record/EMAIL_SUBJECT) !=&quot;&quot;) then $NotificationSent/Record/EMAIL_SUBJECT&#xA;else if($GetTemplateNotification/resultSet/Record[1]/NOTIFY_SUBJECT !=&quot;&quot;) then &#xA;$GetTemplateNotification/resultSet/Record[1]/NOTIFY_SUBJECT&#xA;else&#xA;&quot;&quot;"/>
+                        </Subject>
+                        <Content>
+                            <xsl:value-of select="if(tib:trim($NotificationSent/Record/SENT_CONTENT) !=&quot;&quot;) then $NotificationSent/Record/SENT_CONTENT&#xA;else if($GetTemplateNotification/resultSet/Record[1]/TEMPLATE_CONTENT !=&quot;&quot;) then &#xA;$GetTemplateNotification/resultSet/Record[1]/TEMPLATE_CONTENT&#xA;else&#xA;&quot;&quot;"/>
+                        </Content>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="AssignErrorNoContentEmail">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1878</pd:x>
+                <pd:y>1013</pd:y>
+                <config>
+                    <variableName>ResponseResult</variableName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <Status>
+                            <xsl:value-of select="&quot;4&quot;"/>
+                        </Status>
+                        <Message>
+                            <xsl:value-of select="&quot;Error: No content to send email&quot;"/>
+                        </Message>
+                        <TransactionID>
+                            <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                        </TransactionID>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="UpdateStatusTransaction">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>1685</pd:x>
+            <pd:y>563</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <statement>update tbl_sent_notify_gw t set t.status = ?, t.error_msg = ?, t.date_sent = sysdate where t.notify_id = ?</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>Status</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>Error_Msg</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>NotifyID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <Status>
+                        <xsl:value-of select="$ResponseResult/root/Status"/>
+                    </Status>
+                    <Error_Msg>
+                        <xsl:value-of select="$ResponseResult/root/Message"/>
+                    </Error_Msg>
+                    <NotifyID>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </NotifyID>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AssignFullEmail">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1490</pd:x>
+            <pd:y>832</pd:y>
+            <config>
+                <variableName>EmailSent</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:choose>
+                        <xsl:when test="$NotificationSent/Record/EMAIL_TO !=''">
+                            <TO>
+                                <xsl:value-of select="concat($NotificationSent/Record/EMAIL_TO, $EmailSent/root/TO)"/>
+                            </TO>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <TO>
+                                <xsl:value-of select="substring-after($EmailSent/root/TO, ';')"/>
+                            </TO>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="$NotificationSent/Record/EMAIL_CC !=''">
+                            <CC>
+                                <xsl:value-of select="concat($NotificationSent/Record/EMAIL_CC, $EmailSent/root/CC)"/>
+                            </CC>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <CC>
+                                <xsl:value-of select="substring-after($EmailSent/root/CC, ';')"/>
+                            </CC>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="$NotificationSent/Record/EMAIL_BCC !=''">
+                            <BCC>
+                                <xsl:value-of select="concat($NotificationSent/Record/EMAIL_BCC, $EmailSent/root/BCC)"/>
+                            </BCC>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <BCC>
+                                <xsl:value-of select="substring-after($EmailSent/root/BCC, ';')"/>
+                            </BCC>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="MapSMSBranchList">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>1361</pd:x>
+            <pd:y>275</pd:y>
+            <pd:width>281</pd:width>
+            <pd:height>185</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$SMSQuery/jdbcGeneralActivityOutput/unknownResultset/row</pd:over>
+                <pd:iterationElementSlot>SMSPhoneLoop</pd:iterationElementSlot>
+                <pd:indexSlot>DesIndex</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>false</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>MapDestinationESB</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Assign</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>MapDestinationESB</pd:from>
+                <pd:to>Assign</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="Assign">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1545</pd:x>
+                <pd:y>373</pd:y>
+                <config>
+                    <variableName>ListSMSPhoneNo</variableName>
+                </config>
+                <pd:inputBindings>
+                    <List>
+                        <xsl:for-each select="$ListSMSPhoneNo/List/SMSPhoneNo">
+                            <SMSPhoneNo>
+                                <xsl:value-of select="."/>
+                            </SMSPhoneNo>
+                        </xsl:for-each>
+                        <SMSPhoneNo>
+                            <xsl:value-of select="$MapDestinationESB/SMSPhoneNo"/>
+                        </SMSPhoneNo>
+                    </List>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="MapDestinationESB">
+                <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+                <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+                <pd:x>1448</pd:x>
+                <pd:y>374</pd:y>
+                <config>
+                    <element ref="pfx:SMSPhoneNo"/>
+                </config>
+                <pd:inputBindings>
+                    <SMSPhoneNo>
+                        <xsl:value-of select="$SMSPhoneLoop/row/column[4]/value"/>
+                    </SMSPhoneNo>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="JavaSplitSMS">
+            <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+            <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+            <pd:x>1427</pd:x>
+            <pd:y>144</pd:y>
+            <config>
+                <fileName>AutoSendNotificationJavaSplitSMS</fileName>
+                <packageName>Services.Global.Utilities.SendNotification.OperationImpl.AutoSendNotification</packageName>
+                <fullsource>package Services.Global.Utilities.SendNotification.OperationImpl.AutoSendNotification;
+import java.util.*;
+import java.io.*;
+public class AutoSendNotificationJavaSplitSMS{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String InSMSTo = "";
+	protected String[] OutSMSTo = null;
+	public String getInSMSTo() {
+		return InSMSTo;
+	}
+	public void setInSMSTo(String val) {
+		InSMSTo = val;
+	}
+	public String[] getOutSMSTo() {
+		return OutSMSTo;
+	}
+	public void setOutSMSTo(String[] val) {
+		OutSMSTo = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public AutoSendNotificationJavaSplitSMS() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String InSMSTo
+	Out : String[] OutSMSTo
+* Available Variables: DO NOT MODIFY *****/
+OutSMSTo = InSMSTo.split(";");
+
+}
+}
+</fullsource>
+                <inputData>
+                    <row>
+                        <fieldName>InSMSTo</fieldName>
+                        <fieldType>string</fieldType>
+                        <fieldRequired>optional</fieldRequired>
+                    </row>
+                </inputData>
+                <outputData>
+                    <row>
+                        <fieldName>OutSMSTo</fieldName>
+                        <fieldType>string</fieldType>
+                        <fieldRequired>repeating</fieldRequired>
+                    </row>
+                </outputData>
+                <byteCode>
+                    <class>
+                        <name>AutoSendNotificationJavaSplitSMS</name>
+                        <byteCode>yv66vgAAADMAKwkABwAeCQAHAB8KAAgAIAgAIQgAIgoAIwAkBwAlBwAmAQAHSW5TTVNUbwEAEkxqYXZhL2xhbmcvU3RyaW5nOwEACE91dFNNU1RvAQATW0xqYXZhL2xhbmcvU3RyaW5nOwEACmdldEluU01TVG8BABQoKUxqYXZhL2xhbmcvU3RyaW5nOwEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBAApzZXRJblNNU1RvAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWAQALZ2V0T3V0U01TVG8BABUoKVtMamF2YS9sYW5nL1N0cmluZzsBAAtzZXRPdXRTTVNUbwEAFihbTGphdmEvbGFuZy9TdHJpbmc7KVYBAAY8aW5pdD4BAAMoKVYBAAZpbnZva2UBAApFeGNlcHRpb25zBwAnAQAKU291cmNlRmlsZQEAJUF1dG9TZW5kTm90aWZpY2F0aW9uSmF2YVNwbGl0U01TLmphdmEMAAkACgwACwAMDAAXABgBAAABAAE7BwAoDAApACoBAG5TZXJ2aWNlcy9HbG9iYWwvVXRpbGl0aWVzL1NlbmROb3RpZmljYXRpb24vT3BlcmF0aW9uSW1wbC9BdXRvU2VuZE5vdGlmaWNhdGlvbi9BdXRvU2VuZE5vdGlmaWNhdGlvbkphdmFTcGxpdFNNUwEAEGphdmEvbGFuZy9PYmplY3QBABNqYXZhL2xhbmcvRXhjZXB0aW9uAQAQamF2YS9sYW5nL1N0cmluZwEABXNwbGl0AQAnKExqYXZhL2xhbmcvU3RyaW5nOylbTGphdmEvbGFuZy9TdHJpbmc7ACEABwAIAAAAAgAEAAkACgAAAAQACwAMAAAABgABAA0ADgABAA8AAAAdAAEAAQAAAAUqtAABsAAAAAEAEAAAAAYAAQAAAAkAAQARABIAAQAPAAAAIgACAAIAAAAGKiu1AAGxAAAAAQAQAAAACgACAAAADAAFAA0AAQATABQAAQAPAAAAHQABAAEAAAAFKrQAArAAAAABABAAAAAGAAEAAAAPAAEAFQAWAAEADwAAACIAAgACAAAABiortQACsQAAAAEAEAAAAAoAAgAAABIABQATAAEAFwAYAAEADwAAADQAAgABAAAAECq3AAMqEgS1AAEqAbUAArEAAAABABAAAAASAAQAAAAVAAQABgAKAAcADwAWAAEAGQAYAAIADwAAACoAAwABAAAADioqtAABEgW2AAa1AAKxAAAAAQAQAAAACgACAAAAHAANAB4AGgAAAAQAAQAbAAEAHAAAAAIAHQ==</byteCode>
+                    </class>
+                </byteCode>
+            </config>
+            <pd:inputBindings>
+                <javaCodeActivityInput>
+                    <xsl:if test="$NotificationSent/Record/SMS_TO">
+                        <InSMSTo>
+                            <xsl:value-of select="$NotificationSent/Record/SMS_TO"/>
+                        </InSMSTo>
+                    </xsl:if>
+                </javaCodeActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:group name="MapSMSSentTo">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>1632</pd:x>
+            <pd:y>114</pd:y>
+            <pd:width>321</pd:width>
+            <pd:height>202</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$JavaSplitSMS/javaCodeActivityOutput/OutSMSTo</pd:over>
+                <pd:iterationElementSlot>ExtSMSPhoneLoop</pd:iterationElementSlot>
+                <pd:indexSlot>DesExtIndex</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>false</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>MapExtDestinationESB</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignExtSMS</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>MapExtDestinationESB</pd:from>
+                <pd:to>AssignExtSMS</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="AssignExtSMS">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>1847</pd:x>
+                <pd:y>227</pd:y>
+                <config>
+                    <variableName>ListSMSPhoneNo</variableName>
+                </config>
+                <pd:inputBindings>
+                    <List>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$ListSMSPhoneNo/List/SMSPhoneNo">
+                            <SMSPhoneNo>
+                                <xsl:value-of select="."/>
+                            </SMSPhoneNo>
+                        </xsl:for-each>
+                        <SMSPhoneNo>
+                            <xsl:value-of select="$MapExtDestinationESB/SMSPhoneNo"/>
+                        </SMSPhoneNo>
+                    </List>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="MapExtDestinationESB">
+                <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+                <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+                <pd:x>1724</pd:x>
+                <pd:y>226</pd:y>
+                <config>
+                    <element ref="pfx:SMSPhoneNo"/>
+                </config>
+                <pd:inputBindings>
+                    <SMSPhoneNo>
+                        <xsl:value-of select="$ExtSMSPhoneLoop/OutSMSTo"/>
+                    </SMSPhoneNo>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="AssignQueryError">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1474</pd:x>
+            <pd:y>568</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;4&quot;"/>
+                    </Status>
+                    <Message>
+                        <xsl:value-of select="&quot;Query with Branch Error&quot;"/>
+                    </Message>
+                    <TransactionID>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="WrongSentType">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1456</pd:x>
+            <pd:y>703</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;4&quot;"/>
+                    </Status>
+                    <Message>
+                        <xsl:value-of select="&quot;Wrong Sent Type&quot;"/>
+                    </Message>
+                    <TransactionID>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="NoAuthentication">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>1465</pd:x>
+            <pd:y>418</pd:y>
+            <config>
+                <variableName>ResponseResult</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;4&quot;"/>
+                    </Status>
+                    <Message>
+                        <xsl:value-of select="&quot;Authenticate Failed&quot;"/>
+                    </Message>
+                    <TransactionID>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </TransactionID>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="UpdateStatusError">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1840</pd:x>
+            <pd:y>386</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="UpdateStatusProccess">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>678</pd:x>
+            <pd:y>565</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>update tbl_sent_notify_gw t set t.status = 5 where t.notify_id = ?</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>NotifyID</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+            </config>
+            <pd:inputBindings>
+                <jdbcUpdateActivityInput>
+                    <NotifyID>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </NotifyID>
+                </jdbcUpdateActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="UpdateStatusProcessFailed">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1135</pd:x>
+            <pd:y>1041</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="LogEnd">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>2030</pd:x>
+            <pd:y>563</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="&quot;DEBUG&quot;"/>
+                    </EnableRoles>
+                    <ns13:EngineLog>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="&quot;AutoSendNotification&quot;"/>
+                        </ns13:ServiceName>
+                        <ns13:Message>
+                            <xsl:value-of select="concat( $ServicesVariable/root/OperationName ,': End ', $ServicesVariable/root/OperationName )"/>
+                        </ns13:Message>
+                        <ns13:Category>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EnableRoles"/>
+                        </ns13:Category>
+                        <ns13:TrackingId>
+                            <xsl:value-of select="concat( generate-id($_processContext/ns2:ProcessContext),   tib:timestamp() )"/>
+                        </ns13:TrackingId>
+                    </ns13:EngineLog>
+                    <ns14:SOAEnvelope>
+                        <ns14:SOAServiceHeader>
+                            <ns14:AppHdr>
+                                <ns23:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns23:CharSet>
+                                <ns23:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns23:ServVersion>
+                                <ns23:From>
+                                    <ns23:Id>
+                                        <xsl:value-of select="&quot;1002&quot;"/>
+                                    </ns23:Id>
+                                    <ns23:Name>
+                                        <xsl:value-of select="&quot;NotificationGW&quot;"/>
+                                    </ns23:Name>
+                                </ns23:From>
+                                <ns23:To>
+                                    <ns23:Id>
+                                        <xsl:value-of select="&quot;07&quot;"/>
+                                    </ns23:Id>
+                                    <ns23:Name>
+                                        <xsl:value-of select="&quot;NotificationSystem&quot;"/>
+                                    </ns23:Name>
+                                </ns23:To>
+                                <ns23:MsgId>
+                                    <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                                </ns23:MsgId>
+                                <ns23:BizServ>
+                                    <ns23:Id>
+                                        <xsl:value-of select="&quot;1&quot;"/>
+                                    </ns23:Id>
+                                    <ns23:Name>
+                                        <xsl:value-of select="&quot;Notification&quot;"/>
+                                    </ns23:Name>
+                                </ns23:BizServ>
+                                <ns23:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns23:CreatedDate>
+                            </ns14:AppHdr>
+                            <ns14:SOAMsgId>
+                                <xsl:value-of select="concat(generate-id($_processContext/ns2:ProcessContext), tib:timestamp())"/>
+                            </ns14:SOAMsgId>
+                            <ns14:ServiceName>
+                                <xsl:value-of select="$ServicesVariable/root/ServiceName"/>
+                            </ns14:ServiceName>
+                            <ns14:OperationName>
+                                <xsl:value-of select="$ServicesVariable/root/OperationName"/>
+                            </ns14:OperationName>
+                            <ns14:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                            </ns14:ProcessName>
+                        </ns14:SOAServiceHeader>
+                        <ns14:ServiceBody>
+                            <ns24:ServiceEnverlop>
+                                <ns23:AppHdr>
+                                    <ns23:CharSet>
+                                        <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                    </ns23:CharSet>
+                                    <ns23:ServVersion>
+                                        <xsl:value-of select="&quot;1.0&quot;"/>
+                                    </ns23:ServVersion>
+                                    <ns23:From>
+                                        <ns23:Id>
+                                            <xsl:value-of select="&quot;1002&quot;"/>
+                                        </ns23:Id>
+                                        <ns23:Name>
+                                            <xsl:value-of select="&quot;NotificationGW&quot;"/>
+                                        </ns23:Name>
+                                    </ns23:From>
+                                    <ns23:To>
+                                        <ns23:Id>
+                                            <xsl:value-of select="&quot;07&quot;"/>
+                                        </ns23:Id>
+                                        <ns23:Name>
+                                            <xsl:value-of select="&quot;NotificationSystem&quot;"/>
+                                        </ns23:Name>
+                                    </ns23:To>
+                                    <ns23:MsgId>
+                                        <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                                    </ns23:MsgId>
+                                    <ns23:BizServ>
+                                        <ns23:Id>
+                                            <xsl:value-of select="&quot;1&quot;"/>
+                                        </ns23:Id>
+                                        <ns23:Name>
+                                            <xsl:value-of select="&quot;Notification&quot;"/>
+                                        </ns23:Name>
+                                    </ns23:BizServ>
+                                    <ns23:CreatedDate>
+                                        <xsl:value-of select="current-dateTime()"/>
+                                    </ns23:CreatedDate>
+                                </ns23:AppHdr>
+                                <ns23:ResponseStatus>
+                                    <ns23:Status>
+                                        <xsl:value-of select="if($ResponseResult/root/Status = '1') then '0'&#xA;else '1'"/>
+                                    </ns23:Status>
+                                    <ns23:ErrorMessage>
+                                        <xsl:value-of select="$ResponseResult/root/Message"/>
+                                    </ns23:ErrorMessage>
+                                </ns23:ResponseStatus>
+                                <ServiceBody/>
+                            </ns24:ServiceEnverlop>
+                        </ns14:ServiceBody>
+                    </ns14:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;End&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="tib:timestamp() - $ServicesVariable/root/startTime"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="NonTransactionUpdated">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>681</pd:x>
+            <pd:y>1043</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="AssignServiceInfo">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>404</pd:x>
+            <pd:y>332</pd:y>
+            <config>
+                <variableName>ServicesVariable</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <startTime>
+                        <xsl:value-of select="tib:timestamp()"/>
+                    </startTime>
+                    <ServiceName>
+                        <xsl:value-of select="&quot;Global/System/Utilities/AutoSendNotification&quot;"/>
+                    </ServiceName>
+                    <OperationName>
+                        <xsl:value-of select="&quot;AutoSendNotification&quot;"/>
+                    </OperationName>
+                    <SOAMsgId>
+                        <xsl:value-of select="concat(generate-id($_processContext/ns2:ProcessContext), tib:timestamp())"/>
+                    </SOAMsgId>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CheckNotifyID">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>405</pd:x>
+            <pd:y>562</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns15:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </duplicateKey>
+                </ns15:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="LogStart">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>531</pd:x>
+            <pd:y>564</pd:y>
+            <config>
+                <processName>/Util/Logging/handleLog.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <EnableRoles>
+                        <xsl:value-of select="&quot;DEBUG&quot;"/>
+                    </EnableRoles>
+                    <ns13:EngineLog>
+                        <ns13:ServiceName>
+                            <xsl:value-of select="&quot;AutoSendNotification&quot;"/>
+                        </ns13:ServiceName>
+                        <ns13:Message>
+                            <xsl:value-of select="concat($ServicesVariable/root/OperationName, ': Start ',$ServicesVariable/root/OperationName)"/>
+                        </ns13:Message>
+                        <ns13:Category>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/EnableRoles"/>
+                        </ns13:Category>
+                        <ns13:TrackingId>
+                            <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                        </ns13:TrackingId>
+                    </ns13:EngineLog>
+                    <ns14:SOAEnvelope>
+                        <ns14:SOAServiceHeader>
+                            <ns14:AppHdr>
+                                <ns23:CharSet>
+                                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                                </ns23:CharSet>
+                                <ns23:ServVersion>
+                                    <xsl:value-of select="&quot;1.0&quot;"/>
+                                </ns23:ServVersion>
+                                <ns23:From>
+                                    <ns23:Id>
+                                        <xsl:value-of select="&quot;1002&quot;"/>
+                                    </ns23:Id>
+                                    <ns23:Name>
+                                        <xsl:value-of select="&quot;NotificationGW&quot;"/>
+                                    </ns23:Name>
+                                </ns23:From>
+                                <ns23:To>
+                                    <ns23:Id>
+                                        <xsl:value-of select="&quot;07&quot;"/>
+                                    </ns23:Id>
+                                    <ns23:Name>
+                                        <xsl:value-of select="&quot;NotificationSystem&quot;"/>
+                                    </ns23:Name>
+                                </ns23:To>
+                                <ns23:MsgId>
+                                    <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                                </ns23:MsgId>
+                                <ns23:BizServ>
+                                    <ns23:Id>
+                                        <xsl:value-of select="&quot;1&quot;"/>
+                                    </ns23:Id>
+                                    <ns23:Name>
+                                        <xsl:value-of select="&quot;Notification&quot;"/>
+                                    </ns23:Name>
+                                </ns23:BizServ>
+                                <ns23:CreatedDate>
+                                    <xsl:value-of select="current-dateTime()"/>
+                                </ns23:CreatedDate>
+                            </ns14:AppHdr>
+                            <ns14:SOAMsgId>
+                                <xsl:value-of select="$ServicesVariable/root/SOAMsgId"/>
+                            </ns14:SOAMsgId>
+                            <ns14:ServiceName>
+                                <xsl:value-of select="$ServicesVariable/root/ServiceName"/>
+                            </ns14:ServiceName>
+                            <ns14:OperationName>
+                                <xsl:value-of select="$ServicesVariable/root/OperationName"/>
+                            </ns14:OperationName>
+                            <ns14:ProcessName>
+                                <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                            </ns14:ProcessName>
+                        </ns14:SOAServiceHeader>
+                        <ns14:ServiceBody>
+                            <xsl:copy-of select="$NotificationSent/Record"/>
+                        </ns14:ServiceBody>
+                    </ns14:SOAEnvelope>
+                    <Direction>
+                        <xsl:value-of select="&quot;Start&quot;"/>
+                    </Direction>
+                    <TimeDuration>
+                        <xsl:value-of select="&quot;0&quot;"/>
+                    </TimeDuration>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ExistNotifyID">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>409</pd:x>
+            <pd:y>742</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="CheckBeforeLogEnd">
+            <pd:type>com.tibco.pe.core.CheckpointActivity</pd:type>
+            <pd:resourceType>ae.process.checkpoint</pd:resourceType>
+            <pd:x>1838</pd:x>
+            <pd:y>566</pd:y>
+            <config/>
+            <pd:inputBindings>
+                <ns15:input>
+                    <duplicateKey>
+                        <xsl:value-of select="$NotificationSent/Record/NOTIFY_ID"/>
+                    </duplicateKey>
+                </ns15:input>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="ExistLogEnd">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1978</pd:x>
+            <pd:y>389</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="GetTemplateNotification">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>850</pd:x>
+            <pd:y>250</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/AMXSOA.sharedjdbc</jdbcSharedConfig>
+                <statement>select * from tbl_notifytemplate where notify_name = ? and notify_type = ?</statement>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>p_NotifyName</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>p_NotifyType</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <oraObjects/>
+                <oraTables/>
+                <QueryOutputCachedSchemaColumns>NOTIFY_NAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>NOTIFY_TYPE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>TEMPLATE_CONTENT</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>NOTIFY_FULLNAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>NOTIFY_SUBJECT</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>NOTIFY_ID</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>CREATED_DATE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>MODIFY_DATE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput>
+                    <p_NotifyName>
+                        <xsl:choose>
+                            <xsl:when test="exists($NotificationSent/Record/TEMPLATE_ID)">
+                                <xsl:value-of select="$NotificationSent/Record/TEMPLATE_ID"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </p_NotifyName>
+                    <p_NotifyType>
+                        <xsl:choose>
+                            <xsl:when test="exists($NotificationSent/Record/SENT_TYPE)">
+                                <xsl:value-of select="$NotificationSent/Record/SENT_TYPE"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </p_NotifyType>
+                </jdbcQueryActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetTemplateNotificationNull">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>1682</pd:x>
+            <pd:y>73</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="GetTemplateNotificationError">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>850</pd:x>
+            <pd:y>71</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="QueryTransactionError">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>151</pd:x>
+        <pd:y>1205</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1277</pd:x>
+        <pd:y>1206</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>QueryTransaction</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryTransaction</pd:from>
+        <pd:to>LoopAllTransaction</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LoopAllTransaction</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryTransaction</pd:from>
+        <pd:to>QueryTransactionError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>QueryTransactionError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

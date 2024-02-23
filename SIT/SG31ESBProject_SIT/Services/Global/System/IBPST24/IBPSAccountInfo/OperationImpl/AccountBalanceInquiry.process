@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/Tuxedo/TuxedoAdapterConfiguration/RequestResponseInvocationService" xmlns:ns12="sbv/common/envelope/soaenvelope/1.0" xmlns:pfx="http://xmlns.example.com/1433466938916" xmlns:ns2="sbv/global/remittance/fundxfer/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" xmlns:ns3="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx5="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="sbv/global/utilities/cbsstatus/inquiry/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="sbv/global/datatype/datatype/version1.0" xmlns:pfx2="sbv/common/envelope/commonheader/1.0" xmlns:pfx7="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd" xmlns:pfx6="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.xsd"/>
+    <xsd:import namespace="http://temenos.com/FT.SBV.IBPS.ACTR.FTHV" schemaLocation="/SharedResource/Schema/Global/System/T24/FTIBPSHV/FTIBPSHV_XSD1.xsd"/>
+    <xsd:import namespace="sbv/global/account/accountstatus/inquiry/version1.0"/>
+    <xsd:import namespace="sbv/global/utilities/cbsstatus/inquiry/version1.0"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/account/accountInfo/version1.0" schemaLocation="/SharedResource/Schema/Global/Account/AccountInfo/AccountInfo.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/IBPS/Schema.xsd" schemaLocation="/SharedResource/Schema/Global/System/IBPS/AccountNoList.xsd"/>
+    <pd:name>Services/Global/System/IBPST24/IBPSAccountInfo/OperationImpl/AccountBalanceInquiry.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>88</pd:x>
+        <pd:y>247</pd:y>
+        <config>
+            <StartTime>1438598201000</StartTime>
+            <Frequency>true</Frequency>
+            <TimeInterval>1</TimeInterval>
+            <FrequencyIndex>Second</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>861</pd:endX>
+    <pd:endY>240</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <DataResponse>
+            <xsd:element name="DataResponse" type="xsd:string"/>
+        </DataResponse>
+        <DataInput>
+            <xsd:element name="strDataInput" type="xsd:string"/>
+        </DataInput>
+        <ServiceEnvelop ref="ns3:ServiceEnverlop"/>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/accountbalancetest/version1.0</pd:targetNamespace>
+    <pd:activity name="AssignDataResponse">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>685</pd:x>
+        <pd:y>233</pd:y>
+        <config>
+            <variableName>DataResponse</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/*" element="pfx6:AccountBalance"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <DataResponse>
+                <xsl:value-of select="concat($MapStatus/StatusRes,$RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx6:AccountBalance[1]/pfx6:SystemDate,tib:pad($RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx6:AccountBalance[1]/pfx6:AccountNo,'16',' '),tib:pad($RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx6:AccountBalance[1]/pfx6:BalAmount, '18',' '),tib:pad($RequestResponse/root/ns3:ServiceEnverlop/ServiceBody/pfx6:AccountBalance[1]/pfx6:HoldAmount,'18',' '))"/>
+            </DataResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>431</pd:x>
+        <pd:y>231</pd:y>
+        <config>
+            <processName>/Services/Common/TemplateProcess/RequestResponseOperation.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns12:SOAEnvelope>
+                    <ns12:SOAServiceHeader>
+                        <ns12:AppHdr>
+                            <pfx2:CharSet>
+                                <xsl:value-of select="&quot;UTF-8&quot;"/>
+                            </pfx2:CharSet>
+                            <pfx2:ServVersion>
+                                <xsl:value-of select="&quot;1.0&quot;"/>
+                            </pfx2:ServVersion>
+                            <pfx2:From>
+                                <pfx2:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </pfx2:Id>
+                                <pfx2:Name>
+                                    <xsl:value-of select="&quot;IBPS&quot;"/>
+                                </pfx2:Name>
+                            </pfx2:From>
+                            <pfx2:To>
+                                <pfx2:Id>
+                                    <xsl:value-of select="&quot;2&quot;"/>
+                                </pfx2:Id>
+                                <pfx2:Name>
+                                    <xsl:value-of select="&quot;T24&quot;"/>
+                                </pfx2:Name>
+                            </pfx2:To>
+                            <pfx2:MsgId>
+                                <xsl:value-of select="&quot;1&quot;"/>
+                            </pfx2:MsgId>
+                            <pfx2:MsgPreId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </pfx2:MsgPreId>
+                            <pfx2:MsgSrcId>
+                                <xsl:value-of select="&quot;2&quot;"/>
+                            </pfx2:MsgSrcId>
+                            <pfx2:BizServ>
+                                <pfx2:Id>
+                                    <xsl:value-of select="&quot;1&quot;"/>
+                                </pfx2:Id>
+                                <pfx2:Name>
+                                    <xsl:value-of select="&quot;T24AccountStatus&quot;"/>
+                                </pfx2:Name>
+                            </pfx2:BizServ>
+                            <pfx2:CreatedDate>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </pfx2:CreatedDate>
+                        </ns12:AppHdr>
+                        <ns12:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns1:ProcessContext/ProcessId)"/>
+                        </ns12:ProcessName>
+                    </ns12:SOAServiceHeader>
+                    <ns12:ServiceBody>
+                        <pfx6:AccountNo>
+                            <xsl:value-of select="$MapAccountRes/pfx7:AccountList/pfx7:AccountNoType[1]/pfx7:T24AccountNo"/>
+                        </pfx6:AccountNo>
+                    </ns12:ServiceBody>
+                </ns12:SOAEnvelope>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignDataInput">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>231</pd:y>
+        <config>
+            <variableName>DataInput</variableName>
+        </config>
+        <pd:inputBindings>
+            <strDataInput>
+                <xsl:value-of select="&quot;45201001        &quot;"/>
+            </strDataInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapStatus">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>575</pd:x>
+        <pd:y>237</pd:y>
+        <config>
+            <element>
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="StatusRes" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <StatusRes>
+                <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="if($RequestResponse/root/ns3:ServiceEnverlop/pfx2:ResponseStatus/pfx2:Status='0') then &quot;6000&quot;&#xA;else &quot;6003&quot;"/>
+            </StatusRes>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>AssignDataInput</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>MapStatus</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapStatus</pd:from>
+        <pd:to>AssignDataResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>AssignDataInput</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignDataResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

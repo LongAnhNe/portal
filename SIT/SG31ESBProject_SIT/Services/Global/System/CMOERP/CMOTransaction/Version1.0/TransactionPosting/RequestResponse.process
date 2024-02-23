@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://fis.vn/iMaximusGateway/ErpPostToCsdService/GetAcctStatusFrErp" xmlns:ns6="http://fis.vn/iMaximusGateway/ErpPostToCsdService" xmlns:ns10="http://schemas.tibco.com/bw/plugins/http/5.0/httpExceptions" xmlns:ns7="http://schemas.datacontract.org/2004/07/iMaximus.Gateway.WCFServices" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:pfx5="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/702/basic/functionModules" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://tempuri.org/" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="sbv/global/csderp/version1.0" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/csderp/version1.0" schemaLocation="/SharedResource/Schema/Global/CSDERP/CsdErpSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/702/basic/functionModules" schemaLocation="/AESchemas/ae/702/basic/functionModules.aeschema"/>
+    <wsdl:import namespace="http://tempuri.org/" location="/SharedResource/Schema/Global/System/CSD/ErpPostToCsd/ErpPostToCsd.wsdl"/>
+    <pd:name>Services/Global/System/CMOERP/CMOTransaction/Version1.0/TransactionPosting/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>79</pd:startX>
+    <pd:startY>131</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseVar/Response/Status"/>
+                    </ns3:Status>
+                    <ns3:ErrorInfo>
+                        <ns3:Id>
+                            <xsl:value-of select="$ResponseVar/Response/InterfaceID"/>
+                        </ns3:Id>
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseVar/Response/Message"/>
+                        </ns3:ErrorMessage>
+                    </ns3:ErrorInfo>
+                </ns3:ResponseStatus>
+                <ServiceBody/>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1249</pd:endX>
+    <pd:endY>122</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ResponseVar>
+            <xsd:element name="Response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="InterfaceID" type="xsd:string"/>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseVar>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/cmoerp/cmotransaction/transationposting/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="MapAdapterReq">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>252</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <element ref="pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" type="pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/ancestor-or-self::*/namespace::node()"/>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/@*"/>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*/node()"/>
+            </pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>386</pd:x>
+        <pd:y>34</pd:y>
+        <pd:width>395</pd:width>
+        <pd:height>229</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$MapAdapterReq/pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N/T__SG31/item</pd:over>
+            <pd:iterationElementSlot>current</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>UpdateNewCMOTransaction</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>UpdateNewCMOTransaction</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="UpdateNewCMOTransaction">
+            <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+            <pd:x>565</pd:x>
+            <pd:y>138</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <statement>insert into SBV_CMO_L (BUKRS,BSART, EBELN,MBLNR,MENGE_EKPO,MATNR_EKPO,ZZ_APPDA_1,WERKS,LGORT,ZZ_STSYM,BWTAR,ZZ_APPROVE,ZZ_UNAPPROVE,ZZ_RECNR,ZZ_DELNR,ZZ_TTBBN,ZZ_TTBBX,ZZ_USERLOAD,AEDAT,ZZ_LDCNR,ZZ_TRADA,ZZ_LDCFR,ZZ_LDCTO,ZZ_RESBK,EKORG,ZZ_LNXTH,ZZ_DLKNR,ZZ_RCKNR,ZZ_COMEX,EBELP,TXZ01,MEINS_EKPO,BUDAT,CPUDT,CPUTM,MAKTX,MATNR_MSEG,MENGE_MSEG,MEINS_MSEG,ZZ_DATLOAD,ZZ_EITLOAD,ZZ_LOAD,ZZ_STATUS,ZZ_FLAG,ZZ_DP1,ZZ_DP2,ZZ_DP3,ZZ_DP4,ZZ_DP5,MENGE_EKPO_ATM,ZZ_CRDATE,ZZ_TCODE,ZZ_UZEIT1) 
+values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</statement>
+                <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>BUKRS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>BSART</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>EBELN</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MBLNR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MENGE_EKPO</parameterName>
+                        <dataType>NUMERIC</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MATNR_EKPO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_APPDA_1</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>WERKS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>LGORT</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_STSYM</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>BWTAR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_APPROVE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_UNAPPROVE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_RECNR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DELNR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_TTBBN</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_TTBBX</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_USERLOAD</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>AEDAT</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_LDCNR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_TRADA</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_LDCFR</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_LDCTO</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_RESBK</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>EKORG</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_LNXTH</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DLKNR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_RCKNR</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_COMEX</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>EBELP</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>TXZ01</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MEINS_EKPO</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>BUDAT</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CPUDT</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>CPUTM</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MAKTX</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MATNR_MSEG</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MENGE_MSEG</parameterName>
+                        <dataType>NUMERIC</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MEINS_MSEG</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DATLOAD</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_EITLOAD</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_LOAD</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_STATUS</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_FLAG</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DP1</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DP2</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DP3</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DP4</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_DP5</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>MENGE_EKPO_ATM</parameterName>
+                        <dataType>NUMERIC</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_CRDATE</parameterName>
+                        <dataType>DATE</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_TCODE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                    <parameter>
+                        <parameterName>ZZ_UZEIT1</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+            </config>
+            <pd:inputBindings>
+                <xsl:for-each select="$current/item">
+                    <jdbcUpdateActivityInput>
+                        <BUKRS>
+                            <xsl:copy-of select="BUKRS/@xsi:nil"/>
+                            <xsl:value-of select="BUKRS"/>
+                        </BUKRS>
+                        <BSART>
+                            <xsl:copy-of select="BSART/@xsi:nil"/>
+                            <xsl:value-of select="BSART"/>
+                        </BSART>
+                        <EBELN>
+                            <xsl:copy-of select="EBELN/@xsi:nil"/>
+                            <xsl:value-of select="EBELN"/>
+                        </EBELN>
+                        <MBLNR>
+                            <xsl:copy-of select="MBLNR/@xsi:nil"/>
+                            <xsl:value-of select="MBLNR"/>
+                        </MBLNR>
+                        <MENGE_EKPO>
+                            <xsl:copy-of select="MENGE__EKPO/@xsi:nil"/>
+                            <xsl:value-of select="MENGE__EKPO"/>
+                        </MENGE_EKPO>
+                        <MATNR_EKPO>
+                            <xsl:copy-of select="MATNR__EKPO/@xsi:nil"/>
+                            <xsl:value-of select="MATNR__EKPO"/>
+                        </MATNR_EKPO>
+                        <ZZ_APPDA_1>
+                            <xsl:value-of select="tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)"/>
+                        </ZZ_APPDA_1>
+                        <WERKS>
+                            <xsl:copy-of select="WERKS/@xsi:nil"/>
+                            <xsl:value-of select="WERKS"/>
+                        </WERKS>
+                        <LGORT>
+                            <xsl:copy-of select="LGORT/@xsi:nil"/>
+                            <xsl:value-of select="LGORT"/>
+                        </LGORT>
+                        <ZZ_STSYM>
+                            <xsl:copy-of select="ZZ__STSYM/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__STSYM"/>
+                        </ZZ_STSYM>
+                        <BWTAR>
+                            <xsl:copy-of select="BWTAR/@xsi:nil"/>
+                            <xsl:value-of select="BWTAR"/>
+                        </BWTAR>
+                        <ZZ_APPROVE>
+                            <xsl:copy-of select="ZZ__APPROVE/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__APPROVE"/>
+                        </ZZ_APPROVE>
+                        <ZZ_UNAPPROVE>
+                            <xsl:copy-of select="ZZ__UNAPPROVE/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__UNAPPROVE"/>
+                        </ZZ_UNAPPROVE>
+                        <ZZ_RECNR>
+                            <xsl:copy-of select="ZZ__RECNR/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__RECNR"/>
+                        </ZZ_RECNR>
+                        <ZZ_DELNR>
+                            <xsl:copy-of select="ZZ__DELNR/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__DELNR"/>
+                        </ZZ_DELNR>
+                        <ZZ_TTBBN>
+                            <xsl:copy-of select="ZZ__TTBBN/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__TTBBN"/>
+                        </ZZ_TTBBN>
+                        <ZZ_TTBBX>
+                            <xsl:copy-of select="ZZ__TTBBX/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__TTBBX"/>
+                        </ZZ_TTBBX>
+                        <ZZ_USERLOAD>
+                            <xsl:copy-of select="ZZ__TTBBN/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__TTBBN"/>
+                        </ZZ_USERLOAD>
+                        <AEDAT>
+                            <xsl:value-of select="if (AEDAT =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',AEDAT))"/>
+                        </AEDAT>
+                        <ZZ_LDCNR>
+                            <xsl:copy-of select="ZZ__LDCNR/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__LDCNR"/>
+                        </ZZ_LDCNR>
+                        <ZZ_TRADA>
+                            <xsl:value-of select="if (ZZ__TRADA =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',ZZ__TRADA))"/>
+                        </ZZ_TRADA>
+                        <ZZ_LDCFR>
+                            <xsl:value-of select="if (ZZ__LDCFR =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',ZZ__LDCFR))"/>
+                        </ZZ_LDCFR>
+                        <ZZ_LDCTO>
+                            <xsl:value-of select="if (ZZ__LDCTO =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',ZZ__LDCTO))"/>
+                        </ZZ_LDCTO>
+                        <ZZ_RESBK>
+                            <xsl:copy-of select="ZZ__RESBK/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__RESBK"/>
+                        </ZZ_RESBK>
+                        <EKORG>
+                            <xsl:copy-of select="EKORG/@xsi:nil"/>
+                            <xsl:value-of select="EKORG"/>
+                        </EKORG>
+                        <ZZ_LNXTH>
+                            <xsl:copy-of select="ZZ__LNXTH/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__LNXTH"/>
+                        </ZZ_LNXTH>
+                        <ZZ_DLKNR>
+                            <xsl:copy-of select="ZZ__DLKNR/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__DLKNR"/>
+                        </ZZ_DLKNR>
+                        <ZZ_RCKNR>
+                            <xsl:copy-of select="ZZ__RCKNR/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__RCKNR"/>
+                        </ZZ_RCKNR>
+                        <ZZ_COMEX>
+                            <xsl:copy-of select="ZZ__COMEX/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__COMEX"/>
+                        </ZZ_COMEX>
+                        <EBELP>
+                            <xsl:copy-of select="EBELP/@xsi:nil"/>
+                            <xsl:value-of select="EBELP"/>
+                        </EBELP>
+                        <TXZ01>
+                            <xsl:copy-of select="TXZ01/@xsi:nil"/>
+                            <xsl:value-of select="TXZ01"/>
+                        </TXZ01>
+                        <MEINS_EKPO>
+                            <xsl:copy-of select="MEINS__EKPO/@xsi:nil"/>
+                            <xsl:value-of select="MEINS__EKPO"/>
+                        </MEINS_EKPO>
+                        <BUDAT>
+                            <xsl:value-of select="if (BUDAT =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',BUDAT))"/>
+                        </BUDAT>
+                        <CPUDT>
+                            <xsl:value-of select="if (CPUDT =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',CPUDT))"/>
+                        </CPUDT>
+                        <CPUTM>
+                            <xsl:copy-of select="CPUTM/@xsi:nil"/>
+                            <xsl:value-of select="CPUTM"/>
+                        </CPUTM>
+                        <MAKTX>
+                            <xsl:copy-of select="MAKTX/@xsi:nil"/>
+                            <xsl:value-of select="MAKTX"/>
+                        </MAKTX>
+                        <MATNR_MSEG>
+                            <xsl:copy-of select="MATNR__MSEG/@xsi:nil"/>
+                            <xsl:value-of select="MATNR__MSEG"/>
+                        </MATNR_MSEG>
+                        <MENGE_MSEG>
+                            <xsl:copy-of select="MENGE__MSEG/@xsi:nil"/>
+                            <xsl:value-of select="MENGE__MSEG"/>
+                        </MENGE_MSEG>
+                        <MEINS_MSEG>
+                            <xsl:copy-of select="MEINS__MSEG/@xsi:nil"/>
+                            <xsl:value-of select="MEINS__MSEG"/>
+                        </MEINS_MSEG>
+                        <ZZ_DATLOAD>
+                            <xsl:value-of select="if (ZZ__DATLOAD =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',ZZ__DATLOAD))"/>
+                        </ZZ_DATLOAD>
+                        <ZZ_EITLOAD>
+                            <xsl:copy-of select="ZZ__EITLOAD/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__EITLOAD"/>
+                        </ZZ_EITLOAD>
+                        <ZZ_LOAD>
+                            <xsl:copy-of select="ZZ__LOAD/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__LOAD"/>
+                        </ZZ_LOAD>
+                        <ZZ_STATUS>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ZZ_STATUS>
+                        <ZZ_FLAG>
+                            <xsl:value-of select="&quot;1&quot;"/>
+                        </ZZ_FLAG>
+                        <ZZ_DP1>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ZZ_DP1>
+                        <ZZ_DP2>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ZZ_DP2>
+                        <ZZ_DP3>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ZZ_DP3>
+                        <ZZ_DP4>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ZZ_DP4>
+                        <ZZ_DP5>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </ZZ_DP5>
+                        <MENGE_EKPO_ATM>
+                            <xsl:copy-of select="MENGE__EKPO__ATM/@xsi:nil"/>
+                            <xsl:value-of select="MENGE__EKPO__ATM"/>
+                        </MENGE_EKPO_ATM>
+                        <ZZ_CRDATE>
+                            <xsl:value-of select="if (ZZ__CRDATE =&quot;00000000&quot;)&#xA;then tib:create-date(&quot;1000&quot;, &quot;01&quot;, &quot;01&quot;)&#xA;else tib:format-date('yyyy-MM-dd',tib:parse-date('yyyyMMdd',ZZ__CRDATE))"/>
+                        </ZZ_CRDATE>
+                        <ZZ_TCODE>
+                            <xsl:copy-of select="ZZ__TCODE/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__TCODE"/>
+                        </ZZ_TCODE>
+                        <ZZ_UZEIT1>
+                            <xsl:copy-of select="ZZ__UZEIT1/@xsi:nil"/>
+                            <xsl:value-of select="ZZ__UZEIT1"/>
+                        </ZZ_UZEIT1>
+                    </jdbcUpdateActivityInput>
+                </xsl:for-each>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="JDBC Call Procedure">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>893</pd:x>
+        <pd:y>151</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <schema>APPS</schema>
+            <catalog>FSAH_CREATE_EVENTS_PKG_CMO</catalog>
+            <ProcedureName>MAIN</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_INTERFACE_ID</colName>
+                    <colType>2</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_STATUS</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_MESSAGE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_INTERFACE_ID>
+                        <xsl:copy-of select="$MapAdapterReq/pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N/T__SG31/item[1]/EBELN/@xsi:nil"/>
+                        <xsl:value-of select="$MapAdapterReq/pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N/T__SG31/item[1]/EBELN"/>
+                    </P_INTERFACE_ID>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignResponse">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1047</pd:x>
+        <pd:y>141</pd:y>
+        <config>
+            <variableName>ResponseVar</variableName>
+        </config>
+        <pd:inputBindings>
+            <Response>
+                <InterfaceID>
+                    <xsl:value-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_INTERFACE_ID"/>
+                </InterfaceID>
+                <Status>
+                    <xsl:value-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_STATUS"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="$JDBC-Call-Procedure/resultSet/outputSet/P_MESSAGE"/>
+                </Message>
+            </Response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignResponseFailed">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1052</pd:x>
+        <pd:y>249</pd:y>
+        <config>
+            <variableName>ResponseVar</variableName>
+        </config>
+        <pd:inputBindings>
+            <Response>
+                <InterfaceID>
+                    <xsl:value-of select="$MapAdapterReq/pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N/T__SG31/item[1]/EBELN"/>
+                </InterfaceID>
+                <Status>
+                    <xsl:value-of select="'2'"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;Loi goi thu tuc hach toan trong ERP. Du lieu da duoc cap nhat vao ERP DB Staging&quot;"/>
+                </Message>
+            </Response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AssignResponseFailed-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1062</pd:x>
+        <pd:y>366</pd:y>
+        <config>
+            <variableName>ResponseVar</variableName>
+        </config>
+        <pd:inputBindings>
+            <Response>
+                <InterfaceID>
+                    <xsl:value-of select="$MapAdapterReq/pfx5:__caret_request_caret_ZFM__SG31__N_caret_ZFM__SG31__N/T__SG31/item[1]/EBELN"/>
+                </InterfaceID>
+                <Status>
+                    <xsl:value-of select="'-1'"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;Loi cap nhat ERP DB staging&quot;"/>
+                </Message>
+            </Response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapAdapterReq</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapAdapterReq</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>JDBC Call Procedure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>AssignResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignResponse</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>AssignResponseFailed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignResponseFailed</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>AssignResponseFailed-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AssignResponseFailed-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

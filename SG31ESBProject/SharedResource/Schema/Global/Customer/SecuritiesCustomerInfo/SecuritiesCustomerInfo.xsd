@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd"
+	 xmlns:cmd-envelope="sbv/common/envelope/serviceenvelope/1.0"
+	 targetNamespace="http://www.sbv.gov.vn/schema/global/customer/securitiescustomerinfo/SecuritiesCustomerInfo.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="../../../Common/Envelope/ServiceEnvelope.xsd"/>
+	<xs:element name="getBrokerInfoReq" type="getBrokerInfoReqType"/>
+	<xs:element name="getBrokerInfoRes" type="getBrokerInfoResType"/>
+	<xs:complexType name="getBrokerInfoReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="BrokerInfoInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getBrokerInfoResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="BrokerInfoList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="BrokerInfoInput">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CustomerCode" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BrokerInfoDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CustomerCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="BrokerNo" type="xs:string" minOccurs="0"/>
+				<xs:element name="Mnemonic" type="xs:string" minOccurs="0"/>
+				<xs:element name="CustomerName" type="xs:string" minOccurs="0"/>
+				<xs:element name="Settlementtype" type="xs:string" minOccurs="0"/>
+				<xs:element name="DelInstr" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BrokerInfoList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="BrokerInfoDetail" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getSecuritiesCustomerReq" type="getSecuritiesCustomerReqType"/>
+	<xs:element name="getSecuritiesCustomerRes" type="getSecuritiesCustomerResType"/>
+	<xs:complexType name="getSecuritiesCustomerReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesCustomerInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getSecuritiesCustomerResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesCustomerList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SecuritiesCustomerInput">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SecuritiesCustomerId" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="SecuritiesCustomerId">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:element name="SecuritiesCustomerDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Id" type="xs:string" minOccurs="0"/>
+				<xs:element name="Name" type="xs:string" minOccurs="0"/>
+				<xs:element name="Type" type="xs:string" minOccurs="0"/>
+				<xs:element name="StmtDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="StmtFreq" type="xs:string" minOccurs="0"/>
+				<xs:element name="ExtReps" type="xs:string" minOccurs="0"/>
+				<xs:element name="IntFreqDate" type="xs:string" minOccurs="0"/>
+				<xs:element name="IntFreq" type="xs:string" minOccurs="0"/>
+				<xs:element name="IntRept" type="xs:string" minOccurs="0"/>
+				<xs:element name="DefaultDepo" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecuritiesCustomerList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SecuritiesCustomerDetail" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getSecuritiesMasterReq" type="getSecuritiesMasterReqType"/>
+	<xs:element name="getSecuritiesMasterRes" type="getSecuritiesMasterResType"/>
+	<xs:complexType name="getSecuritiesMasterReqType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeRequestType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesMasterInput"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="getSecuritiesMasterResType">
+		<xs:complexContent>
+			<xs:extension base="cmd-envelope:BaseServiceEnvelopeResponseType">
+				<xs:sequence>
+					<xs:element ref="SecuritiesMasterList"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SecuritiesMasterInput">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SecuritiesMasterId" type="xs:string" minOccurs="0"/>
+				<xs:element name="CompanyDomicile" type="xs:string" minOccurs="0"/>
+				<xs:element name="ShortName" type="xs:string" minOccurs="0"/>
+				<xs:element name="ISIN" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecuritiesMasterList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SecuritiesMasterDetail" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecuritiesMasterDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Id" type="xs:string" minOccurs="0"/>
+				<xs:element name="ShortName" type="xs:string" minOccurs="0"/>
+				<xs:element name="Isin" type="xs:string" minOccurs="0"/>
+				<xs:element name="CompanyDomicile" type="xs:string" minOccurs="0"/>
+				<xs:element name="SecurityDomicile" type="xs:string" minOccurs="0"/>
+				<xs:element name="InterestRate" type="xs:string" minOccurs="0"/>
+				<xs:element name="SecCcy" type="xs:string" minOccurs="0"/>
+				<xs:element name="PriceCcy" type="xs:string" minOccurs="0"/>
+				<xs:element name="Price" type="xs:string" minOccurs="0"/>
+				<xs:element name="DateLastPrice" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

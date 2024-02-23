@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Services/Global/System/T24ERP/T24EntriesBatch/RemoteT24FilePoller.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>89</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <StartTime>1446630300000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%T24WS/BatchJobInterval%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>768</pd:endX>
+    <pd:endY>52</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1446538534315</pd:targetNamespace>
+    <pd:activity name="External Command">
+        <pd:type>com.tibco.plugin.cmdexec.CmdExecActivity</pd:type>
+        <pd:resourceType>ae.activities.CmdExecActivity</pd:resourceType>
+        <pd:x>250</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <outputToString>true</outputToString>
+            <lineSplit>None</lineSplit>
+            <command/>
+        </config>
+        <pd:inputBindings>
+            <CmdInput>
+                <command>
+                    <xsl:value-of select="'/data/esb/datafiles/t24_copyfileLocal.sh'"/>
+                </command>
+            </CmdInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24EntriesBatchFile1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>422</pd:x>
+        <pd:y>296</pd:y>
+        <config>
+            <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatchRecursive.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <FileName>
+                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/T24FilesDir,$MapFileNameInput/FileList/FileName1)"/>
+                </FileName>
+                <NumberRecords>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/BatchCount"/>
+                </NumberRecords>
+                <State>
+                    <xsl:value-of select="if (contains($MapFileNameInput/FileList/FileName1,'Cob')) then 'Cob' else 'Online'"/>
+                </State>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapFileNameInput">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>254</pd:x>
+        <pd:y>295</pd:y>
+        <config>
+            <element>
+                <xsd:element name="FileList">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="FileName1" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="FileName2" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <FileList>
+                <FileName1>
+                    <xsl:value-of select="substring-before($External-Command/CmdOutputWithActivityOutput/output[1], &quot;#&quot;)"/>
+                </FileName1>
+                <FileName2>
+                    <xsl:value-of select="tib:substring-before-last(substring-after($External-Command/CmdOutputWithActivityOutput/output[1],&quot;#&quot;), &quot;#&quot;)"/>
+                </FileName2>
+            </FileList>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24EntriesBatchFile2">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>566</pd:x>
+        <pd:y>291</pd:y>
+        <config>
+            <processName>/Services/Global/System/T24ERP/T24EntriesBatch/T24EntriesBatchRecursive.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <FileName>
+                    <xsl:value-of select="concat($_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/T24FilesDir,$MapFileNameInput/FileList/FileName2)"/>
+                </FileName>
+                <NumberRecords>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/T24WS/BatchCount"/>
+                </NumberRecords>
+                <State>
+                    <xsl:value-of select="if (contains($MapFileNameInput/FileList/FileName1,'Cob')) then 'Cob' else 'Online'"/>
+                </State>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetFinish">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>838</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns1:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/ResultFileName"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$MapResponseOnline/Response"/>
+                </textContent>
+            </ns1:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallERPProcBatch">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>1128</pd:x>
+        <pd:y>266</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/ERPDB.sharedjdbc</jdbcSharedConfig>
+            <schema>APPS</schema>
+            <catalog>FSAH_CREATE_EVENTS_PKG_T24</catalog>
+            <ProcedureName>MAIN_BATCH</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>P_DATE</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_STATUS</colName>
+                    <colType>4</colType>
+                    <dataType>2</dataType>
+                    <typeName>NUMBER</typeName>
+                </parameter>
+                <parameter>
+                    <colName>P_MESSAGE</colName>
+                    <colType>4</colType>
+                    <dataType>12</dataType>
+                    <typeName>VARCHAR2</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <P_DATE>
+                        <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="string(current-date())"/>
+                    </P_DATE>
+                </inputSet>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapResponseOnline">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>725</pd:x>
+        <pd:y>292</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Response" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Response>
+                <xsl:value-of select="concat(&quot;[FINISH]-Total Record Received Online: &quot;,$CallT24EntriesBatchFile1/Output/TotalRecordsReceived, &quot; - Total Record Processed Online: &quot;,$CallT24EntriesBatchFile1/Output/TotalRecordsProcessed,&quot;----Total Record Received Cob: &quot;,$CallT24EntriesBatchFile2/Output/TotalRecordsReceived, &quot; - Total Record Processed Cob: &quot;,$CallT24EntriesBatchFile2/Output/TotalRecordsProcessed)"/>
+            </Response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1125</pd:x>
+        <pd:y>97</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="WriteCallERPProcError">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>956</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns1:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ServiceGlobalVar/T24ERP/ErrorFileName"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="concat(&quot;&#xA;&quot;,&quot;Error Message: &quot;,$_error/ns2:ErrorReport/Msg)"/>
+                </textContent>
+            </ns1:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>External Command</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>External Command</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>NONE</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$External-Command/CmdOutputWithActivityOutput/output=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>External Command</pd:from>
+        <pd:to>MapFileNameInput</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapFileNameInput</pd:from>
+        <pd:to>CallT24EntriesBatchFile1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24EntriesBatchFile1</pd:from>
+        <pd:to>CallT24EntriesBatchFile2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24EntriesBatchFile2</pd:from>
+        <pd:to>MapResponseOnline</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetFinish</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallERPProcBatch</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallERPProcBatch</pd:from>
+        <pd:to>WriteCallERPProcError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetFinish</pd:from>
+        <pd:to>CallERPProcBatch</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapResponseOnline</pd:from>
+        <pd:to>SetFinish</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteCallERPProcError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

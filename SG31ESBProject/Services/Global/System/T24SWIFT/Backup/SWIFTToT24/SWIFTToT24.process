@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>Services/Global/System/T24SWIFT/Backup/SWIFTToT24/SWIFTToT24.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>66</pd:x>
+        <pd:y>104</pd:y>
+        <config>
+            <StartTime>1463126058000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%ServiceGlobalVar/T24SWIFT/SwiftToT24TimeInterval_sec%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>832</pd:endX>
+    <pd:endY>105</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1463048437575</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>833</pd:x>
+        <pd:y>267</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Get SWIFT Msg">
+        <pd:type>com.tibco.plugin.ftp.FTPGetActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPGetActivityUI</pd:resourceType>
+        <pd:x>211</pd:x>
+        <pd:y>103</pd:y>
+        <config>
+            <Timeout>120000</Timeout>
+            <isBinary>false</isBinary>
+            <Overwrite>true</Overwrite>
+            <useProcessData>false</useProcessData>
+            <SharedUserData>/SharedResource/Connection/FTP/SWIFTConnection.sharedftp</SharedUserData>
+            <logout>true</logout>
+        </config>
+        <pd:inputBindings>
+            <FTPGetInputDataFile>
+                <RemoteFileName>
+                    <xsl:value-of select="&quot;/T24/MSG_OUT/*&quot;"/>
+                </RemoteFileName>
+                <LocalFileName>
+                    <xsl:value-of select="&quot;/home/tibadmin/SBVProject/SWIFT/SWIFTToT24/&quot;"/>
+                </LocalFileName>
+                <Host>
+                    <xsl:value-of select="&quot;10.192.5.10&quot;"/>
+                </Host>
+                <Port>
+                    <xsl:value-of select="&quot;21&quot;"/>
+                </Port>
+                <UserName>
+                    <xsl:value-of select="&quot;t24&quot;"/>
+                </UserName>
+                <Password>
+                    <xsl:value-of select="&quot;t24@123&quot;"/>
+                </Password>
+            </FTPGetInputDataFile>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>342</pd:x>
+        <pd:y>32</pd:y>
+        <pd:width>366</pd:width>
+        <pd:height>148</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Get-SWIFT-Msg/FTPGetOutputFile/FileTransferred</pd:over>
+            <pd:iterationElementSlot>Msg</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Put to T24</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Logs File</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Put to T24</pd:from>
+            <pd:to>Logs File</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Put to T24">
+            <pd:type>com.tibco.plugin.ftp.FTPPutActivity</pd:type>
+            <pd:resourceType>ae.activities.FTPPutActivityUI</pd:resourceType>
+            <pd:x>460</pd:x>
+            <pd:y>116</pd:y>
+            <config>
+                <Timeout>10000</Timeout>
+                <FireWall>false</FireWall>
+                <isBinary>false</isBinary>
+                <Append>false</Append>
+                <useProcessData>false</useProcessData>
+                <Overwrite>true</Overwrite>
+                <SharedUserData>/SharedResource/Connection/FTP/T24Connection.sharedftp</SharedUserData>
+            </config>
+            <pd:inputBindings>
+                <FTPPutInputDataFile>
+                    <RemoteFileName>
+                        <xsl:value-of select="concat(&quot;/data/T24/bnk/bnk.interface/ALLIANCE/F.ALLIANCE.MSG/&quot;, tib:substring-after-last($Msg/FileTransferred/Name, &quot;/&quot;))"/>
+                    </RemoteFileName>
+                    <LocalFileName>
+                        <xsl:value-of select="&quot;/home/tibadmin/SBVProject/SWIFT/SWIFTToT24/MT*&quot;"/>
+                    </LocalFileName>
+                    <Host>
+                        <xsl:value-of select="&quot;10.1.26.8&quot;"/>
+                    </Host>
+                    <Port>
+                        <xsl:value-of select="21"/>
+                    </Port>
+                    <UserName>
+                        <xsl:value-of select="&quot;t24&quot;"/>
+                    </UserName>
+                    <Password>
+                        <xsl:value-of select="&quot;t24&quot;"/>
+                    </Password>
+                </FTPPutInputDataFile>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Logs File">
+            <pd:type>com.tibco.plugin.file.FileCopyActivity</pd:type>
+            <pd:resourceType>ae.activities.FileCopyActivity</pd:resourceType>
+            <pd:x>628</pd:x>
+            <pd:y>112</pd:y>
+            <config>
+                <createMissingDirectories>false</createMissingDirectories>
+                <overwrite>true</overwrite>
+            </config>
+            <pd:inputBindings>
+                <ns:CopyActivityConfig>
+                    <fromFileName>
+                        <xsl:value-of select="concat(&quot;/home/tibadmin/SBVProject/SWIFT/SWIFTToT24/&quot;, tib:substring-after-last($Msg/FileTransferred/Name, &quot;/&quot;) )"/>
+                    </fromFileName>
+                    <toFileName>
+                        <xsl:value-of select="concat(&quot;/home/tibadmin/SBVProject/SWIFT/T24ToSWIFTLogs/SWIFTToT24/&quot;, tib:substring-after-last($Msg/FileTransferred/Name, &quot;/&quot;), &quot;_&quot;,  tib:format-dateTime( &quot;yyyyMMddHHmmss&quot;, current-dateTime() ) )"/>
+                    </toFileName>
+                </ns:CopyActivityConfig>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>Get SWIFT Msg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get SWIFT Msg</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

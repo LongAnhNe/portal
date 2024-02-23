@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="sbv/global/pingemsserver/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="www.tibco.com/plugin/java/JavaMethodActivityOutput" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1446544604197" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns12="www.tibco.com/plugin/java/JavaMethodActivityInput">
+    <wsdl:import namespace="http://xmlns.example.com/1446544604197" location="/SharedResource/Schema/Global/Utilities/PingEMSServer/PingEMSServer.wsdl"/>
+    <pd:name>Services/Global/Utilities/PingEMSServer/PingEMSServer.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:PingEMSServerReq"/>
+    <pd:startX>118</pd:startX>
+    <pd:startY>69</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:PingEMSServerRes>
+            <Res>
+                <ns2:Response>
+                    <ns2:IP>
+                        <xsl:value-of select="if($CheckStatus/ns:JavaMethodActivityOutput/MethodReturnValue=1) then &#xA;&#x9;substring-before(tib:substring-after-last(substring-before($_globalVariables/ns1:GlobalVariables/SOAJMS/URL,&quot;,&quot;),&quot;/&quot;),&quot;:&quot;)&#xA;else if($CheckStatus/ns:JavaMethodActivityOutput/MethodReturnValue=2) then&#xA;&#x9;substring-before(tib:substring-after-last(substring-after($_globalVariables/ns1:GlobalVariables/SOAJMS/URL,&quot;,&quot;),&quot;/&quot;),&quot;:&quot;)&#xA;else &quot;Error&quot;"/>
+                    </ns2:IP>
+                    <ns2:Port>
+                        <xsl:value-of select="tib:substring-after-last($_globalVariables/ns1:GlobalVariables/SOAJMS/URL, &quot;:&quot;)"/>
+                    </ns2:Port>
+                </ns2:Response>
+            </Res>
+        </wsdlPfx:PingEMSServerRes>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:PingEMSServerRes"/>
+    <pd:endX>419</pd:endX>
+    <pd:endY>73</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1446610115428</pd:targetNamespace>
+    <pd:activity name="CheckStatus">
+        <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+        <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+        <pd:x>258</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <ConstructDeclaredClass>false</ConstructDeclaredClass>
+            <CacheConstructedClass>false</CacheConstructedClass>
+            <InvokeCleanupMethod>false</InvokeCleanupMethod>
+            <MethodInfo>
+                <classLocation>d:/project/production/sg31esbproject_prod/sharedresource/library/getnumbermsgpending.jar</classLocation>
+                <classPath>/SharedResource/Library/AliasLibrary.aliaslib</classPath>
+                <className>getmsgpending.CheckStatusEMSServer</className>
+                <methodName>CheckStatus</methodName>
+                <methodReturn>java.lang.String</methodReturn>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+            </MethodInfo>
+        </config>
+        <pd:inputBindings>
+            <ns12:JavaMethodActivityInput>
+                <MethodParameters>
+                    <Parameter1>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/SOAJMS/URL"/>
+                    </Parameter1>
+                    <Parameter2>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/SOAJMS/UserName"/>
+                    </Parameter2>
+                    <Parameter3>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/SOAJMS/Password"/>
+                    </Parameter3>
+                </MethodParameters>
+            </ns12:JavaMethodActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CheckStatus</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CheckStatus</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.sbv.gov.vn/global/report/dailybalance/version1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlPfx="http://xmlns.example.com/1448421894901" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <wsdl:import namespace="http://xmlns.example.com/1448421894901" location="/SharedResource/Schema/Global/Report/DailyBalance/DailyBalance.wsdl"/>
+    <pd:name>Services/Global/Report/DailyBalance/OperationImpl/GenarateReport.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="wsdlPfx:Request"/>
+    <pd:startX>56</pd:startX>
+    <pd:startY>264</pd:startY>
+    <pd:returnBindings>
+        <wsdlPfx:Response>
+            <Response>
+                <xsl:for-each select="$Result/Ouput">
+                    <ns1:Response>
+                        <ns1:Status>
+                            <xsl:value-of select="Status"/>
+                        </ns1:Status>
+                        <xsl:if test="Message">
+                            <ns1:Message>
+                                <xsl:value-of select="Message"/>
+                            </ns1:Message>
+                        </xsl:if>
+                    </ns1:Response>
+                </xsl:for-each>
+            </Response>
+        </wsdlPfx:Response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="wsdlPfx:Response"/>
+    <pd:endX>861</pd:endX>
+    <pd:endY>379</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <Result>
+            <xsd:element name="Ouput">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="Message" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Result>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1448425537185</pd:targetNamespace>
+    <pd:activity name="RequestResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>721</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <processName>/Services/Global/Report/DailyBalance/Version1.0/GenarateFileReport/RequestResponse.process</processName>
+            <spawn>true</spawn>
+        </config>
+        <pd:inputBindings>
+            <wsdlPfx:Request>
+                <Request>
+                    <ns1:Request>
+                        <ns1:Date>
+                            <xsl:value-of select="$Start/wsdlPfx:Request/Request/ns1:Request/ns1:Date"/>
+                        </ns1:Date>
+                        <xsl:if test="$Start/wsdlPfx:Request/Request/ns1:Request/ns1:MaDV">
+                            <ns1:MaDV>
+                                <xsl:value-of select="$Start/wsdlPfx:Request/Request/ns1:Request/ns1:MaDV"/>
+                            </ns1:MaDV>
+                        </xsl:if>
+                        <xsl:if test="$Start/wsdlPfx:Request/Request/ns1:Request/ns1:SuffixFile">
+                            <ns1:SuffixFile>
+                                <xsl:value-of select="$Start/wsdlPfx:Request/Request/ns1:Request/ns1:SuffixFile"/>
+                            </ns1:SuffixFile>
+                        </xsl:if>
+                    </ns1:Request>
+                </Request>
+            </wsdlPfx:Request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>990</pd:x>
+        <pd:y>466</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Validate_Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>581</pd:x>
+        <pd:y>262</pd:y>
+        <config>
+            <element>
+                <xsd:element name="Date" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <Date>
+                <xsl:value-of select="upper-case(tib:format-date('dd MMM yyyy',tib:parse-date('yyyyMMdd',$Start/wsdlPfx:Request/Request/ns1:Request/ns1:Date)))"/>
+            </Date>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>858</pd:x>
+        <pd:y>262</pd:y>
+        <config>
+            <variableName>Result</variableName>
+        </config>
+        <pd:inputBindings>
+            <Ouput>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </Message>
+            </Ouput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>579</pd:x>
+        <pd:y>532</pd:y>
+        <config>
+            <variableName>Result</variableName>
+        </config>
+        <pd:inputBindings>
+            <Ouput>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;Input Validate&quot;"/>
+                </Message>
+            </Ouput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="service_processing">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>473</pd:x>
+        <pd:y>388</pd:y>
+        <config>
+            <variableName>Result</variableName>
+        </config>
+        <pd:inputBindings>
+            <Ouput>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+                <Message>
+                    <xsl:value-of select="&quot;service processing&quot;"/>
+                </Message>
+            </Ouput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariableFlag">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>240</pd:x>
+        <pd:y>265</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/FlagProcessDailyBalacne.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="TurnOnFlag">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>406</pd:x>
+        <pd:y>262</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/FlagProcessDailyBalacne.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <flag>
+                    <xsl:value-of select="1"/>
+                </flag>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetVariableFlag</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>string-length($Start/wsdlPfx:Request/Request/ns1:Request/ns1:Date)=8</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RequestResponse</pd:from>
+        <pd:to>Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Validate_Data</pd:from>
+        <pd:to>RequestResponse</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Validate_Data</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>service_processing</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariableFlag</pd:from>
+        <pd:to>TurnOnFlag</pd:to>
+        <pd:xpathDescription>true</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariableFlag/root/flag=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariableFlag</pd:from>
+        <pd:to>service_processing</pd:to>
+        <pd:xpathDescription>flase</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariableFlag/root/flag=1</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TurnOnFlag</pd:from>
+        <pd:to>Validate_Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

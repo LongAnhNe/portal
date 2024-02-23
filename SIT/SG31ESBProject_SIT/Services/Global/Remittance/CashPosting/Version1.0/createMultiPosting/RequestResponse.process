@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pfx16="http://www.sbv.org.vn/service/global/utilities/cbsinfo/version1.0" xmlns:pfx15="http://www.sbv.gov.vn/service/global/account/erpaccountInfo/version1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx14="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" xmlns:pfx13="http://temenos.com/T24.ACCOUNT.STATE" xmlns:pfx12="http://xmlns.example.com/1438330850951" xmlns:pfx11="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://temenos.com/SBV.CSD.WS" xmlns:ns22="sbv/global/datatype/datatype/version1.0" xmlns:pfx18="http://www.temenos.com/T24/event/CustomerInformation/CustomerInfomationFlow" xmlns:pfx17="sbv/global/account/accountstatus/inquiry/version1.0" xmlns:pfx5="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" xmlns:pfx3="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:pfx9="http://temenos.com/FT.SBV.OFS.IBPS.FTHV.INW" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx7="www.tibco.com/plugin/Sleep" xmlns:pfx6="http://xmlns.example.com/1433466938916" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:ns5="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" xmlns:ns12="sbv/common/exceptionhandling/exception/1.0" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns7="http://www.sbv.gov.vn/global/account/accountmapping/version1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0" xmlns:ns2="sbv/global/testtemp/version1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/global/testtemp/version1.0" schemaLocation="/SharedResource/Schema/Global/TestTemp/TestTemp.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/securitiesposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/SecuritiesPosting/SecuritiesPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/cashposting/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/CashPosting/CashPosting.xsd"/>
+    <xsd:import namespace="http://www.sbv.gov.vn/global/remittance/fundxfer/version1.0" schemaLocation="/SharedResource/Schema/Global/Remittance/FundXfer/FundXfer.xsd"/>
+    <xsd:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT"/>
+    <wsdl:import namespace="http://www.sbv.org.vn/service/global/remittance/fundxfer/version1.0"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT"/>
+    <wsdl:import namespace="http://xmlns.example.com/1438330850951" location="/SharedResource/Schema/Global/Local/AccountMapping/AccountMapping1.0.wsdl"/>
+    <wsdl:import namespace="http://temenos.com/SBV.CSD.GOLD.AUCTION.MANAGEMENT" location="/SharedResource/Schema/Global/System/T24/SBV.CSD.T24Service/SBV.CSD.T24Service.WS.wsdl"/>
+    <pd:name>Services/Global/Remittance/CashPosting/Version1.0/createMultiPosting/RequestResponse.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>710</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="$ResponseResult/root/Status"/>
+                    </ns3:Status>
+                    <xsl:if test="$errorProcessor/Result/ns3:ResponseStatus/ns3:ErrorCode">
+                        <ns3:ErrorCode>
+                            <xsl:value-of select="$errorProcessor/Result/ns3:ResponseStatus/ns3:ErrorCode"/>
+                        </ns3:ErrorCode>
+                    </xsl:if>
+                    <xsl:if test="$ResponseResult/root/ErrorMessage">
+                        <ns3:ErrorMessage>
+                            <xsl:value-of select="$ResponseResult/root/ErrorMessage"/>
+                        </ns3:ErrorMessage>
+                    </xsl:if>
+                    <xsl:for-each select="$CallT24CSDWS/outputMessage/pfx11:CSDCreateFTBulkResponse/SBVFTLVBULKType/gERRORMSG/ERRORMSG">
+                        <ns3:ErrorInfo>
+                            <ns3:ErrorMessage>
+                                <xsl:value-of select="."/>
+                            </ns3:ErrorMessage>
+                        </ns3:ErrorInfo>
+                    </xsl:for-each>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <pfx4:TransactionRef>
+                        <xsl:value-of select="$CallT24CSDWS/outputMessage/pfx11:CSDCreateFTBulkResponse/SBVFTLVBULKType/@id"/>
+                    </pfx4:TransactionRef>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1164</pd:endX>
+    <pd:endY>613</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <fundXferReq ref="ns5:FundXferInfoReq"/>
+        <ResponseResult>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Status" type="xsd:string"/>
+                        <xsd:element name="ErrorMessage" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResponseResult>
+        <List>
+            <xsd:element name="List">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="pfx11:CSDCreateFTBulk" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </List>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/cashposting/createMultiPosting/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>61</pd:x>
+        <pd:y>234</pd:y>
+        <config>
+            <element ref="pfx4:CashPosting"/>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx4:CashPosting"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx4:CashPosting>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:CashPosting/pfx4:CashPostingDetail"/>
+            </pfx4:CashPosting>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallT24CSDWS">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>884</pd:x>
+        <pd:y>236</pd:y>
+        <config>
+            <timeout>20</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx11:T24WebServicesImplService</service>
+            <servicePort>T24WebServicesImplPort</servicePort>
+            <operation>CSDCreateFTBulk</operation>
+            <soapAction/>
+            <endpointURL>%%T24WS/T24WSCSD%%</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <xsl:copy-of select="$List/List/pfx11:CSDCreateFTBulk"/>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>482</pd:x>
+        <pd:y>775</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="errorProcessor">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>738</pd:x>
+        <pd:y>772</pd:y>
+        <config>
+            <processName>/Util/ExceptionHandling/errorProcessor.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx4:CashPosting"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <root>
+                <ProcessName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId)"/>
+                </ProcessName>
+                <GeneratedId>
+                    <xsl:value-of select="generate-id($_processContext/ns:ProcessContext/ProcessId)"/>
+                </GeneratedId>
+                <ns12:ExceptionBody>
+                    <ns12:Hostname>
+                        <xsl:value-of select="BW:getHostName()"/>
+                    </ns12:Hostname>
+                    <ns12:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LogCategory/ErrorRole"/>
+                    </ns12:Category>
+                    <ns12:Type>
+                        <xsl:value-of select="&quot;TECHINICAL&quot;"/>
+                    </ns12:Type>
+                    <ns12:Level>
+                        <xsl:value-of select="&quot;HIGH&quot;"/>
+                    </ns12:Level>
+                    <ns12:ErrorReport>
+                        <StackTrace>
+                            <xsl:value-of select="$_error/ns:ErrorReport/StackTrace"/>
+                        </StackTrace>
+                        <Msg>
+                            <xsl:value-of select="$_error/ns:ErrorReport/Msg"/>
+                        </Msg>
+                        <FullClass>
+                            <xsl:value-of select="$_error/ns:ErrorReport/FullClass"/>
+                        </FullClass>
+                        <ObjectClass>
+                            <xsl:value-of select="$_error/ns:ErrorReport/Class"/>
+                        </ObjectClass>
+                        <ProcessStack>
+                            <xsl:value-of select="$_error/ns:ErrorReport/ProcessStack"/>
+                        </ProcessStack>
+                        <MsgCode>
+                            <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                        </MsgCode>
+                        <xsl:copy-of select="$_error/ns:ErrorReport/Data"/>
+                    </ns12:ErrorReport>
+                </ns12:ExceptionBody>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="contains($_error/ns:ErrorReport/StackTrace, concat(BW:getCurrentProcessName($_processContext/ns:ProcessContext/ProcessId),&quot;/Start]&quot;))"/>
+                    <xsl:otherwise>
+                        <ServiceInput>
+                            <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                            <ServiceBody>
+                                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx4:CashPosting"/>
+                            </ServiceBody>
+                        </ServiceInput>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Success">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1157</pd:x>
+        <pd:y>237</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="if ($CallT24CSDWS/outputMessage/pfx11:CSDCreateFTBulkResponse/SBVFTLVBULKType/FTGENERATELSTAT=&quot;PROCESSED&quot;) then '0'&#xA;else &#xA;if(contains($CallT24CSDWS/outputMessage/pfx11:CSDCreateFTBulkResponse/SBVFTLVBULKType/gERRORMSG/ERRORMSG[1], 'L.IBPS.REF:1:1=ALT KEY ALREADY ASSIGNED TO')) then '0'&#xA;else '1'"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="$CallT24CSDWS/outputMessage/pfx11:CSDCreateFTBulkResponse/Status/messages[1]"/>
+                </ErrorMessage>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>927</pd:x>
+        <pd:y>392</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. LOI GOI WEBSERVICES&quot;)"/>
+                </ErrorMessage>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1020</pd:x>
+        <pd:y>776</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;1&quot;"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Loi Catch Exception: &quot;, $errorProcessor/Result/ns3:ResponseStatus/ns3:ErrorCode, &quot;-&quot;, $errorProcessor/Result/ns3:ResponseStatus/ns3:ErrorMessage)"/>
+                </ErrorMessage>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ValidateError">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>862</pd:x>
+        <pd:y>710</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:Status"/>
+                </Status>
+                <xsl:if test="$Start/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:ErrorMessage">
+                    <ErrorMessage>
+                        <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:ErrorMessage"/>
+                    </ErrorMessage>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="LoopFTGroup">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>166</pd:x>
+        <pd:y>12</pd:y>
+        <pd:width>634</pd:width>
+        <pd:height>437</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup</pd:over>
+            <pd:iterationElementSlot>FTGroup</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>AssignGroup</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignReqDebitCredit-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignGroup</pd:from>
+            <pd:to>Map-Data-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map-Data-1</pd:from>
+            <pd:to>AssignReqDebitCredit-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="AssignGroup">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>222</pd:x>
+            <pd:y>79</pd:y>
+            <pd:width>299</pd:width>
+            <pd:height>295</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>ifThenElse</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>AssignReqDebitCredit</pd:to>
+                <pd:xpathDescription>Debit</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>upper-case($Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup[$i]/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingType) ='DR' and upper-case($Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup[$i]/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:PostingType)='CR'</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>AssignReqCreditDebit</pd:to>
+                <pd:xpathDescription>Credit</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>upper-case($Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup[$i]/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingType)='CR' and  upper-case($Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup[$i]/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:PostingType)='DR'</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignReqCreditDebit</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AssignReqDebitCredit</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="AssignReqDebitCredit">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>363</pd:x>
+                <pd:y>153</pd:y>
+                <config>
+                    <variableName>fundXferReq</variableName>
+                </config>
+                <pd:inputBindings>
+                    <ns5:FundXferInfoReq>
+                        <ns5:SystemType>
+                            <xsl:value-of select="&quot;CSD&quot;"/>
+                        </ns5:SystemType>
+                        <ns5:SourceAppId>
+                            <xsl:value-of select="concat($FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:DealNo,'.' ,$i)"/>
+                        </ns5:SourceAppId>
+                        <ns5:CreditInfo>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:AccountNo">
+                                <ns22:AccountNo>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:AccountNo"/>
+                                </ns22:AccountNo>
+                            </xsl:if>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Currency">
+                                <ns22:Currency>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Currency"/>
+                                </ns22:Currency>
+                            </xsl:if>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Amount">
+                                <ns22:Amount>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Amount"/>
+                                </ns22:Amount>
+                            </xsl:if>
+                        </ns5:CreditInfo>
+                        <ns5:DebitInfo>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:AccountNo">
+                                <ns22:AccountNo>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:AccountNo"/>
+                                </ns22:AccountNo>
+                            </xsl:if>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:Currency">
+                                <ns22:Currency>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:Currency"/>
+                                </ns22:Currency>
+                            </xsl:if>
+                            <ns22:Amount>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:Amount"/>
+                            </ns22:Amount>
+                        </ns5:DebitInfo>
+                        <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate">
+                            <ns5:CreditDate>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate"/>
+                            </ns5:CreditDate>
+                        </xsl:if>
+                        <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate">
+                            <ns5:DebitDate>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate"/>
+                            </ns5:DebitDate>
+                        </xsl:if>
+                    </ns5:FundXferInfoReq>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="AssignReqCreditDebit">
+                <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+                <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+                <pd:x>363</pd:x>
+                <pd:y>292</pd:y>
+                <config>
+                    <variableName>fundXferReq</variableName>
+                </config>
+                <pd:inputBindings>
+                    <ns5:FundXferInfoReq>
+                        <ns5:SystemType>
+                            <xsl:value-of select="&quot;CSD&quot;"/>
+                        </ns5:SystemType>
+                        <ns5:SourceAppId>
+                            <xsl:value-of select="concat($FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:DealNo,'.' ,$i)"/>
+                        </ns5:SourceAppId>
+                        <ns5:CreditInfo>
+                            <ns22:AccountNo>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:AccountNo"/>
+                            </ns22:AccountNo>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:Currency">
+                                <ns22:Currency>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:Currency"/>
+                                </ns22:Currency>
+                            </xsl:if>
+                            <ns22:Amount>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:Amount"/>
+                            </ns22:Amount>
+                        </ns5:CreditInfo>
+                        <ns5:DebitInfo>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:AccountNo">
+                                <ns22:AccountNo>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:AccountNo"/>
+                                </ns22:AccountNo>
+                            </xsl:if>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Currency">
+                                <ns22:Currency>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Currency"/>
+                                </ns22:Currency>
+                            </xsl:if>
+                            <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Amount">
+                                <ns22:Amount>
+                                    <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[2]/pfx4:Amount"/>
+                                </ns22:Amount>
+                            </xsl:if>
+                        </ns5:DebitInfo>
+                        <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate">
+                            <ns5:CreditDate>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate"/>
+                            </ns5:CreditDate>
+                        </xsl:if>
+                        <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate">
+                            <ns5:DebitDate>
+                                <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:PostingDate"/>
+                            </ns5:DebitDate>
+                        </xsl:if>
+                    </ns5:FundXferInfoReq>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="AssignReqDebitCredit-1">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>696</pd:x>
+            <pd:y>234</pd:y>
+            <config>
+                <variableName>List</variableName>
+            </config>
+            <pd:inputBindings>
+                <List>
+                    <pfx11:CSDCreateFTBulk>
+                        <WebRequestCommon>
+                            <company>
+                                <xsl:value-of select="&quot;VN0010001&quot;"/>
+                            </company>
+                            <password>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24Pass"/>
+                            </password>
+                            <userName>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/T24Authentication/T24User"/>
+                            </userName>
+                        </WebRequestCommon>
+                        <OfsFunction>
+                            <activityName>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </activityName>
+                            <assignReason>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </assignReason>
+                            <dueDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </dueDate>
+                            <extProcess>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcess>
+                            <extProcessID>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </extProcessID>
+                            <gtsControl>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </gtsControl>
+                            <messageId>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </messageId>
+                            <noOfAuth>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </noOfAuth>
+                            <owner>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </owner>
+                            <replace>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </replace>
+                            <startDate>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </startDate>
+                            <user>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </user>
+                        </OfsFunction>
+                        <SBVFTLVBULKSBVFTCSDWSType>
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="$Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:InterfaceId"/>
+                            </xsl:attribute>
+                            <gIBPSREF>
+                                <xsl:attribute name="g">
+                                    <xsl:value-of select="1"/>
+                                </xsl:attribute>
+                                <xsl:copy-of select="$List/List/pfx11:CSDCreateFTBulk/SBVFTLVBULKSBVFTCSDWSType/gIBPSREF/mIBPSREF"/>
+                                <xsl:for-each select="$Map-Data-1/pfx11:CSDCreateFTBulk/SBVFTLVBULKSBVFTCSDWSType/gIBPSREF/mIBPSREF">
+                                    <mIBPSREF>
+                                        <xsl:if test="@m">
+                                            <xsl:attribute name="m">
+                                                <xsl:value-of select="@m"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="CSDRef">
+                                            <CSDRef>
+                                                <xsl:value-of select="CSDRef"/>
+                                            </CSDRef>
+                                        </xsl:if>
+                                        <xsl:if test="DebitAccountNo">
+                                            <DebitAccountNo>
+                                                <xsl:value-of select="DebitAccountNo"/>
+                                            </DebitAccountNo>
+                                        </xsl:if>
+                                        <xsl:if test="DebitCurrency">
+                                            <DebitCurrency>
+                                                <xsl:value-of select="DebitCurrency"/>
+                                            </DebitCurrency>
+                                        </xsl:if>
+                                        <xsl:if test="DebitAmount">
+                                            <DebitAmount>
+                                                <xsl:value-of select="DebitAmount"/>
+                                            </DebitAmount>
+                                        </xsl:if>
+                                        <xsl:if test="DebitValueDate">
+                                            <DebitValueDate>
+                                                <xsl:value-of select="DebitValueDate"/>
+                                            </DebitValueDate>
+                                        </xsl:if>
+                                        <xsl:if test="CreditAccountNo">
+                                            <CreditAccountNo>
+                                                <xsl:value-of select="CreditAccountNo"/>
+                                            </CreditAccountNo>
+                                        </xsl:if>
+                                        <xsl:if test="CreditCurrency">
+                                            <CreditCurrency>
+                                                <xsl:value-of select="CreditCurrency"/>
+                                            </CreditCurrency>
+                                        </xsl:if>
+                                        <xsl:if test="CreditAmount">
+                                            <CreditAmount>
+                                                <xsl:value-of select="CreditAmount"/>
+                                            </CreditAmount>
+                                        </xsl:if>
+                                        <xsl:if test="CreditValueDate">
+                                            <CreditValueDate>
+                                                <xsl:value-of select="CreditValueDate"/>
+                                            </CreditValueDate>
+                                        </xsl:if>
+                                        <xsl:if test="DealNumber">
+                                            <DealNumber>
+                                                <xsl:value-of select="DealNumber"/>
+                                            </DealNumber>
+                                        </xsl:if>
+                                        <xsl:if test="FeNumber">
+                                            <FeNumber>
+                                                <xsl:value-of select="FeNumber"/>
+                                            </FeNumber>
+                                        </xsl:if>
+                                    </mIBPSREF>
+                                </xsl:for-each>
+                            </gIBPSREF>
+                            <xsl:if test="$Map-Data-1/pfx11:CSDCreateFTBulk/SBVFTLVBULKSBVFTCSDWSType/SystemType">
+                                <SystemType>
+                                    <xsl:value-of select="$Map-Data-1/pfx11:CSDCreateFTBulk/SBVFTLVBULKSBVFTCSDWSType/SystemType"/>
+                                </SystemType>
+                            </xsl:if>
+                        </SBVFTLVBULKSBVFTCSDWSType>
+                    </pfx11:CSDCreateFTBulk>
+                </List>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map-Data-1">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>585</pd:x>
+            <pd:y>234</pd:y>
+            <config>
+                <element ref="pfx11:CSDCreateFTBulk"/>
+            </config>
+            <pd:inputBindings>
+                <pfx11:CSDCreateFTBulk>
+                    <SBVFTLVBULKSBVFTCSDWSType>
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="$Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:InterfaceId"/>
+                        </xsl:attribute>
+                        <gIBPSREF>
+                            <xsl:attribute name="g">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <mIBPSREF>
+                                <xsl:attribute name="m">
+                                    <xsl:value-of select="1"/>
+                                </xsl:attribute>
+                                <CSDRef>
+                                    <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:SourceAppId"/>
+                                </CSDRef>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitInfo/ns22:AccountNo">
+                                    <DebitAccountNo>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitInfo/ns22:AccountNo"/>
+                                    </DebitAccountNo>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitInfo/ns22:Currency">
+                                    <DebitCurrency>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitInfo/ns22:Currency"/>
+                                    </DebitCurrency>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitInfo/ns22:Amount">
+                                    <DebitAmount>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitInfo/ns22:Amount"/>
+                                    </DebitAmount>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitDate">
+                                    <DebitValueDate>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:DebitDate"/>
+                                    </DebitValueDate>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditInfo/ns22:AccountNo">
+                                    <CreditAccountNo>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditInfo/ns22:AccountNo"/>
+                                    </CreditAccountNo>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditInfo/ns22:Currency">
+                                    <CreditCurrency>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditInfo/ns22:Currency"/>
+                                    </CreditCurrency>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditInfo/ns22:Amount">
+                                    <CreditAmount>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditInfo/ns22:Amount"/>
+                                    </CreditAmount>
+                                </xsl:if>
+                                <xsl:if test="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditDate">
+                                    <CreditValueDate>
+                                        <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:CreditDate"/>
+                                    </CreditValueDate>
+                                </xsl:if>
+                                <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:DealNo">
+                                    <DealNumber>
+                                        <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:DealNo"/>
+                                    </DealNumber>
+                                </xsl:if>
+                                <xsl:if test="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:FENo">
+                                    <FeNumber>
+                                        <xsl:value-of select="$FTGroup/pfx4:FTGroup/pfx4:FTGroupDetail/pfx4:LineInfo[1]/pfx4:FENo"/>
+                                    </FeNumber>
+                                </xsl:if>
+                            </mIBPSREF>
+                        </gIBPSREF>
+                        <SystemType>
+                            <xsl:value-of select="$fundXferReq/ns5:FundXferInfoReq/ns5:SystemType"/>
+                        </SystemType>
+                    </SBVFTLVBULKSBVFTCSDWSType>
+                </pfx11:CSDCreateFTBulk>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Call Process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>180</pd:x>
+        <pd:y>615</pd:y>
+        <config>
+            <processName>/Services/Global/Remittance/CashPosting/Version1.0/createPosting/RequestResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>612</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="$Call-Process/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:Status"/>
+                </Status>
+                <xsl:if test="$Call-Process/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:ErrorMessage">
+                    <ErrorMessage>
+                        <xsl:value-of select="$Call-Process/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:ErrorMessage"/>
+                    </ErrorMessage>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>798</pd:x>
+        <pd:y>552</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;3&quot;"/>
+                </Status>
+                <ErrorMessage>
+                    <xsl:value-of select="concat($_error/ns:ErrorReport/MsgCode, &quot;-&quot;, $_error/ns:ErrorReport/Msg, &quot;. T24 Services Timeout&quot;)"/>
+                </ErrorMessage>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-2">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>948</pd:x>
+        <pd:y>515</pd:y>
+        <config>
+            <variableName>ResponseResult</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Status>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </Status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>CallT24CSDWS</pd:from>
+        <pd:to>Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>errorProcessor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>errorProcessor</pd:from>
+        <pd:to>Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallT24CSDWS</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ValidateError</pd:to>
+        <pd:xpathDescription>Validate Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx2:ServiceEnverlop/ns3:ResponseStatus/ns3:Status = 1</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ValidateError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LoopFTGroup</pd:from>
+        <pd:to>CallT24CSDWS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>LoopFTGroup</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Call Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup) =1 and
+count($Map-Data/pfx4:CashPosting/pfx4:CashPostingDetail/pfx4:FTGroup[1]/pfx4:FTGroupDetail/pfx4:LineInfo) =2</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Process</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:xpathDescription>Timeout</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$_error/ns:ErrorReport/MsgCode = 'BWENGINE-100029'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>Assign-2</pd:to>
+        <pd:xpathDescription>Exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($_error/ns:ErrorReport/Msg, 'L.IBPS.REF:1:1=ALT KEY ALREADY ASSIGNED TO')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

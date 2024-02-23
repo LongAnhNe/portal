@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://xmlns.tibco.com/body" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/Schema.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Common/Logging/NotifyBackendAlert.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://temenos.com/HOLIDAY" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:pfx="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS">
+    <wsdl:import namespace="http://temenos.com/SBV.FT.SETTLE.IBPS.PAYMENT.WS" location="/Services/Global/System/ALERTSYS/T24check.wsdl"/>
+    <pd:name>Services/Global/Utilities/SystemAlert/SystemAlert.process</pd:name>
+    <pd:startName>Receive Notification</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Receive Notification">
+        <pd:type>com.tibco.plugin.waitnotify.WaitEventSource</pd:type>
+        <pd:resourceType>ae.activities.waitStarter</pd:resourceType>
+        <pd:x>79</pd:x>
+        <pd:y>291</pd:y>
+        <config>
+            <sharedConfig>/SharedResource/Configuration/BackEndNotification.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>751</pd:endX>
+    <pd:endY>279</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <EmailProperties>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="To" type="xsd:string"/>
+                        <xsd:element name="CC" type="xsd:string"/>
+                        <xsd:element name="Subject">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="Env" type="xsd:string"/>
+                                    <xsd:element name="System" type="xsd:string"/>
+                                    <xsd:element name="Severity" type="xsd:string"/>
+                                    <xsd:element name="Content" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="Body">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="ServicesName" type="xsd:string"/>
+                                    <xsd:element name="OperationName" type="xsd:string"/>
+                                    <xsd:element name="FromSystem" type="xsd:string"/>
+                                    <xsd:element name="ToSystem" type="xsd:string"/>
+                                    <xsd:element name="MsgId" type="xsd:string"/>
+                                    <xsd:element name="ErrorMessage" type="xsd:string"/>
+                                    <xsd:element name="CreatedTime" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </EmailProperties>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1443667023375</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>233</pd:x>
+        <pd:y>94</pd:y>
+        <pd:width>425</pd:width>
+        <pd:height>278</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>MailContent</pd:to>
+            <pd:xpathDescription>Mail</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_globalVariables/ns:GlobalVariables/AlertMailConfig/AlertMethod="MAIL"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Send-Mail-SBV</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>MailContent</pd:from>
+            <pd:to>Send-Mail-SBV</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="MailContent">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>377</pd:x>
+            <pd:y>163</pd:y>
+            <config>
+                <variableName>EmailProperties</variableName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <To>
+                        <xsl:value-of select="if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'CSD') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/CSD_MailList&#xA;else if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'ERP') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/ERP_MailList &#xA;else if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'ESB') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/ESB_MailList&#xA;else if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'CITAD') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/CITAD_MailList&#xA;else if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'T24') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/T24_MailList&#xA;else if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'BTDT') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/BTDT_MailList&#xA;else if($Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem = 'IBPS') then $_globalVariables/ns:GlobalVariables/AlertMailConfig/IBPS_MailList&#xA;else ''"/>
+                    </To>
+                    <CC>
+                        <xsl:value-of select="if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem, 'CSD')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/CSD_MailList&#xA;else if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem, 'ERP')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/ERP_MailList &#xA;else if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem , 'ESB')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/ESB_MailList&#xA;else if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem ,'CITAD')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/CITAD_MailList&#xA;else if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem , 'T24')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/T24_MailList&#xA;else if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem ,'BTDT')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/BTDT_MailList&#xA;else if(contains($Receive-Notification/ns3:NotifyAlert/ns3:FromSystem ,'IBPS')) then $_globalVariables/ns:GlobalVariables/AlertMailConfig/IBPS_MailList&#xA;else ''"/>
+                    </CC>
+                    <Subject>
+                        <Env>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/AlertMailConfig/Enviroment"/>
+                        </Env>
+                        <System>
+                            <xsl:value-of select="$Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem"/>
+                        </System>
+                        <Severity>
+                            <xsl:value-of select="$Receive-Notification/ns3:NotifyAlert/ns3:Severity"/>
+                        </Severity>
+                        <Content>
+                            <xsl:value-of select="$Receive-Notification/ns3:NotifyAlert/ns3:SubjectContent"/>
+                        </Content>
+                    </Subject>
+                    <Body>
+                        <ServicesName>
+                            <xsl:value-of select="concat('Service Name: ', $Receive-Notification/ns3:NotifyAlert/ns3:ServiceName)"/>
+                        </ServicesName>
+                        <OperationName>
+                            <xsl:value-of select="concat('Operation Name: ', $Receive-Notification/ns3:NotifyAlert/ns3:OperationName)"/>
+                        </OperationName>
+                        <FromSystem>
+                            <xsl:value-of select="concat('From System: ', $Receive-Notification/ns3:NotifyAlert/ns3:FromSystem)"/>
+                        </FromSystem>
+                        <ToSystem>
+                            <xsl:value-of select="concat('Error System: ', $Receive-Notification/ns3:NotifyAlert/ns3:ErrorSystem)"/>
+                        </ToSystem>
+                        <MsgId>
+                            <xsl:value-of select="concat('Message ID: ', $Receive-Notification/ns3:NotifyAlert/ns3:MsgId)"/>
+                        </MsgId>
+                        <ErrorMessage>
+                            <xsl:value-of select="concat('Description: ', $Receive-Notification/ns3:NotifyAlert/ns3:ErrorDescription)"/>
+                        </ErrorMessage>
+                        <CreatedTime>
+                            <xsl:value-of select="concat('Created Time: ',$Receive-Notification/ns3:NotifyAlert/ns3:CreatedTimeError)"/>
+                        </CreatedTime>
+                    </Body>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Send-Mail-SBV">
+            <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+            <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+            <pd:x>492</pd:x>
+            <pd:y>245</pd:y>
+            <config>
+                <newMimeSupport>true</newMimeSupport>
+                <inputOutputVersion>5.2.0</inputOutputVersion>
+                <host>10.1.44.9:25</host>
+                <useSsl>false</useSsl>
+                <authenticate>true</authenticate>
+                <username>esbadmin</username>
+                <password>esb@123456</password>
+                <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                    <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                    <ns0:cert isRef="true">/Services/Global/System/ALERTSYS/.folder</ns0:cert>
+                </ns0:ssl>
+                <InputHeaders>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Content-Type" type="string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </InputHeaders>
+            </config>
+            <pd:inputBindings>
+                <ns12:mailActivityInput>
+                    <from>
+                        <xsl:value-of select="'esbadmin@sbv.gov.vn'"/>
+                    </from>
+                    <to>
+                        <xsl:value-of select="$EmailProperties/root/To"/>
+                    </to>
+                    <cc>
+                        <xsl:value-of select="$EmailProperties/root/CC"/>
+                    </cc>
+                    <subject>
+                        <xsl:value-of select="concat(&quot;[&quot;,$EmailProperties/root/Subject/Env, &quot;] &quot;,&quot;[&quot;,$EmailProperties/root/Subject/System,&quot;] &quot;, &quot;[&quot;,$EmailProperties/root/Subject/Severity, &quot;] - &quot;,$EmailProperties/root/Subject/Content)"/>
+                    </subject>
+                    <ns2:bodyElement>
+                        <bodyText>
+                            <xsl:value-of select="concat($EmailProperties/root/Body/ServicesName, '&#xA;', $EmailProperties/root/Body/OperationName, '&#xA;', $EmailProperties/root/Body/FromSystem, '&#xA;', $EmailProperties/root/Body/ToSystem, '&#xA;', $EmailProperties/root/Body/MsgId,'&#xA;',$EmailProperties/root/Body/ErrorMessage,'&#xA;',$EmailProperties/root/Body/CreatedTime)"/>
+                        </bodyText>
+                    </ns2:bodyElement>
+                </ns12:mailActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Receive Notification</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

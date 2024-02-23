@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:ns2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagement/CashWithdraw/CashWithdraw.xsd" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns4="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagemen/CashDeposit.xsd" xmlns:ns="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagement/CashDeposit/CashDeposit.xsd" xmlns:ns3="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/CashManagement/CashWithdraw.xsd" xmlns:tns="http://www.sbv.gov.org/service/global/cashmanagement/version1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns5="sbv/global/cashmanagement/cashdeposit/version1.0" xmlns:ns6="sbv/global/cashmanagement/cashwithdraw/version1.0" name="United" targetNamespace="http://www.sbv.gov.org/service/global/cashmanagement/version1.0">
+    <import namespace="sbv/global/cashmanagement/cashdeposit/version1.0" location="CashDeposit/CashDeposit.xsd"/>
+    <import namespace="sbv/global/cashmanagement/cashwithdraw/version1.0" location="CashWithdraw/CashWithdraw.xsd"/>
+    <message name="cashDepositReq">
+        <part name="Request" element="ns5:cashDepositReq"/>
+    </message>
+    <message name="cashDepositRes">
+        <part name="Response" element="ns5:cashDepositRes"/>
+    </message>
+    <message name="cashWithdrawReq">
+        <part name="Request" element="ns6:cashWithdrawReq"/>
+    </message>
+    <message name="cashWithdrawRes">
+        <part name="Response" element="ns6:cashWithdrawRes"/>
+    </message>
+    <portType name="PortType">
+        <operation name="cashDeposit">
+            <input message="tns:cashDepositReq"/>
+            <output message="tns:cashDepositRes"/>
+        </operation>
+        <operation name="cashWithdraw">
+            <input message="tns:cashWithdrawReq"/>
+            <output message="tns:cashWithdrawRes"/>
+        </operation>
+    </portType>
+</definitions>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="sbv/common/envelope/commonheader/1.0" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="sbv/common/envelope/serviceenvelope/1.0" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="sbv/common/logging/enginelog/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns9="http://www.bidv.com/common/logging/enginelog/1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx8="http://www.bidv.com/common/envelope/soaenvelope/1.0" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns8="http://www.bidv.com/common/envelope/commonheader/1.0">
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <pd:name>Services/Common/TemplateProcess/RequestResponseOperation.process</pd:name>
+    <pd:description>Author: TIBCO PSG</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:SOAEnvelope"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>52</pd:startX>
+    <pd:startY>177</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:copy-of select="$CallRequestResponseProcess/root/ns4:ServiceEnverlop"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns4:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>1073</pd:endX>
+    <pd:endY>176</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ServiceVariables>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="startTime" type="xsd:string"/>
+                        <xsd:element name="ServiceName" type="xsd:string"/>
+                        <xsd:element name="OperationName" type="xsd:string"/>
+                        <xsd:element name="SOAMsgId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ServiceVariables>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/common/templateprocess/requestresponseoperation/1.0</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>376</pd:x>
+        <pd:y>52</pd:y>
+        <pd:width>498</pd:width>
+        <pd:height>238</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>CallInputDataValidation</pd:to>
+            <pd:lineType>Straight</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallRequestResponseProcess</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallInputDataValidation</pd:from>
+            <pd:to>CallRequestResponseProcess</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallInputDataValidation">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>523</pd:x>
+            <pd:y>179</pd:y>
+            <config>
+                <processName>/Services/Common/TemplateProcess/InputDataValidationInterface.process</processName>
+                <processNameXPath>concat('Services/',$ServiceVariables/root/ServiceName,'/Version',$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:AppHdr/ns2:ServVersion,'/',$ServiceVariables/root/OperationName,'/InputValidation.process')</processNameXPath>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <ns4:ServiceEnverlop>
+                        <ns2:AppHdr>
+                            <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:AppHdr/@*"/>
+                            <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:AppHdr/node()"/>
+                        </ns2:AppHdr>
+                        <ServiceBody>
+                            <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:ServiceBody/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:ServiceBody/@*"/>
+                            <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:ServiceBody/node()"/>
+                        </ServiceBody>
+                    </ns4:ServiceEnverlop>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="CallRequestResponseProcess">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>690</pd:x>
+            <pd:y>180</pd:y>
+            <config>
+                <processName>/Services/Common/TemplateProcess/RequestResponseInterface.process</processName>
+                <processNameXPath>concat('Services/',$ServiceVariables/root/ServiceName,'/Version',$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:AppHdr/ns2:ServVersion,'/',$ServiceVariables/root/OperationName,'/RequestResponse.process')</processNameXPath>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:copy-of select="$CallInputDataValidation/root/ns4:ServiceEnverlop"/>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="LogEnd">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>970</pd:x>
+        <pd:y>176</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns3:EngineLog>
+                    <ns3:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns3:ServiceName>
+                    <ns3:Message>
+                        <xsl:value-of select="concat($ServiceVariables/root/ServiceName,': End ',$ServiceVariables/root/OperationName)"/>
+                    </ns3:Message>
+                    <ns3:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns3:Category>
+                    <ns3:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns3:TrackingId>
+                </ns3:EngineLog>
+                <pfx:SOAEnvelope>
+                    <pfx:SOAServiceHeader>
+                        <pfx:AppHdr>
+                            <xsl:copy-of select="$CallRequestResponseProcess/root/ns4:ServiceEnverlop/ns2:AppHdr/ancestor-or-self::*/namespace::node()"/>
+                            <xsl:copy-of select="$CallRequestResponseProcess/root/ns4:ServiceEnverlop/ns2:AppHdr/@*"/>
+                            <xsl:copy-of select="$CallRequestResponseProcess/root/ns4:ServiceEnverlop/ns2:AppHdr/node()"/>
+                        </pfx:AppHdr>
+                        <pfx:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </pfx:SOAMsgId>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </pfx:OperationName>
+                        <pfx:ProcessName>
+                            <xsl:value-of select="$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:ProcessName"/>
+                        </pfx:ProcessName>
+                    </pfx:SOAServiceHeader>
+                    <pfx:ServiceBody>
+                        <xsl:copy-of select="$CallRequestResponseProcess/root/ns4:ServiceEnverlop"/>
+                    </pfx:ServiceBody>
+                </pfx:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;End&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="tib:timestamp() -  $ServiceVariables/root/startTime"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogStart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>288</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <processName>/Util/Logging/handleLog.process</processName>
+            <spawn>false</spawn>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <EnableRoles>
+                    <xsl:value-of select="&quot;DEBUG&quot;"/>
+                </EnableRoles>
+                <ns3:EngineLog>
+                    <ns3:ServiceName>
+                        <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                    </ns3:ServiceName>
+                    <ns3:Message>
+                        <xsl:value-of select="concat($ServiceVariables/root/ServiceName,': Start ',$ServiceVariables/root/OperationName)"/>
+                    </ns3:Message>
+                    <ns3:Category>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/EnableRoles"/>
+                    </ns3:Category>
+                    <ns3:TrackingId>
+                        <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                    </ns3:TrackingId>
+                </ns3:EngineLog>
+                <pfx:SOAEnvelope>
+                    <pfx:SOAServiceHeader>
+                        <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:AppHdr"/>
+                        <pfx:SOAMsgId>
+                            <xsl:value-of select="$ServiceVariables/root/SOAMsgId"/>
+                        </pfx:SOAMsgId>
+                        <pfx:ServiceName>
+                            <xsl:value-of select="$ServiceVariables/root/ServiceName"/>
+                        </pfx:ServiceName>
+                        <pfx:OperationName>
+                            <xsl:value-of select="$ServiceVariables/root/OperationName"/>
+                        </pfx:OperationName>
+                        <pfx:ProcessName>
+                            <xsl:value-of select="$Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:OperationName"/>
+                        </pfx:ProcessName>
+                    </pfx:SOAServiceHeader>
+                    <xsl:copy-of select="$Start/root/pfx:SOAEnvelope/pfx:ServiceBody"/>
+                </pfx:SOAEnvelope>
+                <Direction>
+                    <xsl:value-of select="&quot;Start&quot;"/>
+                </Direction>
+                <TimeDuration>
+                    <xsl:value-of select="0"/>
+                </TimeDuration>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>162</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <variableName>ServiceVariables</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <startTime>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </startTime>
+                <ServiceName>
+                    <xsl:value-of select="substring-before(substring-after($Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:ProcessName, 'Services/'),'/OperationImpl' )"/>
+                </ServiceName>
+                <OperationName>
+                    <xsl:value-of select="substring-before(substring-after($Start/root/pfx:SOAEnvelope/pfx:SOAServiceHeader/pfx:ProcessName, 'OperationImpl/'),'.process' )"/>
+                </OperationName>
+                <SOAMsgId>
+                    <xsl:value-of select="concat(generate-id($_processContext/ns:ProcessContext), tib:timestamp())"/>
+                </SOAMsgId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>LogEnd</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogEnd</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogStart</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>LogStart</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

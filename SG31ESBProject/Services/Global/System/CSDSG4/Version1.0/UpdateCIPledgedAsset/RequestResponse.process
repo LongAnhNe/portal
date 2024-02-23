@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:ns2="http://www.tibco.com/schemas/SG31ESBProject/SharedResource/Schema/Global/System/ESB/Common/ESBCommonModel.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns3="sbv/common/envelope/commonheader/1.0" xmlns:pfx5="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCIPledgedAsset.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCINetCreditLimit.xsd" xmlns:pfx3="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCICollaterizedAssets.xsd" xmlns:pfx2="sbv/common/envelope/serviceenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/serviceenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/ServiceEnvelope.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCINetCreditLimit.xsd" schemaLocation="/SharedResource/Schema/Global/System/CSDSG4/UpdateCINetCreditLimit.xsd"/>
+    <xsd:import namespace="schema://www.sbv.gov.vn/Schema/Global/System/CSDSG4/UpdateCIPledgedAsset.xsd" schemaLocation="/SharedResource/Schema/Global/System/CSDSG4/UpdateCIPledgedAsset.xsd"/>
+    <pd:name>Services/Global/System/CSDSG4/Version1.0/UpdateCIPledgedAsset/RequestResponse.process</pd:name>
+    <pd:description>Author: tuedn</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element ref="pfx2:ServiceEnverlop"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </pd:startType>
+    <pd:startX>101</pd:startX>
+    <pd:startY>311</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <pfx2:ServiceEnverlop>
+                <xsl:copy-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr"/>
+                <ns3:ResponseStatus>
+                    <ns3:Status>
+                        <xsl:value-of select="if ($ESBServiceState/pfx5:ESBServiceState/ns2:Status = 0 ) &#xA;then 0&#xA;else 1"/>
+                    </ns3:Status>
+                    <ns3:ErrorCode>
+                        <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:Status"/>
+                    </ns3:ErrorCode>
+                    <ns3:ErrorMessage>
+                        <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:ErrorMessage"/>
+                    </ns3:ErrorMessage>
+                </ns3:ResponseStatus>
+                <ServiceBody>
+                    <xsl:copy-of select="$UpdateCIPledgedAssetResponseBody/pfx5:UpdateCIPledgedAssetResponseBody"/>
+                    <xsl:copy-of select="$InsertDBGW/jdbcUpdateActivityOutput"/>
+                    <xsl:copy-of select="$SendToESBErrorQueue/ns12:aEmptyOutputClass"/>
+                    <xsl:copy-of select="$ESBServiceState/pfx5:ESBServiceState"/>
+                </ServiceBody>
+            </pfx2:ServiceEnverlop>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:ServiceEnverlop"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>749</pd:endX>
+    <pd:endY>311</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <ESBServiceState ref="pfx5:ESBServiceState"/>
+        <UpdateCIPledgedAssetResponseBody ref="pfx5:UpdateCIPledgedAssetResponseBody"/>
+        <InsertDBModel ref="pfx5:InsertDBModel"/>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/services/CSDSG4/UpdateCIPledgedAsset/requestresponse/version1.0</pd:targetNamespace>
+    <pd:activity name="InsertDBGW">
+        <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+        <pd:x>484</pd:x>
+        <pd:y>307</pd:y>
+        <config>
+            <timeout>%%ServiceGlobalVar/CSDToSG4/SG4DBGWTimeout_sec%%</timeout>
+            <commit>false</commit>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>Insert into CSDAMOUNTUPDATE(MSGID,SOURCEAPPID,BANKCODE,AMOUNT,CREATEDDATE,CONTENT,TRANSTYPE)
+values (?,?,?,?,?,?,?)</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>MSGID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>SOURCEAPPID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>BANKCODE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>AMOUNT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CREATEDDATE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>CONTENT</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>TRANSTYPE</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <jdbcSharedConfig>/SharedResource/Connection/Jdbc/SG4DBGW.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <jdbcUpdateActivityInput>
+                <MSGID>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:MSGID, 1, 30))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:MSGID, 1, 30)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </MSGID>
+                <SOURCEAPPID>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:SOURCEAPPID, 1, 30))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:SOURCEAPPID, 1, 30)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </SOURCEAPPID>
+                <BANKCODE>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:BANKCODE, 1, 8))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:BANKCODE, 1, 8)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </BANKCODE>
+                <AMOUNT>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:AMOUNT, 1, 20))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:AMOUNT, 1, 20)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </AMOUNT>
+                <CREATEDDATE>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:CREATEDDATE, 1, 20))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:CREATEDDATE, 1, 20)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CREATEDDATE>
+                <CONTENT>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:CONTENT, 1, 200))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:CONTENT, 1, 200)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </CONTENT>
+                <TRANSTYPE>
+                    <xsl:choose>
+                        <xsl:when test="exists(substring($InsertDBModel/pfx5:InsertDBModel/pfx5:TRANSTYPE, 1, 20))">
+                            <xsl:value-of select="substring($InsertDBModel/pfx5:InsertDBModel/pfx5:TRANSTYPE, 1, 20)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </TRANSTYPE>
+            </jdbcUpdateActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>466</pd:x>
+        <pd:y>140</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="99.CatchException">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>600</pd:x>
+        <pd:y>139</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="99"/>
+                </ns2:Status>
+                <ns2:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Has Exception in service : &quot;, $_error/ns:ErrorReport/Msg)"/>
+                </ns2:ErrorMessage>
+                <ns2:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Has Exception in service : &quot;, $_error/ns:ErrorReport/Msg)"/>
+                </ns2:NotifyMsg>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:Unique_ID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:timestamps"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:CurrentDateTime"/>
+                </ns2:CurrentDateTime>
+            </pfx5:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateCICollaterizedAssetsResponseBody-Exception">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>745</pd:x>
+        <pd:y>142</pd:y>
+        <config>
+            <variableName>UpdateCIPledgedAssetResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:UpdateCIPledgedAssetResponseBody>
+                <pfx5:DataStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx5:ESBServiceState = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx5:DataStatus>
+                <pfx5:ErrorMsg>
+                    <xsl:value-of select="concat(&quot;Unexpected Error . &quot; , $ESBServiceState/pfx5:ESBServiceState/ns2:ErrorMessage)"/>
+                </pfx5:ErrorMsg>
+            </pfx5:UpdateCIPledgedAssetResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetUpdateCICollaterizedAssetsResponseBody">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>620</pd:x>
+        <pd:y>308</pd:y>
+        <config>
+            <variableName>UpdateCIPledgedAssetResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:UpdateCIPledgedAssetResponseBody>
+                <pfx5:DataStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx5:ESBServiceState/ns2:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx5:DataStatus>
+                <pfx5:NoOfInsert>
+                    <xsl:value-of select="$InsertDBGW/jdbcUpdateActivityOutput/noOfUpdates"/>
+                </pfx5:NoOfInsert>
+                <pfx5:ErrorMsg>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:ErrorMessage"/>
+                </pfx5:ErrorMsg>
+            </pfx5:UpdateCIPledgedAssetResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetDBModel">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>362</pd:x>
+        <pd:y>310</pd:y>
+        <config>
+            <variableName>InsertDBModel</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:InsertDBModel>
+                <pfx5:MSGID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                </pfx5:MSGID>
+                <pfx5:SOURCEAPPID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]/pfx5:SourceAppID"/>
+                </pfx5:SOURCEAPPID>
+                <pfx5:BANKCODE>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]/pfx5:BankCode"/>
+                </pfx5:BANKCODE>
+                <pfx5:AMOUNT>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]/pfx5:PledgeAssetAmount"/>
+                </pfx5:AMOUNT>
+                <pfx5:CREATEDDATE>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]/pfx5:Date"/>
+                </pfx5:CREATEDDATE>
+                <pfx5:CONTENT>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]/pfx5:Description"/>
+                </pfx5:CONTENT>
+                <pfx5:TRANSTYPE>
+                    <xsl:value-of select="&quot;CIPledgedAsset&quot;"/>
+                </pfx5:TRANSTYPE>
+            </pfx5:InsertDBModel>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="0.Init ServiceState">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>320</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$Start/root/pfx2:ServiceEnverlop/ServiceBody/*" element="pfx5:UpdateCIPledgedAssetRequestBody"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <pfx5:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="0"/>
+                </ns2:Status>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;false&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]/pfx5:SourceAppID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="tib:timestamp()"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns2:CurrentDateTime>
+            </pfx5:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetUpdateCICollaterizedAssetsResponseBody-Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>751</pd:x>
+        <pd:y>453</pd:y>
+        <config>
+            <variableName>UpdateCIPledgedAssetResponseBody</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:UpdateCIPledgedAssetResponseBody>
+                <pfx5:DataStatus>
+                    <xsl:value-of select="if ($ESBServiceState/pfx5:ESBServiceState/ns2:Status = 0) &#xA;then &quot;Success&quot;&#xA;else &quot;Failed&quot;"/>
+                </pfx5:DataStatus>
+                <pfx5:ErrorMsg>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:ErrorMessage"/>
+                </pfx5:ErrorMsg>
+            </pfx5:UpdateCIPledgedAssetResponseBody>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SendToESBErrorQueue">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>614</pd:x>
+        <pd:y>453</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>ESBErrorQueue</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResource/Connection/Jms/SOAConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties/>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <JMSCorrelationID>
+                    <xsl:value-of select="$Start/root/pfx2:ServiceEnverlop/ns3:AppHdr/ns3:MsgId"/>
+                </JMSCorrelationID>
+                <JMSProperties>
+                    <ns12:JMSXGroupID>
+                        <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:Unique_ID"/>
+                    </ns12:JMSXGroupID>
+                </JMSProperties>
+                <Body>
+                    <xsl:value-of select="string(tib:render-xml($Start/root/pfx2:ServiceEnverlop/ServiceBody/pfx5:UpdateCIPledgedAssetRequestBody[1]))"/>
+                </Body>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="02. Insert DB Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>489</pd:x>
+        <pd:y>461</pd:y>
+        <config>
+            <variableName>ESBServiceState</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:ESBServiceState>
+                <ns2:Status>
+                    <xsl:value-of select="2"/>
+                </ns2:Status>
+                <ns2:ErrorMessage>
+                    <xsl:value-of select="concat(&quot;Can not insert DB GW : &quot;, $_error/ns:ErrorReport/Msg)"/>
+                </ns2:ErrorMessage>
+                <ns2:NotifyMsg>
+                    <xsl:value-of select="concat(&quot;Can not insert DB GW : &quot;, $_error/ns:ErrorReport/Msg)"/>
+                </ns2:NotifyMsg>
+                <ns2:ErrorExist>
+                    <xsl:value-of select="&quot;true&quot;"/>
+                </ns2:ErrorExist>
+                <ns2:Unique_ID>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:Unique_ID"/>
+                </ns2:Unique_ID>
+                <ns2:timestamps>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:timestamps"/>
+                </ns2:timestamps>
+                <ns2:CurrentDateTime>
+                    <xsl:value-of select="$ESBServiceState/pfx5:ESBServiceState/ns2:CurrentDateTime"/>
+                </ns2:CurrentDateTime>
+            </pfx5:ESBServiceState>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>0.Init ServiceState</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsertDBGW</pd:from>
+        <pd:to>SetUpdateCICollaterizedAssetsResponseBody</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>99.CatchException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>99.CatchException</pd:from>
+        <pd:to>UpdateCICollaterizedAssetsResponseBody-Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateCICollaterizedAssetsResponseBody-Exception</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetUpdateCICollaterizedAssetsResponseBody</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetDBModel</pd:from>
+        <pd:to>InsertDBGW</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>0.Init ServiceState</pd:from>
+        <pd:to>SetDBModel</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsertDBGW</pd:from>
+        <pd:to>02. Insert DB Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetUpdateCICollaterizedAssetsResponseBody-Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>02. Insert DB Error</pd:from>
+        <pd:to>SendToESBErrorQueue</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendToESBErrorQueue</pd:from>
+        <pd:to>SetUpdateCICollaterizedAssetsResponseBody-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

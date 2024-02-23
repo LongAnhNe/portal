@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns0="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns5="sbv/common/envelope/commonheader/1.0" xmlns:ns6="www.tibco.com/plugin/java/JavaMethodActivityOutput" xmlns:pfx="sbv/common/envelope/soaenvelope/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="sbv/common/envelope/commonheader/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/CommonHeader.xsd"/>
+    <xsd:import namespace="sbv/common/envelope/soaenvelope/1.0" schemaLocation="/SharedResource/Schema/Common/Envelope/SOAEnvelope.xsd"/>
+    <pd:name>Util/Logging/MonitorLogQueue.process</pd:name>
+    <pd:description>Author: Dodv</pd:description>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>46</pd:x>
+        <pd:y>378</pd:y>
+        <config>
+            <StartTime>1444632336000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>%%Logging/LogTimerInternal%%</TimeInterval>
+            <FrequencyIndex>Millisecond</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>899</pd:endX>
+    <pd:endY>399</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <SetNull>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Null" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </SetNull>
+    </pd:processVariables>
+    <pd:targetNamespace>sbv/util/logging/savelog/1.0</pd:targetNamespace>
+    <pd:activity name="GetTimerProcessing">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/LogTimerProcessCount.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="IncTimerProcessing">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>419</pd:x>
+        <pd:y>91</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/LogTimerProcessCount.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <LogTimerProcessCount>
+                    <xsl:value-of select="$GetTimerProcessing/root/LogTimerProcessCount+1"/>
+                </LogTimerProcessCount>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="saveLogBatch">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>603</pd:x>
+        <pd:y>93</pd:y>
+        <config>
+            <processName>/Util/Logging/saveLogBatch.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <MsgCount>
+                    <xsl:value-of select="$GetLogMsgCount/ns6:JavaMethodActivityOutput/MethodReturnValue"/>
+                </MsgCount>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="DescTimerProcessing">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>743</pd:x>
+        <pd:y>216</pd:y>
+        <config>
+            <variableConfig>/SharedResource/SharedVariables/LogTimerProcessCount.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <LogTimerProcessCount>
+                    <xsl:value-of select="$GetTimerProcessing/root/LogTimerProcessCount - 1"/>
+                </LogTimerProcessCount>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetLogMsgCount">
+        <pd:type>com.tibco.plugin.java.JavaMethodActivity</pd:type>
+        <pd:resourceType>ae.activities.JavaMethodActivity</pd:resourceType>
+        <pd:x>191</pd:x>
+        <pd:y>381</pd:y>
+        <config>
+            <ConstructDeclaredClass>false</ConstructDeclaredClass>
+            <CacheConstructedClass>false</CacheConstructedClass>
+            <InvokeCleanupMethod>false</InvokeCleanupMethod>
+            <MethodInfo>
+                <classLocation>e:/sbv_project/trien khai/build/svn/sg31esbproject/sharedresource/library/getnumbermsgpending.jar</classLocation>
+                <classPath>/SharedResource/Library/AliasLibrary.aliaslib</classPath>
+                <className>getmsgpending.GetPendingMessageCount</className>
+                <methodName>getNumberMsgPending</methodName>
+                <methodReturn>long</methodReturn>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+                <methodParameter>java.lang.String</methodParameter>
+            </MethodInfo>
+        </config>
+        <pd:inputBindings>
+            <ns0:JavaMethodActivityInput>
+                <MethodParameters>
+                    <Parameter1>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/SOAJMS/URL"/>
+                    </Parameter1>
+                    <Parameter2>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/SOAJMS/UserName"/>
+                    </Parameter2>
+                    <Parameter3>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/SOAJMS/Password"/>
+                    </Parameter3>
+                    <Parameter4>
+                        <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/Logging/logqueue"/>
+                    </Parameter4>
+                </MethodParameters>
+            </ns0:JavaMethodActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>IncTimerProcessing</pd:from>
+        <pd:to>saveLogBatch</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>saveLogBatch</pd:from>
+        <pd:to>DescTimerProcessing</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>GetLogMsgCount</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetLogMsgCount</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>NoRecord</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetLogMsgCount/ns6:JavaMethodActivityOutput/MethodReturnValue&lt;=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetLogMsgCount</pd:from>
+        <pd:to>GetTimerProcessing</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTimerProcessing</pd:from>
+        <pd:to>IncTimerProcessing</pd:to>
+        <pd:xpathDescription>Availlable</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetTimerProcessing/root/LogTimerProcessCount&lt;=$_globalVariables/ns2:GlobalVariables/Logging/RunningProcess</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DescTimerProcessing</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTimerProcessing</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
